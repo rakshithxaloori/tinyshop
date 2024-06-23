@@ -13,7 +13,9 @@ class PyBaseModel(BaseModel):
 
 
 class SqlBase(Base):
+    __abstract__ = True
+
     created = Column(DateTime, default=func.now())
     updated = Column(DateTime, default=func.now(), onupdate=func.now())
     livemode = Column(Boolean)
-    metadata = Column(JSON, default={})
+    metadata_ = Column("metadata", JSON, default={})

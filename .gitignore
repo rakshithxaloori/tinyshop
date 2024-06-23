@@ -2,3 +2,6 @@
 
 # Local Databse
 sql_app.db
+
+# Environment Files
+.env*

@@ -1,3 +1,4 @@
+import enum
 from sqlalchemy import Column, Text, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -15,7 +16,7 @@ class Team(Base):
     shops = relationship("Shop", back_populates="team")
 
 
-class AccessScopeEnum(Enum):
+class AccessScopeEnum(enum.Enum):
     owner = "owner"
     admin = "admin"
 

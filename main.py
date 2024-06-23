@@ -33,11 +33,11 @@ def read_root():
 
 @app.get("/customers", response_model=CustomerList)
 def read_item(db: Session = Depends(get_db)):
-    new_customer: schemas.CustomerCreate = schemas.CustomerCreate(
-        email="{}@gmail.com".format(get_primary_key("em", 10)()),
-        password="{}".format(get_primary_key("em", 10)()),
-    )
-    crud.create_customer(db, new_customer)
+    # new_customer: schemas.CustomerCreate = schemas.CustomerCreate(
+    #     email="{}@gmail.com".format(get_primary_key("em", 10)()),
+    #     password="{}".format(get_primary_key("em", 10)()),
+    # )
+    # crud.create_customer(db, new_customer)
     customers = crud.get_customers(db)
     return CustomerList(
         has_more=False, data=[customer.__dict__ for customer in customers]
