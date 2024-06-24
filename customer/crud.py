@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+from customer import models
 
 
 def get_customers(db: Session, skip: str = None, limit: int = 50):
-    return db.query(schemas.Customer).order_by()
+    print(db.query(models.Customer).first())
+    return []

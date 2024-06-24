@@ -7,7 +7,7 @@ from utils.primary_key import get_primary_key
 
 
 class Address(SqlBase):
-    __tablename__ = "addresses"
+    __tablename__ = "address"
 
     id = Column(Text, primary_key=True, default=get_primary_key("addr"))
     name = Column(Text)
@@ -18,5 +18,5 @@ class Address(SqlBase):
     country = Column(String(2))
     postal_code = Column(Text)
 
-    customer_id = Column(Text, ForeignKey("customers.id", ondelete="CASCADE"))
+    customer_id = Column(Text, ForeignKey("customer.id", ondelete="CASCADE"))
     customer = relationship("Customer", back_populates="addresses")

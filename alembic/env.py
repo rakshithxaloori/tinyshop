@@ -23,8 +23,8 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 from database import Base
 from team.models import *
-from shops.models import *
-from customers.models import *
+from shop.models import *
+from customer.models import *
 
 target_metadata = Base.metadata
 

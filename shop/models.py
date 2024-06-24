@@ -7,11 +7,11 @@ from utils.primary_key import get_primary_key
 
 
 class Shop(SqlBase):
-    __tablename__ = "shops"
+    __tablename__ = "shop"
 
     id = Column(Text, primary_key=True, default=get_primary_key("shop"))
     name = Column(Text, nullable=True)
 
-    team_id = Column(Text, ForeignKey("teams.id"))
+    team_id = Column(Text, ForeignKey("team.id"))
     team = relationship("Team", back_populates="shops")
     customers = relationship("Customer", back_populates="shop")

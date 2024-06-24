@@ -7,13 +7,13 @@ from utils.primary_key import get_primary_key
 
 
 class Customer(SqlBase):
-    __tablename__ = "customers"
+    __tablename__ = "customer"
 
     id = Column(Text, primary_key=True, default=get_primary_key("cus"))
     name = Column(Text)
     email = Column(Text, nullable=True)
     phone = Column(Text)
 
-    shop_id = Column(Text, ForeignKey("shops.id", ondelete="CASCADE"))
+    shop_id = Column(Text, ForeignKey("shop.id", ondelete="CASCADE"))
     shop = relationship("Shop", back_populates="customers")
     addresses = relationship("Address", back_populates="customer")

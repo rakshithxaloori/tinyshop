@@ -1,44 +1,27 @@
-from sqlalchemy.orm import Session
-from fastapi import FastAPI, Depends
-from pydantic import BaseModel
+from fastapi import FastAPI, APIRouter
 
-from .customers import schemas, crud, models
-from .database import SessionLocal, engine
 
-models.Base.metadata.create_all(bind=engine)
+from team import models as team_models
+from shop import models as shop_models
+from customer import models as customer_models
+from customer.addresses import models as address_models
+
+from database import engine, Base
+from utils.base import SqlBase
+from customer.router import router as customers_router
+
+
+Base.metadata.create_all(bind=engine)
+SqlBase.metadata.create_all(bind=engine)
 
 app = FastAPI()
+main_router = APIRouter()
 
 
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-class CustomerList(BaseModel):
-    object: str = "list"
-    url: str = "/v1/customers"
-    has_more: bool
-    data: list[schemas.Customer] = []
-
-
-@app.get("/")
+@main_router.get("/")
 def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/customers", response_model=CustomerList)
-def read_item(db: Session = Depends(get_db)):
-    # new_customer: schemas.CustomerCreate = schemas.CustomerCreate(
-    #     email="{}@gmail.com".format(get_primary_key("em", 10)()),
-    #     password="{}".format(get_primary_key("em", 10)()),
-    # )
-    # crud.create_customer(db, new_customer)
-    customers = crud.get_customers(db)
-    return CustomerList(
-        has_more=False, data=[customer.__dict__ for customer in customers]
-    )
+app.include_router(main_router)
+app.include_router(customers_router)
