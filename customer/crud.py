@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from customer import models
+from customer import model
 
 
 def get_customers(db: Session, skip: str = None, limit: int = 50):
-    print(db.query(models.Customer).first())
+    print(db.query(model.Customer).first())
     return []

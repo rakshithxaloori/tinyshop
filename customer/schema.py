@@ -1,5 +1,5 @@
 from utils.base import PyBaseModel
-from customer.addresses.schemas import Address
+from customer.address.schema import Address
 
 
 class CustomerBase(PyBaseModel):

@@ -15,3 +15,4 @@ class Shop(SqlBase):
     team_id = Column(Text, ForeignKey("team.id"))
     team = relationship("Team", back_populates="shops")
     customers = relationship("Customer", back_populates="shop")
+    products = relationship("Product", back_populates="shop")

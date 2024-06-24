@@ -1,10 +1,14 @@
 from fastapi import FastAPI, APIRouter
 
 
-from team import models as team_models
-from shop import models as shop_models
-from customer import models as customer_models
-from customer.addresses import models as address_models
+from team import model as team_models
+from shop import model as shop_models
+from customer import model as customer_models
+from customer.address import model as address_models
+from product import model as product_models
+from product.option import model as option_models
+from product.variant import model as variant_models
+from product.price import model as price_models
 
 from database import engine, Base
 from utils.base import SqlBase

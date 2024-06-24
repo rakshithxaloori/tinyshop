@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 
-from customer import schemas, crud
+from customer import schema, crud
 from database import SessionLocal
 
 
@@ -23,7 +23,7 @@ class CustomerList(BaseModel):
     object: str = "list"
     url: str = "/v1/customers"
     has_more: bool
-    data: list[schemas.Customer] = []
+    data: list[schema.Customer] = []
 
 
 @router.get("/customers", response_model=CustomerList)
