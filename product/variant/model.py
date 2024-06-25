@@ -12,7 +12,7 @@ class Variant(SqlBase):
     id = Column(Text, primary_key=True, default=get_primary_key("var"))
     name = Column(Text)
     description = Column(Text, nullable=True)
-    active = Column(Boolean, default=False)
+    active = Column(Boolean)
     options = Column(ARRAY(Text))
     accept_zero_inventory_orders = Column(Boolean, default=False)
     next_refill = Column(DateTime, nullable=True)
@@ -28,6 +28,9 @@ class Variant(SqlBase):
 
     package_dimensions_id = Column(Text, ForeignKey("_package_dimensions.id"))
     package_dimensions = relationship("PackageDimensions", back_populates="variant")
+    inventories = relationship("Inventory", back_populates="variant")
+    subscriptions = relationship("Subscription", back_populates="variant")
+    shipping_lines = relationship("ShippingLines", back_populates="variant")
 
 
 class PackageDimensions(SqlBase):

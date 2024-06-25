@@ -1,5 +1,24 @@
 from utils.base import PyBaseModel
-from customer.address.schema import Address
+
+
+class CustomerAddressBase(PyBaseModel):
+    # Create request's insensitive fields
+    name: str
+    line1: str
+    line2: str | None
+    city: str
+    state: str
+    country: str
+    postal_code: str
+
+
+class CustomerAddressCreate(CustomerAddressBase):
+    # Create request's sensitive fields
+    pass
+
+
+class CustomerAddress(CustomerAddressBase):
+    id: str
 
 
 class CustomerBase(PyBaseModel):
@@ -8,7 +27,7 @@ class CustomerBase(PyBaseModel):
     email: str | None
     phone: str
 
-    address: Address
+    address: CustomerAddress
 
 
 class CustomerCreate(PyBaseModel):
@@ -20,7 +39,7 @@ class AddressList(PyBaseModel):
     object: str = "list"
     url: str
     has_more: bool
-    data: list[Address] = []
+    data: list[CustomerAddress] = []
 
 
 class Customer(PyBaseModel):

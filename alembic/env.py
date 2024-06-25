@@ -26,7 +26,6 @@ from database import Base
 from team.model import *
 from shop.model import *
 from customer.model import *
-from customer.address.model import *
 from product.model import *
 from product.option.model import *
 from product.variant.model import *

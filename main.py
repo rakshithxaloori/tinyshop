@@ -4,7 +4,6 @@ from fastapi import FastAPI, APIRouter
 from team import model as team_models
 from shop import model as shop_models
 from customer import model as customer_models
-from customer.address import model as address_models
 from product import model as product_models
 from product.option import model as option_models
 from product.variant import model as variant_models

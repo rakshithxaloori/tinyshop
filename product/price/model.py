@@ -32,6 +32,7 @@ class Price(SqlBase):
         Text, ForeignKey("_customer_unit_amount.id"), nullable=True
     )
     customer_unit_amount = relationship("CustomerUnitAmount", back_populates="price")
+    cart_items = relationship("CartItems", back_populates="price")
 
 
 class CustomerUnitAmount(SqlBase):
