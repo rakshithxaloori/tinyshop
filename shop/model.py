@@ -1,18 +1,23 @@
-from sqlalchemy import Column, Text, ForeignKey
-from sqlalchemy.orm import relationship
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship
 
 
-from utils.base import SqlBase
+from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class Shop(SqlBase):
-    __tablename__ = "shop"
+if TYPE_CHECKING:
+    from team.model import Team
+    from customer.model import Customer
 
-    id = Column(Text, primary_key=True, default=get_primary_key("shop"))
-    name = Column(Text, nullable=True)
+    # from product.model import Product
 
-    team_id = Column(Text, ForeignKey("team.id"))
-    team = relationship("Team", back_populates="shops")
-    customers = relationship("Customer", back_populates="shop")
-    products = relationship("Product", back_populates="shop")
+
+class Shop(SqlBase, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("shop"))
+    name: str = Field(nullable=True)
+
+    team_id: str = Field(foreign_key="team.id", unique=True)
+    team: "Team" = Relationship(back_populates="shop")
+    customers: list["Customer"] = Relationship(back_populates="shop")
+    # products: Mapped[list["Product"]] = relationship("Product", back_populates="shop")

@@ -3,7 +3,7 @@ from sqlalchemy import Column, Text, ForeignKey, Enum, Integer
 from sqlalchemy.orm import relationship
 
 
-from utils.base import SqlBase
+from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 

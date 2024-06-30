@@ -5,3 +5,6 @@ sql_app.db
 
 # Environment Files
 .env*
+
+# Local scripts
+local

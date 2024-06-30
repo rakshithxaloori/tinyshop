@@ -1,11 +1,13 @@
-from utils.base import PyBaseModel
+from pydantic import BaseModel
+
+from utils.model import PyBaseModel
 
 
-class CustomerAddressBase(PyBaseModel):
+class CustomerAddressBase(BaseModel):
     # Create request's insensitive fields
     name: str
     line1: str
-    line2: str | None
+    line2: str | None = None
     city: str
     state: str
     country: str
@@ -17,32 +19,43 @@ class CustomerAddressCreate(CustomerAddressBase):
     pass
 
 
-class CustomerAddress(CustomerAddressBase):
+class CustomerAddress(CustomerAddressBase, PyBaseModel):
     id: str
+    object: str = "customer_address"
 
 
-class CustomerBase(PyBaseModel):
-    # Create request's insensitive fields
-    name: str
-    email: str | None
-    phone: str
-
-    address: CustomerAddress
-
-
-class CustomerCreate(PyBaseModel):
-    # Create request's sensitive fields
-    pass
-
-
-class AddressList(PyBaseModel):
+class AddressList(BaseModel):
     object: str = "list"
     url: str
     has_more: bool
     data: list[CustomerAddress] = []
 
 
-class Customer(PyBaseModel):
-    id: str
+class CustomerBase(BaseModel):
+    # Create request's insensitive fields
+    name: str
+    email: str | None = None
+    phone: str
 
-    addresses: AddressList
+
+class CustomerCreate(CustomerBase):
+    # Create request's sensitive fields
+    address: CustomerAddressCreate | None = None
+
+
+class Customer(CustomerBase, PyBaseModel):
+    id: str
+    object: str = "customer"
+    addresses: AddressList | None = None
+
+
+class CustomerUpdate(BaseModel):
+    name: str | None = None
+    email: str | None = None
+    phone: str | None = None
+
+
+class CustomerDelete(BaseModel):
+    id: str
+    object: str = "customer"
+    deleted: bool

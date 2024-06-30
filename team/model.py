@@ -1,20 +1,21 @@
 import enum
-from sqlalchemy import Column, Text, Enum, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship, SQLModel
 
 
-from utils.base import Base
 from utils.primary_key import get_primary_key
 
 
-class Team(Base):
-    __tablename__ = "team"
+if TYPE_CHECKING:
+    from shop.model import Shop
 
-    id = Column(Text, primary_key=True, default=get_primary_key("team"))
-    name = Column(Text)
 
-    shops = relationship("Shop", back_populates="team")
-    keys = relationship("Keys", back_populates="team")
+class Team(SQLModel, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("team"))
+    name: str = Field()
+
+    shop: "Shop" = Relationship(back_populates="team")
+    keys: list["Keys"] = Relationship(back_populates="team")
 
 
 class AccessScopeEnum(enum.Enum):
@@ -22,14 +23,12 @@ class AccessScopeEnum(enum.Enum):
     admin = "admin"
 
 
-class Keys(Base):
-    __tablename__ = "keys"
+class Keys(SQLModel, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("keys"))
+    name: str = Field()
+    livemode: bool = Field()
+    hashed_key: str = Field()
+    access_scope: AccessScopeEnum = Field()
 
-    id = Column(Text, primary_key=True, default=get_primary_key("keys"))
-    name = Column(Text)
-    livemode = Column(Boolean)
-    hashed_key = Column(Text)
-    access_scope = Column(Enum(AccessScopeEnum))
-
-    team_id = Column(Text, ForeignKey("team.id", ondelete="CASCADE"))
-    team = relationship("Team", back_populates="keys")
+    team_id: str = Field(foreign_key="team.id")
+    team: Team = Relationship(back_populates="keys")
