@@ -54,7 +54,7 @@ async def get_credentials(request: Request, call_next):
         )
     headers = dict(request.scope["headers"])
     headers[b"x-shop-id"] = str.encode(
-        "shop_dtogLpp3stwYXdYvEvtAgg"
+        "shop_3HrDdf3adZCubAEBAxyKk5"
     )  # TODO get shop id
     headers[b"x-livemode"] = str.encode(livemode)
     request.scope["headers"] = [(k, v) for k, v in headers.items()]

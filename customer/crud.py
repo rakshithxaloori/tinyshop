@@ -14,13 +14,12 @@ def create_customer(
 ) -> schema.Customer:
     with Session(engine) as db:
         try:
+            customer_data = customer.model_dump(exclude={"address"})
             # Create a customer
             new_customer = Customer(
-                livemode=livemode,
-                name=customer.name,
-                phone=customer.phone,
-                email=customer.email,
                 shop_id=x_shop_id,
+                livemode=livemode,
+                **customer_data,
             )
             db.add(new_customer)
             db.commit()
@@ -28,17 +27,11 @@ def create_customer(
 
             new_address = None
             if customer.address:
-                address = customer.address
+                address_data = customer.address.model_dump()
                 new_address = CustomerAddress(
                     livemode=livemode,
-                    name=address.name,
-                    line1=address.line1,
-                    line2=address.line2,
-                    city=address.city,
-                    state=address.state,
-                    country=address.country,
-                    postal_code=address.postal_code,
                     customer_id=new_customer.id,
+                    **address_data,
                 )
                 db.add(new_address)
                 db.commit()
