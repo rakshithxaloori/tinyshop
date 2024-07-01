@@ -72,7 +72,7 @@ def create_product(
 ):
     new_product = crud.create_product(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         product,
     )
     return new_product
@@ -87,7 +87,7 @@ def update_product(
 ):
     updated_product = crud.update_product(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         product_id,
         product,
     )
@@ -102,7 +102,7 @@ def retrieve_product(
 ):
     product = crud.retrieve_product(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         product_id,
     )
     return product
@@ -116,7 +116,7 @@ def list_products(
     # TODO skip, limit
     products = crud.list_products(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
     )
     return schema.ProductList(
         has_more=False,  # TODO
@@ -132,7 +132,7 @@ def delete_product(
 ):
     deleted_id = crud.delete_product(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         product_id,
     )
     return schema.ProductDelete(

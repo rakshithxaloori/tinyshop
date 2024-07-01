@@ -56,7 +56,7 @@ def create_customer(
 ):
     new_customer = crud.create_customer(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         customer,
     )
     return new_customer
@@ -71,7 +71,7 @@ def update_customer(
 ):
     updated_customer = crud.update_customer(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         customer_id,
         customer,
     )
@@ -86,7 +86,7 @@ def retrieve_customer(
 ):
     customer = crud.retrieve_customer(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         customer_id,
     )
     return customer
@@ -100,7 +100,7 @@ def list_customers(
     # TODO skip, limit
     customers = crud.list_customers(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
     )
     return schema.CustomerList(
         has_more=False,  # TODO here and in addresses router
@@ -116,7 +116,7 @@ def delete_customer(
 ):
     deleted_id = crud.delete_customer(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         customer_id,
     )
     return schema.CustomerDelete(

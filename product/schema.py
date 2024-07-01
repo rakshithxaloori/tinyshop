@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 from utils.model import PyBaseModel
 from utils.object import object_type
-from product.model import Product
 
 
 class ProductBase(BaseModel):

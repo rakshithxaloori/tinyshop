@@ -8,14 +8,12 @@ from utils.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
+    from product.option.model import Option
 
-    # from product.option.model import Option
     # from product.variant.model import Variant
 
 
 class Product(SqlBase, table=True):
-    __tablename__ = "product"
-
     id: str = Field(primary_key=True, default_factory=get_primary_key("prod"))
     name: str = Field()
     description: str = Field(nullable=True)
@@ -28,10 +26,10 @@ class Product(SqlBase, table=True):
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="products")
-    # options: list["Option"] = Relationship(
-    #     back_populates="product",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
+    options: list["Option"] = Relationship(
+        back_populates="product",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
     # variants: list["Variant"] = Relationship(
     #     back_populates="product",
     #     sa_relationship_kwargs={"cascade": "delete"},

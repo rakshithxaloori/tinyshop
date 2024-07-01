@@ -46,7 +46,7 @@ def update_address(
     customer_id: str,
     address_id: str,
     address: schema.CustomerAddressUpdate,
-):
+) -> schema.CustomerAddress | None:
     with Session(engine) as db:
         try:
             update_data = address.model_dump(exclude_none=True)

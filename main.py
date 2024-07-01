@@ -8,6 +8,7 @@ import shop.model as shop_models
 import customer.model as customer_models
 import customer.address.model as customer_address_models
 from product import model as product_models
+from product.option import model as option_models
 
 # from product.option import model as option_models
 # from product.variant import model as variant_models
@@ -19,6 +20,7 @@ from database import engine
 from customer.router import router as customers_router
 from customer.address.router import router as customer_addresses_router
 from product.router import router as products_router
+from product.option.router import router as options_router
 
 from utils.dependencies import ShopIDDep, LivemodeDep
 
@@ -79,3 +81,4 @@ app.include_router(main_router)
 app.include_router(customers_router)
 app.include_router(customer_addresses_router)
 app.include_router(products_router)
+app.include_router(options_router)

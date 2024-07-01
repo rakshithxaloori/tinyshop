@@ -58,7 +58,7 @@ def create_address(
 ):
     new_address = crud.create_address(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         customer_id,
         address,
     )
@@ -77,7 +77,7 @@ def update_address(
 ):
     updated_address = crud.update_address(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         customer_id,
         address_id,
         address,
@@ -96,7 +96,7 @@ def retrieve_customer_address(
 ):
     address = crud.retrieve_customer(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         customer_id,
         address_id,
     )
@@ -109,9 +109,10 @@ def list_customer_addresses(
     x_livemode: LivemodeDep,
     customer_id: str,
 ):
+    # TODO skip, limit
     all_addresses = crud.list_addresses(
         x_shop_id,
-        is_livemode(x_livemode),
+        x_livemode,
         customer_id,
     )
     return schema.CustomerAddressList(
@@ -131,9 +132,13 @@ def delete_customer_address(
     address_id: str,
 ):
     deleted_id = crud.delete_address(
-        x_shop_id, is_livemode(x_livemode), customer_id, address_id
+        x_shop_id,
+        x_livemode,
+        customer_id,
+        address_id,
     )
     deleted_address = schema.CustomerAddressDelete(
-        id=address_id, deleted=deleted_id is not None
+        id=address_id,
+        deleted=deleted_id is not None,
     )
     return deleted_address

@@ -1,20 +1,23 @@
-from sqlalchemy import Column, Text, ForeignKey, ARRAY
-from sqlalchemy.orm import relationship
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship
 
 
 from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class Option(SqlBase):
-    __tablename__ = "option"
+if TYPE_CHECKING:
+    from shop.model import Shop
+    from product.model import Product
 
-    id = Column(Text, primary_key=True, default=get_primary_key("opt"))
-    name = Column(Text)
+
+class Option(SqlBase, table=True):
+    id: str = Field(primary_key=True, default=get_primary_key("opt"))
+    name: str = Field()
     # TODO add values when using postgres
-    # values = Column(ARRAY(Text))
+    values: list[str] = Field()
 
-    shop_id = Column(Text, ForeignKey("shop.id", ondelete="CASCADE"))
-    shop = relationship("Shop", back_populates="options")
-    product_id = Column(Text, ForeignKey("product.id", ondelete="CASCADE"))
-    product = relationship("Product", back_populates="options")
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="options")
+    product_id: str = Field(foreign_key="product.id")
+    product: "Product" = Relationship(back_populates="options")
