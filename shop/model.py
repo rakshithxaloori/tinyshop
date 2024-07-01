@@ -10,8 +10,7 @@ if TYPE_CHECKING:
     from team.model import Team
     from customer.model import Customer
     from customer.address.model import CustomerAddress
-
-    # from product.model import Product
+    from product.model import Product
 
 
 class Shop(SqlBase, table=True):
@@ -20,6 +19,15 @@ class Shop(SqlBase, table=True):
 
     team_id: str = Field(foreign_key="team.id", unique=True)
     team: "Team" = Relationship(back_populates="shop")
-    customers: list["Customer"] = Relationship(back_populates="shop")
-    customer_addresses: list["CustomerAddress"] = Relationship(back_populates="shop")
-    # products: Mapped[list["Product"]] = relationship("Product", back_populates="shop")
+    customers: list["Customer"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    customer_addresses: list["CustomerAddress"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    products: list["Product"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )

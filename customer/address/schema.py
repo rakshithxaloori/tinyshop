@@ -1,9 +1,7 @@
 from pydantic import BaseModel
 
 from utils.model import PyBaseModel
-
-
-OBJECT_STR = "customer_address"
+from utils.object import object_type
 
 
 class CustomerAddressBase(BaseModel):
@@ -24,7 +22,7 @@ class CustomerAddressCreate(CustomerAddressBase):
 
 class CustomerAddress(CustomerAddressBase, PyBaseModel):
     id: str
-    object: str = OBJECT_STR
+    object: str = object_type.CUSTOMER_ADDRESS
 
 
 class CustomerAddressList(BaseModel):
@@ -46,5 +44,5 @@ class CustomerAddressUpdate(BaseModel):
 
 class CustomerAddressDelete(BaseModel):
     id: str
-    object: str = OBJECT_STR
+    object: str = object_type.CUSTOMER_ADDRESS
     deleted: bool

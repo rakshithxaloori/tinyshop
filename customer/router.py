@@ -1,6 +1,5 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, Form
-from pydantic import BaseModel
 
 
 from customer import schema, crud
@@ -50,7 +49,7 @@ def update_customer_form(
 
 
 @router.post("", response_model=schema.Customer)
-async def create_customer(
+def create_customer(
     x_shop_id: ShopIDDep,
     x_livemode: LivemodeDep,
     customer: Annotated[schema.CustomerCreate, Depends(create_customer_form)],
@@ -98,12 +97,13 @@ def list_customers(
     x_shop_id: ShopIDDep,
     x_livemode: LivemodeDep,
 ):
+    # TODO skip, limit
     customers = crud.list_customers(
         x_shop_id,
         is_livemode(x_livemode),
     )
     return schema.CustomerList(
-        has_more=False,
+        has_more=False,  # TODO here and in addresses router
         data=customers,
     )
 
@@ -119,10 +119,10 @@ def delete_customer(
         is_livemode(x_livemode),
         customer_id,
     )
-    deleted_customer = schema.CustomerDelete(
-        id=customer_id, deleted=deleted_id is not None
+    return schema.CustomerDelete(
+        id=customer_id,
+        deleted=deleted_id is not None,
     )
-    return deleted_customer
 
 
 @router.get("/search", response_model=schema.CustomerList)

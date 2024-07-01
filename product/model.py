@@ -1,28 +1,41 @@
-from sqlalchemy import ForeignKey, Text, Boolean, ARRAY, JSON, UniqueConstraint
-from sqlalchemy.orm import relationship, mapped_column, Mapped
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship, UniqueConstraint
 
 
 from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class Product(SqlBase):
+if TYPE_CHECKING:
+    from shop.model import Shop
+
+    # from product.option.model import Option
+    # from product.variant.model import Variant
+
+
+class Product(SqlBase, table=True):
     __tablename__ = "product"
 
-    id = mapped_column(Text, primary_key=True, default=get_primary_key("prod"))
-    name = mapped_column(Text)
-    description = mapped_column(Text, nullable=True)
-    handle = mapped_column(Text)
-    active = mapped_column(Boolean)
+    id: str = Field(primary_key=True, default_factory=get_primary_key("prod"))
+    name: str = Field()
+    description: str = Field(nullable=True)
+    handle: str = Field()
+    active: bool = Field()
     # TODO add images when using postgres
-    # images = mapped_column(ARRAY(JSON), nullable=True)
-    shippable = mapped_column(Boolean, default=True)
-    preorder = mapped_column(Boolean, default=False)
+    # images: list[str] = Field(nullable=True)
+    shippable: bool = Field(default=True)
+    preorder: bool = Field(default=False)
 
-    shop_id = mapped_column(Text, ForeignKey("shop.id", ondelete="CASCADE"))
-    shop = relationship("Shop", back_populates="products")
-    options = relationship("Option", back_populates="product")
-    variants = relationship("Variant", back_populates="product")
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="products")
+    # options: list["Option"] = Relationship(
+    #     back_populates="product",
+    #     sa_relationship_kwargs={"cascade": "delete"},
+    # )
+    # variants: list["Variant"] = Relationship(
+    #     back_populates="product",
+    #     sa_relationship_kwargs={"cascade": "delete"},
+    # )
 
     # discount_config_off_product_id = mapped_column(
     #     Text, ForeignKey("_discount_config_off_product.id")

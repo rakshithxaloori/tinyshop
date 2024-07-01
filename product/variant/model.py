@@ -1,35 +1,43 @@
-from sqlalchemy import Column, Text, ForeignKey, Boolean, ARRAY, DateTime, Float
-from sqlalchemy.orm import relationship
+from typing import TYPE_CHECKING
+from datetime import datetime
+from sqlmodel import Field, Relationship
 
 
 from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
+if TYPE_CHECKING:
+    from shop.model import Shop
+    from product.model import Product
+
+
 class Variant(SqlBase):
     __tablename__ = "variant"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("var"))
-    name = Column(Text)
-    description = Column(Text, nullable=True)
-    active = Column(Boolean)
+    id: str = Field(primary_key=True, default=get_primary_key("var"))
+    name: str = Field()
+    description: str = Field(nullable=True)
+    active: bool = Field()
     # TODO add options when using postgres
-    # options = Column(ARRAY(Text))
-    accept_zero_inventory_orders = Column(Boolean, default=False)
-    next_refill = Column(DateTime, nullable=True)
-    unit_label = Column(Text, nullable=True)
+    # options: list[str] = Field()
+    accept_zero_inventory_orders: bool = Field(default=False)
+    next_refill: datetime = Field(nullable=True)
+    unit_label: str = Field(nullable=True)
 
-    shop_id = Column(Text, ForeignKey("shop.id", ondelete="CASCADE"))
-    shop = relationship("Shop", back_populates="variants")
-    product_id = Column(Text, ForeignKey("product.id", ondelete="CASCADE"))
-    product = relationship("Product", back_populates="variants")
-    default_price = relationship("Price", back_populates="variant")
-    prices = relationship("Price", back_populates="variant")
-
-    package_dimensions = relationship("PackageDimensions", back_populates="variant")
-    inventories = relationship("Inventory", back_populates="variant")
-    subscriptions = relationship("Subscription", back_populates="variant")
-    shipping_lines = relationship("ShippingLines", back_populates="variant")
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="variants")
+    product_id: str = Field(foreign_key="product.id")
+    product: "Product" = Relationship(back_populates="variants")
+    # default_price:"Price" = Relationship("Price", back_populates="variant")
+    # prices:list["Price"] = Relationship("Price", back_populates="variant")
+    package_dimensions: "PackageDimensions" = Relationship(
+        back_populates="variant",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    # inventories = relationship("Inventory", back_populates="variant")
+    # subscriptions = relationship("Subscription", back_populates="variant")
+    # shipping_lines = relationship("ShippingLines", back_populates="variant")
     # discount_config_buy_x_get_y_get_id = Column(
     #     Text, ForeignKey("_discount_config_buy_x_get_y.id"), nullable=True
     # )
@@ -41,11 +49,11 @@ class Variant(SqlBase):
 class PackageDimensions(SqlBase):
     __tablename__ = "_package_dimensions"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_pdim"))
-    height = Column(Float)
-    width = Column(Float)
-    length = Column(Float)
-    weight = Column(Float)
+    id: str = Field(primary_key=True, default=get_primary_key("_pdim"))
+    height: float = Field()
+    width: float = Field()
+    length: float = Field()
+    weight: float = Field()
 
-    variant_id = Column(Text, ForeignKey("variant.id", ondelete="CASCADE"), unique=True)
-    variant = relationship("Variant", back_populates="package_dimensions")
+    variant_id: str = Field(foreign_key="variant.id", unique=True)
+    variant: "Variant" = Relationship(back_populates="package_dimensions")
