@@ -1,0 +1,29 @@
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship
+
+
+from utils.model import SqlBase
+from utils.primary_key import get_primary_key
+
+
+if TYPE_CHECKING:
+    from shop.model import Shop
+    from customer.model import Customer
+
+
+class CustomerAddress(SqlBase, table=True):
+    __tablename__ = "customer_address"
+
+    id: str = Field(primary_key=True, default_factory=get_primary_key("caddr"))
+    name: str = Field()
+    line1: str = Field()
+    line2: str = Field(nullable=True)
+    city: str = Field()
+    state: str = Field()
+    country: str = Field(max_length=2)
+    postal_code: str = Field()
+
+    customer_id: str = Field(foreign_key="customer.id")
+    customer: "Customer" = Relationship(back_populates="addresses")
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="customer_addresses")

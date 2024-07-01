@@ -9,13 +9,6 @@ from utils.dependencies import ShopIDDep, LivemodeDep, is_livemode
 router = APIRouter(prefix="/v1/customers")
 
 
-class CustomerList(BaseModel):
-    object: str = "list"
-    url: str = "/v1/customers"
-    has_more: bool
-    data: list[schema.Customer] = []
-
-
 def create_customer_form(
     name: Annotated[str, Form()],
     phone: Annotated[str, Form()],
@@ -100,7 +93,7 @@ def retrieve_customer(
     return customer
 
 
-@router.get("", response_model=CustomerList)
+@router.get("", response_model=schema.CustomerList)
 def list_customers(
     x_shop_id: ShopIDDep,
     x_livemode: LivemodeDep,
@@ -109,7 +102,7 @@ def list_customers(
         x_shop_id,
         is_livemode(x_livemode),
     )
-    return CustomerList(
+    return schema.CustomerList(
         has_more=False,
         data=customers,
     )
@@ -132,7 +125,7 @@ def delete_customer(
     return deleted_customer
 
 
-@router.get("/search", response_model=CustomerList)
+@router.get("/search", response_model=schema.CustomerList)
 def search_customers(
     x_shop_id: ShopIDDep,
     x_livemode: LivemodeDep,

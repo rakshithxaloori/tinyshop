@@ -1,34 +1,10 @@
 from pydantic import BaseModel
 
 from utils.model import PyBaseModel
+from customer.address.schema import CustomerAddressCreate, CustomerAddressList
 
 
-class CustomerAddressBase(BaseModel):
-    # Create request's insensitive fields
-    name: str
-    line1: str
-    line2: str | None = None
-    city: str
-    state: str
-    country: str
-    postal_code: str
-
-
-class CustomerAddressCreate(CustomerAddressBase):
-    # Create request's sensitive fields
-    pass
-
-
-class CustomerAddress(CustomerAddressBase, PyBaseModel):
-    id: str
-    object: str = "customer_address"
-
-
-class AddressList(BaseModel):
-    object: str = "list"
-    url: str
-    has_more: bool
-    data: list[CustomerAddress] = []
+OBJECT_STR = "customer"
 
 
 class CustomerBase(BaseModel):
@@ -45,8 +21,15 @@ class CustomerCreate(CustomerBase):
 
 class Customer(CustomerBase, PyBaseModel):
     id: str
-    object: str = "customer"
-    addresses: AddressList | None = None
+    object: str = OBJECT_STR
+    addresses: CustomerAddressList | None = None
+
+
+class CustomerList(BaseModel):
+    object: str = "list"
+    url: str = "/v1/customers"
+    has_more: bool
+    data: list[Customer] = []
 
 
 class CustomerUpdate(BaseModel):
@@ -57,5 +40,5 @@ class CustomerUpdate(BaseModel):
 
 class CustomerDelete(BaseModel):
     id: str
-    object: str = "customer"
+    object: str = OBJECT_STR
     deleted: bool

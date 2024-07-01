@@ -26,6 +26,7 @@ if config.config_file_name is not None:
 from team.model import *
 from shop.model import *
 from customer.model import *
+from customer.address.model import *
 
 # from product.model import *
 # from product.option.model import *

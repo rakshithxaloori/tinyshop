@@ -8,6 +8,7 @@ from utils.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
+    from customer.address.model import CustomerAddress
 
 
 class Customer(SqlBase, table=True):
@@ -28,19 +29,3 @@ class Customer(SqlBase, table=True):
     # subscriptions = relationship("Subscription", back_populates="customer")
     # invoices = relationship("Invoice", back_populates="customer")
     # orders = relationship("Order", back_populates="customer")
-
-
-class CustomerAddress(SqlBase, table=True):
-    __tablename__ = "customer_address"
-
-    id: str = Field(primary_key=True, default_factory=get_primary_key("caddr"))
-    name: str = Field()
-    line1: str = Field()
-    line2: str = Field(nullable=True)
-    city: str = Field()
-    state: str = Field()
-    country: str = Field(max_length=2)
-    postal_code: str = Field()
-
-    customer_id: str = Field(foreign_key="customer.id")
-    customer: Customer = Relationship(back_populates="addresses")

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 49c0c7f28132
+Revision ID: e488fc6a0834
 Revises: 
-Create Date: 2024-06-30 20:01:56.555898
+Create Date: 2024-07-01 12:03:30.818043
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '49c0c7f28132'
+revision: str = 'e488fc6a0834'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -73,7 +73,9 @@ def upgrade() -> None:
     sa.Column('country', sqlmodel.sql.sqltypes.AutoString(length=2), nullable=False),
     sa.Column('postal_code', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

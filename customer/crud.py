@@ -1,8 +1,8 @@
 from sqlmodel import Session, select
 
-from customer.model import Customer, CustomerAddress
+from customer.model import Customer
 from customer import schema
-
+from customer.address.model import CustomerAddress
 from customer.utils import pydantify_customers
 from database import engine
 
@@ -11,7 +11,7 @@ def create_customer(
     x_shop_id: str,
     livemode: bool,
     customer: schema.CustomerCreate,
-) -> schema.Customer:
+) -> schema.Customer | None:
     with Session(engine) as db:
         try:
             customer_data = customer.model_dump(exclude={"address"})
@@ -29,6 +29,7 @@ def create_customer(
             if customer.address:
                 address_data = customer.address.model_dump()
                 new_address = CustomerAddress(
+                    shop_id=x_shop_id,
                     livemode=livemode,
                     customer_id=new_customer.id,
                     **address_data,
@@ -37,7 +38,7 @@ def create_customer(
                 db.commit()
                 db.refresh(new_address)
             py_customers = pydantify_customers([(new_customer, new_address)])
-            return py_customers.pop() if len(py_customers) >= 1 else None
+            return py_customers.pop()
         except Exception as e:
             print("EXCEPTION create_customer:", e)
             return None
@@ -56,8 +57,8 @@ def update_customer(
             statement = (
                 select(Customer)
                 .where(Customer.shop_id == x_shop_id)
-                .where(Customer.id == customer_id)
                 .where(Customer.livemode == livemode)
+                .where(Customer.id == customer_id)
             )
             result = db.exec(statement)
             updated_customer = result.one()
@@ -69,7 +70,7 @@ def update_customer(
             db.commit()
             db.refresh(updated_customer)
             py_customers = pydantify_customers([(updated_customer, None)])
-            return py_customers.pop() if len(py_customers) >= 1 else None
+            return py_customers.pop()
         except Exception as e:
             # TODO create
             print("EXCEPTION update_customer:", e)
@@ -86,13 +87,13 @@ def retrieve_customer(
             results = db.exec(
                 select(Customer, CustomerAddress)
                 .where(Customer.shop_id == x_shop_id)
+                .where(Customer.livemode == livemode)
                 .where(Customer.id == id)
                 .where(Customer.id == CustomerAddress.customer_id)
-                .where(Customer.livemode == livemode)
             )
             all_rows = list(results.all())
             py_customers = pydantify_customers(all_rows)
-            return py_customers.pop() if len(py_customers) >= 1 else None
+            return py_customers.pop()
 
         except Exception as e:
             print("EXCEPTION retrieve_customer:", e)
@@ -106,14 +107,15 @@ def list_customers(
     limit: int = 50,
 ) -> list[schema.Customer]:
     with Session(engine) as db:
+        # TODO skip and limit
         subquery = select(Customer.id).offset(skip).limit(limit).subquery()
 
         results = db.exec(
             select(Customer, CustomerAddress)
             .where(Customer.shop_id == x_shop_id)
+            .where(Customer.livemode == livemode)
             .where(Customer.id.in_(subquery))
             .where(Customer.id == CustomerAddress.customer_id)
-            .where(Customer.livemode == livemode)
         )
         all_rows = list(results.all())
         return pydantify_customers(all_rows)
@@ -129,8 +131,8 @@ def delete_customer(
             results = db.exec(
                 select(Customer)
                 .where(Customer.shop_id == x_shop_id)
-                .where(Customer.id == id)
                 .where(Customer.livemode == livemode)
+                .where(Customer.id == id)
             )
             customer = results.one()
             db.delete(customer)

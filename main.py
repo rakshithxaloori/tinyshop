@@ -1,12 +1,12 @@
 import base64
-from typing import Annotated
 from sqlmodel import SQLModel
-from fastapi import FastAPI, APIRouter, Request, Header, status
+from fastapi import FastAPI, APIRouter, Request, status
 from fastapi.responses import JSONResponse
 
 import team.model as team_models
 import shop.model as shop_models
 import customer.model as customer_models
+import customer.address.model as customer_address_models
 
 # from product import model as product_models
 # from product.option import model as option_models
@@ -17,6 +17,8 @@ import customer.model as customer_models
 from database import engine
 
 from customer.router import router as customers_router
+from customer.address.router import router as customer_addresses_router
+
 from utils.dependencies import ShopIDDep, LivemodeDep
 
 SQLModel.metadata.create_all(bind=engine)
@@ -54,7 +56,7 @@ async def get_credentials(request: Request, call_next):
         )
     headers = dict(request.scope["headers"])
     headers[b"x-shop-id"] = str.encode(
-        "shop_3HrDdf3adZCubAEBAxyKk5"
+        "shop_3gbib4seTXkNxFtdB3dZUo"
     )  # TODO get shop id
     headers[b"x-livemode"] = str.encode(livemode)
     request.scope["headers"] = [(k, v) for k, v in headers.items()]
@@ -74,3 +76,4 @@ def read_root(x_shop_id: ShopIDDep, x_livemode: LivemodeDep):
 
 app.include_router(main_router)
 app.include_router(customers_router)
+app.include_router(customer_addresses_router)
