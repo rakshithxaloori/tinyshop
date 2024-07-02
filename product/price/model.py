@@ -10,6 +10,7 @@ from utils.primary_key import get_primary_key
 if TYPE_CHECKING:
     from shop.model import Shop
     from product.variant.model import Variant
+    from cart.model import CartItem
 
 
 class PriceTypeEnum(str, enum.Enum):
@@ -38,10 +39,10 @@ class Price(SqlBase, table=True):
         back_populates="price",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # cart_items: list["CartItem"] = Relationship(
-    #     back_populates="price",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
+    cart_items: list["CartItem"] = Relationship(
+        back_populates="price",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
 
 
 class CustomerUnitAmount(SqlBase, table=True):

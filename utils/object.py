@@ -7,3 +7,5 @@ class object_type:
     PRICE = "price"
     WAREHOUSE = "warehouse"
     INVENTORY = "inventory"
+    CART = "cart"
+    CART_ITEM = "cart_item"

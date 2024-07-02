@@ -1,10 +1,15 @@
 import enum
-from sqlalchemy import Column, Text, ForeignKey, Enum, Integer
-from sqlalchemy.orm import relationship
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship
 
 
 from utils.model import SqlBase
 from utils.primary_key import get_primary_key
+
+
+if TYPE_CHECKING:
+    from shop.model import Shop
+    from cart.cart_item.model import CartItem
 
 
 class CartStatusEnum(str, enum.Enum):
@@ -13,27 +18,19 @@ class CartStatusEnum(str, enum.Enum):
     PAID = "paid"
 
 
-class Cart(SqlBase):
-    __tablename__ = "cart"
+class Cart(SqlBase, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("cart"))
+    status: CartStatusEnum = Field(default=CartStatusEnum.REQUIRES_PAYMENT)
 
-    id = Column(Text, primary_key=True, default=get_primary_key("cart"))
-    status = Column(Enum(CartStatusEnum), default=CartStatusEnum.REQUIRES_PAYMENT)
-
-    items = relationship("CartItem", back_populates="cart")
-    discounts = relationship("Discount", back_populates="carts")
-    checkouts = relationship("Checkout", back_populates="cart")
-    invoices = relationship("Invoice", back_populates="cart")
-    order_id = Column(Text, ForeignKey("order.id"))
-    order = relationship("Order", back_populates="cart")
-
-
-class CartItem(SqlBase):
-    __tablename__ = "cart_item"
-
-    id = Column(Text, primary_key=True, default=get_primary_key("ci"))
-    quantity = Column(Integer)
-
-    cart_id = Column(Text, ForeignKey("cart.id", ondelete="CASCADE"))
-    cart = relationship("Cart", back_populates="items")
-    price_id = Column(Text, ForeignKey("price.id", ondelete="CASCADE"))
-    price = relationship("Price", back_populates="cart_items")
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship("Shop", back_populates="carts")
+    items: list["CartItem"] = Relationship(
+        back_populates="cart",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    # discounts = relationship("Discount", back_populates="carts")
+    # checkouts = relationship("Checkout", back_populates="cart")
+    # invoices = relationship("Invoice", back_populates="cart")
+    # order_id = Field(Text, ForeignKey("order.id"))
+    # order = relationship("Order", back_populates="cart")
+    # customer

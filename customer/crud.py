@@ -30,7 +30,6 @@ def create_customer(
             if customer.address:
                 address_data = customer.address.model_dump()
                 new_address = CustomerAddress(
-                    shop_id=x_shop_id,
                     livemode=livemode,
                     customer_id=new_customer.id,
                     **address_data,
@@ -120,7 +119,7 @@ def list_customers(
         )
         all_rows = list(results.all())
         customers = pydantify_customers(all_rows)
-        schema.CustomerList(
+        return schema.CustomerList(
             has_more=False,  # TODO here and in addresses router
             data=customers,
         )

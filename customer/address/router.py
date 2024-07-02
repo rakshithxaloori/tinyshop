@@ -94,7 +94,7 @@ def retrieve_customer_address(
     customer_id: str,
     address_id: str,
 ):
-    address = crud.retrieve_customer(
+    address = crud.retrieve_address(
         x_shop_id,
         x_livemode,
         customer_id,

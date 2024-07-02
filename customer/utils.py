@@ -10,7 +10,7 @@ from customer.address.schema import CustomerAddress as PyCustomerAddress
 def pydantify_customers(
     rows: list[tuple[Customer, CustomerAddress | None]]
 ) -> list[PyCustomer]:
-    customers_dict = {}
+    customers_dict: dict[str, PyCustomer] = {}
     for customer, address in rows:
         if customer.id not in customers_dict:
             customers_dict[customer.id] = PyCustomer(

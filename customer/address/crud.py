@@ -53,7 +53,6 @@ def update_address(
 
             statement = (
                 select(CustomerAddress)
-                .where(CustomerAddress.shop_id == x_shop_id)
                 .where(CustomerAddress.livemode == livemode)
                 .where(CustomerAddress.customer_id == customer_id)
                 .where(CustomerAddress.id == address_id)
@@ -74,7 +73,7 @@ def update_address(
             return None
 
 
-def retrieve_customer(
+def retrieve_address(
     x_shop_id: str,
     livemode: bool,
     customer_id: str,
@@ -84,7 +83,6 @@ def retrieve_customer(
         try:
             results = db.exec(
                 select(CustomerAddress)
-                .where(CustomerAddress.shop_id == x_shop_id)
                 .where(CustomerAddress.livemode == livemode)
                 .where(CustomerAddress.customer_id == customer_id)
                 .where(CustomerAddress.id == address_id)
@@ -108,7 +106,6 @@ def list_addresses(
         # TODO skip and limit
         results = db.exec(
             select(CustomerAddress)
-            .where(CustomerAddress.shop_id == x_shop_id)
             .where(CustomerAddress.livemode == livemode)
             .where(CustomerAddress.customer_id == customer_id)
             .offset(skip)
@@ -116,7 +113,7 @@ def list_addresses(
         )
         all_rows = list(results.all())
         addresses = pydantify_addresses(all_rows)
-        schema.CustomerAddressList(
+        return schema.CustomerAddressList(
             url="/v1/customers/{customer_id}/addresses".format(customer_id=customer_id),
             has_more=False,
             data=addresses,
@@ -133,7 +130,6 @@ def delete_address(
         try:
             results = db.exec(
                 select(CustomerAddress)
-                .where(CustomerAddress.shop_id == x_shop_id)
                 .where(CustomerAddress.livemode == livemode)
                 .where(CustomerAddress.customer_id == customer_id)
                 .where(CustomerAddress.id == address_id)

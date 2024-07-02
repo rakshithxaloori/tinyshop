@@ -7,7 +7,6 @@ from utils.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:
-    from shop.model import Shop
     from customer.model import Customer
 
 
@@ -25,5 +24,3 @@ class CustomerAddress(SqlBase, table=True):
 
     customer_id: str = Field(foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="addresses")
-    shop_id: str = Field(foreign_key="shop.id")
-    shop: "Shop" = Relationship(back_populates="customer_addresses")
