@@ -7,13 +7,13 @@ from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class OrderTypeEnum(enum.Enum):
+class OrderTypeEnum(str, enum.Enum):
     preorder = "preorder"
     deferred = "deferred"
     normal = "normal"
 
 
-class OrderStatusEnum(enum.Enum):
+class OrderStatusEnum(str, enum.Enum):
     # TODO
     requires_inventory = "requires_inventory"
     requires_shipping = "requires_shipping"

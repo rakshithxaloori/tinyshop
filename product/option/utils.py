@@ -14,3 +14,5 @@ def pydantify_options(rows: list[Option]) -> list[schema.Option]:
                 )
             )
         )
+
+    return options

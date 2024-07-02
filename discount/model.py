@@ -7,7 +7,7 @@ from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class DiscountTypeEnum(enum.Enum):
+class DiscountTypeEnum(str, enum.Enum):
     OFF_PRODUCT = "off_product"
     OFF_ORDER = "off_order"
     SHIPPING = "shipping"

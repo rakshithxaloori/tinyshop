@@ -7,7 +7,7 @@ from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class CartStatusEnum(enum.Enum):
+class CartStatusEnum(str, enum.Enum):
     REQUIRES_PAYMENT = "requires_payment"
     ABANDONED = "abandoned"
     PAID = "paid"

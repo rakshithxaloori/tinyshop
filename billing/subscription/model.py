@@ -7,7 +7,7 @@ from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class SubscriptionStatusEnum(enum.Enum):
+class SubscriptionStatusEnum(str, enum.Enum):
     INCOMPLETE = "incomplete"
     INCOMPLETE_EXPIRED = "incomplete_expired"
     ACTIVE = "active"
@@ -17,7 +17,7 @@ class SubscriptionStatusEnum(enum.Enum):
     PAUSED = "paused"
 
 
-class CollectionMethodEnum(enum.Enum):
+class CollectionMethodEnum(str, enum.Enum):
     COLLECT_AUTOMATICALLY = "collect_automatically"
     SEND_INVOICE = "send_invoice"
 
@@ -69,7 +69,7 @@ class SubscriptionBillingCycleAnchorConfig(SqlBase):
     subscription_id = Column(Text, ForeignKey("subscription.id", ondelete="CASCADE"))
 
 
-class SubscriptionCancellationDetailsFeedbackEnum(enum.Enum):
+class SubscriptionCancellationDetailsFeedbackEnum(str, enum.Enum):
     customer_service = "customer_service"
     low_quality = "low_quality"
     missing_features = "missing_features"
@@ -80,7 +80,7 @@ class SubscriptionCancellationDetailsFeedbackEnum(enum.Enum):
     other = "other"
 
 
-class SubscriptionCancellationDetailsReasonEnum(enum.Enum):
+class SubscriptionCancellationDetailsReasonEnum(str, enum.Enum):
     cancellation_requested = "cancellation_requested"
     payment_disputed = "payment_disputed"
     payment_failed = "payment_failed"

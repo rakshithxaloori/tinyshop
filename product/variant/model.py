@@ -10,6 +10,7 @@ from utils.primary_key import get_primary_key
 if TYPE_CHECKING:
     from shop.model import Shop
     from product.model import Product
+    from product.price.model import Price
 
 
 class Variant(SqlBase, table=True):
@@ -27,8 +28,10 @@ class Variant(SqlBase, table=True):
     shop: "Shop" = Relationship(back_populates="variants")
     product_id: str = Field(foreign_key="product.id")
     product: "Product" = Relationship(back_populates="variants")
-    # default_price:"Price" = Relationship("Price", back_populates="variant")
-    # prices:list["Price"] = Relationship("Price", back_populates="variant")
+    prices: list["Price"] = Relationship(
+        back_populates="variant",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
     package_dimensions: "PackageDimensions" = Relationship(
         back_populates="variant",
         sa_relationship_kwargs={"cascade": "delete"},

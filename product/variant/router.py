@@ -152,6 +152,7 @@ def update_variant(
         variant_id,
         variant,
     )
+    return updated_variant
 
 
 @router.get("/{variant_id}", response_model=schema.Variant)

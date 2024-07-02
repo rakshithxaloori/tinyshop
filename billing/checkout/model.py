@@ -7,13 +7,13 @@ from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class CheckoutStatusEnum(enum.Enum):
+class CheckoutStatusEnum(str, enum.Enum):
     OPEN = "open"
     COMPLETE = "complete"
     EXPIRED = "expired"
 
 
-class CheckoutPaymentStatus(enum.Enum):
+class CheckoutPaymentStatus(str, enum.Enum):
     PAID = "paid"
     UNPAID = "unpaid"
 

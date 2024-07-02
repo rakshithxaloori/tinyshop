@@ -4,3 +4,6 @@ class object_type:
     PRODUCT = "product"
     OPTION = "option"
     VARIANT = "variant"
+    PRICE = "price"
+    WAREHOUSE = "warehouse"
+    INVENTORY = "inventory"

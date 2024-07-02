@@ -7,7 +7,7 @@ from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class ShippingStatusEnum(enum.Enum):
+class ShippingStatusEnum(str, enum.Enum):
     queued = "queued"
     dispatched = "dispatched"
     out_for_delivery = "out_for_delivery"

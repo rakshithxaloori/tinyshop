@@ -18,7 +18,7 @@ class Team(SQLModel, table=True):
     keys: list["Keys"] = Relationship(back_populates="team")
 
 
-class AccessScopeEnum(enum.Enum):
+class AccessScopeEnum(str, enum.Enum):
     owner = "owner"
     admin = "admin"
 

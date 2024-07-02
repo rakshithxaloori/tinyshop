@@ -1,61 +1,74 @@
 import enum
-from sqlalchemy import Column, Text, ForeignKey, Boolean, String, Enum, Integer
-from sqlalchemy.orm import relationship
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship, Enum
 
 
 from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class PriceTypeEnum(enum.Enum):
+if TYPE_CHECKING:
+    from shop.model import Shop
+    from product.variant.model import Variant
+
+
+class PriceTypeEnum(str, enum.Enum):
     ONE_TIME = "one_time"
     SUBSCRIPTION = "subscription"
 
 
-class Price(SqlBase):
-    __tablename__ = "price"
+class Price(SqlBase, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("price"))
+    active: bool = Field()
+    currency: str = Field(max_length=3)
+    type: Enum[PriceTypeEnum] = Field()
+    unit_amount: int = Field()
+    default: bool = Field(default=False)
 
-    id = Column(Text, primary_key=True, default=get_primary_key("price"))
-    active = Column(Boolean)
-    currency = Column(String(3))
-    type = Column(Enum(PriceTypeEnum))
-    unit_amount = Column(Integer)
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship("Shop", back_populates="prices")
+    variant_id: str = Field(foreign_key="variant.id")
+    variant: "Variant" = Relationship(back_populates="prices")
 
-    shop_id = Column(Text, ForeignKey("shop.id", ondelete="CASCADE"))
-    shop = relationship("Shop", back_populates="prices")
-    variant_id = Column(Text, ForeignKey("variant.id", ondelete="CASCADE"))
-    variant = relationship("Variant", back_populates="prices")
+    recurring: "Recurring" = Relationship(
+        back_populates="price",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    customer_unit_amount: "CustomerUnitAmount" = Relationship(
+        back_populates="price",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    # cart_items: list["CartItem"] = Relationship(
+    #     back_populates="price",
+    #     sa_relationship_kwargs={"cascade": "delete"},
+    # )
 
-    recurring = relationship("Recurring", back_populates="price")
-    customer_unit_amount = relationship("CustomerUnitAmount", back_populates="price")
-    cart_items = relationship("CartItems", back_populates="price")
 
-
-class CustomerUnitAmount(SqlBase):
+class CustomerUnitAmount(SqlBase, table=True):
     __tablename__ = "_customer_unit_amount"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_cua"))
-    maximum = Column(Integer, nullable=True)
-    minimum = Column(Integer, nullable=True)
-    preset = Column(Integer, default=1)
+    id: str = Field(primary_key=True, default_factory=get_primary_key("_cua"))
+    maximum: int = Field(nullable=True)
+    minimum: int = Field(nullable=True)
+    preset: int = Field(default=1)
 
-    price_id = Column(Text, ForeignKey("price.id", ondelete="CASCADE"), unique=True)
-    price = relationship("Price", back_populates="customer_unit_amount")
+    price_id: str = Field(foreign_key="price.id", unique=True)
+    price: "Price" = Relationship(back_populates="customer_unit_amount")
 
 
-class RecurringTypeEnum(enum.Enum):
+class RecurringTypeEnum(str, enum.Enum):
     DAY = "day"
     WEEK = "week"
     MONTH = "month"
     YEAR = "year"
 
 
-class Recurring(SqlBase):
+class Recurring(SqlBase, table=True):
     __tablename__ = "_recurring"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_recurr"))
-    interval = Column(Enum(RecurringTypeEnum))
-    interval_count = Column(Integer)
+    id: str = Field(primary_key=True, default=get_primary_key("_recur"))
+    interval: Enum[RecurringTypeEnum] = Field()
+    interval_count: int = Field()
 
-    price_id = Column(Text, ForeignKey("price.id", ondelete="CASCADE"), unique=True)
-    price = relationship("Price", back_populates="recurring")
+    price_id: str = Field(foreign_key="price.id", unique=True)
+    price: "Price" = Relationship(back_populates="recurring")

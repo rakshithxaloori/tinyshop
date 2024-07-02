@@ -16,7 +16,7 @@ from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class InvoiceStatusEnum(enum.Enum):
+class InvoiceStatusEnum(str, enum.Enum):
     DRAFT = "draft"
     OPEN = "open"
     PAID = "paid"

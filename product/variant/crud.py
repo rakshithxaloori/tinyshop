@@ -19,7 +19,7 @@ def create_variant(
             new_variant = Variant(
                 shop_id=x_shop_id,
                 livemode=livemode,
-                product_id=Variant.product_id,
+                product_id=variant.product,
                 **variant_data,
             )
             db.add(new_variant)
@@ -28,7 +28,7 @@ def create_variant(
 
             new_package_dimensions = None
             if variant.package_dimensions:
-                pd_data = variant.package_dimensions.model_dump(exclude_none=True)
+                pd_data = variant.package_dimensions.model_dump()
                 new_package_dimensions = PackageDimensions(
                     shop_id=x_shop_id,
                     livemode=livemode,
