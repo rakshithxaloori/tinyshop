@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Form
 
 
 from product import schema, crud
-from utils.dependencies import ShopIDDep, LivemodeDep, is_livemode
+from utils.dependencies import ShopIDDep, LivemodeDep
 
 
 router = APIRouter(prefix="/v1/products")
@@ -114,14 +114,11 @@ def list_products(
     x_livemode: LivemodeDep,
 ):
     # TODO skip, limit
-    products = crud.list_products(
+    products_list = crud.list_products(
         x_shop_id,
         x_livemode,
     )
-    return schema.ProductList(
-        has_more=False,  # TODO
-        data=products,
-    )
+    return products_list
 
 
 @router.delete("/{product_id}", response_model=schema.ProductDelete)

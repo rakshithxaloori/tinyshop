@@ -9,8 +9,7 @@ from utils.primary_key import get_primary_key
 if TYPE_CHECKING:
     from shop.model import Shop
     from product.option.model import Option
-
-    # from product.variant.model import Variant
+    from product.variant.model import Variant
 
 
 class Product(SqlBase, table=True):
@@ -30,10 +29,10 @@ class Product(SqlBase, table=True):
         back_populates="product",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # variants: list["Variant"] = Relationship(
-    #     back_populates="product",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
+    variants: list["Variant"] = Relationship(
+        back_populates="product",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
 
     # discount_config_off_product_id = mapped_column(
     #     Text, ForeignKey("_discount_config_off_product.id")

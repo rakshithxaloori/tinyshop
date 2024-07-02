@@ -12,15 +12,13 @@ if TYPE_CHECKING:
     from product.model import Product
 
 
-class Variant(SqlBase):
-    __tablename__ = "variant"
-
+class Variant(SqlBase, table=True):
     id: str = Field(primary_key=True, default=get_primary_key("var"))
     name: str = Field()
     description: str = Field(nullable=True)
     active: bool = Field()
     # TODO add options when using postgres
-    # options: list[str] = Field()
+    options: str = Field(nullable=True)
     accept_zero_inventory_orders: bool = Field(default=False)
     next_refill: datetime = Field(nullable=True)
     unit_label: str = Field(nullable=True)
@@ -46,9 +44,7 @@ class Variant(SqlBase):
     # )
 
 
-class PackageDimensions(SqlBase):
-    __tablename__ = "_package_dimensions"
-
+class PackageDimensions(SqlBase, table=True):
     id: str = Field(primary_key=True, default=get_primary_key("_pdim"))
     height: float = Field()
     width: float = Field()

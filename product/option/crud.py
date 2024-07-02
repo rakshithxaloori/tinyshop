@@ -10,7 +10,6 @@ from database import engine
 def create_option(
     x_shop_id: str,
     livemode: bool,
-    product_id: str,
     option: schema.OptionCreate,
 ) -> schema.Option | None:
     with Session(engine) as db:
@@ -19,12 +18,15 @@ def create_option(
                 select(Product)
                 .where(Product.shop_id == x_shop_id)
                 .where(Product.livemode == livemode)
-                .where(Product.id == product_id)
+                .where(Product.id == option.product)
             )
             product = prod_results.one()
             option_data = option.model_dump()
             new_option = Option(
-                shop_id=x_shop_id, livemode=livemode, product_id=product.id**option_data
+                shop_id=x_shop_id,
+                livemode=livemode,
+                product_id=product.id,
+                **option_data,
             )
             db.add(new_option)
             db.commit()
@@ -39,7 +41,6 @@ def create_option(
 def update_option(
     x_shop_id: str,
     livemode: bool,
-    product_id: str,
     option_id: str,
     option: schema.OptionUpdate,
 ) -> schema.Option | None:
@@ -51,7 +52,6 @@ def update_option(
                 select(Option)
                 .where(Option.shop_id == x_shop_id)
                 .where(Option.livemode == livemode)
-                .where(Option.product_id == product_id)
                 .where(Option.id == option_id)
             )
             result = db.exec(statement)
@@ -73,7 +73,6 @@ def update_option(
 def retrieve_option(
     x_shop_id: str,
     livemode: bool,
-    product_id: str,
     option_id: str,
 ) -> schema.Option | None:
     with Session(engine) as db:
@@ -82,7 +81,6 @@ def retrieve_option(
                 select(Option)
                 .where(Option.shop_id == x_shop_id)
                 .where(Option.livemode == livemode)
-                .where(Option.product_id == product_id)
                 .where(Option.id == option_id)
             )
             option = results.one()
@@ -96,25 +94,27 @@ def retrieve_option(
 def list_options(
     x_shop_id: str,
     livemode: bool,
-    product_id: str,
     skip: str = None,
     limit: int = 50,
-) -> list[schema.Option]:
+) -> schema.OptionList:
     with Session(engine) as db:
         results = db.exec(
             select(Option)
             .where(Option.shop_id == x_shop_id)
             .where(Option.livemode == livemode)
-            .where(Option.product_id == product_id)
         )
         all_rows = list(results.all())
-        return pydantify_options(all_rows)
+        options = pydantify_options(all_rows)
+        schema.OptionList(
+            url="/v1/options",
+            has_more=False,  # TODO
+            data=options,
+        )
 
 
 def delete_option(
     x_shop_id: str,
     livemode: bool,
-    product_id: str,
     option_id: str,
 ) -> schema.OptionDelete:
     with Session(engine) as db:
@@ -123,7 +123,6 @@ def delete_option(
                 select(Option)
                 .where(Option.shop_id == x_shop_id)
                 .where(Option.livemode == livemode)
-                .where(Option.product_id == product_id)
                 .where(Option.id == option_id)
             )
             option = results.one()

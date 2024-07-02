@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from customer.model import Customer
     from customer.address.model import CustomerAddress
     from product.model import Product
+    from product.option.model import Option
+    from product.variant.model import Variant
 
 
 class Shop(SqlBase, table=True):
@@ -28,6 +30,14 @@ class Shop(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     products: list["Product"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    options: list["Option"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    variants: list["Variant"] = Relationship(
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )

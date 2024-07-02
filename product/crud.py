@@ -90,7 +90,7 @@ def list_products(
     livemode: bool,
     skip: str = None,
     limit: int = 50,
-) -> list[schema.Product]:
+) -> schema.ProductList:
     with Session(engine) as db:
         subquery = select(Product.id).offset(skip).limit(limit).subquery()
 
@@ -101,7 +101,11 @@ def list_products(
             .where(Product.id.in_(subquery))
         )
         all_rows = list(results.all())
-        return pydantify_products(all_rows)
+        products = pydantify_products(all_rows)
+        schema.ProductList(
+            has_more=False,  # TODO
+            data=products,
+        )
 
 
 def delete_product(

@@ -15,6 +15,7 @@ def create_customer(
     with Session(engine) as db:
         try:
             customer_data = customer.model_dump(exclude={"address"})
+            # TODO make this a transaction
             # Create a customer
             new_customer = Customer(
                 shop_id=x_shop_id,
@@ -105,7 +106,7 @@ def list_customers(
     livemode: bool,
     skip: str = None,
     limit: int = 50,
-) -> list[schema.Customer]:
+) -> schema.CustomerList:
     with Session(engine) as db:
         # TODO skip and limit
         subquery = select(Customer.id).offset(skip).limit(limit).subquery()
@@ -118,7 +119,11 @@ def list_customers(
             .where(Customer.id == CustomerAddress.customer_id)
         )
         all_rows = list(results.all())
-        return pydantify_customers(all_rows)
+        customers = pydantify_customers(all_rows)
+        schema.CustomerList(
+            has_more=False,  # TODO here and in addresses router
+            data=customers,
+        )
 
 
 def delete_customer(

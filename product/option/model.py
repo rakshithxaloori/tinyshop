@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from sqlmodel import Field, Relationship
+from sqlmodel import Field, Relationship, UniqueConstraint
 
 
 from utils.model import SqlBase
@@ -21,3 +21,7 @@ class Option(SqlBase, table=True):
     shop: "Shop" = Relationship(back_populates="options")
     product_id: str = Field(foreign_key="product.id")
     product: "Product" = Relationship(back_populates="options")
+
+    __table_args__ = (
+        UniqueConstraint("product_id", "name", name="unique_option_name_product"),
+    )

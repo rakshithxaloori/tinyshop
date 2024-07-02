@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Form
 
 
 from customer import schema, crud
-from utils.dependencies import ShopIDDep, LivemodeDep, is_livemode
+from utils.dependencies import ShopIDDep, LivemodeDep
 
 router = APIRouter(prefix="/v1/customers")
 
@@ -98,14 +98,11 @@ def list_customers(
     x_livemode: LivemodeDep,
 ):
     # TODO skip, limit
-    customers = crud.list_customers(
+    customers_list = crud.list_customers(
         x_shop_id,
         x_livemode,
     )
-    return schema.CustomerList(
-        has_more=False,  # TODO here and in addresses router
-        data=customers,
-    )
+    return customers_list
 
 
 @router.delete("/{customer_id}", response_model=schema.CustomerDelete)

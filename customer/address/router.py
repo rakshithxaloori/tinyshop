@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Form
 
 
 from customer.address import schema, crud
-from utils.dependencies import ShopIDDep, LivemodeDep, is_livemode
+from utils.dependencies import ShopIDDep, LivemodeDep
 
 
 router = APIRouter(prefix="/v1/customers")
@@ -110,16 +110,12 @@ def list_customer_addresses(
     customer_id: str,
 ):
     # TODO skip, limit
-    all_addresses = crud.list_addresses(
+    addresses_list = crud.list_addresses(
         x_shop_id,
         x_livemode,
         customer_id,
     )
-    return schema.CustomerAddressList(
-        url="/v1/customers/{customer_id}/addresses".format(customer_id=customer_id),
-        has_more=False,
-        data=all_addresses,
-    )
+    return addresses_list
 
 
 @router.delete(

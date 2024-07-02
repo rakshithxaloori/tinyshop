@@ -10,10 +10,10 @@ class OptionBase(BaseModel):
 
 
 class OptionCreate(OptionBase):
-    pass
+    product: str
 
 
-class Option(OptionBase):
+class Option(OptionBase, PyBaseModel):
     id: str
     object: str = object_type.OPTION
 

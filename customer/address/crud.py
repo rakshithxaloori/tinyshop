@@ -103,7 +103,7 @@ def list_addresses(
     customer_id: str,
     skip: str = None,
     limit: int = 50,
-) -> list[schema.CustomerAddress]:
+) -> schema.CustomerAddressList:
     with Session(engine) as db:
         # TODO skip and limit
         results = db.exec(
@@ -115,7 +115,12 @@ def list_addresses(
             .limit(limit)
         )
         all_rows = list(results.all())
-        return pydantify_addresses(all_rows)
+        addresses = pydantify_addresses(all_rows)
+        schema.CustomerAddressList(
+            url="/v1/customers/{customer_id}/addresses".format(customer_id=customer_id),
+            has_more=False,
+            data=addresses,
+        )
 
 
 def delete_address(
