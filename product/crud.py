@@ -4,6 +4,7 @@ from product.model import Product
 from product import schema
 from product.utils import pydantify_products
 from database import engine
+from utils.session import update_refresh
 
 
 def create_product(
@@ -50,12 +51,7 @@ def update_product(
             result = db.exec(statement)
             updated_product = result.one()
 
-            for key, value in update_data.items():
-                setattr(updated_product, key, value)
-
-            db.add(updated_product)
-            db.commit()
-            db.refresh(updated_product)
+            update_refresh(db, update_data, updated_product)
             py_products = pydantify_products([updated_product])
             return py_products.pop()
 

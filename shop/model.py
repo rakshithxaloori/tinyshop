@@ -10,9 +10,13 @@ if TYPE_CHECKING:
     from team.model import Team
     from customer.model import Customer
     from customer.address.model import CustomerAddress
+
     from product.model import Product
     from product.option.model import Option
     from product.variant.model import Variant
+    from product.price.model import Price
+
+    from warehouse.model import Warehouse
 
 
 class Shop(SqlBase, table=True):
@@ -38,6 +42,14 @@ class Shop(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     variants: list["Variant"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    prices: list["Price"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    warehouses: list["Warehouse"] = Relationship(
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )

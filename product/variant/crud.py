@@ -3,6 +3,7 @@ from sqlmodel import Session, select
 from product.variant.model import Variant, PackageDimensions
 from product.variant import schema
 from product.variant.utils import pydantify_variants
+from utils.session import update_refresh
 
 
 def create_variant(
@@ -67,30 +68,21 @@ def update_variant(
             result = db.exec(statement)
             updated_variant = result.one()
 
-            for key, value in variant_data.items():
-                setattr(updated_variant, key, value)
+            update_refresh(db, variant_data, updated_variant)
 
-            # TODO testing merge here, if works, change it in other places
-            db.merge(updated_variant)  # upsert + refresh
-            db.commit()
-            # db.refresh(updated_variant)
-            package_dimensions_data = variant.package_dimensions.model_dump(
-                exclude_none=True
-            )
-            updated_pd = None
-            if package_dimensions_data:
+            pd = None
+            if variant.package_dimensions:
+                package_dimensions_data = variant.package_dimensions.model_dump(
+                    exclude_none=True
+                )
                 statement = select(PackageDimensions).where(
                     PackageDimensions.variant_id == variant_id
                 )
                 results = db.exec()
-                updated_pd = results.one()
+                pd = results.one()
 
-                for key, value in package_dimensions_data.items():
-                    setattr(updated_pd, key, value)
-
-                db.merge(updated_pd)
-                db.commit()
-            py_variants = pydantify_variants([(updated_variant, updated_pd)])
+                update_refresh(db, package_dimensions_data, pd)
+            py_variants = pydantify_variants([(updated_variant, pd)])
             return py_variants.pop()
         except Exception as e:
             print("EXCEPTION update_variant:", e)
