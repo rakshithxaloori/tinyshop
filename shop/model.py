@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from product.price.model import Price
 
     from warehouse.model import Warehouse
+    from warehouse.inventory.model import Inventory
 
 
 class Shop(SqlBase, table=True):
@@ -50,6 +51,10 @@ class Shop(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     warehouses: list["Warehouse"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    inventories: list["Inventory"] = Relationship(
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )

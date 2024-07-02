@@ -1,18 +1,24 @@
-from sqlalchemy import Column, Text, ForeignKey, Integer
-from sqlalchemy.orm import relationship
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship
 
 
 from utils.model import SqlBase
 from utils.primary_key import get_primary_key
 
 
-class Inventory(SqlBase):
-    __tablename__ = "inventory"
+if TYPE_CHECKING:
+    from shop.model import Shop
+    from product.variant.model import Variant
+    from warehouse.model import Warehouse
 
-    id = Column(Text, primary_key=True, default=get_primary_key("inv"))
-    quantity = Column(Integer)
 
-    variant_id = Column(Text, ForeignKey("variant.id", ondelete="CASCADE"))
-    variant = relationship("Variant", back_populates="inventories")
-    warehouse_id = Column(Text, ForeignKey("warehouse.id", ondelete="CASCADE"))
-    warehouse = relationship("Warehouse", back_populates="inventories")
+class Inventory(SqlBase, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("inv"))
+    quantity: int = Field()
+
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="inventories")
+    variant_id: str = Field(foreign_key="variant.id")
+    variant: "Variant" = Relationship("Variant", back_populates="inventories")
+    warehouse_id: str = Field(foreign_key="warehouse.id")
+    warehouse: "Warehouse" = Relationship("Warehouse", back_populates="inventories")

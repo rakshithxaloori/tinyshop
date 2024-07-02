@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from shop.model import Shop
     from product.model import Product
     from product.price.model import Price
+    from warehouse.inventory.model import Inventory
 
 
 class Variant(SqlBase, table=True):
@@ -36,7 +37,10 @@ class Variant(SqlBase, table=True):
         back_populates="variant",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # inventories = relationship("Inventory", back_populates="variant")
+    inventories: list["Inventory"] = Relationship(
+        back_populates="variant",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
     # subscriptions = relationship("Subscription", back_populates="variant")
     # shipping_lines = relationship("ShippingLines", back_populates="variant")
     # discount_config_buy_x_get_y_get_id = Column(

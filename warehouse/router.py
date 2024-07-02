@@ -74,6 +74,7 @@ def create_warehouse(
         x_livemode,
         warehouse,
     )
+    return new_warehouse
 
 
 @router.post("/{warehouse_id}", response_model=schema.Warehouse)
@@ -83,13 +84,13 @@ def update_warehouse(
     warehouse_id: str,
     warehouse: Annotated[schema.WarehouseUpdate, Depends(update_warehouse_form)],
 ):
-    warehouse = crud.update_warehouse(
+    updated_warehouse = crud.update_warehouse(
         x_shop_id,
         x_livemode,
         warehouse_id,
         warehouse,
     )
-    return warehouse
+    return updated_warehouse
 
 
 @router.get("/{warehouse_id}", response_model=schema.Warehouse)
