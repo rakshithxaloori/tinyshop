@@ -12,15 +12,15 @@ router = APIRouter(prefix="/v1/carts")
 
 @router.post("/{cart_id}/cart_items", response_model=schema.CartItem)
 def create_cart_item(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart_id: str,
     cart_item: Annotated[schema.CartItemCreate, Depends(form.create_cart_item_form)],
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     new_cart_item = crud.create_cart_item(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart_id,
         cart_item,
         db,
@@ -32,16 +32,16 @@ def create_cart_item(
     "/{cart_id}/cart_items/{cart_item_id}", response_model=schema.CartItemUpdate
 )
 def update_cart_item(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart_id: str,
     cart_item_id: str,
     cart_item: Annotated[schema.CartItemUpdate, Depends(form.update_cart_item_form)],
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     updated_cart_item = crud.update_cart_item(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart_id,
         cart_item_id,
         cart_item,
@@ -52,15 +52,15 @@ def update_cart_item(
 
 @router.get("/{cart_id}/cart_items/{cart_item_id}", response_model=schema.CartItem)
 def retrieve_cart_item(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart_id: str,
     cart_item_id: str,
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     cart_item = crud.retrieve_cart_item(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart_id,
         cart_item_id,
         db,
@@ -70,15 +70,15 @@ def retrieve_cart_item(
 
 @router.get("/{cart_id}/cart_items", response_model=schema.CartItemList)
 def list_cart_items(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart_id: str,
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     # TODO skip limit
     cart_items_list = crud.list_cart_items(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart_id,
         db,
     )
@@ -89,15 +89,15 @@ def list_cart_items(
     "/{cart_id}/cart_items/{cart_item_id}", response_model=schema.CartItemDelete
 )
 def delete_cart_item(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart_id: str,
     cart_item_id: str,
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     deleted_id = crud.delete_cart_item(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart_id,
         cart_item_id,
         db,

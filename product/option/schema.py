@@ -10,7 +10,7 @@ class OptionBase(BaseModel):
 
 
 class OptionCreate(OptionBase):
-    product: str
+    pass
 
 
 class Option(OptionBase, PyBaseModel):

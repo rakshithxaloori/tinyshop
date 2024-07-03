@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from product.price.model import Price
 
 
-class CartItem(SqlBase):
+class CartItem(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("ci"))
     quantity: int = Field()
 

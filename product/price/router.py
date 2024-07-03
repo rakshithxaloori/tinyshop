@@ -12,14 +12,14 @@ router = APIRouter(prefix="/v1/prices")
 
 @router.post("", response_model=schema.Price)
 def create_price(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     price: Annotated[schema.PriceCreate, Depends(form.create_price_form)],
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     new_price = crud.create_price(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         price,
         db,
     )
@@ -28,15 +28,15 @@ def create_price(
 
 @router.post("/{price_id}", response_model=schema.Price)
 def update_price(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     price_id: str,
     price: Annotated[schema.PriceUpdate, Depends(form.update_price_form)],
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     updated_price = crud.update_price(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         price_id,
         price,
         db,
@@ -46,14 +46,14 @@ def update_price(
 
 @router.get("/{price_id}", response_model=schema.Price)
 def retrieve_price(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     price_id: str,
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     price = crud.retrieve_price(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         price_id,
         db,
     )
@@ -62,13 +62,13 @@ def retrieve_price(
 
 @router.get("", response_model=schema.PriceList)
 def list_prices(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
-    db: Annotated[Session, Depends(get_session)],
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    db: Session = Depends(get_session),
 ):
     price_list = crud.list_prices(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         db,
     )
     return price_list
@@ -76,14 +76,14 @@ def list_prices(
 
 @router.delete("/{price_id}", response_model=schema.PriceDelete)
 def delete_price(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     price_id: str,
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     deleted_id = crud.delete_customer(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         price_id,
         db,
     )

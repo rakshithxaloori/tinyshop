@@ -1,0 +1,121 @@
+from datetime import datetime
+from typing import Annotated
+from fastapi import Form
+
+
+from product.variant import schema
+from lib.form import bool_string
+
+
+def create_variant_form(
+    name: Annotated[str, Form()],
+    active: Annotated[str, Form()],
+    accept_zero_inventory_orders: Annotated[str, Form()],
+    next_refill: Annotated[str, Form()],  # TODO
+    description: Annotated[str | None, Form()] = None,
+    options: Annotated[list[str] | None, Form()] = None,
+    package_dimensions_height: Annotated[
+        str | None, Form(alias="package_dimensions[height]")
+    ] = None,
+    package_dimensions_width: Annotated[
+        str | None, Form(alias="package_dimensions[width]")
+    ] = None,
+    package_dimensions_length: Annotated[
+        str | None, Form(alias="package_dimensions[length]")
+    ] = None,
+    package_dimensions_weight: Annotated[
+        str | None, Form(alias="package_dimensions[weight]")
+    ] = None,
+):
+    package_dimensions = None
+    if (
+        package_dimensions_height
+        and package_dimensions_width
+        and package_dimensions_length
+        and package_dimensions_weight
+    ):
+        package_dimensions = schema.PackageDimensions(
+            height=package_dimensions_height,
+            width=package_dimensions_width,
+            length=package_dimensions_length,
+            weight=package_dimensions_weight,
+        )
+
+        schema.PackageDimensions.model_validate(package_dimensions)
+
+    option_values = None
+    if options:
+        option_values = [
+            schema.VariantOptionValue(
+                name=o.split(":")[0],
+                value=o.split(":")[1],
+            )
+            for o in options
+        ]
+    return schema.VariantCreate(
+        name=name,
+        description=description,
+        active=active == bool_string.TRUE,
+        options=option_values,
+        accept_zero_inventory_orders=accept_zero_inventory_orders == bool_string.TRUE,
+        # TODO convert string to datetime timestamp
+        next_refill=int(datetime.now().timestamp()),
+        package_dimensions=package_dimensions,
+    )
+
+
+def update_variant_form(
+    name: Annotated[str, Form()],
+    description: Annotated[str | None, Form()] = None,
+    active: Annotated[str | None, Form()] = None,
+    options: Annotated[list[str] | None, Form()] = None,
+    accept_zero_inventory_orders: Annotated[str | None, Form()] = None,
+    next_refill: Annotated[str | None, Form()] = None,
+    package_dimensions_height: Annotated[
+        str | None, Form(alias="package_dimensions[height]")
+    ] = None,
+    package_dimensions_width: Annotated[
+        str | None, Form(alias="package_dimensions[width]")
+    ] = None,
+    package_dimensions_length: Annotated[
+        str | None, Form(alias="package_dimensions[length]")
+    ] = None,
+    package_dimensions_weight: Annotated[
+        str | None, Form(alias="package_dimensions[weight]")
+    ] = None,
+):
+    package_dimensions = None
+    if (
+        package_dimensions_height
+        and package_dimensions_width
+        and package_dimensions_length
+        and package_dimensions_weight
+    ):
+        package_dimensions = schema.PackageDimensions(
+            height=package_dimensions_height,
+            width=package_dimensions_width,
+            length=package_dimensions_length,
+            weight=package_dimensions_weight,
+        )
+
+        package_dimensions.model_validate()
+
+    option_values = None
+    if options:
+        option_values = [
+            schema.VariantOptionValue(
+                name=o.split(":")[0],
+                value=o.split(":")[1],
+            )
+            for o in options
+        ]
+    return schema.VariantUpdate(
+        name=name,
+        description=description,
+        active=active == bool_string.TRUE,
+        options=option_values,
+        accept_zero_inventory_orders=accept_zero_inventory_orders == bool_string.TRUE,
+        # TODO convert string to datetime timestamp
+        next_refill=int(datetime.now().timestamp()),
+        package_dimensions=package_dimensions,
+    )

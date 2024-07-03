@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from sqlmodel import Field, Relationship, UniqueConstraint
+from sqlmodel import Field, Relationship, UniqueConstraint, Column, ARRAY, Text
 
 
 from lib.model import SqlBase
@@ -12,10 +12,9 @@ if TYPE_CHECKING:
 
 
 class Option(SqlBase, table=True):
-    id: str = Field(primary_key=True, default=get_primary_key("opt"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("opt"))
     name: str = Field()
-    # TODO add values when using postgres
-    # values: list[str] = Field()
+    values: list[str] = Field(sa_column=Column(ARRAY(Text)))
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="options")

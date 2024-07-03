@@ -54,7 +54,7 @@ class CustomerUnitAmount(SqlBase, table=True):
 class Recurring(SqlBase, table=True):
     __tablename__ = "_recurring"
 
-    id: str = Field(primary_key=True, default=get_primary_key("_recur"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("_recur"))
     interval: RecurringTypeEnum = Field()
     interval_count: int = Field()
 

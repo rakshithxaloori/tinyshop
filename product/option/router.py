@@ -1,103 +1,103 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Form
+from sqlmodel import Session
+from fastapi import APIRouter, Depends
 
 
-from product.option import schema, crud
+from product.option import schema, crud, form
 from lib.dependencies import ShopIDDep, LivemodeDep
+from lib.session import get_session
 
 
-router = APIRouter(prefix="/v1/options")
-
-
-def create_option_form(
-    name: Annotated[str, Form()],
-    values: Annotated[list[str], Form()],
-    product: Annotated[str, Form()],
-):
-    return schema.OptionCreate(
-        name=name,
-        values=values,
-        product=product,
-    )
-
-
-def update_option_form(
-    name: Annotated[str | None, Form()],
-    values: Annotated[list[str] | None, Form()],
-):
-    return schema.OptionUpdate(
-        name=name,
-        values=values,
-    )
+router = APIRouter(prefix="/v1/products/{product_id}/options")
 
 
 @router.post("", response_model=schema.Option)
 def create_option(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
-    option: Annotated[schema.OptionCreate, Depends(create_option_form)],
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    product_id: str,
+    option: Annotated[schema.OptionCreate, Depends(form.create_option_form)],
+    db: Session = Depends(get_session),
 ):
     new_option = crud.create_option(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
+        product_id,
         option,
+        db,
     )
     return new_option
 
 
 @router.post("/{option_id}", response_model=schema.Option)
 def update_option(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    product_id: str,
     option_id: str,
-    option: Annotated[schema.OptionUpdate, Depends(update_option_form)],
+    option: Annotated[schema.OptionUpdate, Depends(form.update_option_form)],
+    db: Session = Depends(get_session),
 ):
     updated_option = crud.update_option(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
+        product_id,
         option_id,
         option,
+        db,
     )
     return updated_option
 
 
 @router.get("/{option_id}", response_model=schema.Option)
 def retrieve_option(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    product_id: str,
     option_id: str,
+    db: Session = Depends(get_session),
 ):
     option = crud.retrieve_option(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
+        product_id,
         option_id,
+        db,
     )
     return option
 
 
 @router.get("", response_model=schema.OptionList)
 def list_options(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    product_id: str,
+    db: Session = Depends(get_session),
 ):
     # TODO skip, limit
     options_list = crud.list_options(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
+        product_id,
+        db,
     )
     return options_list
 
 
 @router.delete("/{option_id}", response_model=schema.OptionDelete)
 def delete_option(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    product_id: str,
     option_id: str,
+    db: Session = Depends(get_session),
 ):
     deleted_id = crud.delete_option(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
+        product_id,
         option_id,
+        db,
     )
     deleted_option = schema.OptionDelete(
         id=option_id,

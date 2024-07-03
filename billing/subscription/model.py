@@ -25,7 +25,7 @@ class CollectionMethodEnum(str, enum.Enum):
 class Subscription(SqlBase):
     __tablename__ = "subscription"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("sub"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("sub"))
     cancel_at_period_end = Column(Boolean)
     current_period_end = Column(DateTime)
     current_period_start = Column(DateTime)
@@ -59,7 +59,7 @@ class Subscription(SqlBase):
 class SubscriptionBillingCycleAnchorConfig(SqlBase):
     __tablename__ = "_subscription_billing_cycle_anchor_config"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_sbcac"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_sbcac"))
     day_of_month = Column(Integer)
     hour = Column(Integer, nullable=True)
     minute = Column(Integer, nullable=True)
@@ -89,7 +89,7 @@ class SubscriptionCancellationDetailsReasonEnum(str, enum.Enum):
 class SubscriptionCancellationDetails(SqlBase):
     __tablename__ = "_subscription_cancellation_details"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_scd"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_scd"))
     comment = Column(Text, nullable=True)
     feedback = Column(Enum(SubscriptionCancellationDetailsFeedbackEnum), nullable=True)
     reason = Column(Enum(SubscriptionCancellationDetailsReasonEnum), nullable=True)

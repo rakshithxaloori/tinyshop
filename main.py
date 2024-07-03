@@ -61,6 +61,7 @@ async def get_credentials(request: Request, call_next):
         )
 
     username, _ = base64.b64decode(data).decode().split(":", 1)
+    # TODO check secret key and get shop id
     secret_key = "sk_test_1234abcd"
     if username != secret_key:
         return JSONResponse(
@@ -73,12 +74,8 @@ async def get_credentials(request: Request, call_next):
             content={"message": "Secret key is invalid"},
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
-    headers = dict(request.scope["headers"])
-    headers[b"x-shop-id"] = str.encode(
-        "shop_8hCaozNw3kSAfBaYCSTSNX"
-    )  # TODO get shop id
-    headers[b"x-livemode"] = str.encode(livemode)
-    request.scope["headers"] = [(k, v) for k, v in headers.items()]
+    request.state.shop_id = "shop_ahFqdG3TSh9yi2xaUFaN7Y"
+    request.state.livemode = livemode == "live"
     response = await call_next(request)
     return response
 
@@ -88,8 +85,8 @@ main_router = APIRouter()
 
 
 @main_router.get("/")
-def read_root(x_shop_id: ShopIDDep, x_livemode: LivemodeDep):
-    print(x_shop_id, x_livemode)
+def read_root(shop_id: ShopIDDep, livemode: LivemodeDep):
+    print(shop_id, livemode)
     return {"Hello": "World"}
 
 

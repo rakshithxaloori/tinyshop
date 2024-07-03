@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class Variant(SqlBase, table=True):
-    id: str = Field(primary_key=True, default=get_primary_key("var"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("var"))
     name: str = Field()
     description: str = Field(nullable=True)
     active: bool = Field()
@@ -52,7 +52,7 @@ class Variant(SqlBase, table=True):
 
 
 class PackageDimensions(SqlBase, table=True):
-    id: str = Field(primary_key=True, default=get_primary_key("_pdim"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("_pdim"))
     height: float = Field()
     width: float = Field()
     length: float = Field()

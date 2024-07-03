@@ -12,14 +12,14 @@ router = APIRouter(prefix="/v1/carts")
 
 @router.post("", response_model=schema.Cart)
 def create_cart(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart: Annotated[schema.CartCreate, Depends(form.create_cart_form)],
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     new_cart = crud.create_cart(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart,
         db,
     )
@@ -28,15 +28,15 @@ def create_cart(
 
 @router.post("/{cart_id}", response_model=schema.Cart)
 def update_cart(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart_id: str,
     cart: Annotated[schema.CartUpdate, Depends(form.update_cart_form)],
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     updated_cart = crud.update_cart(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart_id,
         cart,
         db,
@@ -46,14 +46,14 @@ def update_cart(
 
 @router.get("/{cart_id}", response_model=schema.Cart)
 def retrieve_cart(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart_id: str,
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     cart = crud.retrieve_cart(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart_id,
         db,
     )
@@ -62,14 +62,14 @@ def retrieve_cart(
 
 @router.get("", response_model=schema.CartList)
 def list_carts(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
-    db: Annotated[Session, Depends(get_session)],
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    db: Session = Depends(get_session),
 ):
     # TODO skip limit
     carts_list = crud.list_carts(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         db,
     )
     return carts_list
@@ -77,14 +77,14 @@ def list_carts(
 
 @router.delete("/{cart_id}", response_model=schema.CartDelete)
 def delete_cart(
-    x_shop_id: ShopIDDep,
-    x_livemode: LivemodeDep,
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
     cart_id: str,
-    db: Annotated[Session, Depends(get_session)],
+    db: Session = Depends(get_session),
 ):
     deleted_id = crud.delete_cart(
-        x_shop_id,
-        x_livemode,
+        shop_id,
+        livemode,
         cart_id,
         db,
     )

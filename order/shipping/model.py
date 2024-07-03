@@ -20,7 +20,7 @@ class ShippingStatusEnum(str, enum.Enum):
 class Shipping(SqlBase):
     __tablename__ = "shipping"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("sh"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("sh"))
     status = Column(Enum(ShippingStatusEnum))
 
     order_id = Column(Text, ForeignKey("order.id", ondelete="CASCADE"))
@@ -35,7 +35,7 @@ class Shipping(SqlBase):
 class ShippingLine(SqlBase):
     __tablename__ = "shipping_line"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("sl"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("sl"))
     quantity = Column(Integer)
 
     shipping_id = Column(Text, ForeignKey("shipping.id", ondelete="CASCADE"))
@@ -46,7 +46,7 @@ class ShippingLine(SqlBase):
 class ShippingAddress(SqlBase):
     __tablename__ = "_shipping_address"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_saddr"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_saddr"))
     name = Column(Text)
     email = Column(Text, nullable=True)
     phone = Column(Text)

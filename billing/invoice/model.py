@@ -27,7 +27,7 @@ class InvoiceStatusEnum(str, enum.Enum):
 class Invoice(SqlBase):
     __tablename__ = "invoice"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("in"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("in"))
     amount_due = Column(Integer)
     amount_paid = Column(Integer)
     amount_remaining = Column(Integer)
@@ -64,7 +64,7 @@ class Invoice(SqlBase):
 class InvoiceCustomerAddress(SqlBase):
     __tablename__ = "_invoice_customer_address"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_ica"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_ica"))
     line1 = Column(Text)
     line2 = Column(Text, nullable=True)
     city = Column(Text)

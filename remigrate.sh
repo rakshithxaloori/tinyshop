@@ -1,6 +1,9 @@
 rm sql_app.db
 rm -rf alembic/versions/*
-export DB_URL="sqlite:///./sql_app.db"
+export DB_URL="postgresql://postgres:postgres@localhost:5432/tinyshop"
+echo $DB_URL
+psql "postgresql://postgres:postgres@localhost:5432" -c "drop database tinyshop WITH (FORCE);"
+psql "postgresql://postgres:postgres@localhost:5432" -c "create database tinyshop owner postgres;"
 alembic revision --autogenerate
 alembic upgrade head
 # PYTHONPATH=. fastapi dev main.py

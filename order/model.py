@@ -25,7 +25,7 @@ class OrderStatusEnum(str, enum.Enum):
 class Order(SqlBase):
     __tablename__ = "order"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("or"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("or"))
     type = Column(Enum(OrderTypeEnum))
     status = Column(Enum(OrderStatusEnum))
 

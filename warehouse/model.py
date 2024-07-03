@@ -8,6 +8,7 @@ from lib.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
+    from warehouse.inventory.model import Inventory
 
 
 class Warehouse(SqlBase, table=True):
@@ -22,14 +23,14 @@ class Warehouse(SqlBase, table=True):
         back_populates="warehouse",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # inventories = relationship("Inventory", back_populates="warehouse")
+    inventories: list["Inventory"] = Relationship(back_populates="warehouse")
     # shippings = relationship("Shipping", back_populates="warehouse")
 
 
-class WarehouseAddress(SqlBase):
+class WarehouseAddress(SqlBase, table=True):
     __tablename__ = "_warehouse_address"
 
-    id: str = Field(primary_key=True, default=get_primary_key("_waddr"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("_waddr"))
     line1: str = Field()
     line2: str = Field(nullable=True)
     city: str = Field()

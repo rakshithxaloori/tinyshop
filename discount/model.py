@@ -18,7 +18,7 @@ class Discount(SqlBase):
     # TODO
     __tablename__ = "discount"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("dis"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("dis"))
     type = Column(Enum(DiscountTypeEnum))
     code = Column(Text)
     active = Column(Boolean)
@@ -31,7 +31,7 @@ class Discount(SqlBase):
 class DiscountConfig(SqlBase):
     __tablename__ = "_discount_config"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_dc"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_dc"))
 
     discount_id = Column(Text, ForeignKey("discount.id", ondelete="CASCADE"))
     discount = relationship("Discount", back_populates="config")
@@ -50,7 +50,7 @@ class DiscountConfig(SqlBase):
 class DiscountConfigOffProduct(SqlBase):
     __tablename__ = "_discount_config_off_product"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_dopc"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_dopc"))
     quantity_min = Column(Integer, nullable=True)
     amount_off = Column(Integer, nullable=True)
     percentage_off = Column(Integer, nullable=True)
@@ -65,7 +65,7 @@ class DiscountConfigOffProduct(SqlBase):
 class DiscountConfigOffOrder(SqlBase):
     __tablename__ = "_discount_config_off_order"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_dooc"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_dooc"))
     amount_min = Column(Integer, nullable=True)
     amount_off = Column(Integer, nullable=True)
     percentage_off = Column(Integer, nullable=True)
@@ -76,7 +76,7 @@ class DiscountConfigOffOrder(SqlBase):
 class DiscountConfigShipping(SqlBase):
     __tablename__ = "_discount_config_shipping"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_dsc"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_dsc"))
     amount_min = Column(Integer, nullable=True)
     amount_off = Column(Integer, nullable=True)
     percentage_off = Column(Integer, nullable=True)
@@ -85,7 +85,7 @@ class DiscountConfigShipping(SqlBase):
 class DiscountConfigBuyXGetY(SqlBase):
     __tablename__ = "_discount_config_buy_x_get_y"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_dbxgyc"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_dbxgyc"))
     quantity_min = Column(Integer, nullable=True)
     quantity_get = Column(Integer, nullable=True)
     amount_min = Column(Integer, nullable=True)

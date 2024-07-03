@@ -21,7 +21,7 @@ class CheckoutPaymentStatus(str, enum.Enum):
 class Checkout(SqlBase):
     __tablename__ = "checkout"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("co"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("co"))
     customer_email = Column(Text, nullable=True)
     customer_phone = Column(Text)
     status = Column(Enum(CheckoutStatusEnum))
@@ -64,7 +64,7 @@ class Checkout(SqlBase):
 class CheckoutCustomerDetails(SqlBase):
     __tablename__ = "_checkout_customer_details"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_ccd"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_ccd"))
     email = Column(Text, nullable=True)
     name = Column(Text)
     phone = Column(Text)
@@ -81,7 +81,7 @@ class CheckoutCustomerDetails(SqlBase):
 class CheckoutCustomerDetailsAddress(SqlBase):
     __tablename__ = "_checkout_customer_details_address"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_ccdaddr"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_ccdaddr"))
     name = Column(Text)
     line1 = Column(Text)
     line2 = Column(Text, nullable=True)
@@ -98,7 +98,7 @@ class CheckoutCustomerDetailsAddress(SqlBase):
 class CheckoutShippingAddress(SqlBase):
     __tablename__ = "_checkout_shipping_address"
 
-    id = Column(Text, primary_key=True, default=get_primary_key("_c"))
+    id = Column(Text, primary_key=True, default_factory=get_primary_key("_c"))
     name = Column(Text)
     line1 = Column(Text)
     line2 = Column(Text, nullable=True)
