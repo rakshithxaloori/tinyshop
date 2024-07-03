@@ -80,7 +80,7 @@ def update_customer(
 def retrieve_customer(
     x_shop_id: str,
     livemode: bool,
-    id: str,
+    customer_id: str,
 ) -> schema.Customer | None:
     with Session(engine) as db:
         try:
@@ -88,7 +88,7 @@ def retrieve_customer(
                 select(Customer, CustomerAddress)
                 .where(Customer.shop_id == x_shop_id)
                 .where(Customer.livemode == livemode)
-                .where(Customer.id == id)
+                .where(Customer.id == customer_id)
                 .where(Customer.id == CustomerAddress.customer_id)
             )
             all_rows = list(results.all())
@@ -128,7 +128,7 @@ def list_customers(
 def delete_customer(
     x_shop_id: str,
     livemode: bool,
-    id: str,
+    customer_id: str,
 ) -> str | None:
     with Session(engine) as db:
         try:
@@ -136,7 +136,7 @@ def delete_customer(
                 select(Customer)
                 .where(Customer.shop_id == x_shop_id)
                 .where(Customer.livemode == livemode)
-                .where(Customer.id == id)
+                .where(Customer.id == customer_id)
             )
             customer = results.one()
             db.delete(customer)

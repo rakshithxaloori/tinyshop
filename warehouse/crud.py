@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from warehouse.model import Warehouse, WarehouseAddress
 from warehouse import schema
 from warehouse.utils import pydantify_warehouses
-from utils.session import update_refresh
+from lib.session import update_refresh
 
 
 def create_warehouse(

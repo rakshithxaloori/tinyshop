@@ -3,8 +3,8 @@ from sqlalchemy import Column, Text, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
 
-from utils.model import SqlBase
-from utils.primary_key import get_primary_key
+from lib.model import SqlBase
+from lib.primary_key import get_primary_key
 
 
 class ShippingStatusEnum(str, enum.Enum):

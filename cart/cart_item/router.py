@@ -1,30 +1,13 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Form
+from sqlmodel import Session
+from fastapi import APIRouter, Depends
 
 
-from cart.cart_item import schema, crud
-from utils.dependencies import ShopIDDep, LivemodeDep
-
+from cart.cart_item import schema, crud, form
+from lib.dependencies import ShopIDDep, LivemodeDep
+from lib.session import get_session
 
 router = APIRouter(prefix="/v1/carts")
-
-
-def create_cart_item_form(
-    cart: Annotated[str, Form()],
-    price: Annotated[str, Form()],
-    quantity: Annotated[int, Form()] = 1,
-) -> schema.CartItemCreate:
-    return schema.CartItemCreate(
-        cart=cart,
-        price=price,
-        quantity=quantity,
-    )
-
-
-def update_cart_item_form(
-    quantity: Annotated[int, Form()],
-) -> schema.CartItemUpdate:
-    return schema.CartItemUpdate(quantity=quantity)
 
 
 @router.post("/{cart_id}/cart_items", response_model=schema.CartItem)
@@ -32,13 +15,15 @@ def create_cart_item(
     x_shop_id: ShopIDDep,
     x_livemode: LivemodeDep,
     cart_id: str,
-    cart_item: Annotated[schema.CartItemCreate, Depends(create_cart_item_form)],
+    cart_item: Annotated[schema.CartItemCreate, Depends(form.create_cart_item_form)],
+    db: Annotated[Session, Depends(get_session)],
 ):
     new_cart_item = crud.create_cart_item(
         x_shop_id,
         x_livemode,
         cart_id,
         cart_item,
+        db,
     )
     return new_cart_item
 
@@ -51,7 +36,8 @@ def update_cart_item(
     x_livemode: LivemodeDep,
     cart_id: str,
     cart_item_id: str,
-    cart_item: Annotated[schema.CartItemUpdate, Depends(update_cart_item_form)],
+    cart_item: Annotated[schema.CartItemUpdate, Depends(form.update_cart_item_form)],
+    db: Annotated[Session, Depends(get_session)],
 ):
     updated_cart_item = crud.update_cart_item(
         x_shop_id,
@@ -59,6 +45,7 @@ def update_cart_item(
         cart_id,
         cart_item_id,
         cart_item,
+        db,
     )
     return updated_cart_item
 
@@ -69,12 +56,14 @@ def retrieve_cart_item(
     x_livemode: LivemodeDep,
     cart_id: str,
     cart_item_id: str,
+    db: Annotated[Session, Depends(get_session)],
 ):
     cart_item = crud.retrieve_cart_item(
         x_shop_id,
         x_livemode,
         cart_id,
         cart_item_id,
+        db,
     )
     return cart_item
 
@@ -84,12 +73,14 @@ def list_cart_items(
     x_shop_id: ShopIDDep,
     x_livemode: LivemodeDep,
     cart_id: str,
+    db: Annotated[Session, Depends(get_session)],
 ):
     # TODO skip limit
     cart_items_list = crud.list_cart_items(
         x_shop_id,
         x_livemode,
         cart_id,
+        db,
     )
     return cart_items_list
 
@@ -102,12 +93,14 @@ def delete_cart_item(
     x_livemode: LivemodeDep,
     cart_id: str,
     cart_item_id: str,
+    db: Annotated[Session, Depends(get_session)],
 ):
     deleted_id = crud.delete_cart_item(
         x_shop_id,
         x_livemode,
         cart_id,
         cart_item_id,
+        db,
     )
     deleted_cart_item = schema.CartItemDelete(
         id=cart_item_id,

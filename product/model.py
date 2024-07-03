@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship, UniqueConstraint
 
 
-from utils.model import SqlBase
-from utils.primary_key import get_primary_key
+from lib.model import SqlBase
+from lib.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:

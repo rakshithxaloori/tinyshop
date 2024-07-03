@@ -1,15 +1,14 @@
-import enum
 from pydantic import BaseModel
 
-from utils.model import PyBaseModel
-from utils.object import object_type
-from product.price.model import PriceTypeEnum, RecurringTypeEnum
+from lib.model import PyBaseModel
+from lib.object import object_type
+from product.price.enum import PriceTypeEnum, RecurringTypeEnum
 
 
 class CustomerUnitAmount(BaseModel):
     maximum: int | None = None
     minimum: int | None = None
-    preset: int
+    preset: int = 1
 
 
 class Recurring(BaseModel):
@@ -33,7 +32,7 @@ class PriceCreate(PriceBase):
 
 class Price(PriceBase, PyBaseModel):
     id: str
-    object: object_type.PRICE
+    object: str = object_type.PRICE
 
 
 class PriceList(BaseModel):

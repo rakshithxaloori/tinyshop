@@ -4,7 +4,7 @@ from product.model import Product
 from product import schema
 from product.utils import pydantify_products
 from database import engine
-from utils.session import update_refresh
+from lib.session import update_refresh
 
 
 def create_product(

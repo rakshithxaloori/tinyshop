@@ -1,6 +1,7 @@
-from cart.model import Cart, CartItem
+from cart.model import Cart
 from cart import schema
 from cart.cart_item import schema as ci_schema
+from cart.cart_item.model import CartItem
 
 
 def pydantify_carts(rows: list[tuple[Cart, CartItem | None]]) -> list[schema.Cart]:

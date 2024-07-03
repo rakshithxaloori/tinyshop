@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship
 
 
-from utils.model import SqlBase
-from utils.primary_key import get_primary_key
+from lib.model import SqlBase
+from lib.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class CartItem(SqlBase):
-    id = Field(primary_key=True, default_factory=get_primary_key("ci"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("ci"))
     quantity: int = Field()
 
     cart_id: str = Field(foreign_key="cart.id")

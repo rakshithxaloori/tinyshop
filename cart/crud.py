@@ -4,7 +4,7 @@ from cart.model import Cart
 from cart import schema
 from cart.cart_item.model import CartItem
 from cart.utils import pydantify_carts
-from utils.session import update_refresh
+from lib.session import update_refresh
 
 
 def create_cart(
@@ -74,7 +74,7 @@ def update_cart(
 def retrieve_cart(
     x_shop_id: str,
     livemode: bool,
-    id: str,
+    cart_id: str,
     db: Session,
 ) -> schema.Cart | None:
     with db.begin():
@@ -83,7 +83,7 @@ def retrieve_cart(
                 select(Cart, CartItem)
                 .where(Cart.shop_id == x_shop_id)
                 .where(Cart.livemode == livemode)
-                .where(Cart.id == id)
+                .where(Cart.id == cart_id)
                 .where(Cart.id == CartItem.cart_id)
             )
             all_rows = list(results.all())
@@ -122,7 +122,7 @@ def list_carts(
 def delete_cart(
     x_shop_id: str,
     livemode: bool,
-    id: str,
+    cart_id: str,
     db: Session,
 ) -> str | None:
     with db.begin():
@@ -131,7 +131,7 @@ def delete_cart(
                 select(Cart)
                 .where(Cart.shop_id == x_shop_id)
                 .where(Cart.livemode == livemode)
-                .where(Cart.id == id)
+                .where(Cart.id == cart_id)
             )
             cart = results.one()
             db.delete(cart)

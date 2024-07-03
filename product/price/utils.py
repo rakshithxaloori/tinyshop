@@ -7,7 +7,7 @@ def pydantify_prices(
 ) -> list[schema.Price]:
     prices: list[schema.Price] = []
     for price, cua, recurring in rows:
-        price_data = price.model(
+        price_data = price.model_dump(
             exclude={"created", "updated", "customer_unit_amount", "recurring"}
         )
         cua_data = cua.model_dump()

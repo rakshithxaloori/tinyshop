@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship
 
 
-from utils.model import SqlBase
-from utils.primary_key import get_primary_key
+from lib.model import SqlBase
+from lib.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:
@@ -23,7 +23,7 @@ class Cart(SqlBase, table=True):
     status: CartStatusEnum = Field(default=CartStatusEnum.REQUIRES_PAYMENT)
 
     shop_id: str = Field(foreign_key="shop.id")
-    shop: "Shop" = Relationship("Shop", back_populates="carts")
+    shop: "Shop" = Relationship(back_populates="carts")
     items: list["CartItem"] = Relationship(
         back_populates="cart",
         sa_relationship_kwargs={"cascade": "delete"},

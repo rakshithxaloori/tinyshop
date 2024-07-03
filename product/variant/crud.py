@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from product.variant.model import Variant, PackageDimensions
 from product.variant import schema
 from product.variant.utils import pydantify_variants
-from utils.session import update_refresh
+from lib.session import update_refresh
 
 
 def create_variant(

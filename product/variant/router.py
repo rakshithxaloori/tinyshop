@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, Form
 
 
 from product.variant import schema, crud
-from utils.dependencies import ShopIDDep, LivemodeDep
-from utils.form import bool_string
+from lib.dependencies import ShopIDDep, LivemodeDep
+from lib.form import bool_string
 
 
 router = APIRouter(prefix="/v1/variants")

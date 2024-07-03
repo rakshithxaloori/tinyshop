@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship
 
 
-from utils.model import SqlBase
-from utils.primary_key import get_primary_key
+from lib.model import SqlBase
+from lib.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:
@@ -19,6 +19,6 @@ class Inventory(SqlBase, table=True):
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="inventories")
     variant_id: str = Field(foreign_key="variant.id")
-    variant: "Variant" = Relationship("Variant", back_populates="inventories")
+    variant: "Variant" = Relationship(back_populates="inventories")
     warehouse_id: str = Field(foreign_key="warehouse.id")
-    warehouse: "Warehouse" = Relationship("Warehouse", back_populates="inventories")
+    warehouse: "Warehouse" = Relationship(back_populates="inventories")

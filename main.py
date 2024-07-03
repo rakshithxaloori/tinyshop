@@ -11,11 +11,14 @@ import customer.address.model as customer_address_models
 
 from product import model as product_models
 from product.option import model as option_models
-from product.option import model as option_models
 from product.variant import model as variant_models
 from product.price import model as price_models
 
 from warehouse import model as warehouse_models
+from warehouse.inventory import model as inventory_models
+
+from cart import model as cart_models
+from cart.cart_item import model as cart_item_models
 
 # from discount import model as discount_models
 
@@ -30,13 +33,17 @@ from product.variant.router import router as variant_router
 from product.price.router import router as price_router
 
 from warehouse.router import router as warehouse_router
+from warehouse.inventory.router import router as inventory_router
 
-from utils.dependencies import ShopIDDep, LivemodeDep
+from cart.router import router as cart_router
+from cart.cart_item.router import router as cart_item_router
+
+from lib.dependencies import ShopIDDep, LivemodeDep
 
 SQLModel.metadata.create_all(bind=engine)
 
 
-app = FastAPI()
+app = FastAPI(root_path="tinyshop")
 
 
 # TODO middleware to log your requests or cache the results
@@ -96,3 +103,7 @@ app.include_router(variant_router)
 app.include_router(price_router)
 
 app.include_router(warehouse_router)
+app.include_router(inventory_router)
+
+app.include_router(cart_router)
+app.include_router(cart_item_router)

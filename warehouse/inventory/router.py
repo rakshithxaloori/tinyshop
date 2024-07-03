@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Form
 
 
 from warehouse.inventory import schema, crud
-from utils.dependencies import ShopIDDep, LivemodeDep
+from lib.dependencies import ShopIDDep, LivemodeDep
 
 
 router = APIRouter(prefix="/v1/inventories")

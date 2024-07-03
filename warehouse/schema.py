@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from utils.model import PyBaseModel
-from utils.object import object_type
+from lib.model import PyBaseModel
+from lib.object import object_type
 
 
 class WarehouseAddress(BaseModel):

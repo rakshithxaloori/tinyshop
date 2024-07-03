@@ -3,8 +3,8 @@ from sqlalchemy import Column, Text, ForeignKey, Enum, String, Integer, DateTime
 from sqlalchemy.orm import relationship
 
 
-from utils.model import SqlBase
-from utils.primary_key import get_primary_key
+from lib.model import SqlBase
+from lib.primary_key import get_primary_key
 
 
 class CheckoutStatusEnum(str, enum.Enum):

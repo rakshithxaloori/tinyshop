@@ -1,11 +1,10 @@
-import enum
 from typing import TYPE_CHECKING
-from sqlmodel import Field, Relationship, Enum
+from sqlmodel import Field, Relationship
 
 
-from utils.model import SqlBase
-from utils.primary_key import get_primary_key
-
+from lib.model import SqlBase
+from lib.primary_key import get_primary_key
+from product.price.enum import PriceTypeEnum, RecurringTypeEnum
 
 if TYPE_CHECKING:
     from shop.model import Shop
@@ -13,21 +12,16 @@ if TYPE_CHECKING:
     from cart.model import CartItem
 
 
-class PriceTypeEnum(str, enum.Enum):
-    ONE_TIME = "one_time"
-    SUBSCRIPTION = "subscription"
-
-
 class Price(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("price"))
     active: bool = Field()
     currency: str = Field(max_length=3)
-    type: Enum[PriceTypeEnum] = Field()
+    type: PriceTypeEnum = Field()
     unit_amount: int = Field()
     default: bool = Field(default=False)
 
     shop_id: str = Field(foreign_key="shop.id")
-    shop: "Shop" = Relationship("Shop", back_populates="prices")
+    shop: "Shop" = Relationship(back_populates="prices")
     variant_id: str = Field(foreign_key="variant.id")
     variant: "Variant" = Relationship(back_populates="prices")
 
@@ -57,18 +51,11 @@ class CustomerUnitAmount(SqlBase, table=True):
     price: "Price" = Relationship(back_populates="customer_unit_amount")
 
 
-class RecurringTypeEnum(str, enum.Enum):
-    DAY = "day"
-    WEEK = "week"
-    MONTH = "month"
-    YEAR = "year"
-
-
 class Recurring(SqlBase, table=True):
     __tablename__ = "_recurring"
 
     id: str = Field(primary_key=True, default=get_primary_key("_recur"))
-    interval: Enum[RecurringTypeEnum] = Field()
+    interval: RecurringTypeEnum = Field()
     interval_count: int = Field()
 
     price_id: str = Field(foreign_key="price.id", unique=True)

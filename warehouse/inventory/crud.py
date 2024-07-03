@@ -5,7 +5,7 @@ from product.variant.model import Variant
 from warehouse.inventory.model import Inventory
 from warehouse.inventory import schema
 from warehouse.inventory.utils import pydantify_inventories
-from utils.session import update_refresh
+from lib.session import update_refresh
 
 
 def create_inventory(

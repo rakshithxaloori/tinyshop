@@ -1,0 +1,2861 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "FastAPI", "version": "0.1.0" },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Read Root",
+        "operationId": "read_root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers": {
+      "get": {
+        "summary": "List Customers",
+        "operationId": "list_customers_v1_customers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Customer",
+        "operationId": "create_customer_v1_customers_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_customer_v1_customers_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Customer" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers/{customer_id}": {
+      "post": {
+        "summary": "Update Customer",
+        "operationId": "update_customer_v1_customers__customer_id__post",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Body_update_customer_v1_customers__customer_id__post"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Customer" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Customer",
+        "operationId": "retrieve_customer_v1_customers__customer_id__get",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    { "$ref": "#/components/schemas/Customer" },
+                    { "type": "null" }
+                  ],
+                  "title": "Response Retrieve Customer V1 Customers  Customer Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Customer",
+        "operationId": "delete_customer_v1_customers__customer_id__delete",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers/search": {
+      "get": {
+        "summary": "Search Customers",
+        "operationId": "search_customers_v1_customers_search_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers/{customer_id}/addresses": {
+      "post": {
+        "summary": "Create Address",
+        "operationId": "create_address_v1_customers__customer_id__addresses_post",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_address_v1_customers__customer_id__addresses_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerAddress" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Customer Addresses",
+        "operationId": "list_customer_addresses_v1_customers__customer_id__addresses_get",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerAddressList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers/{customer_id}/addresses/{address_id}": {
+      "post": {
+        "summary": "Update Address",
+        "operationId": "update_address_v1_customers__customer_id__addresses__address_id__post",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          },
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Address Id" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Body_update_address_v1_customers__customer_id__addresses__address_id__post"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerAddress" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Customer Address",
+        "operationId": "retrieve_customer_address_v1_customers__customer_id__addresses__address_id__get",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          },
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Address Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerAddress" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Customer Address",
+        "operationId": "delete_customer_address_v1_customers__customer_id__addresses__address_id__delete",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          },
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Address Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerAddressDelete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/products": {
+      "get": {
+        "summary": "List Products",
+        "operationId": "list_products_v1_products_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProductList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Product",
+        "operationId": "create_product_v1_products_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_product_v1_products_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/products/{product_id}": {
+      "post": {
+        "summary": "Update Product",
+        "operationId": "update_product_v1_products__product_id__post",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Product Id" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Body_update_product_v1_products__product_id__post"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Product",
+        "operationId": "retrieve_product_v1_products__product_id__get",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Product Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Product",
+        "operationId": "delete_product_v1_products__product_id__delete",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Product Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProductDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/options": {
+      "get": {
+        "summary": "List Options",
+        "operationId": "list_options_v1_options_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OptionList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Option",
+        "operationId": "create_option_v1_options_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_option_v1_options_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Option" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/options/{option_id}": {
+      "post": {
+        "summary": "Update Option",
+        "operationId": "update_option_v1_options__option_id__post",
+        "parameters": [
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Option Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_option_v1_options__option_id__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Option" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Option",
+        "operationId": "retrieve_option_v1_options__option_id__get",
+        "parameters": [
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Option Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Option" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Option",
+        "operationId": "delete_option_v1_options__option_id__delete",
+        "parameters": [
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Option Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OptionDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/variants": {
+      "get": {
+        "summary": "List Variants",
+        "operationId": "list_variants_v1_variants_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VariantList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Variant",
+        "operationId": "create_variant_v1_variants_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_variant_v1_variants_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Variant" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/variants/{variant_id}": {
+      "post": {
+        "summary": "Update Variant",
+        "operationId": "update_variant_v1_variants__variant_id__post",
+        "parameters": [
+          {
+            "name": "variant_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Variant Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_variant_v1_variants__variant_id__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Variant" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Variant",
+        "operationId": "retrieve_variant_v1_variants__variant_id__get",
+        "parameters": [
+          {
+            "name": "variant_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Variant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Variant" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Variant",
+        "operationId": "delete_variant_v1_variants__variant_id__delete",
+        "parameters": [
+          {
+            "name": "variant_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Variant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VariantDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/prices": {
+      "get": {
+        "summary": "List Prices",
+        "operationId": "list_prices_v1_prices_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PriceList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Price",
+        "operationId": "create_price_v1_prices_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_price_v1_prices_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Price" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/prices/{price_id}": {
+      "post": {
+        "summary": "Update Price",
+        "operationId": "update_price_v1_prices__price_id__post",
+        "parameters": [
+          {
+            "name": "price_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Price Id" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Body_update_price_v1_prices__price_id__post"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Price" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Price",
+        "operationId": "retrieve_price_v1_prices__price_id__get",
+        "parameters": [
+          {
+            "name": "price_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Price Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Price" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Price",
+        "operationId": "delete_price_v1_prices__price_id__delete",
+        "parameters": [
+          {
+            "name": "price_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Price Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PriceDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/warehouses": {
+      "get": {
+        "summary": "List Warehouses",
+        "operationId": "list_warehouses_v1_warehouses_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WarehouseList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Warehouse",
+        "operationId": "create_warehouse_v1_warehouses_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_warehouse_v1_warehouses_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Warehouse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/warehouses/{warehouse_id}": {
+      "post": {
+        "summary": "Update Warehouse",
+        "operationId": "update_warehouse_v1_warehouses__warehouse_id__post",
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Warehouse Id" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Body_update_warehouse_v1_warehouses__warehouse_id__post"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Warehouse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Warehouse",
+        "operationId": "retrieve_warehouse_v1_warehouses__warehouse_id__get",
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Warehouse Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Warehouse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Warehouse",
+        "operationId": "delete_warehouse_v1_warehouses__warehouse_id__delete",
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Warehouse Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WarehouseDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/inventories": {
+      "post": {
+        "summary": "Create Inventory",
+        "operationId": "create_inventory_v1_inventories_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_inventory_v1_inventories_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Inventory" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/inventories/{inventory_id}": {
+      "post": {
+        "summary": "Update Inventory",
+        "operationId": "update_inventory_v1_inventories__inventory_id__post",
+        "parameters": [
+          {
+            "name": "inventory_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Inventory Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_inventory_v1_inventories__inventory_id__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Inventory" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Inventory",
+        "operationId": "delete_inventory_v1_inventories__inventory_id__delete",
+        "parameters": [
+          {
+            "name": "inventory_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Inventory Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/InventoryDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carts": {
+      "get": {
+        "summary": "List Carts",
+        "operationId": "list_carts_v1_carts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Cart",
+        "operationId": "create_cart_v1_carts_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_cart_v1_carts_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Cart" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carts/{cart_id}": {
+      "post": {
+        "summary": "Update Cart",
+        "operationId": "update_cart_v1_carts__cart_id__post",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_cart_v1_carts__cart_id__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Cart" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Cart",
+        "operationId": "retrieve_cart_v1_carts__cart_id__get",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Cart" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Cart",
+        "operationId": "delete_cart_v1_carts__cart_id__delete",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carts/{cart_id}/cart_items": {
+      "post": {
+        "summary": "Create Cart Item",
+        "operationId": "create_cart_item_v1_carts__cart_id__cart_items_post",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_cart_item_v1_carts__cart_id__cart_items_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItem" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Cart Items",
+        "operationId": "list_cart_items_v1_carts__cart_id__cart_items_get",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItemList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carts/{cart_id}/cart_items/{cart_item_id}": {
+      "post": {
+        "summary": "Update Cart Item",
+        "operationId": "update_cart_item_v1_carts__cart_id__cart_items__cart_item_id__post",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          },
+          {
+            "name": "cart_item_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Item Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_cart_item_v1_carts__cart_id__cart_items__cart_item_id__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItemUpdate" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Cart Item",
+        "operationId": "retrieve_cart_item_v1_carts__cart_id__cart_items__cart_item_id__get",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          },
+          {
+            "name": "cart_item_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Item Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItem" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Cart Item",
+        "operationId": "delete_cart_item_v1_carts__cart_id__cart_items__cart_item_id__delete",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          },
+          {
+            "name": "cart_item_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Item Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItemDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_create_address_v1_customers__customer_id__addresses_post": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "line1": { "type": "string", "title": "Line1" },
+          "city": { "type": "string", "title": "City" },
+          "state": { "type": "string", "title": "State" },
+          "country": { "type": "string", "title": "Country" },
+          "postal_code": { "type": "string", "title": "Postal Code" },
+          "line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Line2"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "line1",
+          "city",
+          "state",
+          "country",
+          "postal_code"
+        ],
+        "title": "Body_create_address_v1_customers__customer_id__addresses_post"
+      },
+      "Body_create_cart_item_v1_carts__cart_id__cart_items_post": {
+        "properties": {
+          "cart": { "type": "string", "title": "Cart" },
+          "price": { "type": "string", "title": "Price" },
+          "quantity": { "type": "integer", "title": "Quantity", "default": 1 }
+        },
+        "type": "object",
+        "required": ["cart", "price"],
+        "title": "Body_create_cart_item_v1_carts__cart_id__cart_items_post"
+      },
+      "Body_create_cart_v1_carts_post": {
+        "properties": {
+          "price": { "type": "string", "title": "Price" },
+          "quantity": { "type": "integer", "title": "Quantity", "default": 1 }
+        },
+        "type": "object",
+        "required": ["price"],
+        "title": "Body_create_cart_v1_carts_post"
+      },
+      "Body_create_customer_v1_customers_post": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "phone": { "type": "string", "title": "Phone" },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          },
+          "address_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Name"
+          },
+          "address_line1": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Line1"
+          },
+          "address_line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Line2"
+          },
+          "address_city": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address City"
+          },
+          "address_state": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address State"
+          },
+          "address_country": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Country"
+          },
+          "address_postal_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Postal Code"
+          }
+        },
+        "type": "object",
+        "required": ["name", "phone"],
+        "title": "Body_create_customer_v1_customers_post"
+      },
+      "Body_create_inventory_v1_inventories_post": {
+        "properties": {
+          "variant": { "type": "string", "title": "Variant" },
+          "warehouse": { "type": "string", "title": "Warehouse" },
+          "quantity": { "type": "integer", "title": "Quantity" }
+        },
+        "type": "object",
+        "required": ["variant", "warehouse", "quantity"],
+        "title": "Body_create_inventory_v1_inventories_post"
+      },
+      "Body_create_option_v1_options_post": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "values": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Values"
+          },
+          "product": { "type": "string", "title": "Product" }
+        },
+        "type": "object",
+        "required": ["name", "values", "product"],
+        "title": "Body_create_option_v1_options_post"
+      },
+      "Body_create_price_v1_prices_post": {
+        "properties": {
+          "active": { "type": "string", "title": "Active" },
+          "currency": { "type": "string", "title": "Currency" },
+          "price_type": { "type": "string", "title": "Price Type" },
+          "unit_amount": { "type": "integer", "title": "Unit Amount" },
+          "default": { "type": "string", "title": "Default" },
+          "variant": { "type": "string", "title": "Variant" },
+          "customer_unit_amount_maximum": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Unit Amount Maximum"
+          },
+          "customer_unit_amount_minimum": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Unit Amount Minimum"
+          },
+          "customer_unit_amount_preset": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Unit Amount Preset"
+          },
+          "recurring_interval": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recurring Interval"
+          },
+          "recurring_interval_count": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recurring Interval Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "active",
+          "currency",
+          "price_type",
+          "unit_amount",
+          "default",
+          "variant"
+        ],
+        "title": "Body_create_price_v1_prices_post"
+      },
+      "Body_create_product_v1_products_post": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "active": { "type": "string", "title": "Active" },
+          "shippable": { "type": "string", "title": "Shippable" },
+          "preorder": { "type": "string", "title": "Preorder" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": ["name", "active", "shippable", "preorder"],
+        "title": "Body_create_product_v1_products_post"
+      },
+      "Body_create_variant_v1_variants_post": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "active": { "type": "string", "title": "Active" },
+          "accept_zero_inventory_orders": {
+            "type": "string",
+            "title": "Accept Zero Inventory Orders"
+          },
+          "next_refill": { "type": "string", "title": "Next Refill" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "options": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Options"
+          },
+          "package_dimensions_height": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Package Dimensions Height"
+          },
+          "package_dimensions_width": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Package Dimensions Width"
+          },
+          "package_dimensions_length": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Package Dimensions Length"
+          },
+          "package_dimensions_weight": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Package Dimensions Weight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "active",
+          "accept_zero_inventory_orders",
+          "next_refill"
+        ],
+        "title": "Body_create_variant_v1_variants_post"
+      },
+      "Body_create_warehouse_v1_warehouses_post": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "active": { "type": "string", "title": "Active" },
+          "phone": { "type": "string", "title": "Phone" },
+          "address_line1": { "type": "string", "title": "Address Line1" },
+          "address_line2": { "type": "string", "title": "Address Line2" },
+          "address_city": { "type": "string", "title": "Address City" },
+          "address_state": { "type": "string", "title": "Address State" },
+          "address_country": { "type": "string", "title": "Address Country" },
+          "address_postal_code": {
+            "type": "string",
+            "title": "Address Postal Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "active",
+          "phone",
+          "address_line1",
+          "address_line2",
+          "address_city",
+          "address_state",
+          "address_country",
+          "address_postal_code"
+        ],
+        "title": "Body_create_warehouse_v1_warehouses_post"
+      },
+      "Body_update_address_v1_customers__customer_id__addresses__address_id__post": {
+        "properties": {
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "line1": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Line1"
+          },
+          "line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Line2"
+          },
+          "city": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "City"
+          },
+          "state": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "State"
+          },
+          "country": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Country"
+          },
+          "postal_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Postal Code"
+          }
+        },
+        "type": "object",
+        "title": "Body_update_address_v1_customers__customer_id__addresses__address_id__post"
+      },
+      "Body_update_cart_item_v1_carts__cart_id__cart_items__cart_item_id__post": {
+        "properties": {
+          "quantity": { "type": "integer", "title": "Quantity" }
+        },
+        "type": "object",
+        "required": ["quantity"],
+        "title": "Body_update_cart_item_v1_carts__cart_id__cart_items__cart_item_id__post"
+      },
+      "Body_update_cart_v1_carts__cart_id__post": {
+        "properties": { "status": { "type": "string", "title": "Status" } },
+        "type": "object",
+        "required": ["status"],
+        "title": "Body_update_cart_v1_carts__cart_id__post"
+      },
+      "Body_update_customer_v1_customers__customer_id__post": {
+        "properties": {
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "phone": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone"
+          },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          }
+        },
+        "type": "object",
+        "title": "Body_update_customer_v1_customers__customer_id__post"
+      },
+      "Body_update_inventory_v1_inventories__inventory_id__post": {
+        "properties": {
+          "quantity": { "type": "integer", "title": "Quantity" }
+        },
+        "type": "object",
+        "required": ["quantity"],
+        "title": "Body_update_inventory_v1_inventories__inventory_id__post"
+      },
+      "Body_update_option_v1_options__option_id__post": {
+        "properties": {
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "values": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Values"
+          }
+        },
+        "type": "object",
+        "required": ["name", "values"],
+        "title": "Body_update_option_v1_options__option_id__post"
+      },
+      "Body_update_price_v1_prices__price_id__post": {
+        "properties": {
+          "active": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Active"
+          },
+          "default": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Default"
+          },
+          "customer_unit_amount_maximum": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Unit Amount Maximum"
+          },
+          "customer_unit_amount_minimum": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Unit Amount Minimum"
+          },
+          "customer_unit_amount_preset": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Unit Amount Preset"
+          },
+          "recurring_interval": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recurring Interval"
+          },
+          "recurring_interval_count": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recurring Interval Count"
+          }
+        },
+        "type": "object",
+        "title": "Body_update_price_v1_prices__price_id__post"
+      },
+      "Body_update_product_v1_products__product_id__post": {
+        "properties": {
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "active": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Active"
+          },
+          "shippable": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Shippable"
+          },
+          "preorder": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Preorder"
+          }
+        },
+        "type": "object",
+        "title": "Body_update_product_v1_products__product_id__post"
+      },
+      "Body_update_variant_v1_variants__variant_id__post": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "active": { "type": "string", "title": "Active" },
+          "accept_zero_inventory_orders": {
+            "type": "string",
+            "title": "Accept Zero Inventory Orders"
+          },
+          "next_refill": { "type": "string", "title": "Next Refill" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "options": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Options"
+          },
+          "package_dimensions_height": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Package Dimensions Height"
+          },
+          "package_dimensions_width": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Package Dimensions Width"
+          },
+          "package_dimensions_length": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Package Dimensions Length"
+          },
+          "package_dimensions_weight": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Package Dimensions Weight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "active",
+          "accept_zero_inventory_orders",
+          "next_refill"
+        ],
+        "title": "Body_update_variant_v1_variants__variant_id__post"
+      },
+      "Body_update_warehouse_v1_warehouses__warehouse_id__post": {
+        "properties": {
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "active": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Active"
+          },
+          "phone": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone"
+          },
+          "address_line1": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Line1"
+          },
+          "address_line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Line2"
+          },
+          "address_city": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address City"
+          },
+          "address_state": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address State"
+          },
+          "address_country": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Country"
+          },
+          "address_postal_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Address Postal Code"
+          }
+        },
+        "type": "object",
+        "title": "Body_update_warehouse_v1_warehouses__warehouse_id__post"
+      },
+      "Cart": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "cart" },
+          "status": { "$ref": "#/components/schemas/CartStatusEnum" },
+          "cart_items": { "$ref": "#/components/schemas/CartItemList" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "id",
+          "status",
+          "cart_items"
+        ],
+        "title": "Cart"
+      },
+      "CartDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "cart" },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CartDelete"
+      },
+      "CartItem": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "quantity": { "type": "integer", "title": "Quantity" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "cart_item"
+          },
+          "price": { "$ref": "#/components/schemas/Price" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "quantity",
+          "id",
+          "price"
+        ],
+        "title": "CartItem"
+      },
+      "CartItemDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "cart_item"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CartItemDelete"
+      },
+      "CartItemList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/CartItem" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["url", "has_more"],
+        "title": "CartItemList"
+      },
+      "CartItemUpdate": {
+        "properties": {
+          "quantity": { "type": "integer", "title": "Quantity" }
+        },
+        "type": "object",
+        "required": ["quantity"],
+        "title": "CartItemUpdate"
+      },
+      "CartList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url", "default": "/v1/carts" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Cart" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "CartList"
+      },
+      "CartStatusEnum": {
+        "type": "string",
+        "enum": ["requires_payment", "abandoned", "paid"],
+        "title": "CartStatusEnum"
+      },
+      "Customer": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          },
+          "phone": { "type": "string", "title": "Phone" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "customer"
+          },
+          "addresses": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/CustomerAddressList" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["created", "updated", "livemode", "name", "phone", "id"],
+        "title": "Customer"
+      },
+      "CustomerAddress": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "line1": { "type": "string", "title": "Line1" },
+          "line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Line2"
+          },
+          "city": { "type": "string", "title": "City" },
+          "state": { "type": "string", "title": "State" },
+          "country": { "type": "string", "title": "Country" },
+          "postal_code": { "type": "string", "title": "Postal Code" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "customer_address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "line1",
+          "city",
+          "state",
+          "country",
+          "postal_code",
+          "id"
+        ],
+        "title": "CustomerAddress"
+      },
+      "CustomerAddressDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "customer_address"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CustomerAddressDelete"
+      },
+      "CustomerAddressList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/CustomerAddress" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["url", "has_more"],
+        "title": "CustomerAddressList"
+      },
+      "CustomerDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "customer"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CustomerDelete"
+      },
+      "CustomerList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/customers"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Customer" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "CustomerList"
+      },
+      "CustomerUnitAmount": {
+        "properties": {
+          "maximum": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Maximum"
+          },
+          "minimum": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Minimum"
+          },
+          "preset": { "type": "integer", "title": "Preset", "default": 1 }
+        },
+        "type": "object",
+        "title": "CustomerUnitAmount"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Inventory": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "quantity": { "type": "integer", "title": "Quantity" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "inventory"
+          }
+        },
+        "type": "object",
+        "required": ["created", "updated", "livemode", "quantity", "id"],
+        "title": "Inventory"
+      },
+      "InventoryDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "inventory"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "InventoryDelete"
+      },
+      "Option": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "values": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Values"
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "option" }
+        },
+        "type": "object",
+        "required": ["created", "updated", "livemode", "name", "values", "id"],
+        "title": "Option"
+      },
+      "OptionDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "option"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "OptionDelete"
+      },
+      "OptionList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Option" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["url", "has_more"],
+        "title": "OptionList"
+      },
+      "PackageDimensions": {
+        "properties": {
+          "height": { "type": "number", "title": "Height" },
+          "width": { "type": "number", "title": "Width" },
+          "length": { "type": "number", "title": "Length" },
+          "weight": { "type": "number", "title": "Weight" }
+        },
+        "type": "object",
+        "required": ["height", "width", "length", "weight"],
+        "title": "PackageDimensions"
+      },
+      "Price": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "active": { "type": "boolean", "title": "Active" },
+          "currency": { "type": "string", "title": "Currency" },
+          "type": { "$ref": "#/components/schemas/PriceTypeEnum" },
+          "unit_amount": { "type": "integer", "title": "Unit Amount" },
+          "default": { "type": "boolean", "title": "Default" },
+          "customer_unit_amount": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/CustomerUnitAmount" },
+              { "type": "null" }
+            ]
+          },
+          "recurring": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/Recurring" },
+              { "type": "null" }
+            ]
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "price" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "active",
+          "currency",
+          "type",
+          "unit_amount",
+          "default",
+          "customer_unit_amount",
+          "recurring",
+          "id"
+        ],
+        "title": "Price"
+      },
+      "PriceDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "price" },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "PriceDelete"
+      },
+      "PriceList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url", "default": "/v1/prices" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Price" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "PriceList"
+      },
+      "PriceTypeEnum": {
+        "type": "string",
+        "enum": ["one_time", "subscription"],
+        "title": "PriceTypeEnum"
+      },
+      "Product": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "images": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Images",
+            "default": []
+          },
+          "active": { "type": "boolean", "title": "Active" },
+          "shippable": { "type": "boolean", "title": "Shippable" },
+          "preorder": { "type": "boolean", "title": "Preorder" },
+          "id": { "type": "string", "title": "Id" },
+          "handle": { "type": "string", "title": "Handle" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "product"
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "active",
+          "shippable",
+          "preorder",
+          "id",
+          "handle"
+        ],
+        "title": "Product"
+      },
+      "ProductDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "product"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "ProductDelete"
+      },
+      "ProductList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/products"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Product" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "ProductList"
+      },
+      "Recurring": {
+        "properties": {
+          "interval": { "$ref": "#/components/schemas/RecurringTypeEnum" },
+          "interval_count": { "type": "integer", "title": "Interval Count" }
+        },
+        "type": "object",
+        "required": ["interval", "interval_count"],
+        "title": "Recurring"
+      },
+      "RecurringTypeEnum": {
+        "type": "string",
+        "enum": ["day", "week", "month", "year"],
+        "title": "RecurringTypeEnum"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      },
+      "Variant": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "active": { "type": "boolean", "title": "Active" },
+          "options": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/VariantOptionValue" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ],
+            "title": "Options"
+          },
+          "accept_zero_inventory_orders": {
+            "type": "boolean",
+            "title": "Accept Zero Inventory Orders"
+          },
+          "next_refill": { "type": "integer", "title": "Next Refill" },
+          "package_dimensions": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/PackageDimensions" },
+              { "type": "null" }
+            ]
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "variant"
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "active",
+          "accept_zero_inventory_orders",
+          "next_refill",
+          "id"
+        ],
+        "title": "Variant"
+      },
+      "VariantDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "variant"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "VariantDelete"
+      },
+      "VariantList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Variant" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["url", "has_more"],
+        "title": "VariantList"
+      },
+      "VariantOptionValue": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "value": { "type": "string", "title": "Value" }
+        },
+        "type": "object",
+        "required": ["name", "value"],
+        "title": "VariantOptionValue"
+      },
+      "Warehouse": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "active": { "type": "boolean", "title": "Active" },
+          "phone": { "type": "string", "title": "Phone" },
+          "address": { "$ref": "#/components/schemas/WarehouseAddress" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "warehouse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "active",
+          "phone",
+          "address",
+          "id"
+        ],
+        "title": "Warehouse"
+      },
+      "WarehouseAddress": {
+        "properties": {
+          "line1": { "type": "string", "title": "Line1" },
+          "line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Line2"
+          },
+          "city": { "type": "string", "title": "City" },
+          "state": { "type": "string", "title": "State" },
+          "country": { "type": "string", "title": "Country" },
+          "postal_code": { "type": "string", "title": "Postal Code" }
+        },
+        "type": "object",
+        "required": ["line1", "city", "state", "country", "postal_code"],
+        "title": "WarehouseAddress"
+      },
+      "WarehouseDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "warehouse"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "WarehouseDelete"
+      },
+      "WarehouseList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/warehouses"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Warehouse" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "WarehouseList"
+      }
+    }
+  }
+}

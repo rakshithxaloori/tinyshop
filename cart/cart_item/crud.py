@@ -4,7 +4,7 @@ from cart.model import Cart
 from cart.cart_item.model import CartItem
 from cart.cart_item import schema
 from cart.cart_item.utils import pydantify_cart_items
-from utils.session import update_refresh
+from lib.session import update_refresh
 
 
 def create_cart_item(

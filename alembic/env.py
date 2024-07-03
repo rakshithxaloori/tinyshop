@@ -36,6 +36,10 @@ from product.price.model import *
 
 
 from warehouse.model import *
+from warehouse.inventory.model import *
+
+from cart.model import *
+from cart.cart_item.model import *
 
 # from discount.model import *
 

@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from product.price.model import Price, CustomerUnitAmount, Recurring
 from product.price import schema
 from product.price.utils import pydantify_prices
-from utils.session import update_refresh
+from lib.session import update_refresh
 
 
 def create_price(
@@ -88,7 +88,7 @@ def update_price(
                 )
                 result = db.exec(statement)
                 updated_cua = result.one()
-                update_price(db, update_data, updated_cua)
+                update_refresh(db, update_data, updated_cua)
 
             updated_recurring = None
             if price.recurring:
@@ -110,7 +110,7 @@ def update_price(
 def retrieve_price(
     x_shop_id: str,
     livemode: bool,
-    id: str,
+    customer_id: str,
     db: Session,
 ) -> schema.Price | None:
     with db.begin():
@@ -119,7 +119,7 @@ def retrieve_price(
                 select(Price, CustomerUnitAmount, Recurring)
                 .where(Price.shop_id == x_shop_id)
                 .where(Price.livemode == livemode)
-                .where(Price.id == id)
+                .where(Price.id == customer_id)
                 .where(Price.id == CustomerUnitAmount.price_id)
                 .where(Price.id == Recurring.price_id)
             )
@@ -152,7 +152,7 @@ def list_prices(
         )
         all_rows = list(results.all())
         prices = pydantify_prices(all_rows)
-        schema.PriceList(
+        return schema.PriceList(
             has_more=False,  # TODO
             data=prices,
         )
@@ -161,7 +161,7 @@ def list_prices(
 def delete_customer(
     x_shop_id: str,
     livemode: bool,
-    id: str,
+    customer_id: str,
     db: Session,
 ) -> str | None:
     with db.begin():
@@ -170,7 +170,7 @@ def delete_customer(
                 select(Price, CustomerUnitAmount, Recurring)
                 .where(Price.shop_id == x_shop_id)
                 .where(Price.livemode == livemode)
-                .where(Price.id == id)
+                .where(Price.id == customer_id)
             )
             price = results.one()
             db.delete(price)
