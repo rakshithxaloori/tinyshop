@@ -1168,7 +1168,7 @@
         }
       }
     },
-    "/v1/inventories": {
+    "/v1/inventory": {
       "post": {
         "summary": "Create Inventory",
         "operationId": "create_inventory_v1_inventories_post",
@@ -1202,7 +1202,7 @@
         }
       }
     },
-    "/v1/inventories/{inventory_id}": {
+    "/v1/inventory/{inventory_id}": {
       "post": {
         "summary": "Update Inventory",
         "operationId": "update_inventory_v1_inventories__inventory_id__post",

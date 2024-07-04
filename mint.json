@@ -69,13 +69,61 @@
       "pages": ["api-reference/introduction"]
     },
     {
-      "group": "Product",
+      "group": "Products",
       "pages": [
-        "api-reference/product/create",
-        "api-reference/product/update",
-        "api-reference/product/retrieve",
-        "api-reference/product/list",
-        "api-reference/product/delete"
+        "api-reference/products/create",
+        "api-reference/products/update",
+        "api-reference/products/retrieve",
+        "api-reference/products/list",
+        "api-reference/products/delete"
+      ]
+    },
+    {
+      "group": "Options",
+      "pages": [
+        "api-reference/options/create",
+        "api-reference/options/update",
+        "api-reference/options/retrieve",
+        "api-reference/options/list",
+        "api-reference/options/delete"
+      ]
+    },
+    {
+      "group": "Variants",
+      "pages": [
+        "api-reference/variants/create",
+        "api-reference/variants/update",
+        "api-reference/variants/retrieve",
+        "api-reference/variants/list",
+        "api-reference/variants/delete"
+      ]
+    },
+    {
+      "group": "Prices",
+      "pages": [
+        "api-reference/prices/create",
+        "api-reference/prices/update",
+        "api-reference/prices/retrieve",
+        "api-reference/prices/list",
+        "api-reference/prices/delete"
+      ]
+    },
+    {
+      "group": "Warehouses",
+      "pages": [
+        "api-reference/warehouses/create",
+        "api-reference/warehouses/update",
+        "api-reference/warehouses/retrieve",
+        "api-reference/warehouses/list",
+        "api-reference/warehouses/delete"
+      ]
+    },
+    {
+      "group": "Inventory",
+      "pages": [
+        "api-reference/inventory/create",
+        "api-reference/inventory/update",
+        "api-reference/inventory/delete"
       ]
     }
   ],
