@@ -8,7 +8,7 @@ from lib.dependencies import ShopIDDep, LivemodeDep
 from lib.session import get_session
 
 
-router = APIRouter(prefix="/v1/inventories")
+router = APIRouter(prefix="/v1/inventory")
 
 
 @router.post("", response_model=schema.Inventory)
