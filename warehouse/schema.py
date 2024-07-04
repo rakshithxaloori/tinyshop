@@ -36,11 +36,20 @@ class WarehouseList(BaseModel):
     data: list[Warehouse] = []
 
 
+class WarehouseAddressUpdate(BaseModel):
+    line1: str | None = None
+    line2: str | None = None
+    city: str | None = None
+    state: str | None = None
+    country: str | None = None
+    postal_code: str | None = None
+
+
 class WarehouseUpdate(BaseModel):
     name: str | None = None
     active: bool | None = None
     phone: str | None = None
-    address: WarehouseAddress | None
+    address: WarehouseAddressUpdate | None
 
 
 class WarehouseDelete(BaseModel):

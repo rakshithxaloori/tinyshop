@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from warehouse.model import Warehouse, WarehouseAddress
 from warehouse import schema
 from warehouse.utils import pydantify_warehouses
-from lib.session import update_refresh
+from lib.session import update_instance
 
 
 def create_warehouse(
@@ -25,7 +25,7 @@ def create_warehouse(
 
         new_wha = None
         if warehouse.address:
-            wha_data = warehouse.address.model_dump()
+            wha_data = warehouse.address.model_dump(exclude_none=True)
             new_wha = WarehouseAddress(
                 shop_id=shop_id,
                 livemode=livemode,
@@ -34,6 +34,7 @@ def create_warehouse(
             )
             db.add(new_wha)
             db.commit()
+            db.refresh(new_warehouse)
             db.refresh(new_wha)
         py_warehouses = pydantify_warehouses([(new_warehouse, new_wha)])
         return py_warehouses.pop()
@@ -51,7 +52,7 @@ def update_warehouse(
     db: Session,
 ) -> schema.Warehouse | None:
     try:
-        wh_data = warehouse.model_dump(exclude_none=True)
+        wh_data = warehouse.model_dump(exclude_none=True, exclude={"address"})
 
         statement = (
             select(Warehouse)
@@ -61,17 +62,19 @@ def update_warehouse(
         )
         results = db.exec(statement)
         updated_wh = results.one()
-        update_refresh(db, wh_data, updated_wh)
+        update_instance(db, wh_data, updated_wh)
 
         wha = None
         if warehouse.address:
             wha_data = warehouse.address.model_dump(exclude_none=True)
+            print("WHA DATA", wha_data)
             statement = select(WarehouseAddress).where(
                 WarehouseAddress.warehouse_id == warehouse_id
             )
             results = db.exec(statement)
             wha = results.one()
-            update_refresh(db, wha_data, wha)
+            update_instance(db, wha_data, wha)
+            db.refresh(updated_wh)
         py_warehouses = pydantify_warehouses([(updated_wh, wha)])
         return py_warehouses.pop()
 
@@ -92,7 +95,9 @@ def retrieve_warehouse(
             .where(Warehouse.shop_id == shop_id)
             .where(Warehouse.livemode == livemode)
             .where(Warehouse.id == id)
-            .where(Warehouse.id == WarehouseAddress.warehouse_id)
+            .where(
+                Warehouse.id == WarehouseAddress.warehouse_id
+            )  # TODO this is optional, TODO for customer address too
         )
         wh = results.one()
         py_warehouses = pydantify_warehouses([wh])

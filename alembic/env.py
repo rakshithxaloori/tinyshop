@@ -27,19 +27,19 @@ from team.model import *
 from shop.model import *
 
 from customer.model import *
-from customer.address.model import *
+from customer_address.model import *
 
 from product.model import *
-from product.option.model import *
-from product.variant.model import *
-from product.price.model import *
+from option.model import *
+from variant.model import *
+from price.model import *
 
 
 from warehouse.model import *
-from warehouse.inventory.model import *
+from inventory.model import *
 
 from cart.model import *
-from cart.cart_item.model import *
+from cart_item.model import *
 
 # from discount.model import *
 

@@ -8,7 +8,7 @@ class ProductBase(BaseModel):
     # Create request's insensitive fields
     name: str
     description: str | None = None
-    images: list[str] = []
+    images: list[str] | None = None
     active: bool
     shippable: bool
     preorder: bool

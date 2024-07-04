@@ -9,7 +9,7 @@ from lib.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
-    from cart.cart_item.model import CartItem
+    from cart_item.model import CartItem
 
 
 class CartStatusEnum(str, enum.Enum):

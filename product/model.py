@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from sqlmodel import Field, Relationship, UniqueConstraint
+from sqlmodel import Field, Relationship, UniqueConstraint, ARRAY, Text, Column
 
 
 from lib.model import SqlBase
@@ -8,8 +8,8 @@ from lib.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
-    from product.option.model import Option
-    from product.variant.model import Variant
+    from option.model import Option
+    from variant.model import Variant
 
 
 class Product(SqlBase, table=True):
@@ -19,7 +19,7 @@ class Product(SqlBase, table=True):
     handle: str = Field()
     active: bool = Field()
     # TODO add images when using postgres
-    # images: list[str] = Field(nullable=True)
+    images: list[str] = Field(sa_column=Column(ARRAY(Text), nullable=True))
     shippable: bool = Field(default=True)
     preorder: bool = Field(default=False)
 

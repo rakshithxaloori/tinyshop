@@ -1,8 +1,9 @@
 from sqlmodel import Session, select
+from sqlalchemy.orm import joinedload
 
 from customer.model import Customer
 from customer import schema
-from customer.address.model import CustomerAddress
+from customer_address.model import CustomerAddress
 from customer.utils import pydantify_customers
 
 
@@ -88,7 +89,8 @@ def retrieve_customer(
             .where(Customer.shop_id == shop_id)
             .where(Customer.livemode == livemode)
             .where(Customer.id == customer_id)
-            .where(Customer.id == CustomerAddress.customer_id)
+            .outerjoin(CustomerAddress, Customer.addresses)
+            .options(joinedload(Customer.addresses))
         )
         all_rows = list(results.all())
         py_customers = pydantify_customers(all_rows)

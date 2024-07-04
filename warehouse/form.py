@@ -48,7 +48,7 @@ def update_warehouse_form(
         name=name,
         active=active == "true" if active else None,
         phone=phone,
-        address=schema.WarehouseAddress(
+        address=schema.WarehouseAddressUpdate(
             line1=address_line1,
             line2=address_line2,
             city=address_city,

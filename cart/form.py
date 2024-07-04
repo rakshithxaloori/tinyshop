@@ -7,7 +7,7 @@ from cart import schema
 
 def create_cart_form(
     price: Annotated[str, Form()],
-    quantity: Annotated[int, Form()] = 1,
+    quantity: Annotated[int, Form()],
 ) -> schema.CartCreate:
     return schema.CartCreate(
         cart_item=schema.CartItemCreate(
@@ -20,4 +20,6 @@ def create_cart_form(
 def update_cart_form(
     status: Annotated[str, Form()],
 ) -> schema.CartUpdate:
-    return schema.CartUpdate(status=status)
+    return schema.CartUpdate(
+        status=status,
+    )

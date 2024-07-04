@@ -11,14 +11,15 @@ if TYPE_CHECKING:
     from customer.model import Customer
 
     from product.model import Product
-    from product.option.model import Option
-    from product.variant.model import Variant
-    from product.price.model import Price
+    from option.model import Option
+    from variant.model import Variant
+    from price.model import Price
 
     from warehouse.model import Warehouse
-    from warehouse.inventory.model import Inventory
+    from inventory.model import Inventory
 
     from cart.model import Cart
+    from cart_item.model import CartItem
 
 
 class Shop(SqlBase, table=True):
@@ -56,6 +57,10 @@ class Shop(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     carts: list["Cart"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    cart_items: list["CartItem"] = Relationship(
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )

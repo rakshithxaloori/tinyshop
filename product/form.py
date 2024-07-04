@@ -23,15 +23,16 @@ def get_handle(name: str) -> str:
 
 def create_product_form(
     name: Annotated[str, Form()],
-    # TODO images
     active: Annotated[str, Form()],
     shippable: Annotated[str, Form()],
     preorder: Annotated[str, Form()],
+    images: Annotated[list[str], Form(alias="images[]")] = None,
     description: Annotated[str | None, Form()] = None,
 ) -> schema.ProductCreate:
     handle = get_handle(name)
     return schema.ProductCreate(
         name=name,
+        images=images,
         handle=handle,
         description=description,
         active=active == "true",

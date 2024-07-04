@@ -3,8 +3,8 @@ from customer.schema import (
     Customer as PyCustomer,
     CustomerAddressList as PyAddressList,
 )
-from customer.address.model import CustomerAddress
-from customer.address.schema import CustomerAddress as PyCustomerAddress
+from customer_address.model import CustomerAddress
+from customer_address.schema import CustomerAddress as PyCustomerAddress
 
 
 def pydantify_customers(

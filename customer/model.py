@@ -8,7 +8,7 @@ from lib.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
-    from customer.address.model import CustomerAddress
+    from customer_address.model import CustomerAddress
 
 
 class Customer(SqlBase, table=True):

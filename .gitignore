@@ -8,3 +8,6 @@ sql_app.db
 
 # Local scripts
 local
+
+# OpenAPI File
+openapi.json

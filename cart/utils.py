@@ -1,7 +1,7 @@
 from cart.model import Cart
 from cart import schema
-from cart.cart_item import schema as ci_schema
-from cart.cart_item.model import CartItem
+from cart_item import schema as ci_schema
+from cart_item.model import CartItem
 
 
 def pydantify_carts(rows: list[tuple[Cart, CartItem | None]]) -> list[schema.Cart]:
@@ -15,7 +15,7 @@ def pydantify_carts(rows: list[tuple[Cart, CartItem | None]]) -> list[schema.Car
                 cart_items=ci_schema.CartItemList(
                     data=[],
                     has_more=False,  # TODO
-                    url="/v1/carts/{cart_id}/cart_items".format(cart_id=cart.id),
+                    url=f"/v1/carts/{cart.id}/cart_items",
                 ),
             )
         if cart_item:

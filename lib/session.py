@@ -11,14 +11,12 @@ def get_session():
         db.close()
 
 
-def update_refresh(
+def update_instance(
     db: Session,
-    update_data: dict[str, Any],
+    data: dict[str, Any],
     instance: Any,
 ):
-    for key, value in update_data.items():
+    for key, value in data.items():
         setattr(instance, key, value)
 
     db.add(instance)
-    db.commit()
-    db.refresh(instance)

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 from lib.model import PyBaseModel
 from lib.object import object_type
-from customer.address.schema import CustomerAddressCreate, CustomerAddressList
+from customer_address.schema import CustomerAddressCreate, CustomerAddressList
 
 
 class CustomerBase(BaseModel):

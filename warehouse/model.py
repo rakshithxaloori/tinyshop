@@ -8,7 +8,7 @@ from lib.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
-    from warehouse.inventory.model import Inventory
+    from inventory.model import Inventory
 
 
 class Warehouse(SqlBase, table=True):

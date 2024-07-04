@@ -2,9 +2,9 @@ from sqlmodel import Session, select
 
 from cart.model import Cart
 from cart import schema
-from cart.cart_item.model import CartItem
+from cart_item.model import CartItem
 from cart.utils import pydantify_carts
-from lib.session import update_refresh
+from lib.session import update_instance
 
 
 def create_cart(
@@ -25,12 +25,13 @@ def create_cart(
         db.refresh(new_cart)
 
         new_ci = None
-        if cart.cart_item:
-            ci_data = cart.cart_item.model_dump(exclude={"price"})
+        cart_item = cart.cart_item
+        if cart_item:
+            ci_data = cart_item.model_dump(exclude={"price"})
             new_ci = CartItem(
                 livemode=livemode,
                 cart_id=new_cart.id,
-                price_id=cart.cart_item.price,
+                price_id=cart_item.price,
                 **ci_data,
             )
             db.add(new_ci)
@@ -60,7 +61,7 @@ def update_cart(
         )
         results = db.exec(statement)
         updated_cart = results.one()
-        update_refresh(db, update_data, updated_cart)
+        update_instance(db, update_data, updated_cart)
         py_carts = pydantify_carts([(updated_cart, None)])
         return py_carts.pop()
 
