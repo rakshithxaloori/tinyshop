@@ -1,0 +1,8 @@
+node_modules
+package-lock.json
+.DS_Store
+
+migrators/store_data
+migrators/output
+
+test.ts
