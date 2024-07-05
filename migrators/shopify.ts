@@ -80,12 +80,13 @@ const convertToPriceCreate = (
   return {
     active: true, // Assuming all prices are active
     currency: "INR", // Assuming currency is INR
-    type: PriceTypeEnum.ONE_TIME,
+    // type: PriceTypeEnum.ONE_TIME,  // TODO
+    type: "one_time",
     unit_amount: parseInt(shVariant.price),
     unit_compare_amount: shVariant.compare_at_price
       ? parseInt(shVariant.compare_at_price)
       : null,
-    default: true, // Assuming all prices are default
+    default: false,
     customer_unit_amount: {
       preset: 1,
     },
@@ -122,10 +123,10 @@ const processJSONData = async (filePath: string) => {
       product.variants[0],
       product_res.id
     );
-    // variantCreates.push(variantCreate);
-    const variant_res = await tinyshop.variants.create(variantCreate);
-    console.log(variant_res);
-    return;
+    // // variantCreates.push(variantCreate);
+    // const variant_res = await tinyshop.variants.create(variantCreate);
+    // console.log(variant_res);
+    // return;
 
     product.variants.forEach(async (variant: any) => {
       const variantCreate = convertToVariantCreate(variant, product_res.id);

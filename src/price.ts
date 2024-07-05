@@ -6,7 +6,7 @@ export class Prices {
 
   constructor(api: Api) {
     this.api = api;
-    this.endpoint = "/v1/options";
+    this.endpoint = "/v1/prices";
   }
 
   async create(data: PriceCreate): Promise<Price> {
