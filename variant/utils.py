@@ -16,7 +16,7 @@ def pydantify_variants(
                 **variant_data,
                 created=int(variant.created.timestamp()),
                 updated=int(variant.updated.timestamp()),
-                package_dimensions=schema.PackageDimensions(**pd_data)
+                package_dimensions=schema.PackageDimensions(**pd_data),
             )
         )
     return variants

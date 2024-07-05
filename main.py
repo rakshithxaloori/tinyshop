@@ -74,7 +74,7 @@ async def get_credentials(request: Request, call_next):
             content={"message": "Secret key is invalid"},
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
-    request.state.shop_id = "shop_ahFqdG3TSh9yi2xaUFaN7Y"
+    request.state.shop_id = "shop_GBhVwD6RMzkFsvuca38SAv"
     request.state.livemode = livemode == "live"
     response = await call_next(request)
     return response

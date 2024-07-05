@@ -13,18 +13,20 @@ def create_variant(
     db: Session,
 ) -> schema.Variant | None:
     try:
-        variant_data = variant.model_dump(exclude={"product", "package_dimensions"})
+        variant_data = variant.model_dump(
+            exclude={"product", "package_dimensions", "options"}
+        )
         # TODO make this a transaction
         # Create a variant
         new_variant = Variant(
             shop_id=shop_id,
             livemode=livemode,
             product_id=variant.product,
+            # options="".join(variant.options) if variant.options else None,
+            options=None,  # TODO
             **variant_data,
         )
         db.add(new_variant)
-        db.commit()
-        db.refresh(new_variant)
 
         new_package_dimensions = None
         if variant.package_dimensions:
@@ -35,8 +37,9 @@ def create_variant(
                 **pd_data,
             )
             db.add(new_package_dimensions)
-            db.commit()
-            db.refresh(new_variant)
+        db.commit()
+        db.refresh(new_variant)
+        if new_package_dimensions:
             db.refresh(new_package_dimensions)
         py_variants = pydantify_variants([(new_variant, new_package_dimensions)])
         return py_variants.pop()
@@ -82,6 +85,10 @@ def update_variant(
 
             update_instance(db, package_dimensions_data, pd)
             db.refresh(updated_variant)
+        db.commit()
+        db.refresh(updated_variant)
+        if pd:
+            db.refresh(pd)
         py_variants = pydantify_variants([(updated_variant, pd)])
         return py_variants.pop()
     except Exception as e:

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 75a5b52c6a23
+Revision ID: e6ee70772ae2
 Revises: 
-Create Date: 2024-07-03 21:44:59.679937
+Create Date: 2024-07-05 23:50:19.227912
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '75a5b52c6a23'
+revision: str = 'e6ee70772ae2'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -79,6 +79,7 @@ def upgrade() -> None:
     sa.Column('description', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('handle', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('active', sa.Boolean(), nullable=False),
+    sa.Column('images', sa.ARRAY(sa.Text()), nullable=True),
     sa.Column('shippable', sa.Boolean(), nullable=False),
     sa.Column('preorder', sa.Boolean(), nullable=False),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
@@ -173,7 +174,8 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.ForeignKeyConstraint(['variant_id'], ['variant.id'], ),
     sa.ForeignKeyConstraint(['warehouse_id'], ['warehouse.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('variant_id', 'warehouse_id', name='unique_variant_warehouse')
     )
     op.create_table('packagedimensions',
     sa.Column('created', sa.DateTime(), nullable=False),
@@ -198,6 +200,7 @@ def upgrade() -> None:
     sa.Column('currency', sqlmodel.sql.sqltypes.AutoString(length=3), nullable=False),
     sa.Column('type', sa.Enum('ONE_TIME', 'SUBSCRIPTION', name='pricetypeenum'), nullable=False),
     sa.Column('unit_amount', sa.Integer(), nullable=False),
+    sa.Column('unit_compare_amount', sa.Integer(), nullable=True),
     sa.Column('default', sa.Boolean(), nullable=False),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('variant_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
@@ -236,10 +239,12 @@ def upgrade() -> None:
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('quantity', sa.Integer(), nullable=False),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('cart_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['cart_id'], ['cart.id'], ),
     sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

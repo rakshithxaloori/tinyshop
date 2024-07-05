@@ -3,7 +3,6 @@ from datetime import datetime
 
 from lib.model import PyBaseModel
 from lib.object import object_type
-from inventory import schema as inventory_schema
 
 
 class VariantOptionValue(BaseModel):
@@ -35,6 +34,7 @@ class VariantCreate(VariantBase):
 class Variant(VariantBase, PyBaseModel):
     id: str
     object: str = object_type.VARIANT
+    options: str | None
 
 
 class VariantList(BaseModel):
@@ -65,10 +65,3 @@ class VariantDelete(BaseModel):
     id: str
     object: str = object_type.VARIANT
     deleted: bool
-
-
-class InventoryList(BaseModel):
-    object: str = "list"
-    url: str
-    has_more: bool
-    data: list[inventory_schema.Inventory] = []

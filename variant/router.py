@@ -14,7 +14,7 @@ router = APIRouter(prefix="/v1/variants")
 def create_variant(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    variant: Annotated[schema.Variant, Depends(form.create_variant_form)],
+    variant: Annotated[schema.VariantCreate, Depends(form.create_variant_form)],
     db: Session = Depends(get_session),
 ):
     new_variant = crud.create_variant(
@@ -31,7 +31,7 @@ def update_variant(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     variant_id: str,
-    variant: Annotated[schema.Variant, Depends(form.update_variant_form)],
+    variant: Annotated[schema.VariantUpdate, Depends(form.update_variant_form)],
     db: Session = Depends(get_session),
 ):
     updated_variant = crud.update_variant(

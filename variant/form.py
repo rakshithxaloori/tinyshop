@@ -8,6 +8,7 @@ from lib.form import bool_string
 
 
 def create_variant_form(
+    product: Annotated[str, Form()],
     name: Annotated[str, Form()],
     active: Annotated[str, Form()],
     accept_zero_inventory_orders: Annotated[str, Form()],
@@ -26,7 +27,7 @@ def create_variant_form(
     package_dimensions_weight: Annotated[
         str | None, Form(alias="package_dimensions[weight]")
     ] = None,
-):
+) -> schema.VariantCreate:
     package_dimensions = None
     if (
         package_dimensions_height
@@ -53,6 +54,7 @@ def create_variant_form(
             for o in options
         ]
     return schema.VariantCreate(
+        product=product,
         name=name,
         description=description,
         active=active == bool_string.TRUE,
@@ -83,7 +85,7 @@ def update_variant_form(
     package_dimensions_weight: Annotated[
         str | None, Form(alias="package_dimensions[weight]")
     ] = None,
-):
+) -> schema.VariantUpdate:
     package_dimensions = schema.PackageDimensionsUpdate()
     if package_dimensions_height:
         package_dimensions.height = package_dimensions_height
