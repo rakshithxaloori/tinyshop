@@ -80,8 +80,8 @@ const convertToPriceCreate = (
   return {
     active: true, // Assuming all prices are active
     currency: "INR", // Assuming currency is INR
-    // type: PriceTypeEnum.ONE_TIME,  // TODO
-    type: "one_time",
+    type: PriceTypeEnum.ONE_TIME,  // TODO
+    // type: "one_time",
     unit_amount: parseInt(shVariant.price),
     unit_compare_amount: shVariant.compare_at_price
       ? parseInt(shVariant.compare_at_price)

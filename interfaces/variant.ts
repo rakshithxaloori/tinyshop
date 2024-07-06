@@ -42,6 +42,11 @@ interface VariantList {
   data: Variant[];
 }
 
+// Interface for VariantListQueryParams
+interface VariantListQueryParams {
+  product?: string;
+}
+
 // Interface for PackageDimensionsUpdate
 interface PackageDimensionsUpdate {
   height?: number | null;

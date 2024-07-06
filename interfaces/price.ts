@@ -55,6 +55,11 @@ interface PriceList {
   data: Price[];
 }
 
+// Interface for PriceListQueryParams
+interface PriceListQueryParams {
+  variant?: string;
+}
+
 // Interface for PriceUpdate
 interface PriceUpdate {
   active?: boolean | null;

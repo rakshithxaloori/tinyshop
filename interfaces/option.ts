@@ -23,6 +23,11 @@ interface OptionList {
   data: Option[] | null;
 }
 
+// Interface for OptionListQueryParams
+interface OptionListQueryParams {
+  product?: string;
+}
+
 // Interface for OptionUpdate
 interface OptionUpdate {
   name?: string | null;

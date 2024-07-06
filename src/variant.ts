@@ -27,8 +27,11 @@ export class Variants {
     return response_json;
   }
 
-  async list(): Promise<VariantList> {
-    const response_json: VariantList = await this.api.get(this.endpoint);
+  async list(
+    query_params: VariantListQueryParams
+  ): Promise<VariantList> {
+    const query = new URLSearchParams(query_params as Record<string, string>);
+    const response_json: VariantList = await this.api.get(`${this.endpoint}?${query}`);
     return response_json;
   }
 
