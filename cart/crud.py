@@ -21,8 +21,6 @@ def create_cart(
             **cart_data,
         )
         db.add(new_cart)
-        db.commit()
-        db.refresh(new_cart)
 
         new_ci = None
         cart_item = cart.cart_item
@@ -35,8 +33,12 @@ def create_cart(
                 **ci_data,
             )
             db.add(new_ci)
-            db.commit()
+
+        db.commit()
+        db.refresh(new_cart)
+        if new_ci:
             db.refresh(new_ci)
+
         py_carts = pydantify_carts([(new_cart, new_ci)])
         return py_carts.pop()
     except Exception as e:
@@ -62,6 +64,8 @@ def update_cart(
         results = db.exec(statement)
         updated_cart = results.one()
         update_instance(db, update_data, updated_cart)
+        db.commit()
+        db.refresh(updated_cart)
         py_carts = pydantify_carts([(updated_cart, None)])
         return py_carts.pop()
 

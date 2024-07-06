@@ -23,8 +23,6 @@ def create_customer(
             **customer_data,
         )
         db.add(new_customer)
-        db.commit()
-        db.refresh(new_customer)
 
         new_address = None
         if customer.address:
@@ -35,8 +33,12 @@ def create_customer(
                 **address_data,
             )
             db.add(new_address)
-            db.commit()
+
+        db.commit()
+        db.refresh(new_customer)
+        if new_address:
             db.refresh(new_address)
+
         py_customers = pydantify_customers([(new_customer, new_address)])
         return py_customers.pop()
     except Exception as e:

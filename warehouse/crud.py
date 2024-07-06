@@ -20,8 +20,6 @@ def create_warehouse(
             **warehouse_data,
         )
         db.add(new_warehouse)
-        db.commit()
-        db.refresh(new_warehouse)
 
         new_wha = None
         if warehouse.address:
@@ -33,8 +31,9 @@ def create_warehouse(
                 **wha_data,
             )
             db.add(new_wha)
-            db.commit()
-            db.refresh(new_warehouse)
+        db.commit()
+        db.refresh(new_warehouse)
+        if new_wha:
             db.refresh(new_wha)
         py_warehouses = pydantify_warehouses([(new_warehouse, new_wha)])
         return py_warehouses.pop()
@@ -74,7 +73,10 @@ def update_warehouse(
             results = db.exec(statement)
             wha = results.one()
             update_instance(db, wha_data, wha)
-            db.refresh(updated_wh)
+        db.commit()
+        db.refresh(updated_wh)
+        if wha:
+            db.refresh(wha)
         py_warehouses = pydantify_warehouses([(updated_wh, wha)])
         return py_warehouses.pop()
 

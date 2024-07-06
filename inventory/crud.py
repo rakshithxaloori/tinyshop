@@ -66,6 +66,8 @@ def update_inventory(
         )
         inventory = results.one()
         update_instance(db, in_data, inventory)
+        db.commit()
+        db.refresh(inventory)
         py_inventories = pydantify_inventories([inventory])
         return py_inventories.pop()
 

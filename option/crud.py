@@ -4,6 +4,7 @@ from product.model import Product
 from option.model import Option
 from option import schema
 from option.utils import pydantify_options
+from lib.session import update_instance
 
 
 def create_option(
@@ -56,10 +57,7 @@ def update_option(
         result = db.exec(statement)
         updated_option = result.one()
 
-        for key, value in update_data.items():
-            setattr(updated_option, key, value)
-
-        db.add(updated_option)
+        update_instance(db, update_data, updated_option)
         db.commit()
         db.refresh(updated_option)
         py_options = pydantify_options([updated_option])

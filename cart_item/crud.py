@@ -56,6 +56,8 @@ def update_cart_item(
         )
         updated_ci = results.one()
         update_instance(db, update_data, updated_ci)
+        db.commit()
+        db.refresh(updated_ci)
         py_cis = pydantify_cart_items([updated_ci])
         return py_cis.pop()
     except Exception as e:

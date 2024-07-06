@@ -50,6 +50,8 @@ def update_product(
         updated_product = result.one()
 
         update_instance(db, update_data, updated_product)
+        db.commit()
+        db.refresh(updated_product)
         py_products = pydantify_products([updated_product])
         return py_products.pop()
 
