@@ -74,12 +74,12 @@ class ApiService {
     const url = `${this.baseUrl}${endpoint}`;
     const formBody = new URLSearchParams(
       Object.entries(data).reduce((acc, [key, value]) => {
-        if (value) {
+        if (value !== null && value !== undefined) {
           if (Array.isArray(value)) {
             value.forEach((val) => {
               acc.append(`${key}[]`, String(val));
             });
-          } else if (typeof value === "object" && value !== null) {
+          } else if (typeof value === "object") {
             Object.entries(value).forEach(([subKey, subValue]) => {
               acc.append(`${key}[${subKey}]`, String(subValue));
             });
