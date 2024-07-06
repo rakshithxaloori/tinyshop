@@ -1,17 +1,36 @@
 {
-  "name": "tinyshop-node",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@tinyshop/tinyshop-node",
+  "version": "0.0.1",
+  "description": "This package contains SDK code for tinyshop APIs.",
+  "main": "api/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "tinyshop",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.14.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
-  }
+  },
+  "dependencies": {
+    "acorn": "^8.12.1",
+    "acorn-walk": "^8.3.3",
+    "arg": "^4.1.3",
+    "create-require": "^1.1.1",
+    "diff": "^4.0.2",
+    "make-error": "^1.3.6",
+    "undici-types": "^5.26.5",
+    "v8-compile-cache-lib": "^3.0.1",
+    "yn": "^3.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tinyshop-me/tinyshop-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tinyshop-me/tinyshop-node/issues"
+  },
+  "homepage": "https://github.com/tinyshop-me/tinyshop-node#readme"
 }

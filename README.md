@@ -1,0 +1,1 @@
+This package contains SDK code for tinyshop APIs.
