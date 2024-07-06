@@ -74,16 +74,18 @@ class ApiService {
     const url = `${this.baseUrl}${endpoint}`;
     const formBody = new URLSearchParams(
       Object.entries(data).reduce((acc, [key, value]) => {
-        if (Array.isArray(value)) {
-          value.forEach((val) => {
-            acc.append(`${key}[]`, String(val));
-          });
-        } else if (typeof value === "object" && value !== null) {
-          Object.entries(value).forEach(([subKey, subValue]) => {
-            acc.append(`${key}[${subKey}]`, String(subValue));
-          });
-        } else {
-          acc.append(key, String(value));
+        if (value) {
+          if (Array.isArray(value)) {
+            value.forEach((val) => {
+              acc.append(`${key}[]`, String(val));
+            });
+          } else if (typeof value === "object" && value !== null) {
+            Object.entries(value).forEach(([subKey, subValue]) => {
+              acc.append(`${key}[${subKey}]`, String(subValue));
+            });
+          } else {
+            acc.append(key, String(value));
+          }
         }
         return acc;
       }, new URLSearchParams())
