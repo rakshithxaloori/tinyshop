@@ -1,4 +1,5 @@
 import Api from "./api";
+import { Price, PriceCreate, PriceUpdate, PriceList, PriceDelete } from "../interfaces/price";
 
 export class Prices {
   public endpoint: string;

@@ -1,4 +1,5 @@
 import Api from "./api";
+import { Option, OptionCreate, OptionUpdate, OptionList, OptionDelete } from "../interfaces/option";
 
 export class Options {
   public endpoint: string;

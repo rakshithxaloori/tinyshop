@@ -1,4 +1,5 @@
 import Api from "./api";
+import { Product, ProductCreate, ProductUpdate, ProductList, ProductDelete } from "../interfaces/product";
 
 export class Products {
   public endpoint: string;

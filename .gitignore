@@ -6,3 +6,5 @@ migrators/store_data
 migrators/output
 
 test.ts
+
+dist/

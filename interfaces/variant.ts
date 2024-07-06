@@ -1,3 +1,5 @@
+import { object_type } from "../utils/enum";
+
 // Interface for VariantOptionValue
 interface VariantOptionValue {
   name: string;
@@ -67,3 +69,11 @@ interface VariantDelete {
   object: typeof object_type.VARIANT;
   deleted: boolean;
 }
+
+export {
+  Variant,
+  VariantCreate,
+  VariantUpdate,
+  VariantList,
+  VariantDelete,
+};

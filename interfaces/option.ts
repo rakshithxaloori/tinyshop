@@ -1,3 +1,5 @@
+import { object_type } from "../utils/enum";
+
 // Base interface for Option
 interface OptionBase {
   name: string;
@@ -35,3 +37,11 @@ interface OptionDelete {
   object: typeof object_type.OPTION;
   deleted: boolean;
 }
+
+export {
+  Option,
+  OptionCreate,
+  OptionUpdate,
+  OptionList,
+  OptionDelete
+};

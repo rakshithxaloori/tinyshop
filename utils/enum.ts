@@ -6,3 +6,5 @@ const object_type = {
 } as const;
 
 type ObjectType = (typeof object_type)[keyof typeof object_type];
+
+export { object_type, ObjectType };

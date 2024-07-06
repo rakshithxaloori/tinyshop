@@ -2,6 +2,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import Tinyshop from "../src";
+import { ProductCreate } from "../interfaces/product";
+import { OptionCreate } from "../interfaces/option";
+import { VariantCreate } from "../interfaces/variant";
+import { PriceCreate, PriceTypeEnum } from "../interfaces/price";
 
 const secret_key = "sk_test_1234abcd";
 
@@ -125,4 +129,4 @@ const processJSONData = async (filePath: string) => {
 
 // Run the main function with the provided JSON file
 console.log(__dirname);
-processJSONData(path.resolve(__dirname, "store_data/wellnesslanguage.json"));
+processJSONData(path.resolve(__dirname, "store_data/getabranddeal.json"));

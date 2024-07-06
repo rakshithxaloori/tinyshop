@@ -39,14 +39,14 @@ class ApiService {
     endpoint: string,
     queryParams?: Record<string, string>
   ): Promise<// | Product
-  // | ProductList
-  // | Option
-  // | OptionList
-  // | Variant
-  // | VariantList
-  // | Price
-  // | PriceList
-  any> {
+    // | ProductList
+    // | Option
+    // | OptionList
+    // | Variant
+    // | VariantList
+    // | Price
+    // | PriceList
+    any> {
     if (queryParams) {
       const query = new URLSearchParams(queryParams);
       endpoint = `${endpoint}?${query}`;
@@ -61,16 +61,16 @@ class ApiService {
   async post(
     endpoint: string,
     data: //   | ProductCreate
-    //   | ProductUpdate
-    //   | OptionCreate
-    //   | OptionUpdate
-    //   | VariantCreate
-    //   | VariantUpdate
-    //   | PriceCreate
-    //   | PriceUpdate
-    any
+      //   | ProductUpdate
+      //   | OptionCreate
+      //   | OptionUpdate
+      //   | VariantCreate
+      //   | VariantUpdate
+      //   | PriceCreate
+      //   | PriceUpdate
+      any
   ): Promise<//   Product | Option | Variant | Price
-  any> {
+    any> {
     const url = `${this.baseUrl}${endpoint}`;
     const formBody = new URLSearchParams(
       Object.entries(data).reduce((acc, [key, value]) => {
@@ -103,7 +103,7 @@ class ApiService {
   async delete(
     endpoint: string
   ): Promise<//   ProductDelete | OptionDelete | VariantDelete | PriceDelete
-  any> {
+    any> {
     const url = `${this.baseUrl}${endpoint}`;
     const response = await apiFetch(url, this.secretKey, {
       method: "DELETE",

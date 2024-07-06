@@ -1,4 +1,5 @@
 import Api from "./api";
+import { Variant, VariantCreate, VariantUpdate, VariantList, VariantDelete } from "../interfaces/variant";
 
 export class Variants {
   public endpoint: string;
