@@ -27,11 +27,9 @@ export class Options {
     return response_json;
   }
 
-  async list(
-    query_params: OptionListQueryParams
-  ): Promise<OptionList> {
-    const query = new URLSearchParams(query_params as Record<string, string>);
-    const response_json: OptionList = await this.api.get(`${this.endpoint}?${query}`);
+  async list(product_id: string): Promise<OptionList> {
+    const query_params = { product: product_id };
+    const response_json: OptionList = await this.api.get(this.endpoint, query_params);
     return response_json;
   }
 
