@@ -2,7 +2,8 @@ from pydantic import BaseModel
 
 from lib.model import PyBaseModel
 from lib.object import object_type
-from price.schema import Price
+
+# from price.schema import Price
 
 
 class CartItemBase(BaseModel):
@@ -17,7 +18,7 @@ class CartItemCreate(CartItemBase):
 class CartItem(CartItemBase, PyBaseModel):
     id: str
     object: str = object_type.CART_ITEM
-    price: Price
+    price: str  # TODO expand on expand
 
 
 class CartItemList(BaseModel):

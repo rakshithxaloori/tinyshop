@@ -27,6 +27,7 @@ def create_cart(
         if cart_item:
             ci_data = cart_item.model_dump(exclude={"price"})
             new_ci = CartItem(
+                shop_id=shop_id,
                 livemode=livemode,
                 cart_id=new_cart.id,
                 price_id=cart_item.price,

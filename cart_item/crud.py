@@ -22,11 +22,12 @@ def create_cart_item(
         )
 
         cart = cart_res.one()
-        ci_data = cart_item.model_dump(exclude={"cart"})
+        ci_data = cart_item.model_dump(exclude={"cart", "price"})
         new_ci = CartItem(
             shop_id=shop_id,
             livemode=livemode,
             cart_id=cart.id,
+            price_id=cart_item.price,
             **ci_data,
         )
         db.add(new_ci)

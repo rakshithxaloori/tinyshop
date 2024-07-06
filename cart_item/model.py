@@ -22,3 +22,5 @@ class CartItem(SqlBase, table=True):
     cart: "Cart" = Relationship(back_populates="items")
     price_id: str = Field(foreign_key="price.id")
     price: "Price" = Relationship(back_populates="cart_items")
+
+    # TODO cart_id, price_id have to be unique

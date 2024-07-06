@@ -1,6 +1,6 @@
 import base64
 from sqlmodel import SQLModel
-from fastapi import FastAPI, APIRouter, Request, status
+from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
 import team.model as team_models
@@ -38,12 +38,20 @@ from inventory.router import router as inventory_router
 from cart.router import router as cart_router
 from cart_item.router import router as cart_item_router
 
-from lib.dependencies import ShopIDDep, LivemodeDep
 
 SQLModel.metadata.create_all(bind=engine)
 
 
-app = FastAPI(title="tinyshop API", root_path="tinyshop")
+app = FastAPI(
+    title="tinyshop API",
+    version="0.0.1",
+    contact={
+        "name": "tinyshop",
+        "url": "https://support.tinyshop.me/",
+        "email": "hi@tinyshop.me",
+    },
+    root_path="tinyshop",
+)
 
 
 # TODO middleware to log your requests or cache the results

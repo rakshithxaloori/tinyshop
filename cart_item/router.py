@@ -26,7 +26,7 @@ def create_cart_item(
     return new_cart_item
 
 
-@router.post("/{cart_item_id}", response_model=schema.CartItemUpdate)
+@router.post("/{cart_item_id}", response_model=schema.CartItem)
 def update_cart_item(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
@@ -48,7 +48,6 @@ def update_cart_item(
 def retrieve_cart_item(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    cart_id: str,
     cart_item_id: str,
     db: Session = Depends(get_session),
 ):
