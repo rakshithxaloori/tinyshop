@@ -27,9 +27,12 @@ export class Prices {
     return response_json;
   }
 
-  async list(variant_id: string): Promise<PriceList> {
-    const query_params = { variant: variant_id };
-    const response_json: PriceList = await this.api.get(this.endpoint, query_params);
+  async list(variantId: string): Promise<PriceList> {
+    const query_params = { variant: variantId };
+    const response_json: PriceList = await this.api.get(
+      this.endpoint,
+      query_params
+    );
     return response_json;
   }
 

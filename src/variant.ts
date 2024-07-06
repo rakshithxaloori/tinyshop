@@ -27,9 +27,12 @@ export class Variants {
     return response_json;
   }
 
-  async list(product_id: string): Promise<VariantList> {
-    const query_params = { product: product_id };
-    const response_json: VariantList = await this.api.get(this.endpoint, query_params);
+  async list(productId: string): Promise<VariantList> {
+    const query_params = { product: productId };
+    const response_json: VariantList = await this.api.get(
+      this.endpoint,
+      query_params
+    );
     return response_json;
   }
 

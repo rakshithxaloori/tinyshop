@@ -27,9 +27,12 @@ export class Options {
     return response_json;
   }
 
-  async list(product_id: string): Promise<OptionList> {
-    const query_params = { product: product_id };
-    const response_json: OptionList = await this.api.get(this.endpoint, query_params);
+  async list(productId: string): Promise<OptionList> {
+    const query_params = { product: productId };
+    const response_json: OptionList = await this.api.get(
+      this.endpoint,
+      query_params
+    );
     return response_json;
   }
 

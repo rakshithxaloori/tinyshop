@@ -13,11 +13,6 @@ const readJSON = (filePath: string) => {
   return JSON.parse(data);
 };
 
-// Function to write JSON data
-const writeJSON = (filePath: string, data: any) => {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
-};
-
 // Function to convert JSON data to ProductCreate
 const convertToProductCreate = (product: any): ProductCreate => {
   return {
@@ -80,7 +75,7 @@ const convertToPriceCreate = (
   return {
     active: true, // Assuming all prices are active
     currency: "INR", // Assuming currency is INR
-    type: PriceTypeEnum.ONE_TIME,  // TODO
+    type: PriceTypeEnum.ONE_TIME, // TODO
     // type: "one_time",
     unit_amount: parseInt(shVariant.price),
     unit_compare_amount: shVariant.compare_at_price
@@ -100,11 +95,6 @@ const processJSONData = async (filePath: string) => {
   const data = readJSON(filePath);
   const products = data.products;
 
-  const productCreates: ProductCreate[] = [];
-  const optionCreates: OptionCreate[] = [];
-  const variantCreates: VariantCreate[] = [];
-  const priceCreates: PriceCreate[] = [];
-
   products.forEach(async (product: any) => {
     if (product.status !== "active") return;
     const productCreate = convertToProductCreate(product);
@@ -119,15 +109,6 @@ const processJSONData = async (filePath: string) => {
       console.log(option_res);
     });
 
-    const variantCreate = convertToVariantCreate(
-      product.variants[0],
-      product_res.id
-    );
-    // // variantCreates.push(variantCreate);
-    // const variant_res = await tinyshop.variants.create(variantCreate);
-    // console.log(variant_res);
-    // return;
-
     product.variants.forEach(async (variant: any) => {
       const variantCreate = convertToVariantCreate(variant, product_res.id);
       // variantCreates.push(variantCreate);
@@ -140,26 +121,6 @@ const processJSONData = async (filePath: string) => {
       console.log(price_res);
     });
   });
-
-  // Save the results to JSON files
-  writeJSON(path.resolve(__dirname, "output/ProductCreate.json"), {
-    products: productCreates,
-  });
-  writeJSON(path.resolve(__dirname, "output/OptionCreate.json"), {
-    options: optionCreates,
-  });
-  writeJSON(path.resolve(__dirname, "output/VariantCreate.json"), {
-    variants: variantCreates,
-  });
-  writeJSON(path.resolve(__dirname, "output/PriceCreate.json"), {
-    prices: priceCreates,
-  });
-
-  // Output the results
-  console.log("ProductCreate:", JSON.stringify(productCreates, null, 2));
-  console.log("OptionCreate:", JSON.stringify(optionCreates, null, 2));
-  console.log("VariantCreate:", JSON.stringify(variantCreates, null, 2));
-  console.log("PriceCreate:", JSON.stringify(priceCreates, null, 2));
 };
 
 // Run the main function with the provided JSON file
