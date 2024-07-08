@@ -35,14 +35,14 @@ def update_warehouse(
     warehouse: Annotated[schema.WarehouseUpdate, Depends(form.update_warehouse_form)],
     db: Session = Depends(get_session),
 ):
-    updated_warehouse = crud.update_warehouse(
+    warehouse = crud.update_warehouse(
         shop_id,
         livemode,
         warehouse_id,
         warehouse,
         db,
     )
-    return updated_warehouse
+    return warehouse
 
 
 @router.get("/{warehouse_id}", response_model=schema.Warehouse)

@@ -4,7 +4,7 @@ from fastapi import Form
 
 
 from variant import schema
-from lib.form import bool_string
+from lib.form import BoolString
 
 
 def create_variant_form(
@@ -13,6 +13,7 @@ def create_variant_form(
     active: Annotated[str, Form()],
     accept_zero_inventory_orders: Annotated[str, Form()],
     next_refill: Annotated[str, Form()],  # TODO
+    is_default: Annotated[str, Form()],
     description: Annotated[str | None, Form()] = None,
     options: Annotated[list[str] | None, Form()] = None,
     package_dimensions_height: Annotated[
@@ -57,12 +58,13 @@ def create_variant_form(
         product=product,
         name=name,
         description=description,
-        active=active == bool_string.TRUE,
+        active=active == BoolString.TRUE,
         options=option_values,
-        accept_zero_inventory_orders=accept_zero_inventory_orders == bool_string.TRUE,
+        accept_zero_inventory_orders=accept_zero_inventory_orders == BoolString.TRUE,
         # TODO convert string to datetime timestamp
         next_refill=datetime.now(),
         package_dimensions=package_dimensions,
+        is_default=is_default == BoolString.TRUE,
     )
 
 
@@ -73,6 +75,7 @@ def update_variant_form(
     options: Annotated[list[str] | None, Form()] = None,
     accept_zero_inventory_orders: Annotated[str | None, Form()] = None,
     next_refill: Annotated[str | None, Form()] = None,
+    is_default: Annotated[str | None, Form()] = None,
     package_dimensions_height: Annotated[
         str | None, Form(alias="package_dimensions[height]")
     ] = None,
@@ -109,10 +112,11 @@ def update_variant_form(
     return schema.VariantUpdate(
         name=name,
         description=description,
-        active=active == bool_string.TRUE,
+        active=active == BoolString.TRUE if active else None,
         options=option_values,
-        accept_zero_inventory_orders=accept_zero_inventory_orders == bool_string.TRUE,
+        accept_zero_inventory_orders=accept_zero_inventory_orders == BoolString.TRUE,
         # TODO convert string to datetime timestamp
         next_refill=int(datetime.now().timestamp()),
         package_dimensions=package_dimensions,
+        is_default=is_default == BoolString.TRUE if is_default else None,
     )

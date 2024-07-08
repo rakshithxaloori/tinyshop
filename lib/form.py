@@ -1,3 +1,3 @@
-class bool_string:
+class BoolString:
     TRUE = "true"
     FALSE = "false"

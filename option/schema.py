@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
 
 
 class OptionBase(BaseModel):
@@ -15,12 +15,12 @@ class OptionCreate(OptionBase):
 
 class Option(OptionBase, PyBaseModel):
     id: str
-    object: str = object_type.OPTION
+    object: str = ObjectType.OPTION
 
 
 class OptionList(BaseModel):
     object: str = "list"
-    url: str
+    url: str = "/v1/options"
     has_more: bool
     data: list[Option] = []
 
@@ -32,5 +32,5 @@ class OptionUpdate(BaseModel):
 
 class OptionDelete(BaseModel):
     id: str
-    object: str = object_type.OPTION
+    object: str = ObjectType.OPTION
     deleted: bool

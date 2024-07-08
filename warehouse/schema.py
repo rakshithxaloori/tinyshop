@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
 
 
 class WarehouseAddress(BaseModel):
@@ -26,7 +26,7 @@ class WarehouseCreate(WarehouseBase):
 
 class Warehouse(WarehouseBase, PyBaseModel):
     id: str
-    object: str = object_type.WAREHOUSE
+    object: str = ObjectType.WAREHOUSE
 
 
 class WarehouseList(BaseModel):
@@ -54,5 +54,5 @@ class WarehouseUpdate(BaseModel):
 
 class WarehouseDelete(BaseModel):
     id: str
-    object: str = object_type.WAREHOUSE
+    object: str = ObjectType.WAREHOUSE
     deleted: bool

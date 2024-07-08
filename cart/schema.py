@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
 from cart.model import CartStatusEnum
 from cart_item.schema import CartItemList
 
@@ -21,7 +21,7 @@ class CartCreate(CartBase):
 
 class Cart(CartBase, PyBaseModel):
     id: str
-    object: str = object_type.CART
+    object: str = ObjectType.CART
     status: CartStatusEnum
     cart_items: CartItemList
 
@@ -39,5 +39,5 @@ class CartUpdate(BaseModel):
 
 class CartDelete(BaseModel):
     id: str
-    object: str = object_type.CART
+    object: str = ObjectType.CART
     deleted: bool

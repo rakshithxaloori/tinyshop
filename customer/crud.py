@@ -5,6 +5,7 @@ from customer.model import Customer
 from customer import schema
 from customer_address.model import CustomerAddress
 from customer.utils import pydantify_customers
+from lib.session import update_instance
 
 
 def create_customer(
@@ -54,7 +55,7 @@ def update_customer(
     db: Session,
 ) -> schema.Customer | None:
     try:
-        update_data = customer.model_dump(exclude_none=True)
+        data = customer.model_dump(exclude_none=True)
 
         statement = (
             select(Customer)
@@ -63,15 +64,12 @@ def update_customer(
             .where(Customer.id == customer_id)
         )
         result = db.exec(statement)
-        updated_customer = result.one()
+        cus_ins = result.one()
 
-        for key, value in update_data.items():
-            setattr(updated_customer, key, value)
-
-        db.add(updated_customer)
+        update_instance(db, data, cus_ins)
         db.commit()
-        db.refresh(updated_customer)
-        py_customers = pydantify_customers([(updated_customer, None)])
+        db.refresh(cus_ins)
+        py_customers = pydantify_customers([(cus_ins, None)])
         return py_customers.pop()
     except Exception as e:
         # TODO create

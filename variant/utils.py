@@ -10,13 +10,14 @@ def pydantify_variants(
         variant_data = variant.model_dump(
             exclude={"created", "updated", "package_dimensions"}
         )
-        pd_data = pd.model_dump()
+        if pd:
+            pd_data = pd.model_dump()
         variants.append(
             schema.Variant(
                 **variant_data,
                 created=int(variant.created.timestamp()),
                 updated=int(variant.updated.timestamp()),
-                package_dimensions=schema.PackageDimensions(**pd_data),
+                package_dimensions=schema.PackageDimensions(**pd_data) if pd else None,
             )
         )
     return variants

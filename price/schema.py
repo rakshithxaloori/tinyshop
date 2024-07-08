@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
 from price.enum import PriceTypeEnum, RecurringTypeEnum
 
 
@@ -33,7 +33,7 @@ class PriceCreate(PriceBase):
 
 class Price(PriceBase, PyBaseModel):
     id: str
-    object: str = object_type.PRICE
+    object: str = ObjectType.PRICE
 
 
 class PriceList(BaseModel):
@@ -53,5 +53,5 @@ class PriceUpdate(BaseModel):
 
 class PriceDelete(BaseModel):
     id: str
-    object: str = object_type.PRICE
+    object: str = ObjectType.PRICE
     deleted: bool

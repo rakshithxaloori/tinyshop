@@ -4,6 +4,7 @@ from customer.model import Customer
 from customer_address.model import CustomerAddress
 from customer_address import schema
 from customer_address.utils import pydantify_addresses
+from lib.session import update_instance
 
 
 def create_address(
@@ -46,7 +47,7 @@ def update_address(
     db: Session,
 ) -> schema.CustomerAddress | None:
     try:
-        update_data = address.model_dump(exclude_none=True)
+        data = address.model_dump(exclude_none=True)
 
         statement = (
             select(CustomerAddress)
@@ -54,15 +55,12 @@ def update_address(
             .where(CustomerAddress.id == address_id)
         )
         result = db.exec(statement)
-        updated_address = result.one()
+        addr_ins = result.one()
 
-        for key, value in update_data.items():
-            setattr(updated_address, key, value)
-
-        db.add(updated_address)
+        update_instance(db, data, addr_ins)
         db.commit()
-        db.refresh(updated_address)
-        py_addresses = pydantify_addresses([updated_address])
+        db.refresh(addr_ins)
+        py_addresses = pydantify_addresses([addr_ins])
         return py_addresses.pop()
     except Exception as e:
         print("EXCEPTION update_address:", e)

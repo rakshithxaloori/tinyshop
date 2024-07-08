@@ -1,4 +1,4 @@
-class object_type:
+class ObjectType:
     CUSTOMER = "customer"
     CUSTOMER_ADDRESS = "customer_address"
     PRODUCT = "product"
@@ -9,3 +9,5 @@ class object_type:
     INVENTORY = "inventory"
     CART = "cart"
     CART_ITEM = "cart_item"
+    REVIEW = "review"
+    DISCOUNT = "discount"

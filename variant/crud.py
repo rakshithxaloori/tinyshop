@@ -4,6 +4,7 @@ from variant.model import Variant, PackageDimensions
 from variant import schema
 from variant.utils import pydantify_variants
 from lib.session import update_instance
+from price import crud as price_crud
 
 
 def create_variant(
@@ -67,9 +68,9 @@ def update_variant(
             .where(Variant.id == variant_id)
         )
         result = db.exec(statement)
-        updated_variant = result.one()
+        var_ins = result.one()
 
-        update_instance(db, variant_data, updated_variant)
+        update_instance(db, variant_data, var_ins)
 
         pd = None
         if variant.package_dimensions:
@@ -84,12 +85,12 @@ def update_variant(
             pd = results.one()
 
             update_instance(db, package_dimensions_data, pd)
-            db.refresh(updated_variant)
+            db.refresh(var_ins)
         db.commit()
-        db.refresh(updated_variant)
+        db.refresh(var_ins)
         if pd:
             db.refresh(pd)
-        py_variants = pydantify_variants([(updated_variant, pd)])
+        py_variants = pydantify_variants([(var_ins, pd)])
         return py_variants.pop()
     except Exception as e:
         print("EXCEPTION update_variant:", e)
@@ -112,7 +113,14 @@ def retrieve_variant(
         )
         row = results.one()
         py_variants = pydantify_variants([row])
-        return py_variants.pop()
+        variant = py_variants.pop()
+        variant.prices = price_crud.list_prices(
+            shop_id,
+            livemode,
+            variant.id,
+            db,
+        )
+        return variant
 
     except Exception as e:
         print("EXCEPTION retrieve_variant:", e)
@@ -139,6 +147,14 @@ def list_variants(
     )
     all_rows = list(results.all())
     variants = pydantify_variants(all_rows)
+    for variant in variants:
+        # TODO make this db calls efficient
+        variant.prices = price_crud.list_prices(
+            shop_id,
+            livemode,
+            variant.id,
+            db,
+        )
     return schema.VariantList(
         url="/v1/variants",
         has_more=False,  # TODO

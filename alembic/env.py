@@ -23,6 +23,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
+
 from team.model import *
 from shop.model import *
 
@@ -41,7 +42,12 @@ from inventory.model import *
 from cart.model import *
 from cart_item.model import *
 
+# from review.model import *
+
 # from discount.model import *
+
+
+# from lib.many_to_many_tables import *
 
 
 target_metadata = SQLModel.metadata

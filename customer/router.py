@@ -35,14 +35,14 @@ def update_customer(
     customer: Annotated[schema.CustomerUpdate, Depends(form.update_customer_form)],
     db: Session = Depends(get_session),
 ):
-    updated_customer = crud.update_customer(
+    customer = crud.update_customer(
         shop_id,
         livemode,
         customer_id,
         customer,
         db,
     )
-    return updated_customer
+    return customer
 
 
 @router.get("/{customer_id}", response_model=schema.Customer | None)

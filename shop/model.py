@@ -21,6 +21,9 @@ if TYPE_CHECKING:
     from cart.model import Cart
     from cart_item.model import CartItem
 
+    from review.model import Review
+    from discount.model import Discount
+
 
 class Shop(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("shop"))
@@ -64,3 +67,11 @@ class Shop(SqlBase, table=True):
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )
+    # reviews: list["Review"] = Relationship(
+    #     back_populates="shop",
+    #     sa_relationship_kwargs={"cascade": "delete"},
+    # )
+    # discounts: list["Discount"] = Relationship(
+    #     back_populates="shop",
+    #     sa_relationship_kwargs={"cascade": "delete"},
+    # )

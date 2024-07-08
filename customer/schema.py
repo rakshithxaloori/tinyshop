@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
 from customer_address.schema import CustomerAddressCreate, CustomerAddressList
 
 
@@ -19,7 +19,7 @@ class CustomerCreate(CustomerBase):
 
 class Customer(CustomerBase, PyBaseModel):
     id: str
-    object: str = object_type.CUSTOMER
+    object: str = ObjectType.CUSTOMER
     addresses: CustomerAddressList | None = None
 
 
@@ -38,5 +38,5 @@ class CustomerUpdate(BaseModel):
 
 class CustomerDelete(BaseModel):
     id: str
-    object: str = object_type.CUSTOMER
+    object: str = ObjectType.CUSTOMER
     deleted: bool

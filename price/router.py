@@ -34,14 +34,14 @@ def update_price(
     price: Annotated[schema.PriceUpdate, Depends(form.update_price_form)],
     db: Session = Depends(get_session),
 ):
-    updated_price = crud.update_price(
+    price = crud.update_price(
         shop_id,
         livemode,
         price_id,
         price,
         db,
     )
-    return updated_price
+    return price
 
 
 @router.get("/{price_id}", response_model=schema.Price)

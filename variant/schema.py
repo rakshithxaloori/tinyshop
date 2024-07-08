@@ -2,7 +2,8 @@ from pydantic import BaseModel
 from datetime import datetime
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
+from price.schema import PriceList
 
 
 class VariantOptionValue(BaseModel):
@@ -25,6 +26,7 @@ class VariantBase(BaseModel):
     accept_zero_inventory_orders: bool
     next_refill: datetime
     package_dimensions: PackageDimensions | None = None
+    is_default: bool
 
 
 class VariantCreate(VariantBase):
@@ -33,13 +35,14 @@ class VariantCreate(VariantBase):
 
 class Variant(VariantBase, PyBaseModel):
     id: str
-    object: str = object_type.VARIANT
+    object: str = ObjectType.VARIANT
     options: str | None
+    prices: PriceList | None = None
 
 
 class VariantList(BaseModel):
     object: str = "list"
-    url: str
+    url: str = "/v1/variants"
     has_more: bool
     data: list[Variant] = []
 
@@ -59,9 +62,10 @@ class VariantUpdate(BaseModel):
     accept_zero_inventory_orders: bool | None = None
     next_refill: datetime | None = None
     package_dimensions: PackageDimensionsUpdate | None = None
+    is_default: bool | None = None
 
 
 class VariantDelete(BaseModel):
     id: str
-    object: str = object_type.VARIANT
+    object: str = ObjectType.VARIANT
     deleted: bool

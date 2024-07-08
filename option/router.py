@@ -35,14 +35,14 @@ def update_option(
     option: Annotated[schema.OptionUpdate, Depends(form.update_option_form)],
     db: Session = Depends(get_session),
 ):
-    updated_option = crud.update_option(
+    option = crud.update_option(
         shop_id,
         livemode,
         option_id,
         option,
         db,
     )
-    return updated_option
+    return option
 
 
 @router.get("/{option_id}", response_model=schema.Option)

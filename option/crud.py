@@ -46,7 +46,7 @@ def update_option(
     db: Session,
 ) -> schema.Option | None:
     try:
-        update_data = option.model_dump(exclude_none=True)
+        data = option.model_dump(exclude_none=True)
 
         statement = (
             select(Option)
@@ -55,12 +55,12 @@ def update_option(
             .where(Option.id == option_id)
         )
         result = db.exec(statement)
-        updated_option = result.one()
+        option_ins = result.one()
 
-        update_instance(db, update_data, updated_option)
+        update_instance(db, data, option_ins)
         db.commit()
-        db.refresh(updated_option)
-        py_options = pydantify_options([updated_option])
+        db.refresh(option_ins)
+        py_options = pydantify_options([option_ins])
         return py_options.pop()
     except Exception as e:
         print("EXCEPTION update_option:", e)

@@ -35,14 +35,14 @@ def update_inventory(
     inventory: Annotated[schema.InventoryUpdate, Depends(form.update_inventory_form)],
     db: Session = Depends(get_session),
 ):
-    updated_inventory = crud.update_inventory(
+    inventory = crud.update_inventory(
         shop_id,
         livemode,
         inventory_id,
         inventory,
         db,
     )
-    return updated_inventory
+    return inventory
 
 
 @router.delete("/{inventory_id}", response_model=schema.InventoryDelete)

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: f9f84b3dd1f0
+Revision ID: f74271a24437
 Revises: 
-Create Date: 2024-07-06 00:13:17.769198
+Create Date: 2024-07-08 15:27:25.564101
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f9f84b3dd1f0'
+revision: str = 'f74271a24437'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -82,6 +82,7 @@ def upgrade() -> None:
     sa.Column('images', sa.ARRAY(sa.Text()), nullable=True),
     sa.Column('shippable', sa.Boolean(), nullable=False),
     sa.Column('preorder', sa.Boolean(), nullable=False),
+    sa.Column('rating', sa.Integer(), nullable=True),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -156,6 +157,7 @@ def upgrade() -> None:
     sa.Column('accept_zero_inventory_orders', sa.Boolean(), nullable=False),
     sa.Column('next_refill', sa.DateTime(), nullable=True),
     sa.Column('unit_label', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('is_default', sa.Boolean(), nullable=True),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('product_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['product_id'], ['product.id'], ),

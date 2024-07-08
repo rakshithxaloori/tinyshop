@@ -1,5 +1,6 @@
+from typing import Annotated
 from sqlmodel import Session
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 
 from product import schema, crud, form
@@ -34,14 +35,14 @@ def update_product(
     product: schema.ProductUpdate = Depends(form.update_product_form),
     db: Session = Depends(get_session),
 ):
-    updated_product = crud.update_product(
+    product = crud.update_product(
         shop_id,
         livemode,
         product_id,
         product,
         db,
     )
-    return updated_product
+    return product
 
 
 @router.get("/{product_id}", response_model=schema.Product)
@@ -49,12 +50,14 @@ def retrieve_product(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     product_id: str,
+    expand: Annotated[list[str] | None, Query(alias="expand[]")] = None,
     db: Session = Depends(get_session),
 ):
     product = crud.retrieve_product(
         shop_id,
         livemode,
         product_id,
+        expand,
         db,
     )
     return product
@@ -64,6 +67,7 @@ def retrieve_product(
 def list_products(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
+    expand: Annotated[list[str] | None, Query(alias="expand[]")] = None,
     db: Session = Depends(get_session),
 ):
     # TODO skip, limit
@@ -71,6 +75,7 @@ def list_products(
     products_list = crud.list_products(
         shop_id,
         livemode,
+        expand,
         db,
     )
     return products_list

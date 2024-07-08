@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
 
 
 class InventoryBase(BaseModel):
@@ -15,7 +15,7 @@ class InventoryCreate(InventoryBase):
 
 class Inventory(InventoryBase, PyBaseModel):
     id: str
-    object: str = object_type.INVENTORY
+    object: str = ObjectType.INVENTORY
     warehouse: str
     variant: str
 
@@ -26,5 +26,5 @@ class InventoryUpdate(BaseModel):
 
 class InventoryDelete(BaseModel):
     id: str
-    object: str = object_type.INVENTORY
+    object: str = ObjectType.INVENTORY
     deleted: bool

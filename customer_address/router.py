@@ -34,14 +34,14 @@ def update_address(
     address: Annotated[schema.CustomerAddressUpdate, Depends(form.update_address_form)],
     db: Session = Depends(get_session),
 ):
-    updated_address = crud.update_address(
+    address = crud.update_address(
         shop_id,
         livemode,
         address_id,
         address,
         db,
     )
-    return updated_address
+    return address
 
 
 @router.get("/{address_id}", response_model=schema.CustomerAddress)

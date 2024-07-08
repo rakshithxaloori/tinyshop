@@ -55,7 +55,7 @@ def update_cart(
     db: Session,
 ) -> schema.Cart | None:
     try:
-        update_data = cart.model_dump(exclude_none=True)
+        data = cart.model_dump(exclude_none=True)
         statement = (
             select(Cart)
             .where(Cart.shop_id == shop_id)
@@ -63,11 +63,11 @@ def update_cart(
             .where(Cart.id == cart_id)
         )
         results = db.exec(statement)
-        updated_cart = results.one()
-        update_instance(db, update_data, updated_cart)
+        cart_ins = results.one()
+        update_instance(db, data, cart_ins)
         db.commit()
-        db.refresh(updated_cart)
-        py_carts = pydantify_carts([(updated_cart, None)])
+        db.refresh(cart_ins)
+        py_carts = pydantify_carts([(cart_ins, None)])
         return py_carts.pop()
 
     except Exception as e:

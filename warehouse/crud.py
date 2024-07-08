@@ -60,8 +60,8 @@ def update_warehouse(
             .where(Warehouse.id == warehouse_id)
         )
         results = db.exec(statement)
-        updated_wh = results.one()
-        update_instance(db, wh_data, updated_wh)
+        wh_ins = results.one()
+        update_instance(db, wh_data, wh_ins)
 
         wha = None
         if warehouse.address:
@@ -74,10 +74,10 @@ def update_warehouse(
             wha = results.one()
             update_instance(db, wha_data, wha)
         db.commit()
-        db.refresh(updated_wh)
+        db.refresh(wh_ins)
         if wha:
             db.refresh(wha)
-        py_warehouses = pydantify_warehouses([(updated_wh, wha)])
+        py_warehouses = pydantify_warehouses([(wh_ins, wha)])
         return py_warehouses.pop()
 
     except Exception as e:
@@ -88,7 +88,7 @@ def update_warehouse(
 def retrieve_warehouse(
     shop_id: str,
     livemode: bool,
-    id: str,
+    warehouse_id: str,
     db: Session,
 ) -> schema.Warehouse | None:
     try:
@@ -96,7 +96,7 @@ def retrieve_warehouse(
             select(Warehouse, WarehouseAddress)
             .where(Warehouse.shop_id == shop_id)
             .where(Warehouse.livemode == livemode)
-            .where(Warehouse.id == id)
+            .where(Warehouse.id == warehouse_id)
             .where(
                 Warehouse.id == WarehouseAddress.warehouse_id
             )  # TODO this is optional, TODO for customer address too
@@ -137,7 +137,7 @@ def list_warehouses(
 def delete_warehouse(
     shop_id: str,
     livemode: bool,
-    id: str,
+    warehouse_id: str,
     db: Session,
 ) -> str | None:
     try:
@@ -145,7 +145,7 @@ def delete_warehouse(
             select(Warehouse)
             .where(Warehouse.shop_id == shop_id)
             .where(Warehouse.livemode == livemode)
-            .where(Warehouse.id == id)
+            .where(Warehouse.id == warehouse_id)
         )
         warehouse = results.one()
         db.delete(warehouse)

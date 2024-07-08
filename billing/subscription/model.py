@@ -70,20 +70,20 @@ class SubscriptionBillingCycleAnchorConfig(SqlBase):
 
 
 class SubscriptionCancellationDetailsFeedbackEnum(str, enum.Enum):
-    customer_service = "customer_service"
-    low_quality = "low_quality"
-    missing_features = "missing_features"
-    switched_service = "switched_service"
-    too_complex = "too_complex"
-    too_expensive = "too_expensive"
-    unused = "unused"
-    other = "other"
+    CUSTOMER_SERVICE = "customer_service"
+    LOW_QUALITY = "low_quality"
+    MISSING_FEATURES = "missing_features"
+    SWITCHED_SERVICE = "switched_service"
+    TOO_COMPLEX = "too_complex"
+    TOO_EXPENSIVE = "too_expensive"
+    UNUSED = "unused"
+    OTHER = "other"
 
 
 class SubscriptionCancellationDetailsReasonEnum(str, enum.Enum):
-    cancellation_requested = "cancellation_requested"
-    payment_disputed = "payment_disputed"
-    payment_failed = "payment_failed"
+    CANCELLATION_REQUESTED = "cancellation_requested"
+    PAYMENT_DISPUTED = "payment_disputed"
+    PAYMENT_FAILED = "payment_failed"
 
 
 class SubscriptionCancellationDetails(SqlBase):

@@ -1,8 +1,11 @@
 from sqlmodel import Session, select
 
 from product.model import Product
+from option.model import Option
+from variant.model import Variant
+from price.model import Price
 from product import schema
-from product.utils import pydantify_products
+from product.utils import pydantify_products, expand_product, expand_products
 from lib.session import update_instance
 
 
@@ -38,7 +41,7 @@ def update_product(
     db: Session,
 ) -> schema.Product | None:
     try:
-        update_data = product.model_dump(exclude_none=True)
+        data = product.model_dump(exclude_none=True)
 
         statement = (
             select(Product)
@@ -47,12 +50,12 @@ def update_product(
             .where(Product.id == product_id)
         )
         result = db.exec(statement)
-        updated_product = result.one()
+        prod_ins = result.one()
 
-        update_instance(db, update_data, updated_product)
+        update_instance(db, data, prod_ins)
         db.commit()
-        db.refresh(updated_product)
-        py_products = pydantify_products([updated_product])
+        db.refresh(prod_ins)
+        py_products = pydantify_products([prod_ins])
         return py_products.pop()
 
     except Exception as e:
@@ -64,6 +67,7 @@ def retrieve_product(
     shop_id: str,
     livemode: bool,
     product_id: str,
+    expand: list[str] | None,
     db: Session,
 ) -> schema.Product:
     try:
@@ -73,9 +77,20 @@ def retrieve_product(
             .where(Product.livemode == livemode)
             .where(Product.id == product_id)
         )
-        product = results.one()
-        py_products = pydantify_products([product])
-        return py_products.pop()
+
+        product_row = results.one()
+
+        py_products = pydantify_products([product_row])
+        product = py_products.pop()
+        if expand:
+            product = expand_product(
+                db,
+                shop_id,
+                livemode,
+                product,
+                expand,
+            )
+        return product
     except Exception as e:
         print("EXCEPTION retrieve_product:", e)
         return None
@@ -84,6 +99,7 @@ def retrieve_product(
 def list_products(
     shop_id: str,
     livemode: bool,
+    expand: list[str] | None,
     db: Session,
     skip: str = None,
     limit: int = 50,
@@ -96,9 +112,17 @@ def list_products(
         .where(Product.livemode == livemode)
         .where(Product.id.in_(subquery))
     )
-    all_rows = list(results.all())
-    print("ALL ROWS")
-    products = pydantify_products(all_rows)
+    product_rows = list(results.all())
+    products = pydantify_products(product_rows)
+    if expand:
+        products = expand_products(
+            db,
+            shop_id,
+            livemode,
+            products,
+            expand,
+        )
+
     return schema.ProductList(
         has_more=False,  # TODO
         data=products,

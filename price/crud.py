@@ -69,7 +69,7 @@ def update_price(
     db: Session,
 ) -> schema.Price | None:
     try:
-        update_data = price.model_dump(exclude_none=True)
+        data = price.model_dump(exclude_none=True)
 
         statement = (
             select(Price)
@@ -78,35 +78,35 @@ def update_price(
             .where(Price.id == price_id)
         )
         result = db.exec(statement)
-        updated_price = result.one()
-        update_instance(db, update_data, updated_price)
+        price_ins = result.one()
+        update_instance(db, data, price_ins)
 
-        updated_cua = None
+        cua_ins = None
         if price.customer_unit_amount:
-            update_data = price.customer_unit_amount.model_dump(exclude_none=True)
+            data = price.customer_unit_amount.model_dump(exclude_none=True)
             statement = select(CustomerUnitAmount).where(
                 CustomerUnitAmount.price_id == price_id
             )
             result = db.exec(statement)
-            updated_cua = result.one()
-            update_instance(db, update_data, updated_cua)
+            cua_ins = result.one()
+            update_instance(db, data, cua_ins)
 
-        updated_recurring = None
+        recurr_ins = None
         if price.recurring:
-            update_data = price.recurring.model_dump(exclude_none=True)
+            data = price.recurring.model_dump(exclude_none=True)
             statement = select(Recurring).where(Recurring.price_id == price_id)
             result = db.exec(statement)
-            updated_recurring = result.one()
-            update_instance(db, update_data, updated_recurring)
+            recurr_ins = result.one()
+            update_instance(db, data, recurr_ins)
 
         db.commit()
-        db.refresh(updated_price)
-        if updated_cua:
-            db.refresh(updated_cua)
-        if updated_recurring:
-            db.refresh(updated_recurring)
+        db.refresh(price_ins)
+        if cua_ins:
+            db.refresh(cua_ins)
+        if recurr_ins:
+            db.refresh(recurr_ins)
 
-        py_prices = pydantify_prices([(updated_price, updated_cua, updated_recurring)])
+        py_prices = pydantify_prices([(price_ins, cua_ins, recurr_ins)])
         return py_prices.pop()
     except Exception as e:
         print("EXCEPTION update_price:", e)
@@ -157,7 +157,6 @@ def list_prices(
         .outerjoin(Recurring, Price.recurring)
     )
     all_rows = list(results.all())
-    print("ALL ROWS", all_rows)
     prices = pydantify_prices(all_rows)
     return schema.PriceList(
         has_more=False,  # TODO

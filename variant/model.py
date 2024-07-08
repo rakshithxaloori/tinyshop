@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from product.model import Product
     from price.model import Price
     from inventory.model import Inventory
+    from discount.model import DiscountConfigBuyXGetY
 
 
 class Variant(SqlBase, table=True):
@@ -19,11 +20,11 @@ class Variant(SqlBase, table=True):
     name: str = Field()
     description: str = Field(nullable=True)
     active: bool = Field()
-    # TODO add options when using postgres
     options: str = Field(nullable=True)
     accept_zero_inventory_orders: bool = Field(default=False)
     next_refill: datetime = Field(nullable=True)
     unit_label: str = Field(nullable=True)
+    is_default: bool = Field(default=False, nullable=True)  # TODO remove nullable=True
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="variants")
@@ -43,11 +44,9 @@ class Variant(SqlBase, table=True):
     )
     # subscriptions = relationship("Subscription", back_populates="variant")
     # shipping_lines = relationship("ShippingLines", back_populates="variant")
-    # discount_config_buy_x_get_y_get_id = Column(
-    #     Text, ForeignKey("_discount_config_buy_x_get_y.id"), nullable=True
-    # )
-    # discount_config_buy_x_get_y_get = relationship(
-    #     "DiscountConfigBuyXGetY", back_populates="variant_get"
+    # discount_config_buy_x_get_y: list["DiscountConfigBuyXGetY"] = Relationship(
+    #     back_populates="variant_get",
+    #     sa_relationship_kwargs={"cascade": "delete"},
     # )
 
 

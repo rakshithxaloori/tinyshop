@@ -34,14 +34,14 @@ def update_variant(
     variant: Annotated[schema.VariantUpdate, Depends(form.update_variant_form)],
     db: Session = Depends(get_session),
 ):
-    updated_variant = crud.update_variant(
+    variant = crud.update_variant(
         shop_id,
         livemode,
         variant_id,
         variant,
         db,
     )
-    return updated_variant
+    return variant
 
 
 @router.get("/{variant_id}", response_model=schema.Variant)

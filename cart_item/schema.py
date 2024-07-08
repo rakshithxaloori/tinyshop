@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
 
 # from price.schema import Price
 
@@ -17,13 +17,13 @@ class CartItemCreate(CartItemBase):
 
 class CartItem(CartItemBase, PyBaseModel):
     id: str
-    object: str = object_type.CART_ITEM
+    object: str = ObjectType.CART_ITEM
     price: str  # TODO expand on expand
 
 
 class CartItemList(BaseModel):
     object: str = "list"
-    url: str
+    url: str  # TODO
     has_more: bool
     data: list[CartItem] = []
 
@@ -34,5 +34,5 @@ class CartItemUpdate(BaseModel):
 
 class CartItemDelete(BaseModel):
     id: str
-    object: str = object_type.CART_ITEM
+    object: str = ObjectType.CART_ITEM
     deleted: bool

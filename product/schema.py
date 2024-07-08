@@ -1,7 +1,9 @@
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
-from lib.object import object_type
+from lib.object import ObjectType
+from option.schema import OptionList
+from variant.schema import VariantList, Variant
 
 
 class ProductBase(BaseModel):
@@ -21,7 +23,10 @@ class ProductCreate(ProductBase):
 class Product(ProductBase, PyBaseModel):
     id: str
     handle: str
-    object: str = object_type.PRODUCT
+    object: str = ObjectType.PRODUCT
+    default_variant: Variant | None = None
+    options: OptionList | None = None
+    variants: VariantList | None = None
 
 
 class ProductList(BaseModel):
@@ -42,5 +47,5 @@ class ProductUpdate(BaseModel):
 
 class ProductDelete(BaseModel):
     id: str
-    object: str = object_type.PRODUCT
+    object: str = ObjectType.PRODUCT
     deleted: bool

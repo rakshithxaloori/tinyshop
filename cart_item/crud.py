@@ -48,18 +48,18 @@ def update_cart_item(
     db: Session,
 ) -> schema.CartItem | None:
     try:
-        update_data = cart_item.model_dump(exclude_none=True)
+        data = cart_item.model_dump(exclude_none=True)
         results = db.exec(
             select(CartItem)
             .where(CartItem.shop_id == shop_id)
             .where(CartItem.livemode == livemode)
             .where(CartItem.id == cart_item_id)
         )
-        updated_ci = results.one()
-        update_instance(db, update_data, updated_ci)
+        ci_ins = results.one()
+        update_instance(db, data, ci_ins)
         db.commit()
-        db.refresh(updated_ci)
-        py_cis = pydantify_cart_items([updated_ci])
+        db.refresh(ci_ins)
+        py_cis = pydantify_cart_items([ci_ins])
         return py_cis.pop()
     except Exception as e:
         print("EXCEPTION update_cart_item:", e)
