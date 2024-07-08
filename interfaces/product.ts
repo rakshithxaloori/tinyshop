@@ -39,7 +39,7 @@ interface ProductDelete {
   deleted: boolean;
 }
 
-export {
+export type {
   Product,
   ProductCreate,
   ProductUpdate,

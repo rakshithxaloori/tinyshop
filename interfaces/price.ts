@@ -73,12 +73,15 @@ interface PriceDelete {
   deleted: boolean;
 }
 
-export {
+export type {
   Price,
   PriceCreate,
   PriceUpdate,
   PriceList,
   PriceDelete,
+};
+
+export {
   PriceTypeEnum,
   RecurringTypeEnum,
-};
+}

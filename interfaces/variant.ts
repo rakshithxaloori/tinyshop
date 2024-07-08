@@ -71,4 +71,10 @@ interface VariantDelete {
   deleted: boolean;
 }
 
-export { Variant, VariantCreate, VariantUpdate, VariantList, VariantDelete };
+export type {
+  Variant,
+  VariantCreate,
+  VariantUpdate,
+  VariantList,
+  VariantDelete,
+};

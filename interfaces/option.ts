@@ -38,7 +38,7 @@ interface OptionDelete {
   deleted: boolean;
 }
 
-export {
+export type {
   Option,
   OptionCreate,
   OptionUpdate,
