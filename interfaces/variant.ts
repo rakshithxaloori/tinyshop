@@ -23,6 +23,7 @@ interface VariantBase {
   accept_zero_inventory_orders: boolean;
   next_refill: string; // Using string to represent datetime in ISO format
   package_dimensions?: PackageDimensions | null;
+  is_default: boolean;
 }
 
 // Interface for VariantCreate
@@ -70,10 +71,4 @@ interface VariantDelete {
   deleted: boolean;
 }
 
-export {
-  Variant,
-  VariantCreate,
-  VariantUpdate,
-  VariantList,
-  VariantDelete,
-};
+export { Variant, VariantCreate, VariantUpdate, VariantList, VariantDelete };

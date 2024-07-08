@@ -1,5 +1,12 @@
 import Api from "./api";
-import { Product, ProductCreate, ProductUpdate, ProductList, ProductDelete } from "../interfaces/product";
+import {
+  Product,
+  ProductCreate,
+  ProductUpdate,
+  ProductList,
+  ProductDelete,
+} from "../interfaces/product";
+import { OptionalParams } from "./list";
 
 export class Products {
   public endpoint: string;
@@ -28,8 +35,11 @@ export class Products {
     return response_json;
   }
 
-  async list(): Promise<ProductList> {
-    const response_json: ProductList = await this.api.get(this.endpoint);
+  async list(options?: OptionalParams): Promise<ProductList> {
+    const response_json: ProductList = await this.api.get(
+      this.endpoint,
+      options
+    );
     return response_json;
   }
 

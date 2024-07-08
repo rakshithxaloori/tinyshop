@@ -37,18 +37,18 @@ class ApiService {
 
   async get(
     endpoint: string,
-    queryParams?: Record<string, string>
+    queryParams?: any
   ): Promise<// | Product
-    // | ProductList
-    // | Option
-    // | OptionList
-    // | Variant
-    // | VariantList
-    // | Price
-    // | PriceList
-    any> {
+  // | ProductList
+  // | Option
+  // | OptionList
+  // | Variant
+  // | VariantList
+  // | Price
+  // | PriceList
+  any> {
     if (queryParams) {
-      const query = new URLSearchParams(queryParams);
+      const query = urlEncode(queryParams);
       endpoint = `${endpoint}?${query}`;
     }
     const url = `${this.baseUrl}${endpoint}`;
@@ -61,35 +61,18 @@ class ApiService {
   async post(
     endpoint: string,
     data: //   | ProductCreate
-      //   | ProductUpdate
-      //   | OptionCreate
-      //   | OptionUpdate
-      //   | VariantCreate
-      //   | VariantUpdate
-      //   | PriceCreate
-      //   | PriceUpdate
-      any
+    //   | ProductUpdate
+    //   | OptionCreate
+    //   | OptionUpdate
+    //   | VariantCreate
+    //   | VariantUpdate
+    //   | PriceCreate
+    //   | PriceUpdate
+    any
   ): Promise<//   Product | Option | Variant | Price
-    any> {
+  any> {
     const url = `${this.baseUrl}${endpoint}`;
-    const formBody = new URLSearchParams(
-      Object.entries(data).reduce((acc, [key, value]) => {
-        if (value !== null && value !== undefined) {
-          if (Array.isArray(value)) {
-            value.forEach((val) => {
-              acc.append(`${key}[]`, String(val));
-            });
-          } else if (typeof value === "object") {
-            Object.entries(value).forEach(([subKey, subValue]) => {
-              acc.append(`${key}[${subKey}]`, String(subValue));
-            });
-          } else {
-            acc.append(key, String(value));
-          }
-        }
-        return acc;
-      }, new URLSearchParams())
-    ).toString();
+    const formBody = urlEncode(data);
     const response = await apiFetch(url, this.secretKey, {
       method: "POST",
       body: formBody,
@@ -103,7 +86,7 @@ class ApiService {
   async delete(
     endpoint: string
   ): Promise<//   ProductDelete | OptionDelete | VariantDelete | PriceDelete
-    any> {
+  any> {
     const url = `${this.baseUrl}${endpoint}`;
     const response = await apiFetch(url, this.secretKey, {
       method: "DELETE",
@@ -113,3 +96,23 @@ class ApiService {
 }
 
 export default ApiService;
+
+const urlEncode = (data: any) =>
+  new URLSearchParams(
+    Object.entries(data).reduce((acc, [key, value]) => {
+      if (value !== null && value !== undefined) {
+        if (Array.isArray(value)) {
+          value.forEach((val) => {
+            acc.append(`${key}[]`, String(val));
+          });
+        } else if (typeof value === "object") {
+          Object.entries(value).forEach(([subKey, subValue]) => {
+            acc.append(`${key}[${subKey}]`, String(subValue));
+          });
+        } else {
+          acc.append(key, String(value));
+        }
+      }
+      return acc;
+    }, new URLSearchParams())
+  ).toString();
