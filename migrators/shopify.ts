@@ -114,8 +114,12 @@ const processJSONData = async (filePath: string) => {
       console.log(option_res);
     });
 
-    product.variants.forEach(async (variant: any) => {
+    product.variants.forEach(async (variant: any, index) => {
       const variantCreate = convertToVariantCreate(variant, product_res.id);
+      if (index === 0) {
+        variantCreate.is_default = true;
+      }
+
       // variantCreates.push(variantCreate);
       const variant_res = await tinyshop.variants.create(variantCreate);
       console.log(variant_res);
@@ -130,4 +134,4 @@ const processJSONData = async (filePath: string) => {
 
 // Run the main function with the provided JSON file
 console.log(__dirname);
-processJSONData(path.resolve(__dirname, "store_data/wellnesslanguage.json"));
+processJSONData(path.resolve(__dirname, "store_data/getabranddeal.json"));
