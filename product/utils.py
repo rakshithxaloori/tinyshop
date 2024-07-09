@@ -28,7 +28,6 @@ def expand_product(
     expand: list[str],
 ) -> schema.Product:
     if "options" in expand:
-
         product.options = opt_crud.list_options(
             shop_id,
             livemode,

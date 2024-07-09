@@ -1,12 +1,10 @@
 from sqlmodel import Session, select
 
 from product.model import Product
-from option.model import Option
-from variant.model import Variant
-from price.model import Price
 from product import schema
 from product.utils import pydantify_products, expand_product, expand_products
 from lib.session import update_instance
+from lib.search import OPERATORS
 
 
 def create_product(
@@ -149,3 +147,53 @@ def delete_product(
     except Exception as e:
         print("EXCEPTION delete_product:", e)
         return None
+
+
+def search_products(
+    shop_id: str,
+    livemode: bool,
+    query: str,
+    expand: list[str] | None,
+    db: Session,
+) -> schema.ProductList:
+    try:
+        # TODO write a more comprehensive query parser
+        clauses = query.split(" ")
+        for clause in clauses:
+            field, value = clause.split(OPERATORS[0])
+            if field == "handle":
+                results = db.exec(
+                    select(Product)
+                    .where(Product.shop_id == shop_id)
+                    .where(Product.livemode == livemode)
+                    .where(Product.handle == value)
+                )
+                product_ine = results.one()
+                product = pydantify_products([product_ine]).pop()
+                if expand:
+                    py_prod = expand_product(
+                        db,
+                        shop_id,
+                        livemode,
+                        product,
+                        expand,
+                    )
+                return schema.ProductList(
+                    url="/v1/products/search",
+                    has_more=False,  # TODO
+                    data=[py_prod],
+                )
+
+            return schema.ProductList(
+                url="/v1/products/search",
+                has_more=False,  # TODO
+                data=[],
+            )
+
+    except Exception as e:
+        print("EXCEPTION search_products:", e)
+        return schema.ProductList(
+            url="/v1/products/search",
+            has_more=False,
+            data=[],
+        )

@@ -45,6 +45,24 @@ def update_product(
     return product
 
 
+@router.get("/search", response_model=schema.ProductList)
+def search_products(
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    query: Annotated[str, Query()],
+    expand: Annotated[list[str] | None, Query(alias="expand[]")] = None,
+    db: Session = Depends(get_session),
+):
+    products_list = crud.search_products(
+        shop_id,
+        livemode,
+        query,
+        expand,
+        db,
+    )
+    return products_list
+
+
 @router.get("/{product_id}", response_model=schema.Product)
 def retrieve_product(
     shop_id: ShopIDDep,
