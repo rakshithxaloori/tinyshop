@@ -30,6 +30,17 @@ export class Products {
     return response_json;
   }
 
+  async search(query: string, options?: OptionalParams): Promise<ProductList> {
+    const response_json: ProductList = await this.api.get(
+      `${this.endpoint}/search`,
+      {
+        query,
+        ...options,
+      }
+    );
+    return response_json;
+  }
+
   async retrieve(id: string): Promise<Product> {
     const response_json: Product = await this.api.get(`${this.endpoint}/${id}`);
     return response_json;
