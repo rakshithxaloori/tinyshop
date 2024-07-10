@@ -67,11 +67,11 @@ class Shop(SqlBase, table=True):
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # reviews: list["Review"] = Relationship(
-    #     back_populates="shop",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
-    # discounts: list["Discount"] = Relationship(
-    #     back_populates="shop",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
+    reviews: list["Review"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    discounts: list["Discount"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )

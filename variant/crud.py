@@ -135,7 +135,7 @@ def list_variants(
     skip: str = None,
     limit: int = 50,
 ) -> schema.VariantList:
-    subquery = select(Variant.id).offset(skip).limit(limit).subquery()
+    subquery = select(Variant.id).offset(skip).limit(limit)
 
     results = db.exec(
         select(Variant, PackageDimensions)

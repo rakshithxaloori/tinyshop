@@ -102,7 +102,7 @@ def list_products(
     skip: str = None,
     limit: int = 50,
 ) -> schema.ProductList:
-    subquery = select(Product.id).offset(skip).limit(limit).subquery()
+    subquery = select(Product.id).offset(skip).limit(limit)
 
     results = db.exec(
         select(Product)

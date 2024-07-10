@@ -44,10 +44,10 @@ from cart_item.model import *
 
 # from review.model import *
 
-# from discount.model import *
+from discount.model import *
 
 
-# from lib.many_to_many_tables import *
+from lib.many_to_many_tables import *
 
 
 target_metadata = SQLModel.metadata

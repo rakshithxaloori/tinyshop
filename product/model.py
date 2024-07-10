@@ -1,5 +1,14 @@
 from typing import TYPE_CHECKING
-from sqlmodel import Field, Relationship, UniqueConstraint, ARRAY, Text, Column
+from sqlmodel import (
+    Field,
+    Relationship,
+    UniqueConstraint,
+    ARRAY,
+    VARCHAR,
+    Column,
+    ForeignKey,
+    Text,
+)
 
 
 from lib.model import SqlBase
@@ -10,9 +19,8 @@ if TYPE_CHECKING:
     from shop.model import Shop
     from option.model import Option
     from variant.model import Variant
-
-    # from discount.model import DiscountConfigOffProduct, DiscountConfigBuyXGetY
-    # from review.model import Review
+    from discount.model import DiscountConfigOffProduct, DiscountConfigBuyXGetY
+    from review.model import Review
 
 
 class Product(SqlBase, table=True):
@@ -36,24 +44,31 @@ class Product(SqlBase, table=True):
         back_populates="product",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # TODO review
-    # reviews: list["Review"] = Relationship(
-    #     back_populates="product",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
-    # discount_config_off_product_id: str = Field(
-    #     foreign_key="_discount_config_off_product.id", nullable=True
-    # )
-    # discount_config_off_product: "DiscountConfigOffProduct" = Relationship(
-    #     back_populates="products",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
-    # discount_config_buy_x_get_y_id: str = Field(
-    #     foreign_key="_discount_config_buy_x_get_y.id", nullable=True
-    # )
-    # discount_config_buy_x_get_y: "DiscountConfigBuyXGetY" = Relationship(
-    #     back_populates="products_buy"
-    # )
+    reviews: list["Review"] = Relationship(
+        back_populates="product",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    discount_config_off_product_id: str = Field(
+        sa_column=Column(
+            VARCHAR,
+            ForeignKey("_discount_config_off_product.id", use_alter=True),
+            nullable=True,
+        )
+    )
+    discount_config_off_product: "DiscountConfigOffProduct" = Relationship(
+        back_populates="products",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    discount_config_buy_x_get_y_id: str = Field(
+        sa_column=Column(
+            VARCHAR,
+            ForeignKey("_discount_config_buy_x_get_y.id", use_alter=True),
+            nullable=True,
+        )
+    )
+    discount_config_buy_x_get_y: "DiscountConfigBuyXGetY" = Relationship(
+        back_populates="products_buy"
+    )
 
     __table_args__ = (
         UniqueConstraint("shop_id", "handle", name="unique_product_handle_shop"),

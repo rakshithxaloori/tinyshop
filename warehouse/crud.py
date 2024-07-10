@@ -66,7 +66,6 @@ def update_warehouse(
         wha = None
         if warehouse.address:
             wha_data = warehouse.address.model_dump(exclude_none=True)
-            print("WHA DATA", wha_data)
             statement = select(WarehouseAddress).where(
                 WarehouseAddress.warehouse_id == warehouse_id
             )
@@ -116,7 +115,7 @@ def list_warehouses(
     skip: str = None,
     limit: int = 50,
 ) -> schema.WarehouseList:
-    subquery = select(Warehouse.id).offset(skip).limit(limit).subquery()
+    subquery = select(Warehouse.id).offset(skip).limit(limit)
 
     results = db.exec(
         select(Warehouse, WarehouseAddress)

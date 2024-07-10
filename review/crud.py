@@ -1,5 +1,4 @@
-from sqlmodel import Session, select
-from sqlalchemy import func
+from sqlmodel import Session, select, or_
 
 from review.model import Review
 from review import schema
@@ -15,11 +14,13 @@ def create_review(
     db: Session,
 ) -> schema.Review | None:
     try:
-        review_data = review.model_dump(exclude={"product"})
+        review_data = review.model_dump(exclude={"product", "customer"})
+        # TODO validate product id, customer id
         new_review = Review(
             shop_id=shop_id,
             livemode=livemode,
             product_id=review.product,
+            customer_id=review.customer,
             **review_data,
         )
         db.add(new_review)
@@ -84,12 +85,24 @@ def retrieve_review(
 def list_reviews(
     shop_id: str,
     livemode: bool,
+    product_id: str,
+    customer_id: str,
     db: Session,
     skip: str = None,
     limit: int = 50,
 ) -> schema.ReviewList:
     try:
-        subquery = select(Review.id).offset(skip).limit(limit).subquery()
+        subquery = (
+            select(Review.id)
+            .where(
+                or_(
+                    Review.product_id == product_id,
+                    Review.customer_id == customer_id,
+                )
+            )
+            .offset(skip)
+            .limit(limit)
+        )
         results = db.exec(
             select(Review)
             .where(Review.shop_id == shop_id)

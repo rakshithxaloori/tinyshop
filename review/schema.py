@@ -9,7 +9,7 @@ class ReviewBase(BaseModel):
     product_rating: int
     shipping_rating: int
     feedback: FeedbackEnum | None = None
-    comment: str | None = None
+    review: str | None = None
 
 
 class ReviewCreate(ReviewBase):
@@ -33,7 +33,7 @@ class ReviewUpdate(BaseModel):
     product_rating: int | None
     shipping_rating: int | None
     feedback: FeedbackEnum | None = None
-    comment: str | None = None
+    review: str | None = None
 
 
 class ReviewDelete(BaseModel):

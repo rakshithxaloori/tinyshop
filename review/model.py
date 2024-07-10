@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 # An enum that has quick feedback
 class FeedbackEnum(str, enum.Enum):
+    # TODO more enums
     CUSTOMER_SERVICE = "customer_service"
     LOW_QUALITY = "low_quality"
     MISSING_FEATURES = "missing_features"
@@ -25,11 +26,11 @@ class FeedbackEnum(str, enum.Enum):
 
 
 class Review(SqlBase, table=True):
-    id: str = Field(primary_key=True, default_factory=get_primary_key("review_"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("review"))
     product_rating: int = Field()  # Out of 5
     shipping_rating: int = Field()  # Out of 5
     feedback: FeedbackEnum = Field(nullable=True)
-    comment: str = Field(nullable=True)
+    review: str = Field(nullable=True)
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="reviews")

@@ -44,10 +44,10 @@ class Variant(SqlBase, table=True):
     )
     # subscriptions = relationship("Subscription", back_populates="variant")
     # shipping_lines = relationship("ShippingLines", back_populates="variant")
-    # discount_config_buy_x_get_y: list["DiscountConfigBuyXGetY"] = Relationship(
-    #     back_populates="variant_get",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
+    discount_config_buy_x_get_y: list["DiscountConfigBuyXGetY"] = Relationship(
+        back_populates="variant_get",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
 
 
 class PackageDimensions(SqlBase, table=True):

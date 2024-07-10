@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: f74271a24437
+Revision ID: ea28df78f606
 Revises: 
-Create Date: 2024-07-08 15:27:25.564101
+Create Date: 2024-07-10 15:12:50.617186
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f74271a24437'
+revision: str = 'ea28df78f606'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -70,6 +70,20 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('phone')
     )
+    op.create_table('discount',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('type', sa.Enum('OFF_PRODUCT', 'OFF_ORDER', 'SHIPPING', 'BUY_X_GET_Y', name='discounttypeenum'), nullable=False),
+    sa.Column('code', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=False),
+    sa.Column('expires_at', sa.DateTime(), nullable=True),
+    sa.Column('applies_max', sa.Integer(), nullable=True),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('product',
     sa.Column('created', sa.DateTime(), nullable=False),
     sa.Column('updated', sa.DateTime(), nullable=False),
@@ -84,6 +98,10 @@ def upgrade() -> None:
     sa.Column('preorder', sa.Boolean(), nullable=False),
     sa.Column('rating', sa.Integer(), nullable=True),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('discount_config_off_product_id', sa.VARCHAR(), nullable=True),
+    sa.Column('discount_config_buy_x_get_y_id', sa.VARCHAR(), nullable=True),
+    sa.ForeignKeyConstraint(['discount_config_buy_x_get_y_id'], ['_discount_config_buy_x_get_y.id'], use_alter=True),
+    sa.ForeignKeyConstraint(['discount_config_off_product_id'], ['_discount_config_off_product.id'], use_alter=True),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('shop_id', 'handle', name='unique_product_handle_shop')
@@ -99,6 +117,16 @@ def upgrade() -> None:
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('_discount_config',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('discount_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['discount_id'], ['discount.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('discount_id')
     )
     op.create_table('_warehouse_address',
     sa.Column('created', sa.DateTime(), nullable=False),
@@ -130,6 +158,16 @@ def upgrade() -> None:
     sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('discountcustomerlink',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('discount_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
+    sa.ForeignKeyConstraint(['discount_id'], ['discount.id'], ),
+    sa.PrimaryKeyConstraint('discount_id', 'customer_id')
     )
     op.create_table('option',
     sa.Column('created', sa.DateTime(), nullable=False),
@@ -163,6 +201,62 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['product_id'], ['product.id'], ),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('_discount_config_buy_x_get_y',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('quantity_min', sa.Integer(), nullable=True),
+    sa.Column('amount_min', sa.Integer(), nullable=True),
+    sa.Column('quantity_get', sa.Integer(), nullable=False),
+    sa.Column('variant_get_id', sa.VARCHAR(), nullable=True),
+    sa.Column('config_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['config_id'], ['_discount_config.id'], ),
+    sa.ForeignKeyConstraint(['variant_get_id'], ['variant.id'], use_alter=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('config_id')
+    )
+    op.create_table('_discount_config_off_order',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('quantity_min', sa.Integer(), nullable=True),
+    sa.Column('amount_min', sa.Integer(), nullable=True),
+    sa.Column('amount_off', sa.Integer(), nullable=True),
+    sa.Column('percentage_off', sa.Integer(), nullable=True),
+    sa.Column('config_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['config_id'], ['_discount_config.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('config_id')
+    )
+    op.create_table('_discount_config_off_product',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('quantity_min', sa.Integer(), nullable=True),
+    sa.Column('amount_off', sa.Integer(), nullable=True),
+    sa.Column('percentage_off', sa.Integer(), nullable=True),
+    sa.Column('config_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['config_id'], ['_discount_config.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('config_id')
+    )
+    op.create_table('_discount_config_shipping',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('quantity_min', sa.Integer(), nullable=True),
+    sa.Column('amount_min', sa.Integer(), nullable=True),
+    sa.Column('amount_off', sa.Integer(), nullable=True),
+    sa.Column('percentage_off', sa.Integer(), nullable=True),
+    sa.Column('config_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['config_id'], ['_discount_config.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('config_id')
     )
     op.create_table('inventory',
     sa.Column('created', sa.DateTime(), nullable=False),
@@ -260,12 +354,19 @@ def downgrade() -> None:
     op.drop_table('price')
     op.drop_table('packagedimensions')
     op.drop_table('inventory')
+    op.drop_table('_discount_config_shipping')
+    op.drop_table('_discount_config_off_product')
+    op.drop_table('_discount_config_off_order')
+    op.drop_table('_discount_config_buy_x_get_y')
     op.drop_table('variant')
     op.drop_table('option')
+    op.drop_table('discountcustomerlink')
     op.drop_table('customer_address')
     op.drop_table('_warehouse_address')
+    op.drop_table('_discount_config')
     op.drop_table('warehouse')
     op.drop_table('product')
+    op.drop_table('discount')
     op.drop_table('customer')
     op.drop_table('cart')
     op.drop_table('shop')

@@ -89,5 +89,8 @@ def delete_price(
         price_id,
         db,
     )
-    deleted_price = schema.PriceDelete(id=price_id, deleted=deleted_id is not None)
+    deleted_price = schema.PriceDelete(
+        id=price_id,
+        deleted=deleted_id is not None,
+    )
     return deleted_price

@@ -21,12 +21,12 @@ from inventory import model as inventory_models
 from cart import model as cart_models
 from cart_item import model as cart_item_models
 
-# from review import model as review_models
+from review import model as review_models
 
-# from discount import model as discount_models
+from discount import model as discount_models
 
 
-# from lib import many_to_many_tables as m2m_models
+from lib import many_to_many_tables as m2m_models
 
 
 from database import engine
@@ -36,16 +36,18 @@ from customer_address.router import router as customer_addresses_router
 
 from product.router import router as products_router
 from option.router import router as options_router
-from variant.router import router as variant_router
-from price.router import router as price_router
+from variant.router import router as variants_router
+from price.router import router as prices_router
 
-from warehouse.router import router as warehouse_router
+from warehouse.router import router as warehouses_router
 from inventory.router import router as inventory_router
 
-from cart.router import router as cart_router
-from cart_item.router import router as cart_item_router
+from cart.router import router as carts_router
+from cart_item.router import router as cart_items_router
 
-# from review.router import router as review_router
+from review.router import router as reviews_router
+
+from discount.router import router as discounts_router
 
 
 SQLModel.metadata.create_all(bind=engine)
@@ -91,7 +93,7 @@ async def get_credentials(request: Request, call_next):
             content={"message": "Secret key is invalid"},
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
-    request.state.shop_id = "shop_SLHcGCmW8TyBVtzBbkK47b"
+    request.state.shop_id = "shop_JdahBTsTWanXXgToqA7sYG"
     request.state.livemode = livemode == "live"
     response = await call_next(request)
     return response
@@ -102,13 +104,14 @@ app.include_router(customer_addresses_router)
 
 app.include_router(products_router)
 app.include_router(options_router)
-app.include_router(variant_router)
-app.include_router(price_router)
+app.include_router(variants_router)
+app.include_router(prices_router)
 
-app.include_router(warehouse_router)
+app.include_router(warehouses_router)
 app.include_router(inventory_router)
 
-app.include_router(cart_router)
-app.include_router(cart_item_router)
+app.include_router(carts_router)
+app.include_router(cart_items_router)
 
-# app.include_router(review_router)
+app.include_router(reviews_router)
+app.include_router(discounts_router)

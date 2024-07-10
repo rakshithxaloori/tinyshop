@@ -5,14 +5,12 @@ from sqlmodel import Field, Relationship
 from lib.model import SqlBase
 from lib.primary_key import get_primary_key
 
-# from lib.many_to_many_tables import DiscountCustomerLink
 
 if TYPE_CHECKING:
     from shop.model import Shop
     from customer_address.model import CustomerAddress
-
-    # from review.model import Review
-    # from discount.model import Discount
+    from review.model import Review
+    from lib.many_to_many_tables import DiscountCustomerLink
 
 
 class Customer(SqlBase, table=True):
@@ -29,16 +27,13 @@ class Customer(SqlBase, table=True):
         back_populates="customer",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # TODO review
-    # reviews: list["Review"] = Relationship(
-    #     back_populates="customer",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
-    # TODO discount
-    # discounts_available: list["Discount"] = Relationship(
-    #     back_populates="customers_select",
-    #     link_model=DiscountCustomerLink,
-    # )
+    reviews: list["Review"] = Relationship(
+        back_populates="customer",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    discount_links: list["DiscountCustomerLink"] = Relationship(
+        back_populates="customer"
+    )
     # checkouts = relationship("Checkout", back_populates="customer")
     # subscriptions = relationship("Subscription", back_populates="customer")
     # invoices = relationship("Invoice", back_populates="customer")

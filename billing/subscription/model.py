@@ -90,7 +90,7 @@ class SubscriptionCancellationDetails(SqlBase):
     __tablename__ = "_subscription_cancellation_details"
 
     id = Column(Text, primary_key=True, default_factory=get_primary_key("_scd"))
-    comment = Column(Text, nullable=True)
+    review = Column(Text, nullable=True)
     feedback = Column(Enum(SubscriptionCancellationDetailsFeedbackEnum), nullable=True)
     reason = Column(Enum(SubscriptionCancellationDetailsReasonEnum), nullable=True)
 

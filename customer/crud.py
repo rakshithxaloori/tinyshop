@@ -109,7 +109,7 @@ def list_customers(
     limit: int = 50,
 ) -> schema.CustomerList:
     # TODO skip and limit
-    subquery = select(Customer.id).offset(skip).limit(limit).subquery()
+    subquery = select(Customer.id).offset(skip).limit(limit)
 
     results = db.exec(
         select(Customer, CustomerAddress)

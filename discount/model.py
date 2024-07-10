@@ -1,19 +1,18 @@
 import enum
 from typing import TYPE_CHECKING
 from datetime import datetime
-from sqlmodel import Field, Relationship
+from sqlmodel import Field, Relationship, Column, ForeignKey, VARCHAR
 
 
 from lib.model import SqlBase
 from lib.primary_key import get_primary_key
 
-# from lib.many_to_many_tables import DiscountCustomerLink
 
 if TYPE_CHECKING:
     from shop.model import Shop
     from product.model import Product
     from variant.model import Variant
-    from customer.model import Customer
+    from lib.many_to_many_tables import DiscountCustomerLink
 
 
 class DiscountTypeEnum(str, enum.Enum):
@@ -31,19 +30,18 @@ class Discount(SqlBase, table=True):
     expires_at: datetime = Field(nullable=True)
     applies_max: int = Field(nullable=True)
 
-    # This Discount is only available for these customers
-    # TODO discount
-    # customers_select: list["Customer"] = Relationship(
-    #     back_populates="discounts_available",
-    #     link_model=DiscountCustomerLink,
-    # )
-
     config: "DiscountConfig" = Relationship(
         back_populates="discount",
         sa_relationship_kwargs={"cascade": "delete"},
     )
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="discounts")
+    # This Discount is only available for these customers
+    customer_links: list["DiscountCustomerLink"] = Relationship(
+        back_populates="discount"
+    )
+
+    # TODO code, shop_id unique constraint
 
 
 class DiscountConfig(SqlBase, table=True):
@@ -132,7 +130,13 @@ class DiscountConfigBuyXGetY(SqlBase, table=True):
     products_buy: list["Product"] = Relationship(
         back_populates="discount_config_buy_x_get_y"
     )
-    variant_get_id: str = Field(foreign_key="variant.id")
+    variant_get_id: str = Field(
+        sa_column=Column(
+            VARCHAR,
+            ForeignKey("variant.id", use_alter=True),
+            nullable=True,
+        )
+    )
     variant_get: "Variant" = Relationship(back_populates="discount_config_buy_x_get_y")
     config_id: str = Field(
         foreign_key="_discount_config.id",

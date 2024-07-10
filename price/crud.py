@@ -52,7 +52,6 @@ def create_price(
             db.refresh(new_cua)
         if new_recurring:
             db.refresh(new_recurring)
-        print("BEFORE PY", new_price, new_cua, new_recurring)
         py_prices = pydantify_prices([(new_price, new_cua, new_recurring)])
         return py_prices.pop()
 
@@ -145,7 +144,7 @@ def list_prices(
     skip: str = None,
     limit: int = 50,
 ) -> schema.PriceList:
-    subquery = select(Price.id).offset(skip).limit(limit).subquery()
+    subquery = select(Price.id).offset(skip).limit(limit)
 
     results = db.exec(
         select(Price, CustomerUnitAmount, Recurring)

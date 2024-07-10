@@ -104,7 +104,7 @@ def list_carts(
     skip: str = None,
     limit: int = 50,
 ) -> schema.CartList:
-    subquery = select(Cart.id).offset(skip).limit(limit).subquery()
+    subquery = select(Cart.id).offset(skip).limit(limit)
 
     results = db.exec(
         select(Cart, CartItem)

@@ -1,6 +1,6 @@
 from typing import Annotated
 from sqlmodel import Session
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 
 from review import schema, crud, form
@@ -65,12 +65,21 @@ def retrieve_review(
 def list_reviews(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
+    product_id: Annotated[str | None, Query(alias="product")] = None,
+    customer_id: Annotated[str | None, Query(alias="customer")] = None,
     db: Session = Depends(get_session),
 ):
+    if product_id is None and customer_id is None:
+        # TODO raise error
+        pass
+    # TODO both product_id and customer_id can't be given at the same time - XOR validation
+
     # TODO skip limit
     reviews_list = crud.list_reviews(
         shop_id,
         livemode,
+        product_id,
+        customer_id,
         db,
     )
     return reviews_list
