@@ -134,4 +134,4 @@ const processJSONData = async (filePath: string) => {
 
 // Run the main function with the provided JSON file
 console.log(__dirname);
-processJSONData(path.resolve(__dirname, "store_data/getabranddeal.json"));
+processJSONData(path.resolve(__dirname, "store_data/wellnesslanguage.json"));

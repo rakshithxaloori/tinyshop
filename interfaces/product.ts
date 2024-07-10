@@ -1,4 +1,4 @@
-import { object_type } from "../utils/enum";
+import { ObjectType } from "../utils/enum";
 
 interface ProductBase {
   name: string;
@@ -9,12 +9,12 @@ interface ProductBase {
   preorder: boolean;
 }
 
-interface ProductCreate extends ProductBase { }
+interface ProductCreate extends ProductBase {}
 
 interface Product extends ProductBase {
   id: string;
   handle: string;
-  object: typeof object_type.PRODUCT;
+  object: typeof ObjectType.PRODUCT;
 }
 
 interface ProductList {
@@ -35,7 +35,7 @@ interface ProductUpdate {
 
 interface ProductDelete {
   id: string;
-  object: typeof object_type.PRODUCT;
+  object: typeof ObjectType.PRODUCT;
   deleted: boolean;
 }
 
@@ -44,5 +44,5 @@ export type {
   ProductCreate,
   ProductUpdate,
   ProductList,
-  ProductDelete
+  ProductDelete,
 };

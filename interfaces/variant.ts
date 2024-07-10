@@ -1,4 +1,4 @@
-import { object_type } from "../utils/enum";
+import { ObjectType } from "../utils/enum";
 
 // Interface for VariantOptionValue
 interface VariantOptionValue {
@@ -34,7 +34,7 @@ interface VariantCreate extends VariantBase {
 // Interface for Variant
 interface Variant extends VariantBase {
   id: string;
-  object: typeof object_type.VARIANT;
+  object: typeof ObjectType.VARIANT;
 }
 
 // Interface for VariantList
@@ -67,7 +67,7 @@ interface VariantUpdate {
 // Interface for VariantDelete
 interface VariantDelete {
   id: string;
-  object: typeof object_type.VARIANT;
+  object: typeof ObjectType.VARIANT;
   deleted: boolean;
 }
 
