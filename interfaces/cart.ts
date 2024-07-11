@@ -14,7 +14,7 @@ interface CartItemCreate {
 interface CartBase {}
 
 interface CartCreate extends CartBase {
-  cart_item: CartItemCreate;
+  cart_item?: CartItemCreate | null;
 }
 
 interface Cart extends CartBase {

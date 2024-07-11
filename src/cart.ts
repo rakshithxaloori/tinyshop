@@ -16,8 +16,8 @@ export class Carts {
     this.endpoint = "/v1/carts";
   }
 
-  async create(data: CartCreate): Promise<Cart> {
-    const response_json: Cart = await this.api.post(this.endpoint, data);
+  async create(data?: CartCreate): Promise<Cart> {
+    const response_json: Cart = await this.api.post(this.endpoint, data || {});
     return response_json;
   }
 
