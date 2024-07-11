@@ -16,7 +16,7 @@ class CartBase(BaseModel):
 
 
 class CartCreate(CartBase):
-    cart_item: CartItemCreate
+    cart_item: CartItemCreate | None = None
 
 
 class Cart(CartBase, PyBaseModel):

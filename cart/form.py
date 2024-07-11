@@ -6,13 +6,17 @@ from cart import schema
 
 
 def create_cart_form(
-    price: Annotated[str, Form()],
-    quantity: Annotated[int, Form()],
+    price: Annotated[str | None, Form(alias="cart_item[price]")] = None,
+    quantity: Annotated[int | None, Form(alias="cart_item[quantity]")] = None,
 ) -> schema.CartCreate:
     return schema.CartCreate(
-        cart_item=schema.CartItemCreate(
-            price=price,
-            quantity=quantity,
+        cart_item=(
+            schema.CartItemCreate(
+                price=price,
+                quantity=quantity,
+            )
+            if price and quantity
+            else None
         )
     )
 

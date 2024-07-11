@@ -4,6 +4,8 @@ from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
 
+from lib.error import TinyshopException
+
 import team.model as team_models
 import shop.model as shop_models
 
@@ -66,6 +68,21 @@ app = FastAPI(
 
 
 # TODO middleware to log your requests or cache the results
+
+
+@app.exception_handler(TinyshopException)
+async def tinyshop_exception_handler(request: Request, exc: TinyshopException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "type": exc.type,
+            "code": exc.code,
+            "decline_code": exc.decline_code,
+            "message": exc.message,
+            "param": exc.param,
+            "detail": exc.detail,
+        },
+    )
 
 
 @app.middleware("http")
