@@ -4,7 +4,6 @@ from fastapi import Form
 
 
 from variant import schema
-from lib.form import BoolString
 
 
 def create_variant_form(
@@ -58,13 +57,13 @@ def create_variant_form(
         product=product,
         name=name,
         description=description,
-        active=active == BoolString.TRUE,
+        active=active == "true",
         options=option_values,
-        accept_zero_inventory_orders=accept_zero_inventory_orders == BoolString.TRUE,
+        accept_zero_inventory_orders=accept_zero_inventory_orders == "true",
         # TODO convert string to datetime timestamp
         next_refill=datetime.now(),
         package_dimensions=package_dimensions,
-        is_default=is_default == BoolString.TRUE,
+        is_default=is_default == "true",
     )
 
 
@@ -112,11 +111,11 @@ def update_variant_form(
     return schema.VariantUpdate(
         name=name,
         description=description,
-        active=active == BoolString.TRUE if active else None,
+        active=active == "true" if active else None,
         options=option_values,
-        accept_zero_inventory_orders=accept_zero_inventory_orders == BoolString.TRUE,
+        accept_zero_inventory_orders=accept_zero_inventory_orders == "true",
         # TODO convert string to datetime timestamp
         next_refill=int(datetime.now().timestamp()),
         package_dimensions=package_dimensions,
-        is_default=is_default == BoolString.TRUE if is_default else None,
+        is_default=is_default == "true" if is_default else None,
     )

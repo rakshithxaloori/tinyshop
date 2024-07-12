@@ -5,6 +5,7 @@ from fastapi import Form
 
 
 from product import schema
+from lib.form.sanitizers import bool_sanitizer, urls_sanitizer
 
 
 def get_handle(name: str) -> str:
@@ -26,18 +27,25 @@ def create_product_form(
     active: Annotated[str, Form()],
     shippable: Annotated[str, Form()],
     preorder: Annotated[str, Form()],
-    images: Annotated[list[str], Form(alias="images[]")] = None,
+    images: Annotated[set[str], Form(alias="images[]")] = None,
     description: Annotated[str | None, Form()] = None,
 ) -> schema.ProductCreate:
+    # Sanitize the all fields of the form
+    name: str = name.strip()
+    active: bool = bool_sanitizer(active, "active")
+    shippable: bool = bool_sanitizer(shippable, "shippable")
+    preorder: bool = bool_sanitizer(preorder, "preorder")
+    images: set[str] = urls_sanitizer(images, "images", count_max=8)
+
     handle = get_handle(name)
     return schema.ProductCreate(
         name=name,
         images=images,
         handle=handle,
         description=description,
-        active=active == "true",
-        shippable=shippable == "true",
-        preorder=preorder == "true",
+        active=active,
+        shippable=shippable,
+        preorder=preorder,
     )
 
 

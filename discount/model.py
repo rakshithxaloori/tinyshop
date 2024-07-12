@@ -38,7 +38,8 @@ class Discount(SqlBase, table=True):
     shop: "Shop" = Relationship(back_populates="discounts")
     # This Discount is only available for these customers
     customer_links: list["DiscountCustomerLink"] = Relationship(
-        back_populates="discount"
+        back_populates="discount",
+        sa_relationship_kwargs={"cascade": "delete"},
     )
 
     # TODO code, shop_id unique constraint

@@ -33,7 +33,7 @@ class ProductList(BaseModel):
     object: str = "list"
     url: str = "/v1/products"
     has_more: bool
-    data: list[Product] = []
+    data: list[Product] | list[str] = []
 
 
 class ProductUpdate(BaseModel):

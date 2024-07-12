@@ -8,7 +8,7 @@ from variant import schema as var_schema
 EXPAND_LIMIT = 20
 
 
-def pydantify_discounts(rows: list[(Discount)]) -> list[schema.Discount]:
+def pydantify_discounts(rows: list[Discount]) -> list[schema.Discount]:
     discounts: list[schema.Discount] = []
     for discount_ins in rows:
         discount_config = None
@@ -54,6 +54,7 @@ def pydantify_discounts(rows: list[(Discount)]) -> list[schema.Discount]:
                             discount_ins.config.buy_x_get_y.products_buy[:EXPAND_LIMIT]
                         ),
                     ),
+                    # TODO expand
                     # variant_get=var_schema.Variant(
                     #     **variant_ins.model_dump(exclude={"created", "updated"}),
                     #     created=int(variant_ins.created.timestamp()),
@@ -67,6 +68,7 @@ def pydantify_discounts(rows: list[(Discount)]) -> list[schema.Discount]:
             created=int(discount_ins.created.timestamp()),
             updated=int(discount_ins.updated.timestamp()),
             customers=schema.DiscountCustomersList(
+                # TODO expand
                 # data=[
                 #     cus_schema.Customer(
                 #         **cus.customer.model_dump(exclude={"created", "updated"}),

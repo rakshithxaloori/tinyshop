@@ -1,0 +1,173 @@
+from sqlmodel import Session, select
+
+from collection.model import Collection
+from collection import schema
+from product.model import Product
+from lib.many_to_many_tables import CollectionProductLink
+from collection.utils import pydantify_collections
+from lib.session import update_instance
+
+
+def create_collection(
+    shop_id: str,
+    livemode: bool,
+    collection: schema.CollectionCreate,
+    db: Session,
+) -> schema.Collection:
+    try:
+        col_data = collection.model_dump(exclude={"products"})
+        new_col = Collection(
+            shop_id=shop_id,
+            livemode=livemode,
+            **col_data,
+        )
+
+        if collection.products:
+            prod_res = db.exec(
+                select(Product.id)
+                .where(Product.shop_id == shop_id)
+                .where(Product.livemode == livemode)
+                .where(Product.id.in_(collection.products))
+            )
+            prod_ids = list(prod_res.all())
+            for prod_id in prod_ids:
+                new_cp_link = CollectionProductLink(
+                    livemode=livemode,
+                    collection_id=new_col.id,
+                    product_id=prod_id,
+                )
+                new_col.product_links.append(new_cp_link)
+                db.add(new_cp_link)
+        db.add(new_col)
+        db.commit()
+        db.refresh(new_col)
+
+        py_collections = pydantify_collections([new_col])
+        return py_collections.pop()
+
+    except Exception as e:
+        print("EXCEPTION create_collection:", e)
+        return None
+
+
+def update_collection(
+    shop_id: str,
+    livemode: bool,
+    collection_id: str,
+    collection: schema.CollectionUpdate,
+    db: Session,
+) -> schema.Collection:
+    try:
+        data = collection.model_dump(exclude_none=True, exclude={"products"})
+        col_res = db.exec(
+            select(Collection)
+            .where(Collection.shop_id == shop_id)
+            .where(Collection.livemode == livemode)
+            .where(Collection.id == collection_id)
+        )
+        col_ins = col_res.one()
+
+        update_instance(db, data, col_ins)
+
+        products = collection.products
+        if products:
+            if products.add:
+                prod_res = db.exec(
+                    select(Product.id)
+                    .where(Product.shop_id == shop_id)
+                    .where(Product.livemode == livemode)
+                    .where(Product.id.in_(products.add))
+                )
+                prod_ids = list(prod_res.all())
+                for prod_id in prod_ids:
+                    new_cp_link = CollectionProductLink(
+                        livemode=livemode,
+                        collection_id=col_ins.id,
+                        product_id=prod_id,
+                    )
+                    col_ins.product_links.append(new_cp_link)
+                    db.add(new_cp_link)
+            if products.remove:
+                cp_links_res = db.exec(
+                    select(CollectionProductLink)
+                    .where(CollectionProductLink.livemode == livemode)
+                    .where(CollectionProductLink.collection_id == col_ins.id)
+                    .where(CollectionProductLink.product_id.in_(products.remove))
+                )
+                cp_links = cp_links_res.all()
+                for cp_link in cp_links:
+                    db.delete(cp_link)
+            db.add(col_ins)
+        db.commit()
+        db.refresh(col_ins)
+        py_collections = pydantify_collections([col_ins])
+        return py_collections.pop()
+
+    except Exception as e:
+        print("EXCEPTION update_collection:", e)
+        return None
+
+
+def retrieve_collection(
+    shop_id: str,
+    livemode: bool,
+    collection_id: str,
+    db: Session,
+) -> schema.Collection:
+    try:
+        result = db.exec(
+            select(Collection)
+            .where(Collection.shop_id == shop_id)
+            .where(Collection.livemode == livemode)
+            .where(Collection.id == collection_id)
+        )
+        collection = result.one()
+        py_collections = pydantify_collections([collection])
+        return py_collections.pop()
+    except Exception as e:
+        print("EXCEPTION retrieve_collection:", e)
+        return None
+
+
+def list_collections(
+    shop_id: str,
+    livemode: bool,
+    db: Session,
+    skip: str = None,
+    limit: int = 50,
+) -> schema.CollectionList:
+    subquery = select(Collection.id).offset(skip).limit(limit)
+    results = db.exec(
+        select(Collection)
+        .where(Collection.shop_id == shop_id)
+        .where(Collection.livemode == livemode)
+        .where(Collection.id.in_(subquery))
+    )
+    all_rows = results.all()
+    collections = pydantify_collections(all_rows)
+    return schema.CollectionList(
+        has_more=False,
+        data=collections,
+    )
+
+
+def delete_collection(
+    shop_id: str,
+    livemode: bool,
+    collection_id: str,
+    db: Session,
+) -> str | None:
+    try:
+        results = db.exec(
+            select(Collection)
+            .where(Collection.shop_id == shop_id)
+            .where(Collection.livemode == livemode)
+            .where(Collection.id == collection_id)
+        )
+        collection = results.one()
+        db.delete(collection)
+        db.commit()
+        return collection.id
+    except Exception as e:
+        print("EXCEPTION delete_collection:", e)
+        return None

@@ -2,7 +2,7 @@ import base64
 from sqlmodel import SQLModel
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
-
+from fastapi.exceptions import RequestValidationError
 
 from lib.error import TinyshopException
 
@@ -16,6 +16,7 @@ from product import model as product_models
 from option import model as option_models
 from variant import model as variant_models
 from price import model as price_models
+from collection import model as collection_models
 
 from warehouse import model as warehouse_models
 from inventory import model as inventory_models
@@ -40,6 +41,7 @@ from product.router import router as products_router
 from option.router import router as options_router
 from variant.router import router as variants_router
 from price.router import router as prices_router
+from collection.router import router as collections_router
 
 from warehouse.router import router as warehouses_router
 from inventory.router import router as inventory_router
@@ -77,11 +79,19 @@ async def tinyshop_exception_handler(request: Request, exc: TinyshopException):
         content={
             "type": exc.type,
             "code": exc.code,
-            "decline_code": exc.decline_code,
             "message": exc.message,
             "param": exc.param,
-            "detail": exc.detail,
         },
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    # TODO handle form incorrect name and type errors
+    print(exc.errors())
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={"detail": "Hmmmmmm", "Error": "Name field is missing"},
     )
 
 
@@ -110,7 +120,7 @@ async def get_credentials(request: Request, call_next):
             content={"message": "Secret key is invalid"},
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
-    request.state.shop_id = "shop_JdahBTsTWanXXgToqA7sYG"
+    request.state.shop_id = "shop_FNqMB2zoRHomnmpRxeqWGw"
     request.state.livemode = livemode == "live"
     response = await call_next(request)
     return response
@@ -123,6 +133,7 @@ app.include_router(products_router)
 app.include_router(options_router)
 app.include_router(variants_router)
 app.include_router(prices_router)
+app.include_router(collections_router)
 
 app.include_router(warehouses_router)
 app.include_router(inventory_router)

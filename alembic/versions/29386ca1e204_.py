@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ea28df78f606
+Revision ID: 29386ca1e204
 Revises: 
-Create Date: 2024-07-10 15:12:50.617186
+Create Date: 2024-07-12 16:59:32.691704
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'ea28df78f606'
+revision: str = '29386ca1e204'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -53,6 +53,18 @@ def upgrade() -> None:
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('status', sa.Enum('REQUIRES_PAYMENT', 'ABANDONED', 'PAID', name='cartstatusenum'), nullable=False),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('collection',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('image_web', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('image_mobile', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -142,6 +154,16 @@ def upgrade() -> None:
     sa.Column('warehouse_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['warehouse_id'], ['warehouse.id'], ),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('collectionproductlink',
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('collection_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('product_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['collection_id'], ['collection.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['product.id'], ),
+    sa.PrimaryKeyConstraint('collection_id', 'product_id')
     )
     op.create_table('customer_address',
     sa.Column('created', sa.DateTime(), nullable=False),
@@ -362,12 +384,14 @@ def downgrade() -> None:
     op.drop_table('option')
     op.drop_table('discountcustomerlink')
     op.drop_table('customer_address')
+    op.drop_table('collectionproductlink')
     op.drop_table('_warehouse_address')
     op.drop_table('_discount_config')
     op.drop_table('warehouse')
     op.drop_table('product')
     op.drop_table('discount')
     op.drop_table('customer')
+    op.drop_table('collection')
     op.drop_table('cart')
     op.drop_table('shop')
     op.drop_table('keys')

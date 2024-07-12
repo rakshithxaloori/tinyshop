@@ -32,7 +32,8 @@ class Customer(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     discount_links: list["DiscountCustomerLink"] = Relationship(
-        back_populates="customer"
+        back_populates="customer",
+        sa_relationship_kwargs={"cascade": "delete"},
     )
     # checkouts = relationship("Checkout", back_populates="customer")
     # subscriptions = relationship("Subscription", back_populates="customer")

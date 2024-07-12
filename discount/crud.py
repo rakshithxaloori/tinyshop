@@ -42,13 +42,13 @@ def create_discount(
             )
             cus_ids = list(cus_results.all())
             for cus_id in cus_ids:
-                new_discount.customer_links.append(
-                    DiscountCustomerLink(
-                        livemode=livemode,
-                        discount_id=new_discount.id,
-                        customer_id=cus_id,
-                    )
+                new_dc_link = DiscountCustomerLink(
+                    livemode=livemode,
+                    discount_id=new_discount.id,
+                    customer_id=cus_id,
                 )
+                new_discount.customer_links.append(new_dc_link)
+                db.add(new_dc_link)
 
         db.add(new_discount)
 
@@ -169,13 +169,13 @@ def update_discount(
                 )
                 cus_ids = list(cus_results.all())
                 for cus_id in cus_ids:
-                    discount_ins.customer_links.append(
-                        DiscountCustomerLink(
-                            livemode=livemode,
-                            discount_id=discount_ins.id,
-                            customer_id=cus_id,
-                        )
+                    new_dc_link = DiscountCustomerLink(
+                        livemode=livemode,
+                        discount_id=discount_ins.id,
+                        customer_id=cus_id,
                     )
+                    discount_ins.customer_links.append(new_dc_link)
+                    db.add(new_dc_link)
             if customers.remove:
                 # Remove these customers
                 dc_links_res = db.exec(
@@ -187,6 +187,7 @@ def update_discount(
                 dc_links = dc_links_res.all()
                 for dc_link in dc_links:
                     db.delete(dc_link)
+            db.add(discount_ins)
 
         if discount.config:
             if discount_ins.type == DiscountTypeEnum.OFF_PRODUCT:
@@ -297,7 +298,7 @@ def retrieve_discount(
 
         result = db.exec(query)
         discount = result.one()
-        py_discounts = pydantify_discounts([(discount)])
+        py_discounts = pydantify_discounts([discount])
         return py_discounts.pop()
     except Exception as e:
         print("EXCEPTION retrieve_discount:", e)

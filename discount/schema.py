@@ -21,21 +21,21 @@ class DiscountProductsList(BaseModel):
     object: str = "list"
     url: str = "/v1/discounts/{discount_id}/products"
     has_more: bool
-    data: list[Product] | list[str]
+    data: list[Product]
 
 
 class DiscountCustomersList(BaseModel):
     object: str = "list"
     url: str = "/v1/discounts/{discount_id}/customers"
     has_more: bool
-    data: list[Customer] | list[str]
+    data: list[Customer]
 
 
 class OffProduct(BaseModel):
     quantity_min: int | None = None
     amount_off: int | None = None
     percentage_off: int | None = None
-    products: DiscountProductsList | None = None
+    products: DiscountProductsList | list[str] | None = None
 
 
 class OffProductUpdateProducts(BaseModel):

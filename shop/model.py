@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from option.model import Option
     from variant.model import Variant
     from price.model import Price
+    from collection.model import Collection
 
     from warehouse.model import Warehouse
     from inventory.model import Inventory
@@ -48,6 +49,10 @@ class Shop(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     prices: list["Price"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    collections: list["Collection"] = Relationship(
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )

@@ -34,7 +34,7 @@ from product.model import *
 from option.model import *
 from variant.model import *
 from price.model import *
-
+from collection.model import *
 
 from warehouse.model import *
 from inventory.model import *

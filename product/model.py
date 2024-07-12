@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from variant.model import Variant
     from discount.model import DiscountConfigOffProduct, DiscountConfigBuyXGetY
     from review.model import Review
+    from lib.many_to_many_tables import CollectionProductLink
 
 
 class Product(SqlBase, table=True):
@@ -41,6 +42,10 @@ class Product(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     variants: list["Variant"] = Relationship(
+        back_populates="product",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    collection_links: list["CollectionProductLink"] = Relationship(
         back_populates="product",
         sa_relationship_kwargs={"cascade": "delete"},
     )

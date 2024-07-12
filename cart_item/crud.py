@@ -1,6 +1,7 @@
 from sqlmodel import Session, select
 
 from cart.model import Cart
+from price.model import Price
 from cart_item.model import CartItem
 from cart_item import schema
 from cart_item.utils import pydantify_cart_items
@@ -22,12 +23,20 @@ def create_cart_item(
         )
 
         cart = cart_res.one()
+        price_res = db.exec(
+            select(Price)
+            .where(Price.shop_id == shop_id)
+            .where(Price.livemode == livemode)
+            .where(Price.id == cart_item.price)
+        )
+        price = price_res.one()
+
         ci_data = cart_item.model_dump(exclude={"cart", "price"})
         new_ci = CartItem(
             shop_id=shop_id,
             livemode=livemode,
             cart_id=cart.id,
-            price_id=cart_item.price,
+            price_id=price.id,
             **ci_data,
         )
         db.add(new_ci)

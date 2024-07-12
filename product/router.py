@@ -85,11 +85,11 @@ def retrieve_product(
 def list_products(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
+    collection_id: Annotated[str | None, Query(alias="collection")] = None,
     expand: Annotated[list[str] | None, Query(alias="expand[]")] = None,
     db: Session = Depends(get_session),
 ):
     # TODO skip, limit
-    print(shop_id, livemode)
     products_list = crud.list_products(
         shop_id,
         livemode,

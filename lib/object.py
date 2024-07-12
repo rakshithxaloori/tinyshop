@@ -5,6 +5,7 @@ class ObjectType:
     OPTION = "option"
     VARIANT = "variant"
     PRICE = "price"
+    COLLECTION = "collection"
     WAREHOUSE = "warehouse"
     INVENTORY = "inventory"
     CART = "cart"

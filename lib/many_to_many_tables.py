@@ -5,6 +5,8 @@ from lib.model import SqlBase
 if TYPE_CHECKING:
     from discount.model import Discount
     from customer.model import Customer
+    from collection.model import Collection
+    from product.model import Product
 
 
 class DiscountCustomerLink(SqlBase, table=True):
@@ -15,6 +17,18 @@ class DiscountCustomerLink(SqlBase, table=True):
 
     discount: "Discount" = Relationship(back_populates="customer_links")
     customer: "Customer" = Relationship(back_populates="discount_links")
+
+    # TODO shop, shop id ?
+
+
+class CollectionProductLink(SqlBase, table=True):
+    """Collections and Products."""
+
+    collection_id: str = Field(foreign_key="collection.id", primary_key=True)
+    product_id: str = Field(foreign_key="product.id", primary_key=True)
+
+    collection: "Collection" = Relationship(back_populates="product_links")
+    product: "Product" = Relationship(back_populates="collection_links")
 
 
 # TODO create one for customers, shop
