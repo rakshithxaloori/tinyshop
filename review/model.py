@@ -31,6 +31,7 @@ class Review(SqlBase, table=True):
     shipping_rating: int = Field()  # Out of 5
     feedback: FeedbackEnum = Field(nullable=True)
     review: str = Field(nullable=True)
+    image: str = Field(nullable=True)
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="reviews")

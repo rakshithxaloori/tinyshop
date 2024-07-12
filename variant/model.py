@@ -24,6 +24,7 @@ class Variant(SqlBase, table=True):
     accept_zero_inventory_orders: bool = Field(default=False)
     next_refill: datetime = Field(nullable=True)
     unit_label: str = Field(nullable=True)
+    image: str = Field(nullable=True)
     is_default: bool = Field(default=False, nullable=True)  # TODO remove nullable=True
 
     shop_id: str = Field(foreign_key="shop.id")

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 29386ca1e204
+Revision ID: d0325f443a32
 Revises: 
-Create Date: 2024-07-12 16:59:32.691704
+Create Date: 2024-07-12 21:40:45.354939
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '29386ca1e204'
+revision: str = 'd0325f443a32'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -217,6 +217,7 @@ def upgrade() -> None:
     sa.Column('accept_zero_inventory_orders', sa.Boolean(), nullable=False),
     sa.Column('next_refill', sa.DateTime(), nullable=True),
     sa.Column('unit_label', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('image', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('is_default', sa.Boolean(), nullable=True),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('product_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),

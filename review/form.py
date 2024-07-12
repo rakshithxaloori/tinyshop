@@ -13,6 +13,7 @@ def create_review_form(
     shipping_rating: Annotated[int, Form()],
     feedback: Annotated[FeedbackEnum | None, Form()] = None,
     review: Annotated[str | None, Form()] = None,
+    image: Annotated[str | None, Form()] = None,
 ) -> schema.ReviewCreate:
     return schema.ReviewCreate(
         customer=customer,
@@ -21,6 +22,7 @@ def create_review_form(
         shipping_rating=shipping_rating,
         feedback=feedback,
         review=review,
+        image=image,
     )
 
 
@@ -29,10 +31,12 @@ def update_review_form(
     shipping_rating: Annotated[int | None, Form()] = None,
     feedback: Annotated[FeedbackEnum | None, Form()] = None,
     review: Annotated[str | None, Form()] = None,
+    image: Annotated[str | None, Form()] = None,
 ) -> schema.ReviewUpdate:
     return schema.ReviewUpdate(
         product_rating=product_rating,
         shipping_rating=shipping_rating,
         feedback=feedback,
         review=review,
+        image=image,
     )

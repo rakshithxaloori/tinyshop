@@ -10,6 +10,7 @@ class ReviewBase(BaseModel):
     shipping_rating: int
     feedback: FeedbackEnum | None = None
     review: str | None = None
+    image: str | None = None
 
 
 class ReviewCreate(ReviewBase):

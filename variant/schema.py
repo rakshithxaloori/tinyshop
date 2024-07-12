@@ -25,6 +25,7 @@ class VariantBase(BaseModel):
     options: list[VariantOptionValue] | None = None
     accept_zero_inventory_orders: bool
     next_refill: datetime
+    image: str | None = None
     package_dimensions: PackageDimensions | None = None
     is_default: bool
 
@@ -61,6 +62,7 @@ class VariantUpdate(BaseModel):
     options: list[VariantOptionValue] | None = None
     accept_zero_inventory_orders: bool | None = None
     next_refill: datetime | None = None
+    image: str | None = None
     package_dimensions: PackageDimensionsUpdate | None = None
     is_default: bool | None = None
 

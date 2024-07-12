@@ -13,6 +13,7 @@ def create_variant_form(
     accept_zero_inventory_orders: Annotated[str, Form()],
     next_refill: Annotated[str, Form()],  # TODO
     is_default: Annotated[str, Form()],
+    image: Annotated[str | None, Form()] = None,
     description: Annotated[str | None, Form()] = None,
     options: Annotated[list[str] | None, Form()] = None,
     package_dimensions_height: Annotated[
@@ -59,6 +60,7 @@ def create_variant_form(
         description=description,
         active=active == "true",
         options=option_values,
+        image=image,
         accept_zero_inventory_orders=accept_zero_inventory_orders == "true",
         # TODO convert string to datetime timestamp
         next_refill=datetime.now(),
@@ -74,6 +76,7 @@ def update_variant_form(
     options: Annotated[list[str] | None, Form()] = None,
     accept_zero_inventory_orders: Annotated[str | None, Form()] = None,
     next_refill: Annotated[str | None, Form()] = None,
+    image: Annotated[str | None, Form()] = None,
     is_default: Annotated[str | None, Form()] = None,
     package_dimensions_height: Annotated[
         str | None, Form(alias="package_dimensions[height]")
@@ -116,6 +119,7 @@ def update_variant_form(
         accept_zero_inventory_orders=accept_zero_inventory_orders == "true",
         # TODO convert string to datetime timestamp
         next_refill=int(datetime.now().timestamp()),
+        image=image,
         package_dimensions=package_dimensions,
         is_default=is_default == "true" if is_default else None,
     )
