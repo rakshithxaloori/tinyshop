@@ -3,6 +3,7 @@ import { Options } from "./option";
 import { Products } from "./product";
 import { Variants } from "./variant";
 import { Prices } from "./price";
+import { Collections } from "./collection";
 import { Carts } from "./cart";
 import { CartItems } from "./cartItem";
 import { Reviews } from "./review";
@@ -13,6 +14,7 @@ class Tinyshop {
   public options: Options;
   public variants: Variants;
   public prices: Prices;
+  public collections: Collections;
   public carts: Carts;
   public cartItems: CartItems;
   public reviews: Reviews;
@@ -25,6 +27,7 @@ class Tinyshop {
     this.options = new Options(this.api);
     this.variants = new Variants(this.api);
     this.prices = new Prices(this.api);
+    this.collections = new Collections(this.api);
     this.carts = new Carts(this.api);
     this.cartItems = new CartItems(this.api);
     this.reviews = new Reviews(this.api);
