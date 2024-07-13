@@ -3,13 +3,14 @@ import { cn } from "@/lib/utils";
 import BasicFooter from "@/template/footer/basic";
 import BasicHeader from "@/template/header/basic";
 
-const StorefrontLayout = async ({ children }: { children: React.ReactNode }) => {
+
+const StorefrontLayout = async ({ cartId, children }: { cartId: string | null, children: React.ReactNode }) => {
   const navItems = await getHeaderNavItems();
   return (
     <div className={cn("flex flex-col h-full min-h-screen w-full bg-base-200 text-base-content",)}
       data-theme="retro"
     >
-      <BasicHeader {...{ navItems }} />
+      <BasicHeader {...{ cartId, navItems }} />
       <div className="flex flex-1 justify-center mx-lg md:mx-xl">
         {children}
       </div>

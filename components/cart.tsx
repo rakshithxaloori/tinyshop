@@ -12,6 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { useEffect } from "react";
 
 const EmptyCart = () => {
   return (
@@ -44,10 +45,24 @@ const CartList = () => {
 
 }
 
-const Cart = () => {
+const Cart = ({
+  cartId,
+}: {
+  cartId: string | null
+}) => {
   const cartStore = useCartStore()
   const { cart } = cartStore
-  if (!cart) return null
+  console.log(cart)
+  useEffect(() => {
+    console.log(cart)
+    // async function initializeCart(cartId: string | null) {
+    //   await cart.initCart(cartId || "")
+
+    // }
+    // initializeCart(cartId)
+
+  }, [cart, cartId])
+
   const cartItems = 0
 
   return (

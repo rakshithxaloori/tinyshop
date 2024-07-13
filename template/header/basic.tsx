@@ -90,8 +90,10 @@ const NavItems = ({ navItems }: { navItems: any[] }) => {
 const BasicHeader = ({
   className,
   navItems,
+  cartId
 }: {
   navItems: any[],
+  cartId: string | null;
   className?: string;
 }) => {
   const sticky = true;
@@ -117,9 +119,10 @@ const BasicHeader = ({
             <Wishlist />
           </section>
           <section id="basic-header-cart" className="flex space-x-4">
-            <Cart />
+            <Cart {...{ cartId }} />
           </section>
         </section>
+
       </div>
     </header>
   );

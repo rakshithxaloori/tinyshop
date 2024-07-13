@@ -1,15 +1,19 @@
+import { getCartId } from "@/lib/cookie/cart";
 import ClientSideProvider from "../providers";
 import StorefrontLayout from "@/components/layout/storefront";
 
-const StorefrontTemplate = (
+const StorefrontTemplate = async (
   { children }: Readonly<{
     children: React.ReactNode;
   }>,
 ) => {
 
+  const cartId = await getCartId();
+  console.log("StorefrontTemplate > cartId ", cartId);
+
   return (
     <ClientSideProvider>
-      <StorefrontLayout>
+      <StorefrontLayout {...{ cartId }}>
         {children}
       </StorefrontLayout>
 
