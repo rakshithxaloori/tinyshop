@@ -6,6 +6,7 @@ import {
   CollectionList,
   CollectionDelete,
 } from "../interfaces/collection";
+import { OptionalParams } from "./list";
 
 export class Collections {
   public endpoint: string;
@@ -28,6 +29,20 @@ export class Collections {
     const response_json: Collection = await this.api.post(
       `${this.endpoint}/${id}`,
       data
+    );
+    return response_json;
+  }
+
+  async search(
+    query: string,
+    options?: OptionalParams
+  ): Promise<CollectionList> {
+    const response_json: CollectionList = await this.api.get(
+      `${this.endpoint}/search`,
+      {
+        query,
+        ...options,
+      }
     );
     return response_json;
   }
