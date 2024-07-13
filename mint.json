@@ -15,6 +15,10 @@
       "to": "#07C983"
     }
   },
+  "modeToggle": {
+    "default": "light",
+    "isHidden": true
+  },
   "topbarLinks": [
     {
       "name": "Support",
@@ -74,64 +78,115 @@
         {
           "group": "Products",
           "pages": [
-            "api-reference/products/create",
-            "api-reference/products/update",
-            "api-reference/products/retrieve",
-            "api-reference/products/list",
-            "api-reference/products/delete"
+            "api-reference/store/products/create",
+            "api-reference/store/products/update",
+            "api-reference/store/products/retrieve",
+            "api-reference/store/products/list",
+            "api-reference/store/products/delete"
           ]
         },
         {
           "group": "Options",
           "pages": [
-            "api-reference/options/create",
-            "api-reference/options/update",
-            "api-reference/options/retrieve",
-            "api-reference/options/list",
-            "api-reference/options/delete"
+            "api-reference/store/options/create",
+            "api-reference/store/options/update",
+            "api-reference/store/options/retrieve",
+            "api-reference/store/options/list",
+            "api-reference/store/options/delete"
           ]
         },
         {
           "group": "Variants",
           "pages": [
-            "api-reference/variants/create",
-            "api-reference/variants/update",
-            "api-reference/variants/retrieve",
-            "api-reference/variants/list",
-            "api-reference/variants/delete"
+            "api-reference/store/variants/create",
+            "api-reference/store/variants/update",
+            "api-reference/store/variants/retrieve",
+            "api-reference/store/variants/list",
+            "api-reference/store/variants/delete"
           ]
         },
         {
           "group": "Prices",
           "pages": [
-            "api-reference/prices/create",
-            "api-reference/prices/update",
-            "api-reference/prices/retrieve",
-            "api-reference/prices/list",
-            "api-reference/prices/delete"
+            "api-reference/store/prices/create",
+            "api-reference/store/prices/update",
+            "api-reference/store/prices/retrieve",
+            "api-reference/store/prices/list",
+            "api-reference/store/prices/delete"
           ]
         },
         {
+          "group": "Collections",
+          "pages": [
+            "api-reference/store/collections/create",
+            "api-reference/store/collections/update",
+            "api-reference/store/collections/retrieve",
+            "api-reference/store/collections/list",
+            "api-reference/store/collections/delete"
+          ]
+        },
+        {
+          "group": "Carts",
+          "pages": [
+            "api-reference/store/carts/create",
+            "api-reference/store/carts/update",
+            "api-reference/store/carts/retrieve",
+            "api-reference/store/carts/list",
+            "api-reference/store/carts/delete"
+          ]
+        },
+        {
+          "group": "Cart Items",
+          "pages": [
+            "api-reference/store/cart_items/create",
+            "api-reference/store/cart_items/update",
+            "api-reference/store/cart_items/retrieve",
+            "api-reference/store/cart_items/list",
+            "api-reference/store/cart_items/delete"
+          ]
+        },
+        {
+          "group": "Reviews",
+          "pages": [
+            "api-reference/store/reviews/create",
+            "api-reference/store/reviews/update",
+            "api-reference/store/reviews/retrieve",
+            "api-reference/store/reviews/list",
+            "api-reference/store/reviews/delete"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Fulfillment",
+      "pages": [
+        {
           "group": "Warehouses",
           "pages": [
-            "api-reference/warehouses/create",
-            "api-reference/warehouses/update",
-            "api-reference/warehouses/retrieve",
-            "api-reference/warehouses/list",
-            "api-reference/warehouses/delete"
+            "api-reference/fulfillment/warehouses/create",
+            "api-reference/fulfillment/warehouses/update",
+            "api-reference/fulfillment/warehouses/retrieve",
+            "api-reference/fulfillment/warehouses/list",
+            "api-reference/fulfillment/warehouses/delete"
           ]
         },
         {
           "group": "Inventory",
           "pages": [
-            "api-reference/inventory/create",
-            "api-reference/inventory/update",
-            "api-reference/inventory/delete"
+            "api-reference/fulfillment/inventory/create",
+            "api-reference/fulfillment/inventory/update",
+            "api-reference/fulfillment/inventory/delete"
           ]
         }
       ]
     }
   ],
+  "api": {
+    "auth": {
+      "method": "basic",
+      "name": "sk_test_xxxx:"
+    }
+  },
   "footerSocials": {
     "x": "https://x.com/mintlify",
     "github": "https://github.com/mintlify",
