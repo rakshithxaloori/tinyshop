@@ -45,6 +45,24 @@ def update_collection(
     return collection
 
 
+@router.get("/search", response_model=schema.CollectionList)
+def search_collections(
+    shop_id: ShopIDDep,
+    livemode: LivemodeDep,
+    query: Annotated[str, Query()],
+    expand: Annotated[list[str] | None, Query(alias="expand[]")] = None,
+    db: Session = Depends(get_session),
+):
+    collections_list = crud.search_collections(
+        shop_id,
+        livemode,
+        query,
+        db,
+        expand,
+    )
+    return collections_list
+
+
 @router.get("/{collection_id}", response_model=schema.Collection)
 def retrieve_collection(
     shop_id: ShopIDDep,

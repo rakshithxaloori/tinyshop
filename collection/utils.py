@@ -1,6 +1,8 @@
+from sqlmodel import Session, select
 from collection.model import Collection
 from collection import schema
-
+from product import schema as prod_schema
+from product import utils as prod_utils
 
 EXPAND_LIMIT = 20
 
@@ -25,3 +27,37 @@ def pydantify_collections(rows: list[Collection]) -> list[schema.Collection]:
         )
 
     return collections
+
+
+def expand_collection(
+    db: Session,
+    shop_id: str,
+    livemode: bool,
+    collection: schema.Collection,
+    expand: list[str],
+) -> schema.Collection:
+    # TODO
+    if "products" in expand:
+        results = db.exec(
+            select(Collection)
+            .where(Collection.shop_id == shop_id)
+            .where(Collection.livemode == livemode)
+            .where(Collection.id == collection.id)
+        )
+        col_ins = results.one()
+        collection.products.data = [
+            prod_schema.Product(
+                **cp_link.product.model_dump(exclude={"created", "updated"}),
+                created=int(cp_link.product.created.timestamp()),
+                updated=int(cp_link.product.updated.timestamp()),
+            )
+            for cp_link in col_ins.product_links[:EXPAND_LIMIT]
+        ]
+        collection.products.data = prod_utils.expand_products(
+            db,
+            shop_id,
+            livemode,
+            collection.products.data,
+            ["default_variant"],
+        )
+    return collection

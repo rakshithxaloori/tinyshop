@@ -93,8 +93,9 @@ def list_products(
     products_list = crud.list_products(
         shop_id,
         livemode,
-        expand,
         db,
+        expand,
+        collection_id,
     )
     return products_list
 

@@ -4,8 +4,9 @@ from collection.model import Collection
 from collection import schema
 from product.model import Product
 from lib.many_to_many_tables import CollectionProductLink
-from collection.utils import pydantify_collections
+from collection.utils import pydantify_collections, expand_collection
 from lib.session import update_instance
+from lib.search import Operators
 
 
 def create_collection(
@@ -171,3 +172,53 @@ def delete_collection(
     except Exception as e:
         print("EXCEPTION delete_collection:", e)
         return None
+
+
+def search_collections(
+    shop_id: str,
+    livemode: bool,
+    query: str,
+    db: Session,
+    expand: list[str] | None = None,
+) -> schema.CollectionList:
+    try:
+        clauses = query.split(" ")
+        for clause in clauses:
+            field, value = clause.split(Operators.SEMI_COLON)
+            if field == "handle":
+                results = db.exec(
+                    select(Collection)
+                    .where(Collection.shop_id == shop_id)
+                    .where(Collection.livemode == livemode)
+                    .where(Collection.handle == value)
+                )
+                collection_ins = results.one()
+                collection = pydantify_collections([collection_ins]).pop()
+
+                if expand:
+                    collection = expand_collection(
+                        db,
+                        shop_id,
+                        livemode,
+                        collection,
+                        expand,
+                    )
+                return schema.CollectionList(
+                    url="/v1/collections/search",
+                    has_more=False,  # TODO
+                    data=[collection],
+                )
+
+        return schema.CollectionList(
+            url="/v1/collections/search",
+            has_more=False,  # TODO
+            data=[],
+        )
+
+    except Exception as e:
+        print("EXCEPTION search_collections:", e)
+        return schema.CollectionList(
+            url="/v1/collections/search",
+            has_more=False,  # TODO
+            data=[],
+        )

@@ -4,7 +4,7 @@ from product.model import Product
 from product import schema
 from product.utils import pydantify_products, expand_product, expand_products
 from lib.session import update_instance
-from lib.search import OPERATORS
+from lib.search import Operators
 
 
 def create_product(
@@ -97,18 +97,18 @@ def retrieve_product(
 def list_products(
     shop_id: str,
     livemode: bool,
-    expand: list[str] | None,
     db: Session,
+    expand: list[str] | None = None,
+    collection: str | None = None,
     skip: str = None,
     limit: int = 50,
 ) -> schema.ProductList:
-    subquery = select(Product.id).offset(skip).limit(limit)
-
     results = db.exec(
         select(Product)
         .where(Product.shop_id == shop_id)
         .where(Product.livemode == livemode)
-        .where(Product.id.in_(subquery))
+        .offset(skip)
+        .limit(limit)
     )
     product_rows = list(results.all())
     products = pydantify_products(product_rows)
@@ -160,7 +160,7 @@ def search_products(
         # TODO write a more comprehensive query parser
         clauses = query.split(" ")
         for clause in clauses:
-            field, value = clause.split(OPERATORS[0])
+            field, value = clause.split(Operators.SEMI_COLON)
             if field == "handle":
                 results = db.exec(
                     select(Product)
@@ -168,10 +168,10 @@ def search_products(
                     .where(Product.livemode == livemode)
                     .where(Product.handle == value)
                 )
-                product_ine = results.one()
-                product = pydantify_products([product_ine]).pop()
+                product_ins = results.one()
+                product = pydantify_products([product_ins]).pop()
                 if expand:
-                    py_prod = expand_product(
+                    product = expand_product(
                         db,
                         shop_id,
                         livemode,
@@ -181,14 +181,14 @@ def search_products(
                 return schema.ProductList(
                     url="/v1/products/search",
                     has_more=False,  # TODO
-                    data=[py_prod],
+                    data=[product],
                 )
 
-            return schema.ProductList(
-                url="/v1/products/search",
-                has_more=False,  # TODO
-                data=[],
-            )
+        return schema.ProductList(
+            url="/v1/products/search",
+            has_more=False,  # TODO
+            data=[],
+        )
 
     except Exception as e:
         print("EXCEPTION search_products:", e)
