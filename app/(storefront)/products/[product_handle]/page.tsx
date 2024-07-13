@@ -1,5 +1,6 @@
-import ProductCard from "@/components/product-card";
+import ProductDetailsPage from "@/components/product-details/page";
 import { getProductByHandle } from "@/lib/storefront";
+import { Fragment, Suspense } from "react";
 
 
 const ProductLandingPage = async (
@@ -10,17 +11,14 @@ const ProductLandingPage = async (
   if (!raw_product) {
     return <div>Product not found</div>;
   }
-  const product = {
-    ...raw_product,
-    handle: raw_product.handle,
-  };
 
+  const product = raw_product.data[0];
   return (
-    <div>
-      <h1>Product Landing Page</h1>
-      <p>Product Handle: {product_handle}</p>
-      <ProductCard product={product} />
-    </div>
+    <Suspense fallback={
+      <div>Loading...</div>
+    }>
+      <ProductDetailsPage product={product} />
+    </Suspense>
   );
 }
 

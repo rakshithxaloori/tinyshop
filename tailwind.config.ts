@@ -11,7 +11,8 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-    './template/**/*.{ts,tsx}'
+    './template/**/*.{ts,tsx}',
+    './sections/**/*.{ts,tsx}',
   ],
   prefix: "",
   theme: {
@@ -20,6 +21,53 @@ const config = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+      },
+    },
+    extend: {
+      margin: {
+        "sm": "0.5rem",
+        "md": "1rem",
+        "lg": "2rem",
+        "xl": "3.5rem",
+        "2xl": "5.5rem",
+      },
+      animation: {
+        buttonheartbeat: 'buttonheartbeat 1s infinite linear',
+        'hover-pulse': 'hover-pulse 1s infinite ease-in-out',
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      keyframes: {
+        'hover-pulse': {
+          '0%': {
+            boxShadow: '0 0 0 0 theme("colors.primary")'
+          },
+          '100%': {
+            boxShadow: '0 0 0 1rem theme("colors.primary/0")'
+          }
+        },
+        buttonheartbeat: {
+          '0%': {
+            'box-shadow': '0 0 0 0 theme("colors.primary")',
+            transform: 'scale(0.98)',
+          },
+          '50%': {
+            'box-shadow': '0 0 0 7px theme("colors.primary/0")',
+            transform: 'scale(1)',
+          },
+          '100%': {
+            'box-shadow': '0 0 0 0 theme("colors.primary/0")',
+            transform: 'scale(0.98)',
+          },
+        },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
       },
     },
   },

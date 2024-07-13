@@ -1,11 +1,16 @@
 "use client";
 
-import { PreviewProvider } from "@/components/preview/context";
+import CartModalProvider from "@/components/hooks/cart";
+// import { PreviewProvider } from "@/components/preview/context";
 
 const ClientSideProvider = ({ children }: { children: React.ReactNode }) => {
-  return <PreviewProvider>
-    {children}
-  </PreviewProvider>;
+  return (
+    // <PreviewProvider>
+    <CartModalProvider>
+      {children}
+    </CartModalProvider>
+    // </PreviewProvider>
+  );
 }
 
 export default ClientSideProvider;

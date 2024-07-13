@@ -1,0 +1,44 @@
+import {
+  CurrencyIconComponent,
+  CurrencyString
+} from "./currency-icon";
+
+interface PriceCardProps {
+  price: string | number;
+  currency: string;
+  comparePrice?: number | string;
+}
+
+const PriceCard = (props: PriceCardProps) => {
+  const {
+    price,
+    currency,
+    comparePrice
+  } = props;
+
+  if (comparePrice) {
+    return (
+      <div className="flex items-center w-full gap-2">
+        <span className="text-2xl font-bold flex flex-row items-center">
+          <CurrencyIconComponent currency={currency} />
+          {price}
+        </span>
+        <span className="text-2xl line-through text-primary-content/60">
+          <CurrencyString currency={currency} />
+          {comparePrice}
+        </span>
+      </div >
+    )
+  }
+
+  return (
+    <div className="flex items-center">
+      <CurrencyIconComponent currency={currency} />
+      <span className="text-2xl font-bold">
+        {price}
+      </span>
+    </div >
+  )
+}
+
+export default PriceCard

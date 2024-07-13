@@ -42,14 +42,15 @@ const SearchBar = () => {
     setSearch(e.target.value);
   }
 
-
   return (
-
-    <Input type="email" placeholder="Search products..."
-      value={search || ""}
-      onChange={handleSearchInput}
-      className="w-full outline-none bg-transparent text-gray-600 text-sm" />
-
+    <label className="input input-bordered flex items-center gap-2">
+      <input type="text" className="grow" placeholder="Search products..."
+        value={search || ""}
+        onChange={handleSearchInput}
+      />
+      <kbd className="kbd kbd-sm">⌘</kbd>
+      <kbd className="kbd kbd-sm">K</kbd>
+    </label>
   )
 }
 

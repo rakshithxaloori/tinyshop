@@ -11,7 +11,6 @@ const StorefrontTemplate = (
 
   return (
     <ClientSideProvider>
-      <PreviewNav />
       <StorefrontLayout>
         {children}
       </StorefrontLayout>

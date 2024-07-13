@@ -4,6 +4,7 @@ const allowedImageHosts = [
   'img.daisyui.com',
   'via.placeholder.com',
   'images.unsplash.com',
+  'cdn.shopify.com'
 ]
 
 const nextConfig = {
@@ -18,7 +19,6 @@ const nextConfig = {
   },
   experimental: {
     ppr: true,
-    missingSuspenseWithCSRBailout: true,
   },
   transpilePackages: ["@tinyshop/tinyshop-node"]
 }
