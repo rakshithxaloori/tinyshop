@@ -30,10 +30,14 @@ Each Option is a Product's dimension.
 const flavorOption = await tinyshop.options.create({
     product: product.id,
     name: "Flavor",
-    values: ["Mango", "Chocolate", "Kit Kat"]
+    values: ["Mango", "Chocolate", "Kit Kat"],
 });
 
-const quantityOption = await tiny
+const quantityOption = await tinyshop.options.create({
+product: product.id,
+name: "Quantity",
+values: ["500 gms", "1 kg"],
+})
 
 ````
 
@@ -47,7 +51,7 @@ const quantityOption = await tiny
 ```javascript javascript
 const variant = await tinyshop.variants.create({
     name: "Mango",
-    options: "Flavor:Mango",    // Optional field
+    options: "Flavor:Mango,Quantity:1 kg",    // Optional field
     active: true,
     next_refill: "",
     is_default: true,
@@ -58,7 +62,7 @@ const variant = await tinyshop.variants.create({
 
 ## Price the Variant
 
-Variants have two kinds of prices - one-time and subscription.
+Variants have two kinds of [Prices](/api-reference/store/prices) - one-time and subscription.
 
 <CodeGroup>
 ```javascript javascript
