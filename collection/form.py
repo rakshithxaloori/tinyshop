@@ -2,6 +2,7 @@ from typing import Annotated
 from fastapi import Form
 
 from collection import schema
+from lib.form.handle import get_handle
 
 
 def create_collection_form(
@@ -12,6 +13,7 @@ def create_collection_form(
 ) -> schema.CollectionCreate:
     return schema.CollectionCreate(
         name=name,
+        handle=get_handle(name),
         image_web=image_web,
         image_mobile=image_mobile,
         products=products,

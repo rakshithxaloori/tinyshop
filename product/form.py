@@ -1,25 +1,10 @@
-import re
-import unicodedata
 from typing import Annotated
 from fastapi import Form
 
 
 from product import schema
 from lib.form.sanitizers import bool_sanitizer, urls_sanitizer
-
-
-def get_handle(name: str) -> str:
-    # Normalize the product name to NFKD form
-    handle = unicodedata.normalize("NFKD", name)
-    # Convert to lowercase
-    handle = handle.lower()
-    # Replace spaces and special characters with hyphens
-    handle = re.sub(r"\s+", "-", handle)
-    # Remove non-alphanumeric characters except for hyphens
-    handle = re.sub(r"[^a-z0-9-]", "", handle)
-    # Remove leading and trailing hyphens
-    handle = handle.strip("-")
-    return handle
+from lib.form.handle import get_handle
 
 
 def create_product_form(

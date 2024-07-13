@@ -24,7 +24,6 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 
 
-from team.model import *
 from shop.model import *
 
 from customer.model import *

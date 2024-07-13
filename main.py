@@ -6,7 +6,6 @@ from fastapi.exceptions import RequestValidationError
 
 from lib.error import TinyshopException
 
-import team.model as team_models
 import shop.model as shop_models
 
 import customer.model as customer_models
@@ -120,7 +119,7 @@ async def get_credentials(request: Request, call_next):
             content={"message": "Secret key is invalid"},
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
-    request.state.shop_id = "shop_FNqMB2zoRHomnmpRxeqWGw"
+    request.state.shop_id = "shop_PShKfxMHrzeVmMdNjJwM7c"
     request.state.livemode = livemode == "live"
     response = await call_next(request)
     return response

@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 class Collection(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("col"))
     name: str = Field()
+    handle: str = Field()
     image_web: str = Field(nullable=True)
     image_mobile: str = Field(nullable=True)
 
