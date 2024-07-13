@@ -1,0 +1,77 @@
+---
+title: "Products"
+description: "Create products, variants and add prices."
+---
+
+import CreateRequest from "/snippets/requests/products/create.mdx";
+
+## Products
+
+[Products](/api-reference/store/products) describe specific goods or services you offer to your customers. Products have Options & Variants.
+
+[Options](/api-reference/store/options) provide the customer to choose among different [Variants](/api-reference/store/variants). For example, _Color_ and _Size_ are Options and a _Red M-sized T-shirt_ is a Variant.
+
+Whenever a customer buys something, they buy a Variant. For example, the Product is a _T-shirt_ and the Variant the customer purchases is a _Red M-sized T-shirt_.
+
+## Create a Product
+
+<CodeGroup>
+  <CreateRequest />
+</CodeGroup>
+
+## Create an Option (Optional)
+
+Each Option is a Product's dimension.
+
+<Note>You don't need to create Options to create Variants.</Note>
+
+<CodeGroup>
+```javascript javascript
+const flavorOption = await tinyshop.options.create({
+    product: product.id,
+    name: "Flavor",
+    values: ["Mango", "Chocolate", "Kit Kat"]
+});
+
+const quantityOption = await tiny
+
+````
+
+</CodeGroup>
+
+## Add a Variant
+
+<Note>You can also create Variants without any Options.</Note>
+
+<CodeGroup>
+```javascript javascript
+const variant = await tinyshop.variants.create({
+    name: "Mango",
+    options: "Flavor:Mango",    // Optional field
+    active: true,
+    next_refill: "",
+    is_default: true,
+})
+````
+
+</CodeGroup>
+
+## Price the Variant
+
+Variants have two kinds of prices - one-time and subscription.
+
+<CodeGroup>
+```javascript javascript
+const onetime_price = await tinyshop.prices.create({
+    variant: variant.id,
+    active: true,
+    currency: "INR",
+    type: "one_time",
+    unit_amount: 200000,    // 2000 INR in paise
+    is_default: true,    
+})
+```
+
+</CodeGroup>
+
+That's it. You have everything you need for the Product page in your storefront.
