@@ -13,6 +13,7 @@ interface CollectionCreate extends CollectionBase {
 
 interface Collection extends CollectionBase {
   id: string;
+  handle: string;
   object: typeof ObjectType.COLLECTION;
   products: ProductList;
 }
