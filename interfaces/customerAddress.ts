@@ -1,3 +1,5 @@
+import { ObjectType } from "../utils/enum";
+
 interface CustomerAddressBase {
   name: string;
   line1: string;
@@ -14,7 +16,7 @@ interface CustomerAddressCreate extends CustomerAddressBase {
 
 interface CustomerAddress extends CustomerAddressBase {
   id: string;
-  object: string;
+  object: typeof ObjectType.CUSTOMER_ADDRESS;
 }
 
 interface CustomerAddressList {
@@ -36,7 +38,7 @@ interface CustomerAddressUpdate {
 
 interface CustomerAddressDelete {
   id: string;
-  object: string;
+  object: typeof ObjectType.CUSTOMER_ADDRESS;
   deleted: boolean;
 }
 
