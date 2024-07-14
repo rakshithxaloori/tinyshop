@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 const SearchBar = () => {
   const pathname = usePathname();
   const searchParam = useSearchParams().get("q");
-  console.log("searchParam", searchParam);
   const [search, setSearch] = useState<string | null>(null);
   const historyPath = useRef("");
 
@@ -18,7 +17,6 @@ const SearchBar = () => {
         router.push(`/search?q=${search}`);
       } else {
         if (search !== null) {
-          console.log("search is empty, calling /");
           router.push(historyPath.current || "/");
         }
       }

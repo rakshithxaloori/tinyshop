@@ -21,7 +21,7 @@ const ProductImage = ({
     fallbackImage
   ]
   return (
-    <div className="flex flex-col w-full h-full p-2 justify-center">
+    <div className="flex flex-col w-full h-full justify-center">
       <div className="carousel flex-1 rounded-box w-full">
         {
           imageArray.map((image: string, index: number) => {
@@ -64,7 +64,7 @@ const ProductDetails = ({ product }: { product: any }) => {
 
 const ProductVariantSection = ({ product, fallbackOptions }: ProductVariantSectionProps) => {
   return (
-    <div className="flex flex-1 min-h-[40rem] max-h-[85vh] w-full rounded p-2">
+    <div className="flex flex-1 min-h-[40rem] max-h-[85vh] w-full rounded mt-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-4 w-full min-h-full">
         <ProductImage product={product} fallbackImage={fallbackOptions?.fallbackImage} />
         <Variant>

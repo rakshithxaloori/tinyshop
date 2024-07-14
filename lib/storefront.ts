@@ -113,3 +113,27 @@ export const getHeroSectionDetails = async () => {
   }
   return heroSectionDetails
 }
+
+export const getProductCollections = async (product: any) => {
+  const { id: productId } = product;
+  const collectionsRaw = await getCollectionList();
+  const { data: collections } = collectionsRaw;
+  let productCollections = [];
+  for (let collection of collections) {
+    const { products: productsRaw } = collection;
+    const { data: products } = productsRaw;
+    for (let colProdId of products) {
+      if (colProdId === productId) {
+        productCollections.push(
+          {
+            name: collection.name,
+            url: `/collections/${collection.handle}`
+          }
+        )
+      }
+    }
+  }
+
+
+  return productCollections
+}

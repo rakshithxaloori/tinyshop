@@ -1,25 +1,12 @@
 "use server";
 
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface TabsSectionProps {
   product: any;
   config: any
 }
-
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { ImageAndTextTabContent, TextOnlyTabContent } from "@/template/tab-content/basic";
 
 type TabType = "text" | "text-image"

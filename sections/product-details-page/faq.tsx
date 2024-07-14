@@ -76,7 +76,7 @@ const FAQSection = (props: FAQSectionProps) => {
 
   return (
     <section id="pdp-faq-section" className={
-      cn("h-full w-full mt-xl", className)
+      cn("h-full w-full my-xl", className)
     }>
       <FAQBuilder faqSpec={faqSpec} />
     </section >
