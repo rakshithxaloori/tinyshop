@@ -38,7 +38,7 @@ interface CustomerDelete {
   deleted: boolean;
 }
 
-export {
+export type {
   Customer,
   CustomerCreate,
   CustomerUpdate,
