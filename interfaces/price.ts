@@ -33,7 +33,7 @@ interface PriceBase {
   type: PriceTypeEnum;
   unit_amount: number;
   unit_compare_amount?: number | null;
-  default: boolean;
+  is_default: boolean;
   customer_unit_amount?: CustomerUnitAmount | null;
   recurring?: Recurring | null;
 }

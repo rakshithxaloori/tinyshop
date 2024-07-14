@@ -1,4 +1,6 @@
 import Api from "./api";
+import { Customers } from "./customer";
+import { CustomerAddresses } from "./customerAddress";
 import { Options } from "./option";
 import { Products } from "./product";
 import { Variants } from "./variant";
@@ -10,6 +12,8 @@ import { Reviews } from "./review";
 import { Discounts } from "./discount";
 
 class Tinyshop {
+  public customers: Customers;
+  public customerAddresses: CustomerAddresses;
   public products: Products;
   public options: Options;
   public variants: Variants;
@@ -23,6 +27,8 @@ class Tinyshop {
 
   constructor(secret_key: string) {
     this.api = new Api(secret_key);
+    this.customers = new Customers(this.api);
+    this.customerAddresses = new CustomerAddresses(this.api);
     this.products = new Products(this.api);
     this.options = new Options(this.api);
     this.variants = new Variants(this.api);

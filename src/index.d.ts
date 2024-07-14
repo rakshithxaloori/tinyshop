@@ -1,3 +1,5 @@
+import { Customers } from "./customer";
+import { CustomerAddresses } from "./customerAddress";
 import { Options } from "./option";
 import { Products } from "./product";
 import { Variants } from "./variant";
@@ -9,6 +11,8 @@ import { Reviews } from "./review";
 import { Discounts } from "./discount";
 
 declare class Tinyshop {
+  customers: Customers;
+  customerAddresses: CustomerAddresses;
   products: Products;
   options: Options;
   variants: Variants;

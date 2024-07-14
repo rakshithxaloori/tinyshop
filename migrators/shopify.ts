@@ -86,7 +86,7 @@ const convertToPriceCreate = (
     unit_compare_amount: shVariant.compare_at_price
       ? parseInt(shVariant.compare_at_price)
       : null,
-    default: false,
+    is_default: false,
     customer_unit_amount: {
       preset: 1,
     },
