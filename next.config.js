@@ -4,7 +4,8 @@ const allowedImageHosts = [
   'img.daisyui.com',
   'via.placeholder.com',
   'images.unsplash.com',
-  'cdn.shopify.com'
+  'cdn.shopify.com',
+  'plus.unsplash.com',
 ]
 
 const nextConfig = {

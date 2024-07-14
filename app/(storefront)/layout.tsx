@@ -1,5 +1,3 @@
-"use client";
-import PreviewNav from "@/components/preview/preview-nav";
 import ClientSideProvider from "../providers";
 import StorefrontLayout from "@/components/layout/storefront";
 

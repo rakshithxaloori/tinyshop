@@ -1,39 +1,123 @@
+"use client";
 import Cart from "@/components/cart";
 import SearchBar from "@/components/search-bar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { Suspense } from "react";
+import React, { Suspense } from "react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu"
+import { PizzaIcon } from "lucide-react";
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-info/20 hover:text-info-content focus:bg-info/20 focus:text-info-content",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-info-content">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"
+
+const NavItems = ({ navItems }: { navItems: any[] }) => {
+  return (
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Shop</NavigationMenuTrigger>
+          <NavigationMenuContent className="bg-primary">
+            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+              <li className="row-span-3">
+                <NavigationMenuLink asChild>
+                  <a
+                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-info/50 to-info p-6 no-underline outline-none focus:shadow-md"
+                    href="/"
+                  >
+                    <PizzaIcon size={40} />
+                    <div className="mb-2 mt-4 text-lg font-medium">
+                      Tinyshop
+                    </div>
+                    <p className="text-sm leading-tight text-info-content">
+                      Tinyshop is a modern e-commerce solution built using Tailwind CSS and Next.js.
+                    </p>
+                  </a>
+                </NavigationMenuLink>
+              </li>
+              <ListItem href="/collections" title="All products">
+                Explore our collections
+              </ListItem>
+              {
+                navItems.map((item) => (
+                  <ListItem key={item.url} href={item.url} title={item.name}>
+                    {item.description}
+                  </ListItem>
+                ))
+              }
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
+      </NavigationMenuList>
+    </NavigationMenu>
+  )
+}
+
 
 const BasicHeader = ({
-  className
+  className,
+  navItems,
 }: {
+  navItems: any[],
   className?: string;
 }) => {
+  const sticky = true;
   return (
-    <div className={cn("h-[8vh] flex w-full py-4 px-8 items-center justify-start gap-2 sticky top-0 left-0 z-30", className)}
-      data-theme="coffee"
-    >
-      <section id="basic-header-name">
-        <Link href="/demo">
-          <h1 className="text-2xl">Your Store</h1>
+    <header className={cn("border-b py-4",
+      sticky ? "sticky top-0 z-50 bg-primary shadow-md" : "",
+    )} data-theme="black">
+      <div className={cn("sm:items-centerm mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 md:flex-nowrap lg:px-8",
+        className)}>
+        <Link id="basic-header-name" href="/">
+          <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold">Your Store</span>
         </Link>
-      </section>
-      <section id="basic-header-nav" className="flex space-x-4">
-        <a href="#" className="">Shop</a>
-        <a href="#" className="">About</a>
-      </section>
-      <section id="basic-header-right" className="flex space-x-4 min-w-lg ml-auto items-center">
-        <section id="basic-header-search" className="flex space-x-4 ml-auto">
-          <Suspense fallback={<div>Loading...</div>}>
-            <SearchBar />
-          </Suspense>
+        <div id="basic-header-nav" className="sm:mr-auto ml-sm">
+          <NavItems navItems={navItems} />
+        </div>
+        <section id="basic-header-right" className="flex space-x-4 min-w-lg ml-auto items-center">
+          <section id="basic-header-search" className="flex space-x-4 ml-auto">
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchBar />
+            </Suspense>
+          </section>
+          <section id="basic-header-cart" className="flex space-x-4">
+            <Cart />
+          </section>
         </section>
-        <section id="basic-header-cart" className="flex space-x-4">
-          <Cart />
-        </section>
-
-      </section>
-    </div>
+      </div>
+    </header>
   );
 }
 

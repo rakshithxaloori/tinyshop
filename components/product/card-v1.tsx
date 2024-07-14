@@ -38,13 +38,13 @@ const ProductCard = ({ product,
 
   return (
     <div onClick={handleLinkClick}
-      className="card-wrapper cursor-pointer">
-      <div className="card card-bordered card-compact">
-        <figure className="relative h-[15rem]">
+      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary transition-colors duration-100	ease-linear border-2 rounded-xl">
+      <div className="group card card-compact">
+        <figure className="aspect-square relative h-[15rem] rounded-t-xl">
           <Image src={
             productImage
           } alt={product.name}
-
+            className="w-full h-full group-hover:opacity-75 transition-opacity duration-200 ease-in-out"
             fill
           />
         </figure>
@@ -62,7 +62,7 @@ const ProductCard = ({ product,
         <div className="badge badge-primary ml-2 mb-2 absolute top-0 left-0 mt-2 ml-2">NEW</div>
         <div className="flex p-1 px-2 m-0">
           <div className="w-2/3">
-            <h2 className="card-title text-base h-[3rem] line-clamp-2">
+            <h2 className="group card-title text-base group-hover:opacity-75 transition-opacity duration-200 ease-in-out h-[3rem] line-clamp-2">
               {product.name}
             </h2>
           </div>
@@ -77,7 +77,7 @@ const ProductCard = ({ product,
         </div>
 
         <section id="price_card-footer"
-          className="flex justify-between p-2 m-0 mt-1"
+          className="group flex justify-between p-2 m-0 mt-sm group-hover:opacity-75"
         >
           <PriceCard
             price={

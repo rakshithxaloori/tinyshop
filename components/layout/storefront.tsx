@@ -1,18 +1,16 @@
-"use client";
-
+import { getHeaderNavItems } from "@/lib/storefront";
 import { cn } from "@/lib/utils";
 import BasicFooter from "@/template/footer/basic";
 import BasicHeader from "@/template/header/basic";
 
-const StorefrontLayout = ({ children }: { children: React.ReactNode }) => {
+const StorefrontLayout = async ({ children }: { children: React.ReactNode }) => {
+  const navItems = await getHeaderNavItems();
   return (
-    <div className={cn("flex flex-col h-full min-h-screen justify-center items-center self-center mx-auto",
-      "bg-base-100",
-    )}
-      data-theme="retro"
+    <div className={cn("flex flex-col h-full min-h-screen w-full bg-base-200 text-base-content",)}
+      data-theme="black"
     >
-      <BasicHeader />
-      <div className="grow w-full h-full">
+      <BasicHeader {...{ navItems }} />
+      <div className="flex flex-1 justify-center mx-sm md:mx-xl">
         {children}
       </div>
       <BasicFooter />

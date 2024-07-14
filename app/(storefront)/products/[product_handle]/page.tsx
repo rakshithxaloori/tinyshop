@@ -1,6 +1,6 @@
-import ProductDetailsPage from "@/components/product-details/page";
+import ProductDetailsPage from "@/components/pages/product-details-page"
 import { getProductByHandle } from "@/lib/storefront";
-import { Fragment, Suspense } from "react";
+import { Suspense } from "react";
 
 
 const ProductLandingPage = async (
@@ -11,7 +11,6 @@ const ProductLandingPage = async (
   if (!raw_product) {
     return <div>Product not found</div>;
   }
-
   const product = raw_product.data[0];
   return (
     <Suspense fallback={

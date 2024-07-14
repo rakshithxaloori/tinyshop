@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Input } from "@/components/ui/input"
 
 
 const SearchBar = () => {
@@ -19,8 +18,8 @@ const SearchBar = () => {
         router.push(`/search?q=${search}`);
       } else {
         if (search !== null) {
-          console.log("search is empty, calling /demo");
-          router.push(historyPath.current || "/demo");
+          console.log("search is empty, calling /");
+          router.push(historyPath.current || "/");
         }
       }
     }
@@ -43,13 +42,13 @@ const SearchBar = () => {
   }
 
   return (
-    <label className="input input-bordered flex items-center gap-2">
-      <input type="text" className="grow" placeholder="Search products..."
+    <label className="input input-bordered flex bg-secondary items-center gap-2">
+      <input type="text" className="grow text-secondary-content" placeholder="Search products..."
         value={search || ""}
         onChange={handleSearchInput}
       />
-      <kbd className="kbd kbd-sm">⌘</kbd>
-      <kbd className="kbd kbd-sm">K</kbd>
+      <kbd className="bg-secondary kbd kbd-sm">⌘</kbd>
+      <kbd className="bg-secondary kbd kbd-sm">K</kbd>
     </label>
   )
 }

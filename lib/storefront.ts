@@ -40,6 +40,19 @@ export const processPricesResponse = (prices: any) => {
   });
 }
 
+export const getRootCollection = async () => {
+  const rootCollectionImage = "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+  const name = "All Products";
+
+  const all_products_raw = await getProductList();
+  const rootCollection = {
+    name,
+    image_web: rootCollectionImage,
+    products: all_products_raw
+  }
+  return rootCollection
+}
+
 export const getProductList = async () => {
   const all_products_raw = await tinyshop.products.list(
     {
@@ -48,6 +61,32 @@ export const getProductList = async () => {
   );
   return all_products_raw
 
+}
+
+export const getCollectionList = async () => {
+  const collections = await tinyshop.collections.list();
+  return collections
+}
+
+export const getCollectionByHandle = async (handle: string) => {
+  const collection = await tinyshop.collections.search(`handle:${handle}`,
+    { expand: ["products"] }
+  );
+  return collection
+}
+
+export const getHeaderNavItems = async () => {
+  const collections_raw = await getCollectionList();
+  const { data: collections } = collections_raw;
+  const navItems = collections.map((collection: any) => {
+    return {
+      name: collection.name,
+      url: `/collections/${collection.handle}`,
+      description: 'All products in this collection'
+    }
+  });
+
+  return navItems;
 }
 
 export const getProductByHandle = async (handle: string) => {
