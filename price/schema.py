@@ -22,7 +22,7 @@ class PriceBase(BaseModel):
     type: PriceTypeEnum
     unit_amount: int
     unit_compare_amount: int | None = None
-    default: bool
+    is_default: bool
     customer_unit_amount: CustomerUnitAmount | None = None
     recurring: Recurring | None = None
 
@@ -45,7 +45,7 @@ class PriceList(BaseModel):
 
 class PriceUpdate(BaseModel):
     active: bool | None = None
-    default: bool | None = None
+    is_default: bool | None = None
     unit_compare_amount: int | None = None
     customer_unit_amount: CustomerUnitAmount | None = None
     recurring: Recurring | None = None

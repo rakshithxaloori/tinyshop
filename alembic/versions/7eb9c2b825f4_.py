@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: e4259b1dbb5c
+Revision ID: 7eb9c2b825f4
 Revises: 
-Create Date: 2024-07-13 21:06:49.878244
+Create Date: 2024-07-14 15:16:15.157601
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'e4259b1dbb5c'
+revision: str = '7eb9c2b825f4'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -303,7 +303,7 @@ def upgrade() -> None:
     sa.Column('type', sa.Enum('ONE_TIME', 'SUBSCRIPTION', name='pricetypeenum'), nullable=False),
     sa.Column('unit_amount', sa.Integer(), nullable=False),
     sa.Column('unit_compare_amount', sa.Integer(), nullable=True),
-    sa.Column('default', sa.Boolean(), nullable=False),
+    sa.Column('is_default', sa.Boolean(), nullable=False),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('variant_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),

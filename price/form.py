@@ -11,7 +11,7 @@ def create_price_form(
     currency: Annotated[str, Form()],
     price_type: Annotated[str, Form(alias="type")],
     unit_amount: Annotated[int, Form()],
-    default: Annotated[str, Form()],
+    is_default: Annotated[str, Form()],
     unit_compare_amount: Annotated[int | None, Form()] = None,
     customer_unit_amount_maximum: Annotated[
         str | None, Form(alias="customer_unit_amount[maximum]")
@@ -51,7 +51,7 @@ def create_price_form(
         type=price_type,
         unit_amount=unit_amount,
         unit_compare_amount=unit_compare_amount,
-        default=default == "true",
+        is_default=is_default == "true",
         variant=variant,
         customer_unit_amount=cua,
         recurring=recurring,
@@ -60,7 +60,7 @@ def create_price_form(
 
 def update_price_form(
     active: Annotated[str | None, Form()] = None,
-    default: Annotated[str | None, Form()] = None,
+    is_default: Annotated[str | None, Form()] = None,
     unit_compare_amount: Annotated[int | None, Form()] = None,
     customer_unit_amount_maximum: Annotated[
         str | None, Form(alias="customer_unit_amount[maximum]")
@@ -96,7 +96,7 @@ def update_price_form(
         )
     return schema.PriceUpdate(
         active=active == "true" if active else None,
-        default=default == "true" if default else None,
+        is_default=is_default == "true" if is_default else None,
         unit_compare_amount=unit_compare_amount,
         customer_unit_amount=cua,
         recurring=recurring,

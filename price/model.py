@@ -19,7 +19,7 @@ class Price(SqlBase, table=True):
     type: PriceTypeEnum = Field()
     unit_amount: int = Field()
     unit_compare_amount: int = Field(nullable=True)
-    default: bool = Field(default=False)
+    is_default: bool = Field(default=False)
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="prices")
