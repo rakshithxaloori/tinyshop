@@ -1,4 +1,4 @@
-import { ObjectType } from "./enum";
+import { ObjectType } from "../utils/enum";
 import { ProductList } from "./product";
 
 interface CollectionBase {

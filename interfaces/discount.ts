@@ -1,4 +1,4 @@
-import { ObjectType } from "./enum";
+import { ObjectType } from "../utils/enum";
 import { Product } from "./product";
 import { Variant } from "./variant";
 

@@ -6,7 +6,7 @@ import {
   CollectionList,
   CollectionDelete,
 } from "../interfaces/collection";
-import { OptionalParams } from "./list";
+import { OptionalParams } from "../utils/list";
 
 export class Collections {
   public endpoint: string;

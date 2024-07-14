@@ -6,7 +6,7 @@ import {
   ProductList,
   ProductDelete,
 } from "../interfaces/product";
-import { OptionalParams } from "./list";
+import { OptionalParams } from "../utils/list";
 
 export class Products {
   public endpoint: string;
