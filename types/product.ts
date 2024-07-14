@@ -3,9 +3,23 @@ type ProductConciseReview = {
   count: number | null;
 }
 
-type TProduct = {
-  name: string;
-  handle: string;
+export type TProductUICard = {
   id: string;
-  images?: string[]
+  handle: string;
+  name: string;
+  images: string[];
+  default_variant: {
+    prices: {
+      data: {
+        id: string;
+        currency: string;
+        unit_amount: number | null;
+        unit_compare_amount: number | null;
+      }[]
+    }
+  },
 }
+export type TProduct = {
+  images?: string[]
+} & TProductUICard
+

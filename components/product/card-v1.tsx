@@ -10,16 +10,17 @@
 "use client";
 
 import Image from "next/image";
-import { GemIcon, SparkleIcon, HeartIcon, ShoppingCartIcon, ArrowUp, ArrowUpRightIcon } from "lucide-react";
+import { HeartIcon, ShoppingCartIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import PriceCard from "@/components/price/price-card-v1";
 import { processPricesResponse } from "@/lib/storefront";
 import { useRouter } from "next/navigation";
+import { TProductUICard } from "@/types/product";
 
 const ProductCard = ({ product,
   fallbackOptions
 }: {
-  product: any;
+  product: TProductUICard;
   fallbackOptions: any;
 }) => {
   const { image } = fallbackOptions;
@@ -102,3 +103,5 @@ const ProductCard = ({ product,
 }
 
 export default ProductCard;
+
+export type { TProductUICard };
