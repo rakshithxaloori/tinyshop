@@ -16,11 +16,8 @@ export class Customers {
     this.endpoint = "/v1/customers";
   }
 
-  async create(data?: CustomerCreate): Promise<Customer> {
-    const response_json: Customer = await this.api.post(
-      this.endpoint,
-      data || {}
-    );
+  async create(data: CustomerCreate): Promise<Customer> {
+    const response_json: Customer = await this.api.post(this.endpoint, data);
     return response_json;
   }
 
