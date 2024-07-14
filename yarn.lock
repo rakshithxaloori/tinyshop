@@ -765,10 +765,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tinyshop/tinyshop-node@^0.0.21":
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/@tinyshop/tinyshop-node/-/tinyshop-node-0.0.21.tgz#7901bf2428e528ecff6368432dcc05864c597040"
-  integrity sha512-37WwZLQbQDpN+AVk4MhkFw6z3MCioR0SS8Cz1RS+N0q6Z5n4vcbSjLlAFN+so+NP55h6vFp5zGVb6/VtQRlFdw==
+"@tinyshop/tinyshop-node@^0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@tinyshop/tinyshop-node/-/tinyshop-node-0.0.22.tgz#5cdbf6952585595d4cd6e9706ec0654661d7429f"
+  integrity sha512-GD23QSqgMCo0fSRX3UmqQKBSSig1YH+RE3Z/rBQg2ftesFmELKoOqN5VptasbQqjxyKtgOrZ/QGEUM0KwI+GwQ==
 
 "@types/json5@^0.0.29":
   version "0.0.29"

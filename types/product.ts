@@ -19,7 +19,5 @@ export type TProductUICard = {
     }
   },
 }
-export type TProduct = {
-  images?: string[]
-} & TProductUICard
+export type TProduct = TProductUICard
 

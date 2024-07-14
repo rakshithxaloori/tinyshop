@@ -98,6 +98,17 @@ export const getProductByHandle = async (handle: string) => {
   return expanded_product
 }
 
+export const getWishlistProductDetails = async (productIdList: string[]) => {
+  const wishlistProductDetails = [];
+  for (let productId of productIdList) {
+    const product = await tinyshop.products.retrieve(productId,
+      { expand: ["default_variant"] }
+    );
+    wishlistProductDetails.push(product);
+  }
+  return wishlistProductDetails
+}
+
 export const getHeroSectionDetails = async () => {
   const heroSectionDetails = {
     title: "Discover the best products",

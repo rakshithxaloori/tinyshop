@@ -15,6 +15,7 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 import { PizzaIcon } from "lucide-react";
+import Wishlist from "@/components/wishlist";
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
@@ -114,6 +115,9 @@ const BasicHeader = ({
           </section>
           <section id="basic-header-cart" className="flex space-x-4">
             <Cart />
+          </section>
+          <section id="basic-header-wishlist" className="flex space-x-4">
+            <Wishlist />
           </section>
         </section>
       </div>

@@ -16,6 +16,7 @@ import PriceCard from "@/components/price/price-card-v1";
 import { processPricesResponse } from "@/lib/storefront";
 import { useRouter } from "next/navigation";
 import { TProductUICard } from "@/types/product";
+import WishlistItem from "./wishlist";
 
 const ProductCard = ({ product,
   fallbackOptions
@@ -39,7 +40,7 @@ const ProductCard = ({ product,
 
   return (
     <div onClick={handleLinkClick}
-      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary transition-colors duration-100	ease-linear border-2 rounded-xl">
+      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary transition-colors duration-100	ease-linear bg-base-100 border-2 rounded-xl">
       <div className="group card card-compact">
         <figure className="aspect-square relative h-[15rem] rounded-t-xl">
           <Image src={
@@ -49,17 +50,7 @@ const ProductCard = ({ product,
             fill
           />
         </figure>
-        <div className="absolute top-0 right-0 m-0 mt-2 mr-2 p-0">
-          <label className="swap swap-flip p-0 m-0">
-            <input type="checkbox" />
-            <HeartIcon size={24}
-              fillOpacity={0.5}
-              className="swap-on fill-error stroke-error" />
-            <HeartIcon size={24}
-              className="swap-off stroke-primary/50"
-            />
-          </label>
-        </div>
+        <WishlistItem product={product} />
         <div className="badge badge-primary ml-2 mb-2 absolute top-0 left-0 mt-2 ml-2">NEW</div>
         <div className="flex p-1 px-2 m-0">
           <div className="w-2/3">

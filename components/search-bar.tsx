@@ -10,11 +10,6 @@ const SearchBar = () => {
   const [search, setSearch] = useState<string | null>(null);
   const historyPath = useRef("");
 
-  console.log("search", search);
-  console.log("pathname", pathname);
-  console.log("searchParam", searchParam);
-  console.log("historyPath", historyPath.current);
-
   const router = useRouter();
   useEffect(() => {
     if (pathname === "/search" || search !== null && search.length > 0) {
@@ -26,7 +21,6 @@ const SearchBar = () => {
         }
       }
     } else {
-      console.log("not in the search path", pathname);
       setSearch((s) => "");
     }
   }, [search, router, pathname]);
