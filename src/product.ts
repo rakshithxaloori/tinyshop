@@ -41,8 +41,8 @@ export class Products {
     return response_json;
   }
 
-  async retrieve(id: string): Promise<Product> {
-    const response_json: Product = await this.api.get(`${this.endpoint}/${id}`);
+  async retrieve(id: string, options?: OptionalParams): Promise<Product> {
+    const response_json: Product = await this.api.get(`${this.endpoint}/${id}`, options);
     return response_json;
   }
 
