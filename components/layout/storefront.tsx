@@ -7,7 +7,7 @@ const StorefrontLayout = async ({ children }: { children: React.ReactNode }) => 
   const navItems = await getHeaderNavItems();
   return (
     <div className={cn("flex flex-col h-full min-h-screen w-full bg-base-200 text-base-content",)}
-      data-theme="black"
+      data-theme="retro"
     >
       <BasicHeader {...{ navItems }} />
       <div className="flex flex-1 justify-center mx-sm md:mx-xl">
