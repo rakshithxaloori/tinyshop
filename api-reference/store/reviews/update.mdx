@@ -2,3 +2,13 @@
 title: "Update a Review"
 openapi: "POST /v1/reviews/{review_id}"
 ---
+
+<RequestExample>
+
+```javascript javascript
+const review = await tinyshop.reviews.update("review_xxxaaa", {
+  product_rating: 4,
+});
+```
+
+</RequestExample>

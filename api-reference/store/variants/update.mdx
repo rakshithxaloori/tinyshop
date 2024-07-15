@@ -2,3 +2,14 @@
 title: "Update a Variant"
 openapi: "POST /v1/variants/{variant_id}"
 ---
+
+<RequestExample>
+
+```javascript javascript
+const variant = await tinyshop.variants.update("var_xxxaaa", {
+  name: "Red Cybertruck",
+  accept_zero_inventory_orders: false,
+});
+```
+
+</RequestExample>

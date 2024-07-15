@@ -2,3 +2,13 @@
 title: "Update a Cart"
 openapi: "POST /v1/carts/{cart_id}"
 ---
+
+<RequestExample>
+
+```javascript javascript
+const cart = await tinyshop.carts.update("cart_xxxaaa", {
+  status: "inactive",
+});
+```
+
+</RequestExample>

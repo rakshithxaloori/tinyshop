@@ -2,3 +2,14 @@
 title: "Update a Product"
 openapi: "POST /v1/products/{product_id}"
 ---
+
+<RequestExample>
+
+```javascript javascript
+const product = await tinyshop.products.update("prod_xxxaaa", {
+  name: "Cybertruck",
+  description: "The future has to look like the future.",
+});
+```
+
+</RequestExample>

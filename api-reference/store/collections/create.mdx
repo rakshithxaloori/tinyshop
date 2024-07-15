@@ -2,3 +2,14 @@
 title: "Create a Collection"
 openapi: "POST /v1/collections"
 ---
+
+<RequestExample>
+
+```javascript javascript
+const collection = await tinyshop.collections.create({
+  name: "Electric Cars",
+  products: ["prod_xxxaaa", "prod_xxxbbb"],
+});
+```
+
+</RequestExample>

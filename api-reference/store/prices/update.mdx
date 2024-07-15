@@ -2,3 +2,14 @@
 title: "Update a Price"
 openapi: "POST /v1/prices/{price_id}"
 ---
+
+<RequestExample>
+
+```javascript javascript
+const price = await tinyshop.prices.update({
+  unit_amount: 60000, // Amount in paise
+  is_default: true,
+});
+```
+
+</RequestExample>

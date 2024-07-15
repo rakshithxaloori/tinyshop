@@ -2,3 +2,15 @@
 title: "Create a Cart Item"
 openapi: "POST /v1/cart_items"
 ---
+
+<RequestExample>
+
+```javascript javascript
+const cartItem = await tinyshop.cartItems.create({
+  cart: "cart_xxxaaa",
+  price: "price_xxxbbb",
+  quantity: 1,
+});
+```
+
+</RequestExample>
