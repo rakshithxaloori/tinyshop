@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from lib.model import PyBaseModel
 from lib.object import ObjectType
 from review.model import FeedbackEnum
+from customer.schema import Customer
 
 
 class ReviewBase(BaseModel):
@@ -21,6 +22,7 @@ class ReviewCreate(ReviewBase):
 class Review(ReviewBase, PyBaseModel):
     id: str
     object: str = ObjectType.REVIEW
+    customer: Customer
 
 
 class ReviewList(BaseModel):

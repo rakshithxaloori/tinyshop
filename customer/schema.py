@@ -8,18 +8,20 @@ from customer_address.schema import CustomerAddressCreate, CustomerAddressList
 class CustomerBase(BaseModel):
     # Create request's insensitive fields
     name: str
-    email: str | None = None
-    phone: str
 
 
 class CustomerCreate(CustomerBase):
     # Create request's sensitive fields
+    email: str | None = None
+    phone: str
     address: CustomerAddressCreate | None = None
 
 
 class Customer(CustomerBase, PyBaseModel):
     id: str
     object: str = ObjectType.CUSTOMER
+    email: str | None = None
+    phone: str | None = None
     addresses: CustomerAddressList | None = None
 
 
