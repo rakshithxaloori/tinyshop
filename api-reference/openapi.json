@@ -1289,6 +1289,50 @@
         }
       }
     },
+    "/v1/collections/search": {
+      "get": {
+        "summary": "Search Collections",
+        "operationId": "search_collections_v1_collections_search_get",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Query" }
+          },
+          {
+            "name": "expand[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "array", "items": { "type": "string" } },
+                { "type": "null" }
+              ],
+              "title": "Expand[]"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CollectionList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/warehouses": {
       "get": {
         "summary": "List Warehouses",
@@ -2450,7 +2494,7 @@
           "currency": { "type": "string", "title": "Currency" },
           "price_type": { "type": "string", "title": "Price Type" },
           "unit_amount": { "type": "integer", "title": "Unit Amount" },
-          "default": { "type": "string", "title": "Default" },
+          "is_default": { "type": "string", "title": "Is Default" },
           "unit_compare_amount": {
             "anyOf": [{ "type": "integer" }, { "type": "null" }],
             "title": "Unit Compare Amount"
@@ -2483,7 +2527,7 @@
           "currency",
           "price_type",
           "unit_amount",
-          "default"
+          "is_default"
         ],
         "title": "Body_create_price_v1_prices_post"
       },
@@ -2858,9 +2902,9 @@
             "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Active"
           },
-          "default": {
+          "is_default": {
             "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Default"
+            "title": "Is Default"
           },
           "unit_compare_amount": {
             "anyOf": [{ "type": "integer" }, { "type": "null" }],
@@ -3231,6 +3275,7 @@
           "updated": { "type": "integer", "title": "Updated" },
           "livemode": { "type": "boolean", "title": "Livemode" },
           "name": { "type": "string", "title": "Name" },
+          "handle": { "type": "string", "title": "Handle" },
           "image_web": {
             "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Image Web"
@@ -3253,6 +3298,7 @@
           "updated",
           "livemode",
           "name",
+          "handle",
           "id",
           "products"
         ],
@@ -3816,7 +3862,7 @@
             "anyOf": [{ "type": "integer" }, { "type": "null" }],
             "title": "Unit Compare Amount"
           },
-          "default": { "type": "boolean", "title": "Default" },
+          "is_default": { "type": "boolean", "title": "Is Default" },
           "customer_unit_amount": {
             "anyOf": [
               { "$ref": "#/components/schemas/CustomerUnitAmount" },
@@ -3841,7 +3887,7 @@
           "currency",
           "type",
           "unit_amount",
-          "default",
+          "is_default",
           "id"
         ],
         "title": "Price"

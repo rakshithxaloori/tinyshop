@@ -1,0 +1,36 @@
+---
+title: "Carts"
+description: "Carts contain items that a customer intends to buy."
+---
+
+TODO api reference with a sentence
+
+## Create a Cart
+
+```javascript javascript
+const cart = await tinyshop.carts.create();
+```
+
+## Add an item
+
+```javascript javascript
+const cartItem = await tinyshop.cartItems.create({
+  cart: cart.id,
+  price: "price_xxxaaa", // A variant's one_time or subscription price
+  quantity: 1,
+});
+```
+
+## Change the item's quantity
+
+```javascript javascript
+const cartItem = await tinyshop.cartItems.update(cartItem.id, {
+  quantity: 2,
+});
+```
+
+## Remove an item from cart
+
+```javascript javascript
+await tinyshop.cartItems.delete(cartItem.id);
+```

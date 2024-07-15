@@ -1,0 +1,79 @@
+---
+title: "Discounts"
+description: "TODO"
+---
+
+[Discounts](/api-reference/store/discounts) are a crucial part of your store and in acquiring your customers. Discounts are of four types:
+
+- [Off Product](/guide/discounts#off-product): Applied to select products.
+- [Off Order](/guide/discounts#off-order): A discount on the subtotal of the whole order.
+- [Shipping](/guide/discounts#shipping): Offer shipping discounts for medium to large orders.
+- [Buy X Get Y](/guide/discounts#buy-x-get-y): Incentivize your customers to try out new products.
+
+## Off Product
+
+```javascript javascript
+const offProductDiscount = await tinyshop.discounts.create({
+  type: "off_product",
+  code: "PROTEINSALE",
+  active: true,
+  config: {
+    off_product: {
+      quantity_min: 2,
+      amount_off: 15000,
+      products: ["prod_xxxaaa", "prod_xxxbbb"],
+    },
+  },
+});
+```
+
+## Off Order
+
+```javascript javascript
+const offOrderDiscount = await tinyshop.discounts.create({
+  type: "off_order",
+  code: "NEWYEARSALE",
+  active: true,
+  config: {
+    off_order: {
+      amount_min: 80000,
+      amount_off: 30000,
+    },
+  },
+});
+```
+
+## Shipping
+
+```javascript javascript
+const shippingDiscount = await tinyshop.discounts.create({
+  type: "shipping",
+  code: "SHIPPING",
+  active: true,
+  config: {
+    shipping: {
+      amount_min: 50000,
+      percentage_off: 10000,
+    },
+  },
+});
+```
+
+<Note>Percentages are represented as integers. 21.5% is 2150. </Note>
+
+# Buy X Get Y
+
+```javascript javascript
+const buyXGetYDiscount = await tinyshop.discounts.create({
+  type: "buy_x_get_y",
+  code: "WINTERSALE",
+  active: true,
+  config: {
+    buy_x_get_y: {
+      amount_min: 150000,
+      variant_get: "var_xxxfff",
+      quantity_get: 1,
+    },
+  },
+});
+```

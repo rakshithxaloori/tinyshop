@@ -58,15 +58,16 @@
       "pages": ["introduction"]
     },
     {
-      "group": "Guide",
+      "group": "Storefront",
       "pages": [
-        "guide/products",
-        "guide/code",
-        "guide/images",
-        "guide/settings",
-        "guide/navigation",
-        "guide/reusable-snippets"
+        "storefront/products",
+        "storefront/collections",
+        "storefront/discounts"
       ]
+    },
+    {
+      "group": "Orders",
+      "pages": ["orders/carts", "orders/reviews"]
     },
     {
       "group": "API Documentation",
