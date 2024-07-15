@@ -3,18 +3,20 @@ import { CustomerAddressCreate, CustomerAddressList } from "./customerAddress";
 
 interface CustomerBase {
   name: string;
-  email?: string | null;
-  phone: string;
 }
 
 interface CustomerCreate extends CustomerBase {
   address?: CustomerAddressCreate | null;
+  email?: string | null;
+  phone: string;
 }
 
 interface Customer extends CustomerBase {
   id: string;
   object: typeof ObjectType.CUSTOMER;
   addresses?: CustomerAddressList | null;
+  email?: string | null;
+  phone?: string | null;
 }
 
 interface CustomerList {

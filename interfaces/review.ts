@@ -1,3 +1,4 @@
+import { Customer } from "./customer";
 import { ObjectType } from "../utils/enum";
 
 enum FeedbackEnum {
@@ -25,6 +26,7 @@ interface ReviewCreate extends ReviewBase {
 interface Review extends ReviewBase {
   id: string;
   object: typeof ObjectType.REVIEW;
+  customer: Customer;
 }
 
 interface ReviewList {
