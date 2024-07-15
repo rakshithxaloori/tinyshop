@@ -128,6 +128,13 @@
   resolved "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#7bf68b20c0a350f936915fcae06f58e32007ce30"
   integrity sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==
 
+"@babel/runtime@^7.14.3":
+  version "7.24.8"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.8.tgz#5d958c3827b13cc6d05e038c07fb2e5e3420d82e"
+  integrity sha512-5F7SDGs1T72ZczbRwbGO9lQi0NLjQxzl6i4lJxLxfW9U5UluCSyEJeniWvnhl3/euNiqQVbo8zruhsDfid0esA==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/runtime@^7.24.1":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.7.tgz#f4f0d5530e8dbdf59b3451b9b3e594b6ba082e12"
@@ -644,6 +651,14 @@
   dependencies:
     "@radix-ui/react-slot" "1.1.0"
 
+"@radix-ui/react-progress@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-progress/-/react-progress-1.1.0.tgz#28c267885ec154fc557ec7a66cb462787312f7e2"
+  integrity sha512-aSzvnYpP725CROcxAOEBVZZSIQVQdHgBr2QQFKySsaD14u8dNT0batuXI+AAGDdAHfXH8rbnHmjYFqVJ21KkRg==
+  dependencies:
+    "@radix-ui/react-context" "1.1.0"
+    "@radix-ui/react-primitive" "2.0.0"
+
 "@radix-ui/react-roving-focus@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-roving-focus/-/react-roving-focus-1.1.0.tgz#b30c59daf7e714c748805bfe11c76f96caaac35e"
@@ -765,10 +780,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tinyshop/tinyshop-node@^0.0.22":
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/@tinyshop/tinyshop-node/-/tinyshop-node-0.0.22.tgz#5cdbf6952585595d4cd6e9706ec0654661d7429f"
-  integrity sha512-GD23QSqgMCo0fSRX3UmqQKBSSig1YH+RE3Z/rBQg2ftesFmELKoOqN5VptasbQqjxyKtgOrZ/QGEUM0KwI+GwQ==
+"@tinyshop/tinyshop-node@^0.0.23":
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/@tinyshop/tinyshop-node/-/tinyshop-node-0.0.23.tgz#29fcda14ffcef7bd90624f310ed77057db1252d2"
+  integrity sha512-oO01pRt+5kSJPWLWeorCRlLrwUYXQPdZCOQJL1j1BW49yZMlKxj79t4LNhG/MIATw9CHZBVNwafWQc2TKYEdcQ==
 
 "@types/json5@^0.0.29":
   version "0.0.29"
@@ -1190,6 +1205,11 @@ chokidar@^3.5.3:
     readdirp "~3.6.0"
   optionalDependencies:
     fsevents "~2.3.2"
+
+chroma-js@^2.1.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/chroma-js/-/chroma-js-2.4.2.tgz#dffc214ed0c11fa8eefca2c36651d8e57cbfb2b0"
+  integrity sha512-U9eDw6+wt7V8z5NncY2jJfZa+hUH8XEj8FQHgFJTrUFnJfXYf4Ml4adI2vXZOjqRDpFWtYVWypDfZwnJ+HIR4A==
 
 class-variance-authority@^0.7.0:
   version "0.7.0"
@@ -2891,7 +2911,7 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prop-types@^15.8.1:
+prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -2921,6 +2941,15 @@ react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-nice-avatar@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/react-nice-avatar/-/react-nice-avatar-1.5.0.tgz#08af0267f5879da21780bc968d194daf7ed37faa"
+  integrity sha512-sGusqbgWIA4Il6Y0zHEfs4XF+a06etNljhwFYiHIGATDmVVf53Nez7U7GY5EwEz5/xGuUhs6uel5AC5NN/2UPg==
+  dependencies:
+    "@babel/runtime" "^7.14.3"
+    chroma-js "^2.1.2"
+    prop-types "^15.7.2"
 
 react-remove-scroll-bar@^2.3.4:
   version "2.3.6"

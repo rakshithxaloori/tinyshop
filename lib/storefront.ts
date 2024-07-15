@@ -1,3 +1,4 @@
+import { TProductUICard } from "@/types/product";
 import { tinyshop } from "./tinyshop"
 
 // "prices": {
@@ -145,6 +146,11 @@ export const getProductCollections = async (product: any) => {
     }
   }
 
-
   return productCollections
+}
+
+export const getProductReviews = async (product: any) => {
+  const { id: productId } = product;
+  const { data: reviews } = await tinyshop.reviews.list(productId);
+  return reviews
 }

@@ -1,5 +1,5 @@
 import ProductDetailsPage from "@/components/pages/product-details-page"
-import { getProductByHandle, getProductCollections } from "@/lib/storefront";
+import { getProductByHandle, getProductCollections, getProductReviews } from "@/lib/storefront";
 import { Suspense } from "react";
 
 const ProductLandingPage = async (
@@ -13,11 +13,13 @@ const ProductLandingPage = async (
   const product = raw_product.data[0];
   const collections = await getProductCollections(product);
 
+  const reviews = await getProductReviews(product);
+
   return (
     <Suspense fallback={
       <div>Loading...</div>
     }>
-      <ProductDetailsPage product={product} collections={collections} />
+      <ProductDetailsPage product={product} collections={collections} reviews={reviews} />
     </Suspense>
   );
 }

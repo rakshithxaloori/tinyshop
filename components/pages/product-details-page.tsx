@@ -7,16 +7,19 @@ import BreadcrumbSection from "@/sections/product-details-page/breadcrumb";
 
 const ProductDetailsPage = ({
   product,
-  collections
+  collections,
+  reviews
 }: {
   product: any;
   collections: any[];
+  reviews: any[];
 }
 ) => {
   return (
-    <div className="flex flex-col flex-1 h-full">
+    <div className="flex flex-col flex-1 h-full scroll-mt-[100vh]">
       <BreadcrumbSection product={product} collections={collections} />
       <ProductVariantSection product={product}
+        reviews={reviews}
         fallbackOptions={
           {
             fallbackImage: 'https://via.placeholder.com/400x400'
@@ -25,7 +28,11 @@ const ProductDetailsPage = ({
       />
       <TabsSection product={product} config={{}} />
       <FAQSection product={product} />
-      {/* <ReviewsSection product={product} /> */}
+      <ReviewsSection reviews={reviews}
+        config={{
+          title: "Customer Reviews"
+        }}
+      />
       {/* <RelatedSection product={product} /> */}
     </div>
 

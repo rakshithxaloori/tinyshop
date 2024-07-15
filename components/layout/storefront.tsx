@@ -10,7 +10,7 @@ const StorefrontLayout = async ({ children }: { children: React.ReactNode }) => 
       data-theme="retro"
     >
       <BasicHeader {...{ navItems }} />
-      <div className="flex flex-1 justify-center mx-sm md:mx-xl">
+      <div className="flex flex-1 justify-center mx-lg md:mx-xl">
         {children}
       </div>
       <BasicFooter />

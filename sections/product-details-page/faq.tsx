@@ -44,7 +44,7 @@ const faqSpec = {
 const FAQBuilder = ({ faqSpec }: { faqSpec: any }) => {
   const { title, list } = faqSpec
   return (
-    <div className="flex flex-col w-full h-full p-2">
+    <div className="flex flex-col w-full h-full py-2">
       <h1 className="text-3xl font-bold text-center">{title}</h1>
       <div className="mt-lg">
         <Accordion type="single" collapsible className="w-full">
@@ -76,7 +76,7 @@ const FAQSection = (props: FAQSectionProps) => {
 
   return (
     <section id="pdp-faq-section" className={
-      cn("h-full w-full my-xl", className)
+      cn("h-full w-full my-lg", className)
     }>
       <FAQBuilder faqSpec={faqSpec} />
     </section >
