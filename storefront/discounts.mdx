@@ -1,16 +1,18 @@
 ---
 title: "Discounts"
-description: "TODO"
+description: "Offer lower prices or free items on the cart for your customers."
 ---
 
-[Discounts](/api-reference/store/discounts) are a crucial part of your store and in acquiring your customers. Discounts are of four types:
+[Discounts](/api-reference/store/discounts) are of four types:
 
-- [Off Product](/guide/discounts#off-product): Applied to select products.
-- [Off Order](/guide/discounts#off-order): A discount on the subtotal of the whole order.
-- [Shipping](/guide/discounts#shipping): Offer shipping discounts for medium to large orders.
-- [Buy X Get Y](/guide/discounts#buy-x-get-y): Incentivize your customers to try out new products.
+- [Off Product](/guide/discounts#off-product)
+- [Off Order](/guide/discounts#off-order)
+- [Shipping](/guide/discounts#shipping)
+- [Buy X Get Y](/guide/discounts#buy-x-get-y)
 
 ## Off Product
+
+A lower price on specific products added to the cart.
 
 ```javascript javascript
 const offProductDiscount = await tinyshop.discounts.create({
@@ -29,6 +31,8 @@ const offProductDiscount = await tinyshop.discounts.create({
 
 ## Off Order
 
+A lower amount on the subtotal of the whole cart.
+
 ```javascript javascript
 const offOrderDiscount = await tinyshop.discounts.create({
   type: "off_order",
@@ -44,6 +48,8 @@ const offOrderDiscount = await tinyshop.discounts.create({
 ```
 
 ## Shipping
+
+Free or a lower shipping amount.
 
 ```javascript javascript
 const shippingDiscount = await tinyshop.discounts.create({
@@ -62,6 +68,8 @@ const shippingDiscount = await tinyshop.discounts.create({
 <Note>Percentages are represented as integers. 21.5% is 2150. </Note>
 
 # Buy X Get Y
+
+A variant, added to the order for free, when a customer hits a minimum amount or a minimum quantiy of a specific product or the whole cart.
 
 ```javascript javascript
 const buyXGetYDiscount = await tinyshop.discounts.create({
