@@ -6,6 +6,8 @@ import { ProductCreate } from "../interfaces/product";
 import { OptionCreate } from "../interfaces/option";
 import { VariantCreate } from "../interfaces/variant";
 import { PriceCreate, PriceTypeEnum } from "../interfaces/price";
+import Haikunator from 'haikunator'
+import { FeedbackEnum } from "../interfaces/review";
 
 const secret_key = "sk_test_1234abcd";
 
@@ -159,7 +161,72 @@ const processJSONData = async (filePath: string) => {
   console.log("Done creating collections.");
 };
 
+function getRandomFeedbackEnum(): FeedbackEnum {
+  const enumValues = Object.values(FeedbackEnum);
+  const randomIndex = Math.floor(Math.random() * enumValues.length);
+  return enumValues[randomIndex] as FeedbackEnum;
+}
+
+function getRandomReviewText(): string {
+  const reviewList = [
+    'This is a great product! I would recommend it to everyone.',
+    'I am very happy with my purchase. The product is of great quality.',
+    'The product was delivered on time and in good condition.',
+    'I am satisfied with the product. It met my expectations.',
+    'The product is as described. I am happy with my purchase.',
+  ];
+
+  const randomIndex = Math.floor(Math.random() * reviewList.length);
+  return reviewList[randomIndex];
+}
+
+function getRandomPhoneNumber(): string {
+  // Generate a random 10-digit number
+  const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
+
+  // Convert the number to a string and pad it with leading zeros if necessary
+  return randomNumber.toString().padStart(10, '0');
+}
+
+const createReviews = async (numCustomers: number) => {
+  console.log("Creating reviews...");
+  // create `numCustomers` fake customers
+  const haikunator = new Haikunator();
+  let customerIds: string[] = [];
+  for (let i = 0; i < numCustomers; i++) {
+    // create the customer
+    const customerObject = {
+      email: `customer${i + 1}@email.com`,
+      name: haikunator.haikunate(),
+      phone: getRandomPhoneNumber(),
+    };
+
+    const { id: customerId } = await tinyshop.customers.create(customerObject);
+    customerIds.push(customerId);
+  }
+
+
+  const { data: productsData } = await tinyshop.products.list();
+  for (const product of productsData) {
+    // Create `numCustomers` fake reviews for each product
+    for (let i = 0; i < numCustomers; i++) {
+      const reviewObject = {
+        product: product.id,
+        customer: customerIds[i],
+        product_rating: Math.floor(Math.random() * 5) + 1,
+        shipping_rating: Math.floor(Math.random() * 5) + 1,
+        feedback: getRandomFeedbackEnum(),
+        review: getRandomReviewText(),
+      };
+      await tinyshop.reviews.create(reviewObject);
+    }
+  }
+}
+
 // Run the main function with the provided JSON file
 console.log(__dirname);
-// processJSONData(path.resolve(__dirname, "store_data/wellnesslanguage.json"));
-processJSONData(path.resolve(__dirname, "store_data/getabranddeal.json"));
+// processJSONData(path.resolve(__dirname, "store_data/wellnesslanguage.json"))
+processJSONData(path.resolve(__dirname, "store_data/getabranddeal.json"))
+  .then(() => {
+    createReviews(15);
+  })
