@@ -51,3 +51,7 @@ export const hasWishlistItem = async (productId: string) => {
   const wishlist = await getWishlist()
   return wishlist.includes(productId)
 }
+
+export const clearWishlist = async () => {
+  setWishlist([])
+}

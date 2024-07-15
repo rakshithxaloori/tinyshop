@@ -113,11 +113,11 @@ const BasicHeader = ({
               <SearchBar />
             </Suspense>
           </section>
-          <section id="basic-header-cart" className="flex space-x-4">
-            <Cart />
-          </section>
           <section id="basic-header-wishlist" className="flex space-x-4">
             <Wishlist />
+          </section>
+          <section id="basic-header-cart" className="flex space-x-4">
+            <Cart />
           </section>
         </section>
       </div>
