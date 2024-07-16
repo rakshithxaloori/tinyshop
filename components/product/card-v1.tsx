@@ -10,13 +10,20 @@
 "use client";
 
 import Image from "next/image";
-import { HeartIcon, ShoppingCartIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import PriceCard from "@/components/price/price-card-v1";
 import { processPricesResponse } from "@/lib/storefront";
 import { useRouter } from "next/navigation";
-import { TProductUICard } from "@/types/product";
+import { TPriceUI, TProductUICard } from "@/types/product";
 import WishlistItem from "./wishlist";
+import useCartStore from "@/store/cart";
+import dynamic from "next/dynamic";
+import { ShoppingBagIcon, ShoppingCartIcon } from "lucide-react";
+
+const NoSSRCartBagDisplay = dynamic(() => import("../cart-bag-display"), {
+  ssr: false,
+  loading: () => <div className="h-6 w-6 animate-spin border-2 rounded-full border-base-300 border-t-primary" />
+});
 
 const ProductCard = ({ product,
   fallbackOptions
@@ -26,12 +33,22 @@ const ProductCard = ({ product,
 }) => {
   const { image } = fallbackOptions;
   const productImage = product?.images && product.images[0] ? product.images[0] : image;
-  const prices = product?.default_variant?.prices ? processPricesResponse(product?.default_variant?.prices?.data) : [];
+  const prices: TPriceUI[] = product?.default_variant?.prices ? processPricesResponse(product?.default_variant?.prices?.data) : [] as any;
   const router = useRouter();
+  const cartStore = useCartStore();
+  const { addItem, getProduct } = cartStore;
+  const cartProductQuantity = getProduct(product.id).quantity ?? 0;
+
+  const cartItemChain = {
+    priceId: prices.length > 0 ? prices[0].id : "N/A",
+    productId: product.id,
+    variantId: product.default_variant.id
+  }
+
   const handleAddToCart: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
     event.stopPropagation();
-
+    addItem(cartItemChain);
   };
 
   const handleLinkClick = () => {
@@ -70,11 +87,12 @@ const ProductCard = ({ product,
 
         <section id="price_card-footer"
           className="group flex justify-between p-2 m-0 mt-sm group-hover:opacity-75"
+          suppressHydrationWarning={true}
         >
           <PriceCard
             price={
               prices.length > 0 ?
-                prices[0].unit_amount :
+                prices[0].unit_amount ?? "N/A" :
                 "N/A"
             }
             currency={
@@ -83,7 +101,12 @@ const ProductCard = ({ product,
                 "N/A"
             }
           />
+
           <div className="grow" />
+
+          <NoSSRCartBagDisplay quantity={cartProductQuantity}
+            cx={cartProductQuantity > 0 ? "block" : "hidden"}
+          />
 
         </section>
       </div>

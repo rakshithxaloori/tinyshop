@@ -1,7 +1,6 @@
 "use server";
 
 import { cookies } from "next/headers"
-import { TCart } from "../cart";
 
 const getCartId = async () => {
   const cart = cookies().get('cart');
@@ -9,12 +8,12 @@ const getCartId = async () => {
     return null;
   } else {
     const cartValue = cart.value;
-    const tCart = JSON.parse(cartValue) as TCart;
-    return tCart.id;
+    const tCart = JSON.parse(cartValue) as string;
+    return tCart;
   }
 }
 
-const setCartCookie = (cart: TCart) => {
+const setCartCookie = (cart: any) => {
   cookies().set('cart', JSON.stringify(cart));
 }
 

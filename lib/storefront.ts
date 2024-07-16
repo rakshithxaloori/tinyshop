@@ -1,4 +1,4 @@
-import { TProductUICard } from "@/types/product";
+import { TPriceUI, TProductUICard } from "@/types/product";
 import { tinyshop } from "./tinyshop"
 
 // "prices": {
@@ -27,13 +27,14 @@ import { tinyshop } from "./tinyshop"
 //       }
 //   ]
 // }
-export const processPricesResponse = (prices: any) => {
+export const processPricesResponse = (prices: any): TPriceUI => {
   // Prices are returned as an array of objects
   // return the currency, the unit_amount and the unit_compare_amount
   // if available
   return prices.map((price: any) => {
-    const { currency, unit_amount, unit_compare_amount } = price;
+    const { currency, unit_amount, unit_compare_amount, id } = price;
     return {
+      id,
       currency,
       unit_amount,
       unit_compare_amount

@@ -9,7 +9,6 @@ const StorefrontTemplate = async (
 ) => {
 
   const cartId = await getCartId();
-  console.log("StorefrontTemplate > cartId ", cartId);
 
   return (
     <ClientSideProvider>

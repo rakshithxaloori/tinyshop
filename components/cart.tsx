@@ -2,7 +2,6 @@
 
 import useCartStore from "@/store/cart"
 import { ShoppingBagIcon } from "lucide-react"
-import { useCartModal } from "./hooks/cart";
 
 import {
   Sheet,
@@ -12,7 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { useEffect } from "react";
+import CartBagDisplay from "./cart-bag-display";
 
 const EmptyCart = () => {
   return (
@@ -23,26 +22,31 @@ const EmptyCart = () => {
   )
 }
 
+const CartListItem = ({ cartItem }: { cartItem: any }) => {
+  return (
+    <li className="flex justify-between items-center py-2">
+      <span className="text-lg">{cartItem.productId}</span>
+      <span className="text-lg">${cartItem.quantity}</span>
+    </li>
+  )
+}
+
 const CartList = () => {
   const cartStore = useCartStore()
-  const { cart } = cartStore
+  const { items } = cartStore
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <ul className="divide-y divide-primary w-full">
-        {Object.entries(cart).map(([productId, product]) => {
+    <div className="flex flex-col items-center justify-center h-full divide-y divide-primary w-full">
+
+      {
+        items.map((item, index) => {
           return (
-            <li key={productId} className="flex justify-between items-center p-2">
-              <span>{product.name}</span>
-              <span>{product.quantity}</span>
-              <span>{product.price}</span>
-            </li>
+            <CartListItem key={index} cartItem={item} />
           )
-        })}
-      </ul>
+        })
+      }
     </div>
   )
-
 }
 
 const Cart = ({
@@ -51,39 +55,20 @@ const Cart = ({
   cartId: string | null
 }) => {
   const cartStore = useCartStore()
-  const { cart } = cartStore
-  console.log(cart)
-  useEffect(() => {
-    console.log(cart)
-    // async function initializeCart(cartId: string | null) {
-    //   await cart.initCart(cartId || "")
+  const { items } = cartStore
 
-    // }
-    // initializeCart(cartId)
-
-  }, [cart, cartId])
-
-  const cartItems = 0
+  const cartItems = items.length
+  const cartItemsQty = items.reduce((acc, item) => acc + item.quantity, 0)
 
   return (
     <Sheet>
       <SheetTrigger>
-        <div className="relative mr-2.5 block h-6 w-6" >
-          <ShoppingBagIcon width={24} height={24} className="self-center" />
-          <span
-            className="absolute bottom-0 right-0 inline-flex h-5 w-5 translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full border-2 bg-white text-center text-xs"
-            aria-label="Items in your cart">
-            <span className="sr-only">Items in your cart: </span>
-            {cartItems}
-          </span>
-        </div>
+        <CartBagDisplay quantity={cartItemsQty} />
       </SheetTrigger>
       <SheetContent className="bg-base-200 w-full md:max-w-sm">
         <SheetHeader>
-          <SheetTitle>Cart ({cartItems})</SheetTitle>
-          <SheetDescription>
-            {cartItems > 0 ? <CartList /> : <EmptyCart />}
-          </SheetDescription>
+          <SheetTitle>Cart ({cartItemsQty}) | ({cartItems})</SheetTitle>
+          {cartItemsQty > 0 ? <CartList /> : <EmptyCart />}
         </SheetHeader>
       </SheetContent>
 
