@@ -1,7 +1,8 @@
 "use client";
-import { TCartItem, TItemChain } from '@/types/cart';
+import { TCartItem, TCartItemDisplay, TItemChain } from '@/types/cart';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { v4 as uuidv4 } from 'uuid';
 
 export type TCartStore = {
   id: string;
@@ -19,7 +20,7 @@ type TCartStoreGetters = {
 };
 
 type TCartStoreActions = {
-  addItem: (chain: TItemChain) => void;
+  addItem: (chain: TItemChain, display: TCartItemDisplay, quantity: number) => void;
   removeItem: (chain: TItemChain) => void;
   clearCartItem: (cartItemId: string) => void;
   clearCart: () => void;
@@ -31,13 +32,22 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
       id: '',
       items: [],
       // the setter functions
-      addItem: (chain: TItemChain) => {
+      addItem: (chain: TItemChain, display: TCartItemDisplay, quantity: number = 1) => {
+
         const existingItem = get().items.find(i => i.priceId === chain.priceId);
         if (existingItem) {
-          existingItem.quantity += 1;
+          existingItem.quantity += quantity;
           set({ items: [...get().items] });
         } else {
-          set({ items: [...get().items, { ...chain, quantity: 1, id: Math.random().toString() }] });
+          set({
+            items: [...get().items, {
+              ...chain,
+              quantity: quantity,
+              id: uuidv4(),
+              ...display
+
+            }]
+          });
         }
       },
       removeItem: (chain: TItemChain) => {

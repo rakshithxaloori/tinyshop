@@ -4,12 +4,20 @@ type TItemChain = {
   productId: string;
 }
 
+type TCartItemDisplay = {
+  image: string;
+  price: number | string;
+  name: string;
+  currency: string;
+}
+
 type TCartItem = {
   id: string;
   quantity: number;
-} & TItemChain;
+} & TItemChain & TCartItemDisplay
 
 export type {
   TItemChain,
-  TCartItem
+  TCartItem,
+  TCartItemDisplay
 }

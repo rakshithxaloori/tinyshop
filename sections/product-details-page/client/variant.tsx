@@ -6,6 +6,13 @@ import { cn } from "@/lib/utils";
 import { MinusIcon, PlusIcon, ShoppingBagIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useVariant } from "../hook/variant";
+import useCartStore from "@/store/cart";
+import dynamic from "next/dynamic";
+
+const NoSSRCartBagDisplay = dynamic(() => import("@/components/cart-bag-display"), {
+  ssr: false,
+  loading: () => <div className="h-6 w-6 animate-spin border-2 rounded-full border-base-300 border-t-primary" />
+});
 
 const SingleOptionComponent = ({
   option,
@@ -46,29 +53,16 @@ const MultiOptionComponent = () => {
 }
 
 // Quantity Selector and the Add to Cart Button
-const AddToCart = ({ config }:
+const AddToCart = ({ config, product }:
   {
-    config: any
+    config: any;
+    product: any;
   }
 ) => {
+  const [quantity, setQuantity] = useState<number>(1)
+  const { variant: selectedVariant } = useVariant();
   const { shouldAnimateButton } = config
-  return (
-    <div className="flex flex-row mt-2 gap-2">
-      <QuantitySelector />
-      <Button
-        className={cn("btn flex-1 text-primary-content",
-          shouldAnimateButton ? "animate-buttonheartbeat" : "",
-          "hover:animate-hover-pulse"
-        )}>
-        <ShoppingBagIcon />
-        <p>Add to Cart</p>
-      </Button>
-    </div>
-  )
-}
-
-const QuantitySelector = () => {
-  const [quantity, setQuantity] = useState(1)
+  const { items, addItem } = useCartStore()
 
   const handleIncrement = () => {
     setQuantity(quantity + 1)
@@ -81,11 +75,61 @@ const QuantitySelector = () => {
     // if you can't decrement, you can show a toast message
   }
 
+  const cartItemChain = {
+    productId: product.id,
+    variantId: selectedVariant?.id || "",
+    priceId: selectedVariant?.prices.data[0].id || "",
+  }
+
+  const cartItemDisplay = {
+    image: product.images.length ? product.images[0] : "",
+    name: product.name,
+    price: selectedVariant?.prices.data[0].unit_amount || 0,
+    currency: selectedVariant?.prices.data[0].currency || "",
+  }
+
+  const handleAddToCart = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(cartItemChain, cartItemDisplay, quantity)
+  }
+
+  return (
+    <div className="flex flex-row mt-2 gap-2">
+      <QuantitySelector
+        quantity={quantity}
+        onIncrement={handleIncrement}
+        onDecrement={handleDecrement}
+      />
+      <Button
+        className={cn("btn flex-1 text-primary-content",
+          shouldAnimateButton ? "animate-buttonheartbeat" : "",
+          "hover:animate-hover-pulse"
+        )}
+        onClick={handleAddToCart}
+      >
+        <ShoppingBagIcon />
+        <p>Add to Cart</p>
+      </Button>
+    </div>
+  )
+}
+
+const QuantitySelector = ({
+  quantity,
+  onIncrement,
+  onDecrement,
+}:
+  {
+    quantity: number,
+    onIncrement: any,
+    onDecrement: any,
+  }) => {
   return (
     <div className="flex flex-row justify-center items-center border-2 rounded-sm border-primary">
       <Button
         variant="ghost"
-        onClick={handleDecrement}
+        onClick={onDecrement}
         className="bg-transparent hover:bg-transparent hover:text-primary-content px-0 text-primary"
       >
         <MinusIcon />
@@ -93,7 +137,7 @@ const QuantitySelector = () => {
       <span className="p-2 px-3">{quantity}</span>
       <Button
         variant="ghost"
-        onClick={handleIncrement}
+        onClick={onIncrement}
         className="bg-transparent hover:bg-transparent
          hover:text-primary-content px-0 text-primary
          transition-all"
@@ -113,6 +157,9 @@ const VariantItem = ({ variant, selectedVariant, onSelect }: {
   const priceAmount = prices.data[0].unit_amount
   const priceCurrency = prices.data[0].currency
   const isSelected = useMemo(() => selectedVariant.id === variant.id, [selectedVariant, variant])
+  const { getVariant } = useCartStore()
+  const cartVariantQty = getVariant(variant.id).quantity
+
   return (
     <div className={cn("flex flex-row min-w-full item-center h-full p-2 mt-2",
       isSelected ? "border-2 border-primary" : "border-2 border-primary",
@@ -122,9 +169,10 @@ const VariantItem = ({ variant, selectedVariant, onSelect }: {
     )}
       onClick={() => onSelect(variant)}
     >
-      <h1 className="text-lg font-bold">{variant.name}</h1>
+      <span className="text-lg font-bold">{variant.name}</span>
       <div className="grow"></div>
       <PriceCard price={priceAmount} currency={priceCurrency} />
+      <NoSSRCartBagDisplay quantity={cartVariantQty} cx="ml-2" />
     </div>
   )
 }
@@ -132,6 +180,8 @@ const VariantSelector = ({ product }: { product: any }) => {
   const variantInfo = product.variants.data
   const [selectedVariant, setSelectedVariant] = useState(variantInfo[0])
   const { setVariant } = useVariant();
+  const { getProduct } = useCartStore()
+  const cartProductQty = getProduct(product.id).quantity
 
   useEffect(() => {
     setVariant(selectedVariant)
@@ -140,10 +190,9 @@ const VariantSelector = ({ product }: { product: any }) => {
   const handleSelectVariant = (localVariant: any) => {
     setSelectedVariant(localVariant)
   }
-
   return (
     <div className={cn("flex flex-col w-full overflow-x-scroll",
-      variantInfo.length === 1 && "hidden"
+      (variantInfo.length === 1 && cartProductQty === 0) && "hidden"
     )}>
       {
         variantInfo.map((variant: any, index: number) => {
@@ -173,7 +222,9 @@ const PriceAndAddToCardComponent = ({
     <div>
       <AddToCart config={{
         shouldAnimateButton: false
-      }} />
+      }}
+        product={product}
+      />
     </div>
   )
 }

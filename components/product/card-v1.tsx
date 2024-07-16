@@ -45,10 +45,24 @@ const ProductCard = ({ product,
     variantId: product.default_variant.id
   }
 
+  const itemPrice = prices.length > 0 ?
+    prices[0].unit_amount ?? "N/A" :
+    "N/A"
+  const itemCurrency = prices.length > 0 ?
+    prices[0].currency :
+    "N/A"
+
+  const cartItemDisplay = {
+    image: productImage,
+    name: product.name,
+    price: itemPrice,
+    currency: itemCurrency
+  }
+
   const handleAddToCart: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    addItem(cartItemChain);
+    addItem(cartItemChain, cartItemDisplay, 1);
   };
 
   const handleLinkClick = () => {
@@ -90,16 +104,8 @@ const ProductCard = ({ product,
           suppressHydrationWarning={true}
         >
           <PriceCard
-            price={
-              prices.length > 0 ?
-                prices[0].unit_amount ?? "N/A" :
-                "N/A"
-            }
-            currency={
-              prices.length > 0 ?
-                prices[0].currency :
-                "N/A"
-            }
+            price={itemPrice}
+            currency={itemCurrency}
           />
 
           <div className="grow" />
