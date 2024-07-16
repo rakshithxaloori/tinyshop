@@ -32,9 +32,9 @@ const Basic2DHeroSection = ({ config }: Basic2DHeroSectionProps) => {
           <Link
             className="btn btn-wide bg-primary 
             rounded-lg 
-            hover:text-opacity-100 
+            hover:text-opacity-80 
             hover:border-primary
-            text-base-content/80"
+            text-primary-content"
             href={cta.url}>
             {cta.text}
           </Link>

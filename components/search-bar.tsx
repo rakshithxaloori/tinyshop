@@ -1,42 +1,37 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useSearchQuery } from "./hooks/search";
 
 
 const SearchBar = () => {
   const pathname = usePathname();
-  const searchParam = useSearchParams().get("q");
-  const [search, setSearch] = useState<string | null>(null);
-  const historyPath = useRef("");
-
+  const { query, setQuery } = useSearchQuery();
+  const historyPath = useRef("")
   const router = useRouter();
+
   useEffect(() => {
-    if (pathname === "/search" || search !== null && search.length > 0) {
-      if (search !== null && search.length > 0) {
-        router.push(`/search?q=${search}`);
-      } else {
-        if (search !== null) {
-          router.push(historyPath.current || "/");
-        }
-      }
-    } else {
-      setSearch((s) => "");
+    if (query) {
+      router.push(`/search?q=${query}`)
+    } else if (query !== null) {
+      router.push(historyPath.current)
     }
-  }, [search, router, pathname]);
+  }, [query, router])
 
   const handleSearchInput = (e: any) => {
     e.preventDefault();
-    if (search === null || search.length === 0) {
+    // search non-search pages as history
+    if (pathname !== "/search") {
       historyPath.current = pathname;
     }
-    setSearch(e.target.value);
+    setQuery(e.target.value);
   }
 
   return (
     <label className="input input-bordered flex bg-secondary items-center gap-2">
       <input type="text" className="grow text-secondary-content" placeholder="Search products..."
-        value={search || ""}
+        value={query || ""}
         onChange={handleSearchInput}
       />
       <kbd className="bg-secondary kbd kbd-sm">⌘</kbd>

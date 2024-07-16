@@ -1,15 +1,12 @@
 "use client";
 
-import CartModalProvider from "@/components/hooks/cart";
-// import { PreviewProvider } from "@/components/preview/context";
+import SearchQueryProvider from "@/components/hooks/search";
 
 const ClientSideProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    // <PreviewProvider>
-    <CartModalProvider>
+    <SearchQueryProvider>
       {children}
-    </CartModalProvider>
-    // </PreviewProvider>
+    </SearchQueryProvider>
   );
 }
 
