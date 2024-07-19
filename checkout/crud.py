@@ -1,7 +1,8 @@
+from datetime import datetime, timedelta
 from sqlmodel import Session, select
 
 
-from checkout.model import Checkout, CheckoutLineItem
+from checkout.model import Checkout, CheckoutLineItem, CheckoutStatusEnum
 from customer.model import Customer
 from customer_address.model import CustomerAddress
 from checkout.utils import pydantify_checkouts
@@ -16,7 +17,9 @@ def create_checkout(
     db: Session,
 ) -> schema.Checkout | None:
     try:
-        checkout_data = checkout.model_dump(exclude={"cart", "customer", "url"})
+        checkout_data = checkout.model_dump(
+            exclude={"cart", "customer", "customer_address", "url"}
+        )
         cart_res = db.exec(
             select(Cart)
             .where(Cart.shop_id == shop_id)
@@ -33,25 +36,42 @@ def create_checkout(
         customer_id = customer_res.one()
         ca_res = db.exec(
             select(CustomerAddress.id)
-            .where(CustomerAddress.shop_id == shop_id)
             .where(CustomerAddress.livemode == livemode)
             .where(CustomerAddress.customer_id == checkout.customer)
             .where(CustomerAddress.id == checkout.customer_address)
         )
         ca_id = ca_res.one()
+        amount_subtotal = 0
+        amount_discount = 0
+        amount_shipping = 0
+        amount_tax = 0
+        for ci in cart.items:
+            amount_subtotal += ci.price.unit_amount
+
+        # TODO discount, shipping, tax
+
+        amount_total = amount_subtotal - amount_discount + amount_shipping + amount_tax
         new_checkout = Checkout(
             shop_id=shop_id,
             livemode=livemode,
             cart_id=cart.id,
             customer_id=customer_id,
             customer_address_id=ca_id,
+            amount_subtotal=amount_subtotal,
+            amount_discount=amount_discount,
+            amount_shipping=amount_shipping,
+            amount_tax=amount_tax,
+            amount_total=amount_total,
+            # Expires in 1 hour
+            expires_at=int((datetime.now() + timedelta(days=1)).timestamp()),
             **checkout_data,
         )
-        new_checkout.url = checkout.url.format(new_checkout.id)
+        new_checkout.url = checkout.url.replace("{CHECKOUT_ID}", new_checkout.id)
         db.add(new_checkout)
         # Create Checkout Lines
         for ci in cart.items:
             new_cli = CheckoutLineItem(
+                livemode=livemode,
                 quantity=ci.quantity,
                 checkout_id=new_checkout.id,
                 price_id=ci.price_id,
@@ -83,7 +103,6 @@ def update_checkout(
         checkout_ins = checkout_res.one()
         ca_res = db.exec(
             select(CustomerAddress.id)
-            .where(CustomerAddress.shop_id == shop_id)
             .where(CustomerAddress.livemode == livemode)
             .where(CustomerAddress.customer_id == checkout_ins.customer_id)
             .where(CustomerAddress.id == checkout.customer_address)
@@ -138,7 +157,12 @@ def list_checkouts(
         .limit(limit)
     )
     ch_rows = list(results.all())
-    return pydantify_checkouts(ch_rows)
+    checkouts = pydantify_checkouts(ch_rows)
+    return schema.CheckoutList(
+        url="/v1/checkouts",
+        data=checkouts,
+        has_more=False,  # TODO
+    )
 
 
 def delete_checkout(

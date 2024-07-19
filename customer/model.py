@@ -11,9 +11,11 @@ if TYPE_CHECKING:
     from customer_address.model import CustomerAddress
     from review.model import Review
     from lib.many_to_many_tables import DiscountCustomerLink
-    from subscription.model import Subscription
+
+    # from subscription.model import Subscription
     from checkout.model import Checkout
-    from invoice.model import Invoice
+
+    # from invoice.model import Invoice
     from order.model import Order
 
 
@@ -40,12 +42,12 @@ class Customer(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     checkouts: list["Checkout"] = Relationship(back_populates="customer")
-    subscriptions: list["Subscription"] = Relationship(
-        back_populates="customer",
-        sa_relationship_kwargs={"cascade": "delete"},
-    )
-    invoices: list["Invoice"] = Relationship(
-        back_populates="customer",
-        sa_relationship_kwargs={"cascade": "delete"},
-    )
-    orders: list["Order"] = Relationship(back_populates="customer")
+    # subscriptions: list["Subscription"] = Relationship(
+    #     back_populates="customer",
+    #     sa_relationship_kwargs={"cascade": "delete"},
+    # )
+    # invoices: list["Invoice"] = Relationship(
+    #     back_populates="customer",
+    #     sa_relationship_kwargs={"cascade": "delete"},
+    # )
+    # orders: list["Order"] = Relationship(back_populates="customer")

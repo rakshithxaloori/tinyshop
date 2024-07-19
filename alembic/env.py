@@ -41,9 +41,11 @@ from inventory.model import *
 from cart.model import *
 from cart_item.model import *
 
-# from review.model import *
+from review.model import *
 
 from discount.model import *
+
+from checkout.model import *
 
 
 from lib.many_to_many_tables import *

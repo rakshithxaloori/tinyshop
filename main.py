@@ -27,6 +27,8 @@ from review import model as review_models
 
 from discount import model as discount_models
 
+from checkout import model as checkout_models
+
 
 from lib import many_to_many_tables as m2m_models
 
@@ -51,6 +53,8 @@ from cart_item.router import router as cart_items_router
 from review.router import router as reviews_router
 
 from discount.router import router as discounts_router
+
+from checkout.router import router as checkouts_router
 
 
 SQLModel.metadata.create_all(bind=engine)
@@ -119,7 +123,7 @@ async def get_credentials(request: Request, call_next):
             content={"message": "Secret key is invalid"},
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
-    request.state.shop_id = "shop_AxCneJ3TGyZrhXYAvNJq5e"
+    request.state.shop_id = "shop_XyPjbPcAzgiLrKs2yWaFeq"
     request.state.livemode = livemode == "live"
     response = await call_next(request)
     return response
@@ -142,3 +146,5 @@ app.include_router(cart_items_router)
 
 app.include_router(reviews_router)
 app.include_router(discounts_router)
+
+app.include_router(checkouts_router)

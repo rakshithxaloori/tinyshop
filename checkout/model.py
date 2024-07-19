@@ -12,7 +12,8 @@ if TYPE_CHECKING:
     from customer.model import Customer
     from customer_address.model import CustomerAddress
     from cart.model import Cart
-    from invoice.model import Invoice
+
+    # from invoice.model import Invoice
     from price.model import Price
 
 
@@ -29,9 +30,9 @@ class CheckoutPaymentStatus(str, Enum):
 
 
 class Checkout(SqlBase, table=True):
-    id: str = Field(primary_key=True, default_factory=get_primary_key("co"))
-    status: CheckoutStatusEnum = Field()
-    payment_status: CheckoutPaymentStatus = Field()
+    id: str = Field(primary_key=True, default_factory=get_primary_key("ch"))
+    status: CheckoutStatusEnum = Field(default=CheckoutStatusEnum.OPEN)
+    payment_status: CheckoutPaymentStatus = Field(default=CheckoutPaymentStatus.UNPAID)
     return_url: str = Field(nullable=True)
     success_url: str = Field(nullable=True)
     url: str = Field(nullable=True)
@@ -51,13 +52,16 @@ class Checkout(SqlBase, table=True):
     customer: "Customer" = Relationship(back_populates="checkouts")
     customer_address_id: str = Field(foreign_key="customer_address.id", nullable=True)
     customer_address: "CustomerAddress" = Relationship(back_populates="checkouts")
-    invoice: "Invoice" = Relationship(back_populates="checkout")
+    # invoice: "Invoice" = Relationship(back_populates="checkout")
     # payment_intent_id: str = Field(foreign_key="payment_intent.id")
     # payment_intent:"PaymentIntent" = Relationship( back_populates="checkout")
     # order_id: str = Field(foreign_key="order.id", nullable=True)
     # order :"Order"= Relationship( back_populates="checkout")
 
-    line_items: list["CheckoutLineItem"] = Relationship(back_populates="checkout")
+    line_items: list["CheckoutLineItem"] = Relationship(
+        back_populates="checkout",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
 
 
 class CheckoutLineItem(SqlBase, table=True):

@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from product.model import Product
     from variant.model import Variant
     from lib.many_to_many_tables import DiscountCustomerLink
+    from cart.model import Cart
 
 
 class DiscountTypeEnum(str, enum.Enum):
@@ -41,6 +42,7 @@ class Discount(SqlBase, table=True):
         back_populates="discount",
         sa_relationship_kwargs={"cascade": "delete"},
     )
+    # carts: list["Cart"] = Relationship(back_populates="discounts")
 
     # TODO code, shop_id unique constraint
 
