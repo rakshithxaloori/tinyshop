@@ -28,6 +28,7 @@ from review import model as review_models
 from discount import model as discount_models
 
 from checkout import model as checkout_models
+from invoice import model as invoice_models
 
 
 from lib import many_to_many_tables as m2m_models
@@ -55,6 +56,7 @@ from review.router import router as reviews_router
 from discount.router import router as discounts_router
 
 from checkout.router import router as checkouts_router
+from invoice.router import router as invoices_router
 
 
 SQLModel.metadata.create_all(bind=engine)
@@ -148,3 +150,4 @@ app.include_router(reviews_router)
 app.include_router(discounts_router)
 
 app.include_router(checkouts_router)
+app.include_router(invoices_router)

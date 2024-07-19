@@ -17,4 +17,5 @@ class ObjectType:
     INVENTORY = "inventory"
     # Billing
     CHECKOUT = "checkout"
+    INVOICE = "invoice"
     SUBSCRIPTION = "subscription"

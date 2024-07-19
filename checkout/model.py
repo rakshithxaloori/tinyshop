@@ -12,8 +12,7 @@ if TYPE_CHECKING:
     from customer.model import Customer
     from customer_address.model import CustomerAddress
     from cart.model import Cart
-
-    # from invoice.model import Invoice
+    from invoice.model import Invoice
     from price.model import Price
 
 
@@ -52,7 +51,7 @@ class Checkout(SqlBase, table=True):
     customer: "Customer" = Relationship(back_populates="checkouts")
     customer_address_id: str = Field(foreign_key="customer_address.id", nullable=True)
     customer_address: "CustomerAddress" = Relationship(back_populates="checkouts")
-    # invoice: "Invoice" = Relationship(back_populates="checkout")
+    invoice: "Invoice" = Relationship(back_populates="checkout")
     # payment_intent_id: str = Field(foreign_key="payment_intent.id")
     # payment_intent:"PaymentIntent" = Relationship( back_populates="checkout")
     # order_id: str = Field(foreign_key="order.id", nullable=True)

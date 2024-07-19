@@ -34,14 +34,14 @@ def update_cart(
     cart: Annotated[schema.CartUpdate, Depends(form.update_cart_form)],
     db: Session = Depends(get_session),
 ):
-    cart = crud.update_cart(
+    updated_cart = crud.update_cart(
         shop_id,
         livemode,
         cart_id,
         cart,
         db,
     )
-    return cart
+    return updated_cart
 
 
 @router.get("/{cart_id}", response_model=schema.Cart)

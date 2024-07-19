@@ -46,7 +46,7 @@ from review.model import *
 from discount.model import *
 
 from checkout.model import *
-
+from invoice.model import *
 
 from lib.many_to_many_tables import *
 

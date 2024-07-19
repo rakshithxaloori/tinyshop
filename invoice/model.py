@@ -8,10 +8,11 @@ from lib.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:
+    from shop.model import Shop
     from customer.model import Customer
     from checkout.model import Checkout
-    from cart.model import Cart
-    from order.model import Order
+
+    # from order.model import Order
 
 
 class InvoiceStatusEnum(str, enum.Enum):
@@ -23,10 +24,7 @@ class InvoiceStatusEnum(str, enum.Enum):
 
 
 class Invoice(SqlBase, table=True):
-    __tablename__ = "invoice"
-
     id: str = Field(primary_key=True, default_factory=get_primary_key("in"))
-    amount_due: int = Field()
     amount_paid: int = Field()
     amount_remaining: int = Field()
     amount_shipping: int = Field()
@@ -38,22 +36,24 @@ class Invoice(SqlBase, table=True):
     currency: str = Field(max_length=3)
     attempted: bool = Field(default=False)
     status: InvoiceStatusEnum = Field()
-    customer_email: str = Field(nullable=True)
-    customer_phone: str = Field()
-    customer_name: str = Field()
     due_date: int = Field(nullable=True)
     invoice_pdf: str = Field(nullable=True)
     paid: bool = Field()
 
     # charge TODO
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="invoices")
     customer_id: str = Field(foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="invoices")
     checkout_id: str = Field(foreign_key="checkout.id", nullable=True)
     checkout: "Checkout" = Relationship(back_populates="invoice")
-    order: "Order" = Relationship(back_populates="invoice")
+    # order: "Order" = Relationship(back_populates="invoice")
     # TODO subscription invoice link table
     # subscriptions:list["Subscription"] = Relationship( back_populates="invoices")
-    customer_address: "InvoiceCustomerAddress" = Relationship(back_populates="invoice")
+    customer_address: "InvoiceCustomerAddress" = Relationship(
+        back_populates="invoice",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
     # TODO list[payment intent]
 
 
