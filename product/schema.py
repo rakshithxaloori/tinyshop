@@ -27,6 +27,7 @@ class Product(ProductBase, PyBaseModel):
     default_variant: Variant | None = None
     options: OptionList | None = None
     variants: VariantList | None = None
+    rating: int | None = None
 
 
 class ProductList(BaseModel):

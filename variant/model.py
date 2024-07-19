@@ -43,7 +43,6 @@ class Variant(SqlBase, table=True):
         back_populates="variant",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # subscriptions = relationship("Subscription", back_populates="variant")
     # shipping_lines = relationship("ShippingLines", back_populates="variant")
     discount_config_buy_x_get_y: list["DiscountConfigBuyXGetY"] = Relationship(
         back_populates="variant_get",

@@ -1,19 +1,25 @@
-import enum
-from sqlalchemy import Column, Text, ForeignKey, Enum
-from sqlalchemy.orm import relationship
+from enum import Enum
+from typing import TYPE_CHECKING
+from sqlmodel import Field, Relationship
 
 
 from lib.model import SqlBase
 from lib.primary_key import get_primary_key
 
 
-class OrderTypeEnum(str, enum.Enum):
+if TYPE_CHECKING:
+    from invoice.model import Invoice
+    from customer.model import Customer
+    from price.model import Price
+
+
+class OrderTypeEnum(str, Enum):
     preorder = "preorder"
     deferred = "deferred"
     normal = "normal"
 
 
-class OrderStatusEnum(str, enum.Enum):
+class OrderStatusEnum(str, Enum):
     # TODO
     requires_inventory = "requires_inventory"
     requires_shipping = "requires_shipping"
@@ -22,17 +28,30 @@ class OrderStatusEnum(str, enum.Enum):
     return_requested = "return_requested"
 
 
-class Order(SqlBase):
-    __tablename__ = "order"
+class Order(SqlBase, table=True):
+    id: int = Field(primary_key=True, default_factory=get_primary_key("or"))
+    number: int = Field()
+    type: OrderTypeEnum = Field()
+    status: OrderStatusEnum = Field()
 
-    id = Column(Text, primary_key=True, default_factory=get_primary_key("or"))
-    type = Column(Enum(OrderTypeEnum))
-    status = Column(Enum(OrderStatusEnum))
+    invoice_id: int = Field(foreign_key="invoice.id", nullable=True)
+    invoice: "Invoice" = Relationship(back_populates="order")
+    customer_id: int = Field(foreign_key="customer.id")
+    customer: "Customer" = Relationship(back_populates="orders")
+    # fulfillments = relationship("Fulfillments", back_populates="order")
+    # TODO discounts applieds
+    line_items: list["OrderLineItem"] = Relationship(back_populates="order")
 
-    invoice_id = Column(Text, ForeignKey("invoice.id"), nullable=True)
-    invoice = relationship("Invoice", back_populates="order")
-    customer_id = Column(Text, ForeignKey("customer.id", ondelete="CASCADE"))
-    customer = relationship("Customer", back_populates="orders")
-    cart_id = Column(Text, ForeignKey("cart.id"))
-    cart = relationship("Cart", back_populates="order")
-    shippings = relationship("Shipping", back_populates="order")
+
+# TODO order lines
+class OrderLineItem(SqlBase, table=True):
+    __tablename__ = "_order_line_item"
+
+    id: int = Field(primary_key=True, default_factory=get_primary_key("_oli"))
+    quantity: int = Field()
+    unit_amount: int = Field()
+
+    order_id: str = Field(foreign_key="order.id")
+    order: "Order" = Relationship(back_populates="line_items")
+    price_id: str = Field(foreign_key="price.id")
+    price: "Price" = Relationship(back_populates="order_line_items")

@@ -24,7 +24,6 @@ def create_product(
         db.commit()
         db.refresh(new_product)
         py_products = pydantify_products([new_product])
-        print("PY PRODUCTS", py_products)
         return py_products.pop()
     except Exception as e:
         print("EXCEPTION create_products:", e)

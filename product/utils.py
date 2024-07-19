@@ -1,10 +1,13 @@
 from sqlmodel import Session, select
+from sqlalchemy.sql import func
+
 
 from product.model import Product
 from product import schema
 from option import crud as opt_crud
 from variant.model import Variant
 from variant import crud as variant_crud
+from review.model import Review
 
 
 def pydantify_products(rows: list[Product]) -> list[schema.Product]:
