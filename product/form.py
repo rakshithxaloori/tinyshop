@@ -50,5 +50,5 @@ def update_product_form(
         description=description,
         active=active == "true" if active else None,
         shippable=shippable == "true" if shippable else None,
-        preorder=preorder == "true" if shippable else None,
+        preorder=preorder == "true" if preorder else None,
     )

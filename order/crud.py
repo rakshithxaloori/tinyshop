@@ -65,7 +65,7 @@ def create_order(
         for price_ins in prices_ins:
             if price_ins.variant.product.preorder:
                 preorder_prices.append(price_ins)
-            # elif inventory is zero, add it to deferred
+                continue
             is_inventory_available = False
             for inventory in price_ins.variant.inventories:
                 if inventory.quantity > 0:
