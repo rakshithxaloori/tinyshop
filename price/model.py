@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from cart.model import CartItem
 
     # from subscription.model import Subscription
-    # from order.model import OrderLineItem
+    from order.model import OrderLineItem
     from checkout.model import CheckoutLineItem
 
 
@@ -47,7 +47,7 @@ class Price(SqlBase, table=True):
     #     sa_relationship_kwargs={"cascade": "delete"},
     # )
     checkout_line_items: list["CheckoutLineItem"] = Relationship(back_populates="price")
-    # order_line_items: list["OrderLineItem"] = Relationship(back_populates="price")
+    order_line_items: list["OrderLineItem"] = Relationship(back_populates="price")
 
 
 class CustomerUnitAmount(SqlBase, table=True):

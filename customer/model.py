@@ -15,8 +15,7 @@ if TYPE_CHECKING:
     # from subscription.model import Subscription
     from checkout.model import Checkout
     from invoice.model import Invoice
-
-    # from order.model import Order
+    from order.model import Order
 
 
 class Customer(SqlBase, table=True):
@@ -50,4 +49,7 @@ class Customer(SqlBase, table=True):
         back_populates="customer",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-    # orders: list["Order"] = Relationship(back_populates="customer")
+    orders: list["Order"] = Relationship(
+        back_populates="customer",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )

@@ -8,46 +8,54 @@ from lib.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:
+    from shop.model import Shop
     from invoice.model import Invoice
     from customer.model import Customer
     from price.model import Price
 
 
 class OrderTypeEnum(str, Enum):
-    preorder = "preorder"
-    deferred = "deferred"
-    normal = "normal"
+    PREORDER = "preorder"
+    DEFERRED = "deferred"
+    NORMAL = "normal"
 
 
 class OrderStatusEnum(str, Enum):
     # TODO
-    requires_inventory = "requires_inventory"
-    requires_shipping = "requires_shipping"
-    shipping = "shipping"
-    completed = "completed"
-    return_requested = "return_requested"
+    REQUIRES_INVENTORY = "requires_inventory"
+    REQUIRES_SHIPPING = "requires_shipping"
+    IN_SHIPPING = "shipping"
+    COMPLETED = "completed"
+    RETURN_REQUESTED = "return_requested"
 
 
 class Order(SqlBase, table=True):
-    id: int = Field(primary_key=True, default_factory=get_primary_key("or"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("or"))
     number: int = Field()
     type: OrderTypeEnum = Field()
     status: OrderStatusEnum = Field()
 
-    invoice_id: int = Field(foreign_key="invoice.id", nullable=True)
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="orders")
+    invoice_id: str = Field(foreign_key="invoice.id", nullable=True)
     invoice: "Invoice" = Relationship(back_populates="order")
-    customer_id: int = Field(foreign_key="customer.id")
+    customer_id: str = Field(foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="orders")
     # fulfillments = relationship("Fulfillments", back_populates="order")
     # TODO discounts applieds
-    line_items: list["OrderLineItem"] = Relationship(back_populates="order")
+    line_items: list["OrderLineItem"] = Relationship(
+        back_populates="order",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+
+    # TODO order number, shop id are unique
 
 
 # TODO order lines
 class OrderLineItem(SqlBase, table=True):
     __tablename__ = "_order_line_item"
 
-    id: int = Field(primary_key=True, default_factory=get_primary_key("_oli"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("_oli"))
     quantity: int = Field()
     unit_amount: int = Field()
 

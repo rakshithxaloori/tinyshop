@@ -11,8 +11,7 @@ if TYPE_CHECKING:
     from shop.model import Shop
     from customer.model import Customer
     from checkout.model import Checkout
-
-    # from order.model import Order
+    from order.model import Order
 
 
 class InvoiceStatusEnum(str, enum.Enum):
@@ -47,7 +46,7 @@ class Invoice(SqlBase, table=True):
     customer: "Customer" = Relationship(back_populates="invoices")
     checkout_id: str = Field(foreign_key="checkout.id", nullable=True)
     checkout: "Checkout" = Relationship(back_populates="invoice")
-    # order: "Order" = Relationship(back_populates="invoice")
+    order: "Order" = Relationship(back_populates="invoice")
     # TODO subscription invoice link table
     # subscriptions:list["Subscription"] = Relationship( back_populates="invoices")
     customer_address: "InvoiceCustomerAddress" = Relationship(

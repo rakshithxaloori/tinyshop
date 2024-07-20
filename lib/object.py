@@ -1,4 +1,7 @@
-class ObjectType:
+from enum import Enum
+
+
+class ObjectType(str, Enum):
     # Customer
     CUSTOMER = "customer"
     CUSTOMER_ADDRESS = "customer_address"
@@ -19,3 +22,5 @@ class ObjectType:
     CHECKOUT = "checkout"
     INVOICE = "invoice"
     SUBSCRIPTION = "subscription"
+    # Order
+    ORDER = "order"

@@ -3,7 +3,7 @@ from invoice import schema
 
 
 def pydantify_invoices(rows: list[Invoice]) -> list[schema.Invoice]:
-    invoices: list[Invoice] = []
+    invoices: list[schema.Invoice] = []
     for invoice_ins in rows:
         invoices.append(
             schema.Invoice(
