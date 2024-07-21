@@ -9,7 +9,7 @@ from lib.primary_key import get_primary_key
 if TYPE_CHECKING:
     from customer.model import Customer
 
-    # from subscription.model import Subscription
+    from subscription.model import Subscription
     from checkout.model import Checkout
 
 
@@ -30,7 +30,7 @@ class CustomerAddress(SqlBase, table=True):
     checkouts: list["Checkout"] = Relationship(
         back_populates="customer_address",
     )
-    # subscriptions: list["Subscription"] = Relationship(
-    #     back_populates="customer_address",
-    #     sa_relationship_kwargs={"cascade": "delete"},
-    # )
+    subscriptions: list["Subscription"] = Relationship(
+        back_populates="customer_address",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )

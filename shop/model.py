@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from discount.model import Discount
 
     from checkout.model import Checkout
+    from subscription.model import Subscription
     from invoice.model import Invoice
     from order.model import Order
 
@@ -82,6 +83,10 @@ class Shop(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     checkouts: list["Checkout"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    subscriptions: list["Subscription"] = Relationship(
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )

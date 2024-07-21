@@ -8,6 +8,7 @@ from lib.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:
+    from shop.model import Shop
     from customer.model import Customer
     from customer_address.model import CustomerAddress
     from price.model import Price
@@ -48,6 +49,8 @@ class Subscription(SqlBase, table=True):
     quantity: int = Field(default=1)  # Quantity of the price
     next_pending_invoice: int = Field()
 
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="subscriptions")
     customer_id: str = Field(foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="subscriptions")
     customer_address_id: str = Field(foreign_key="customer_address.id")
@@ -59,7 +62,8 @@ class Subscription(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     pending_invoice_interval: "SubscriptionPendingInvoiceInterval" = Relationship(
-        back_populates="subscription"
+        back_populates="subscription",
+        sa_relationship_kwargs={"cascade": "delete"},
     )
     cancellation_details: "SubscriptionCancellationDetails" = Relationship(
         back_populates="subscription",
@@ -82,7 +86,7 @@ class SubscriptionPendingInvoiceInterval(SqlBase, table=True):
 
     id: str = Field(primary_key=True, default_factory=get_primary_key("_spiii"))
     interval: SubscriptionPendingInvoiceIntervalEnum = Field()
-    inteval_count: int = Field(default=1)
+    interval_count: int = Field(default=1)
 
     subscription_id: str = Field(foreign_key="subscription.id")
     subscription: "Subscription" = Relationship(

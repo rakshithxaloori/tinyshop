@@ -38,7 +38,6 @@ class SubscriptionBase(BaseModel):
     quantity: int
     billing_cycle_anchor_config: BillingCycleAnchorConfig
     pending_invoice_interval: PendingInvoiceInterval
-    cancellation_details: CancellationDetails
 
 
 class SubscriptionCreate(SubscriptionBase):
@@ -61,6 +60,7 @@ class Subscription(PyBaseModel, SubscriptionBase):
     ended_at: int | None = None
     start_date: int | None = None
     next_pending_invoice: int
+    cancellation_details: CancellationDetails | None = None
 
 
 class SubscriptionUpdate(BaseModel):

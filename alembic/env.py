@@ -46,6 +46,7 @@ from review.model import *
 from discount.model import *
 
 from checkout.model import *
+from subscription.model import *
 from invoice.model import *
 from order.model import *
 

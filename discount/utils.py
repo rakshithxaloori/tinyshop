@@ -41,7 +41,6 @@ def pydantify_discounts(rows: list[Discount]) -> list[schema.Discount]:
                 )
             )
         elif discount_ins.type == DiscountTypeEnum.BUY_X_GET_Y:
-            print("discount_ins.config.buy_x_get_y", discount_ins.config)
             variant_ins = discount_ins.config.buy_x_get_y.variant_get
             discount_config = schema.DiscountConfig(
                 buy_x_get_y=schema.BuyXGetY(

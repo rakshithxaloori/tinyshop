@@ -28,6 +28,7 @@ from review import model as review_models
 from discount import model as discount_models
 
 from checkout import model as checkout_models
+from subscription import model as subscription_models
 from invoice import model as invoice_models
 from order import model as order_models
 
@@ -57,6 +58,7 @@ from review.router import router as reviews_router
 from discount.router import router as discounts_router
 
 from checkout.router import router as checkouts_router
+from subscription.router import router as subscriptions_router
 from invoice.router import router as invoices_router
 from order.router import router as orders_router
 
@@ -151,5 +153,6 @@ app.include_router(reviews_router)
 app.include_router(discounts_router)
 
 app.include_router(checkouts_router)
+app.include_router(subscriptions_router)
 app.include_router(invoices_router)
 app.include_router(orders_router)
