@@ -9,6 +9,10 @@ import { Carts } from "./cart";
 import { CartItems } from "./cartItem";
 import { Reviews } from "./review";
 import { Discounts } from "./discount";
+import { Checkouts } from "./checkout";
+import { Invoices } from "./invoice";
+import { Subscriptions } from "./subscription";
+import { Orders } from "./order";
 
 declare class Tinyshop {
   customers: Customers;
@@ -22,6 +26,10 @@ declare class Tinyshop {
   cartItems: CartItems;
   reviews: Reviews;
   discounts: Discounts;
+  checkouts: Checkouts;
+  invoices: Invoices;
+  subscriptions: Subscriptions;
+  orders: Orders;
   private api;
   constructor(secret_key: string, base_url?: string);
 }

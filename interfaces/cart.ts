@@ -32,7 +32,7 @@ interface CartList {
 }
 
 interface CartUpdate {
-  status?: CartStatusEnum | null;
+  status?: "active" | "inactive";
 }
 
 interface CartDelete {

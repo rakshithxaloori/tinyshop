@@ -35,6 +35,7 @@ export class Reviews {
   }
 
   async list(productId?: string, customerId?: string): Promise<ReviewList> {
+    // TODO push all list args to an object
     const query_params = {
       product: productId,
       customer: customerId,
