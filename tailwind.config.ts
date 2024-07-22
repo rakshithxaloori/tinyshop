@@ -82,6 +82,7 @@ const config = {
     themeRoot: ":root", // The element that receives theme color CSS variables
   },
   plugins: [
+    require('tailwind-scrollbar-hide'),
     require('daisyui'),
     require("tailwindcss-animate"),
     addVariablesForColors,

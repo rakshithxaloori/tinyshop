@@ -99,8 +99,8 @@ const BasicHeader = ({
   const sticky = true;
   return (
     <header className={cn("border-b py-4",
-      sticky ? "sticky top-0 z-50 bg-primary shadow-md" : "",
-    )} data-theme="black">
+      sticky ? "sticky top-0 z-50 bg-base-100 shadow-md" : "",
+    )} data-theme="night">
       <div className={cn("sm:items-centerm mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 md:flex-nowrap lg:px-8",
         className)}>
         <Link id="basic-header-name" href="/">

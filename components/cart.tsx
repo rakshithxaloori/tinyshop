@@ -51,11 +51,11 @@ const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
         </span>
       </div>
       <div className="flex flex-row gap-1 items-center px-1 align-end">
-        <button className="btn btn-circle btn-sm p-0 border-info/50 hover:border-info/80 border-2" onClick={() => removeItem(itemChain)}>
+        <button className="btn btn-circle btn-sm p-0 border-neutral/50 hover:border-neutral/80 border-2" onClick={() => removeItem(itemChain)}>
           <MinusIcon />
         </button>
         <span className="p-2 text-sm">{quantity}</span>
-        <button className="btn btn-circle btn-sm p-0 border-info/50 hover:border-info/80 border-2" onClick={() => addItem(itemChain, displayItem, 1)} >
+        <button className="btn btn-circle btn-sm p-0 border-neutral/50 hover:border-neutral/80 border-2" onClick={() => addItem(itemChain, displayItem, 1)} >
           <PlusIcon />
         </button>
       </div>

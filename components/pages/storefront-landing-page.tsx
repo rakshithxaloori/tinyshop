@@ -1,6 +1,18 @@
 import CollectionDisplayList from "@/components/collection-display-list";
 import ProductDisplayList from "@/components/product-display-list";
 import Basic2DHeroSection from "@/template/hero/2d-basic";
+import Image3DCarousel from "../3d-image-carousel";
+
+const carouselImages = [
+  // Add your image URLs here
+  "https://images.unsplash.com/photo-1523437237164-d442d57cc3c9",
+  "https://images.unsplash.com/photo-1421930866250-aa0594cea05c",
+  "https://images.unsplash.com/photo-1536152470836-b943b246224c",
+  "https://images.unsplash.com/photo-1518717202715-9fa9d099f58a",
+  "https://images.unsplash.com/photo-1495107334309-fcf20504a5ab",
+  "https://images.unsplash.com/photo-1584148721201-b6432e0d5106"
+];
+
 
 const StorefrontLandingPage = ({
   products,
@@ -14,9 +26,14 @@ const StorefrontLandingPage = ({
   }
 ) => {
   return (
-    <div className="">
+    <div className="overflow-y-auto scrollbar-hide">
       <Basic2DHeroSection
         config={heroSectionConfig}
+      />
+
+      <Image3DCarousel
+        title="Featured Products"
+        images={carouselImages}
       />
 
       <ProductDisplayList

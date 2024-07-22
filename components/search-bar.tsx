@@ -29,13 +29,13 @@ const SearchBar = () => {
   }
 
   return (
-    <label className="input input-bordered flex bg-secondary items-center gap-2">
-      <input type="text" className="grow text-secondary-content" placeholder="Search products..."
+    <label className="input input-bordered flex bg-base-100 items-center gap-2">
+      <input type="text" className="grow text-base-content" placeholder="Search products..."
         value={query || ""}
         onChange={handleSearchInput}
       />
-      <kbd className="bg-secondary kbd kbd-sm">⌘</kbd>
-      <kbd className="bg-secondary kbd kbd-sm">K</kbd>
+      <kbd className="bg-neutral text-neutral-content kbd kbd-sm">⌘</kbd>
+      <kbd className="bg-neutral text-neutral-content kbd kbd-sm">K</kbd>
     </label>
   )
 }
