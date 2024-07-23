@@ -8,7 +8,7 @@ const StorefrontLayout = async ({ cartId, children }: { cartId: string | null, c
   const navItems = await getHeaderNavItems();
   return (
     <div className={cn("flex flex-col h-full min-h-screen w-full bg-base-200 text-base-content scrollbar-hide",)}
-      data-theme="retro"
+      data-theme="light"
     >
       <BasicHeader {...{ cartId, navItems }} />
       <div className="flex flex-1 justify-center mx-lg md:mx-xl">

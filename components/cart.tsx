@@ -107,7 +107,7 @@ const Cart = ({
         <CartBagDisplay quantity={cartItemsQty} />
       </SheetTrigger>
       <SheetContent className="flex flex-col overflow-y-hidden bg-base-200 w-full md:max-w-md">
-        <SheetHeader>
+        <SheetHeader >
           <SheetTitle>Cart ({cartItemsQty})</SheetTitle>
           <a className="link link-error" onClick={onClearClick} >Clear</a>
         </SheetHeader>

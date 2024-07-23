@@ -30,11 +30,13 @@ const Basic2DHeroSection = ({ config }: Basic2DHeroSectionProps) => {
             {description}
           </p>
           <Link
-            className="btn btn-wide bg-primary 
+            className="btn btn-wide
+            bg-primary
+            text-primary-content
+            hover:bg-primary/90
             rounded-lg 
-            hover:text-opacity-80 
-            hover:border-primary
-            text-primary-content"
+            hover:text-opacity-100
+            hover:border-secondary"
             href={cta.url}>
             {cta.text}
           </Link>

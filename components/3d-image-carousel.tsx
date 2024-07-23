@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import CurlyArrow from './curly-arrow';
 
 interface Image3DCarouselProps {
   title: string;
@@ -10,7 +11,10 @@ const Image3DCarousel = (props: Image3DCarouselProps) => {
 
   return (
     <div className="flex flex-col min-h-screen bg-transparent flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">{title}</h1>
+      <div className='flex flex-row justify-center'>
+        <h1 className="text-4xl font-bold text-center mb-8">{title}</h1>
+        {/* <CurlyArrow className="ml-auto" /> */}
+      </div>
       {/* Add your 3D image carousel component here */}
       <div className="three-d-carousel-wrapper w-full">
         <div className="three-d-carousel-track">
