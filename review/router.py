@@ -3,8 +3,8 @@ from sqlmodel import Session
 from fastapi import APIRouter, Depends, Query
 
 
-from review import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from review import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/v1/reviews")
 def create_review(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    review: Annotated[schema.ReviewCreate, Depends(form.create_review_form)],
+    review: schema.ReviewCreate = FormDep(schema.ReviewCreate),
     db: Session = Depends(get_session),
 ):
     new_review = crud.create_review(
@@ -32,7 +32,7 @@ def update_review(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     review_id: str,
-    review: Annotated[schema.ReviewUpdate, Depends(form.update_review_form)],
+    review: schema.ReviewUpdate = FormDep(schema.ReviewUpdate),
     db: Session = Depends(get_session),
 ):
     review = crud.update_review(

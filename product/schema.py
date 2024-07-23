@@ -17,7 +17,7 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
-    handle: str
+    pass
 
 
 class Product(ProductBase, PyBaseModel):
@@ -39,7 +39,6 @@ class ProductList(BaseModel):
 
 class ProductUpdate(BaseModel):
     name: str | None = None
-    handle: str | None = None
     description: str | None = None
     active: bool | None = None
     shippable: bool | None = None

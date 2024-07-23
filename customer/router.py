@@ -1,10 +1,9 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from customer import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from customer import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +14,7 @@ router = APIRouter(prefix="/v1/customers")
 def create_customer(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    customer: Annotated[schema.CustomerCreate, Depends(form.create_customer_form)],
+    customer: schema.CustomerCreate = FormDep(schema.CustomerCreate),
     db: Session = Depends(get_session),
 ):
     new_customer = crud.create_customer(
@@ -32,7 +31,7 @@ def update_customer(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     customer_id: str,
-    customer: Annotated[schema.CustomerUpdate, Depends(form.update_customer_form)],
+    customer: schema.CustomerUpdate = FormDep(schema.CustomerUpdate),
     db: Session = Depends(get_session),
 ):
     customer = crud.update_customer(

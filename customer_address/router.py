@@ -1,10 +1,9 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from customer_address import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from customer_address import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 router = APIRouter(prefix="/v1/customer_addresses")
@@ -14,7 +13,7 @@ router = APIRouter(prefix="/v1/customer_addresses")
 def create_address(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    address: Annotated[schema.CustomerAddressCreate, Depends(form.create_address_form)],
+    address: schema.CustomerAddressCreate = FormDep(schema.CustomerAddressCreate),
     db: Session = Depends(get_session),
 ):
     new_address = crud.create_address(
@@ -31,7 +30,7 @@ def update_address(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     address_id: str,
-    address: Annotated[schema.CustomerAddressUpdate, Depends(form.update_address_form)],
+    address: schema.CustomerAddressUpdate = FormDep(schema.CustomerAddressUpdate),
     db: Session = Depends(get_session),
 ):
     address = crud.update_address(

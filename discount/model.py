@@ -1,6 +1,5 @@
 import enum
 from typing import TYPE_CHECKING
-from datetime import datetime
 from sqlmodel import Field, Relationship, Column, ForeignKey, VARCHAR
 
 
@@ -28,7 +27,7 @@ class Discount(SqlBase, table=True):
     type: DiscountTypeEnum = Field()
     code: str = Field()
     active: bool = Field()
-    expires_at: datetime = Field(nullable=True)
+    expires_at: int = Field(nullable=True)
     applies_max: int = Field(nullable=True)
 
     config: "DiscountConfig" = Relationship(

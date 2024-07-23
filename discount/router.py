@@ -1,21 +1,24 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from discount import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from discount import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
 router = APIRouter(prefix="/v1/discounts")
 
 
+# TODO /{discount_id}/products
+# TODO /{discount_id}/customers
+
+
 @router.post("", response_model=schema.Discount)
 def create_discount(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    discount: Annotated[schema.DiscountCreate, Depends(form.create_discount_form)],
+    discount: schema.DiscountCreate = FormDep(schema.DiscountCreate),
     db: Session = Depends(get_session),
 ):
     new_discount = crud.create_discount(
@@ -32,7 +35,7 @@ def update_discount(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     discount_id: str,
-    discount: Annotated[schema.DiscountUpdate, Depends(form.update_discount_form)],
+    discount: schema.DiscountUpdate = FormDep(schema.DiscountUpdate),
     db: Session = Depends(get_session),
 ):
     discount = crud.update_discount(

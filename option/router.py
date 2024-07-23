@@ -3,8 +3,8 @@ from sqlmodel import Session
 from fastapi import APIRouter, Depends, Query
 
 
-from option import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from option import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/v1/options")
 def create_option(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    option: Annotated[schema.OptionCreate, Depends(form.create_option_form)],
+    option: schema.OptionCreate = FormDep(schema.OptionCreate),
     db: Session = Depends(get_session),
 ):
     new_option = crud.create_option(
@@ -32,7 +32,7 @@ def update_option(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     option_id: str,
-    option: Annotated[schema.OptionUpdate, Depends(form.update_option_form)],
+    option: schema.OptionUpdate = FormDep(schema.OptionUpdate),
     db: Session = Depends(get_session),
 ):
     updated_option = crud.update_option(

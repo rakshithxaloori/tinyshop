@@ -3,9 +3,10 @@ from sqlmodel import Session
 from fastapi import APIRouter, Depends, Query
 
 
-from cart_item import schema, crud, form
+from cart_item import schema, crud
 from lib.dependencies import ShopIDDep, LivemodeDep
 from lib.session import get_session
+from lib.dependencies import FormDep
 
 router = APIRouter(prefix="/v1/cart_items")
 
@@ -14,7 +15,7 @@ router = APIRouter(prefix="/v1/cart_items")
 def create_cart_item(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    cart_item: Annotated[schema.CartItemCreate, Depends(form.create_cart_item_form)],
+    cart_item: schema.CartItemCreate = FormDep(schema.CartItemCreate),
     db: Session = Depends(get_session),
 ):
     new_cart_item = crud.create_cart_item(
@@ -31,7 +32,7 @@ def update_cart_item(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     cart_item_id: str,
-    cart_item: Annotated[schema.CartItemUpdate, Depends(form.update_cart_item_form)],
+    cart_item: schema.CartItemUpdate = FormDep(schema.CartItemUpdate),
     db: Session = Depends(get_session),
 ):
     cart_item = crud.update_cart_item(

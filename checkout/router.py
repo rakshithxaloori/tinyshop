@@ -1,10 +1,9 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from checkout import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from checkout import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +14,7 @@ router = APIRouter(prefix="/v1/checkouts")
 def create_checkout(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    checkout: Annotated[schema.CheckoutCreate, Depends(form.create_checkout_form)],
+    checkout: schema.CheckoutCreate = FormDep(schema.CheckoutCreate),
     db: Session = Depends(get_session),
 ):
     new_checkout = crud.create_checkout(
@@ -32,7 +31,7 @@ def update_checkout(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     checkout_id: str,
-    checkout: Annotated[schema.CheckoutUpdate, Depends(form.update_checkout_form)],
+    checkout: schema.CheckoutUpdate = FormDep(schema.CheckoutUpdate),
     db: Session = Depends(get_session),
 ):
     updated_checkout = crud.update_checkout(

@@ -33,8 +33,8 @@ class ReviewList(BaseModel):
 
 
 class ReviewUpdate(BaseModel):
-    product_rating: int | None
-    shipping_rating: int | None
+    product_rating: int | None = None
+    shipping_rating: int | None = None
     feedback: FeedbackEnum | None = None
     review: str | None = None
 

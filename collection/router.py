@@ -3,8 +3,8 @@ from sqlmodel import Session
 from fastapi import APIRouter, Depends, Query
 
 
-from collection import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from collection import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/v1/collections")
 def create_collection(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    collection: schema.CollectionCreate = Depends(form.create_collection_form),
+    collection: schema.CollectionCreate = FormDep(schema.CollectionCreate),
     db: Session = Depends(get_session),
 ):
     new_collection = crud.create_collection(
@@ -32,7 +32,7 @@ def update_collection(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     collection_id: str,
-    collection: schema.CollectionUpdate = Depends(form.update_collection_form),
+    collection: schema.CollectionUpdate = FormDep(schema.CollectionUpdate),
     db: Session = Depends(get_session),
 ):
     collection = crud.update_collection(

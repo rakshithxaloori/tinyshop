@@ -1,10 +1,27 @@
 import re
-from collections import defaultdict
 from typing import Any
-from fastapi import Request
 from fastapi.datastructures import FormData
 
-from subscription import schema
+
+def parse_value(value: str) -> Any:
+    # Parse boolean values
+    if value.lower() in ["true", "false"]:
+        return value.lower() == "true"
+
+    return value
+
+
+# Flatten nested structures
+def flatten(data):
+    if isinstance(data, dict):
+        for key, value in list(data.items()):
+            if isinstance(value, dict) and len(value) == 1 and key in value:
+                data[key] = flatten(value[key])
+            else:
+                data[key] = flatten(value)
+    elif isinstance(data, list):
+        return [flatten(item) for item in data]
+    return data
 
 
 def parse_form_data(form_data: FormData) -> dict[str, Any]:
@@ -16,10 +33,9 @@ def parse_form_data(form_data: FormData) -> dict[str, Any]:
     """
     result = {}
 
-    for key, value in form_data.items():
-        # Parse boolean values
-        if value.lower() in ["true", "false"]:
-            value = value.lower() == "true"
+    for key, value in form_data.multi_items():
+        # Parse the value
+        parsed_value = parse_value(value)
 
         # Split the key into parts
         parts = re.findall(r"\w+|\[\d*\]", key)
@@ -30,10 +46,10 @@ def parse_form_data(form_data: FormData) -> dict[str, Any]:
                 # Handle array
                 index = part[1:-1]
                 if index == "":
-                    # Simple array (e.g., high[])
+                    # Simple array (e.g., images[])
                     if parts[i - 1] not in current:
                         current[parts[i - 1]] = []
-                    current[parts[i - 1]].append(value)
+                    current[parts[i - 1]].append(parsed_value)
                     break
                 else:
                     # Array with index (e.g., high[0])
@@ -46,24 +62,13 @@ def parse_form_data(form_data: FormData) -> dict[str, Any]:
             else:
                 # Handle dictionary
                 if i == len(parts) - 1:
-                    current[part] = value
+                    current[part] = parsed_value
                 else:
                     if part not in current:
                         current[part] = {}
                     current = current[part]
 
+    # Flatten simple arrays
+    result = flatten(result)
+
     return result
-
-
-async def create_subscription_form(request: Request) -> schema.SubscriptionCreate:
-    form_data = await request.form()
-    parsed_data = parse_form_data(form_data)
-    subscription = schema.SubscriptionCreate.model_validate(parsed_data)
-    return subscription
-
-
-async def update_subscription_form(request: Request) -> schema.SubscriptionUpdate:
-    form_data = await request.form()
-    parsed_data = parse_form_data(form_data)
-    subscription = schema.SubscriptionUpdate.model_validate(parsed_data)
-    return subscription

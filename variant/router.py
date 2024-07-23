@@ -3,8 +3,8 @@ from sqlmodel import Session
 from fastapi import APIRouter, Depends, Query
 
 
-from variant import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from variant import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 router = APIRouter(prefix="/v1/variants")
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/v1/variants")
 def create_variant(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    variant: Annotated[schema.VariantCreate, Depends(form.create_variant_form)],
+    variant: schema.VariantCreate = FormDep(schema.VariantCreate),
     db: Session = Depends(get_session),
 ):
     new_variant = crud.create_variant(
@@ -31,7 +31,7 @@ def update_variant(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     variant_id: str,
-    variant: Annotated[schema.VariantUpdate, Depends(form.update_variant_form)],
+    variant: schema.VariantUpdate = FormDep(schema.VariantUpdate),
     db: Session = Depends(get_session),
 ):
     variant = crud.update_variant(

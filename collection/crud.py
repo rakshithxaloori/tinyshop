@@ -7,6 +7,7 @@ from lib.many_to_many_tables import CollectionProductLink
 from collection.utils import pydantify_collections, expand_collection
 from lib.session import update_instance
 from lib.search import Operators
+from lib.form.handle import get_handle
 
 
 def create_collection(
@@ -20,6 +21,7 @@ def create_collection(
         new_col = Collection(
             shop_id=shop_id,
             livemode=livemode,
+            handle=get_handle(collection.name),
             **col_data,
         )
 
@@ -60,6 +62,8 @@ def update_collection(
 ) -> schema.Collection:
     try:
         data = collection.model_dump(exclude_none=True, exclude={"products"})
+        if collection.name:
+            data["handle"] = get_handle(collection.name)
         col_res = db.exec(
             select(Collection)
             .where(Collection.shop_id == shop_id)

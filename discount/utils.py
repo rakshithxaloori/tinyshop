@@ -1,9 +1,6 @@
 from discount.model import Discount, DiscountTypeEnum
 from discount import schema
-from customer import schema as cus_schema
-from product import schema as prod_schema
 from product.model import Product
-from variant import schema as var_schema
 
 EXPAND_LIMIT = 20
 
@@ -53,12 +50,6 @@ def pydantify_discounts(rows: list[Discount]) -> list[schema.Discount]:
                             discount_ins.config.buy_x_get_y.products_buy[:EXPAND_LIMIT]
                         ),
                     ),
-                    # TODO expand
-                    # variant_get=var_schema.Variant(
-                    #     **variant_ins.model_dump(exclude={"created", "updated"}),
-                    #     created=int(variant_ins.created.timestamp()),
-                    #     updated=int(variant_ins.updated.timestamp()),
-                    # ),
                     variant_get=variant_ins.id,
                 )
             )
@@ -67,15 +58,6 @@ def pydantify_discounts(rows: list[Discount]) -> list[schema.Discount]:
             created=int(discount_ins.created.timestamp()),
             updated=int(discount_ins.updated.timestamp()),
             customers=schema.DiscountCustomersList(
-                # TODO expand
-                # data=[
-                #     cus_schema.Customer(
-                #         **cus.customer.model_dump(exclude={"created", "updated"}),
-                #         created=int(cus.created.timestamp()),
-                #         updated=int(cus.updated.timestamp()),
-                #     )
-                #     for cus in discount_ins.customer_links[:EXPAND_LIMIT]
-                # ],
                 data=[
                     cd_link.customer_id
                     for cd_link in discount_ins.customer_links[:EXPAND_LIMIT]
@@ -95,22 +77,7 @@ def _get_discount_products(
     discount_id: str, products: list[Product]
 ) -> schema.DiscountProductsList:
     return schema.DiscountProductsList(
-        data=[
-            # prod_schema.Product(
-            #     **prod.model_dump(
-            #         exclude={
-            #             "created",
-            #             "updated",
-            #             "options",
-            #             "variants",
-            #         }
-            #     ),
-            #     created=int(prod.created.timestamp()),
-            #     updated=int(prod.updated.timestamp()),
-            # )
-            prod.id
-            for prod in products[:EXPAND_LIMIT]
-        ],
+        data=[prod.id for prod in products[:EXPAND_LIMIT]],
         url=f"/v1/discounts/{discount_id}/products",
         has_more=False,  # TODO
     )

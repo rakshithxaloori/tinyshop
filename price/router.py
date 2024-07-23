@@ -3,8 +3,8 @@ from sqlmodel import Session
 from fastapi import APIRouter, Depends, Query
 
 
-from price import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from price import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 router = APIRouter(prefix="/v1/prices")
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/v1/prices")
 def create_price(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    price: Annotated[schema.PriceCreate, Depends(form.create_price_form)],
+    price: schema.PriceCreate = FormDep(schema.PriceCreate),
     db: Session = Depends(get_session),
 ):
     new_price = crud.create_price(
@@ -31,7 +31,7 @@ def update_price(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     price_id: str,
-    price: Annotated[schema.PriceUpdate, Depends(form.update_price_form)],
+    price: schema.PriceUpdate = FormDep(schema.PriceUpdate),
     db: Session = Depends(get_session),
 ):
     price = crud.update_price(

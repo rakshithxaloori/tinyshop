@@ -23,7 +23,7 @@ def create_invoice(
             .where(Checkout.id == invoice.checkout)
         )
         checkout = checkout_res.one()
-        address_data = checkout.customer_address.model_dump()
+        address_data = checkout.customer_address.model_dump(exclude={"id"})
         new_invoice = Invoice(
             shop_id=shop_id,
             livemode=livemode,

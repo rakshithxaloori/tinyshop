@@ -1,19 +1,15 @@
-from datetime import datetime
 from pydantic import BaseModel
 
 from lib.model import PyBaseModel
 from lib.object import ObjectType
 from discount.model import DiscountTypeEnum
-from customer.schema import Customer
-from product.schema import Product
-from variant.schema import Variant
 
 
 class DiscountBase(BaseModel):
     type: DiscountTypeEnum
     code: str
     active: bool
-    expires_at: datetime | None = None
+    expires_at: int | None = None
     applies_max: int | None = None
 
 
@@ -21,14 +17,14 @@ class DiscountProductsList(BaseModel):
     object: str = "list"
     url: str = "/v1/discounts/{discount_id}/products"
     has_more: bool
-    data: list[Product]
+    data: list[str]
 
 
 class DiscountCustomersList(BaseModel):
     object: str = "list"
     url: str = "/v1/discounts/{discount_id}/customers"
     has_more: bool
-    data: list[Customer]
+    data: list[str]
 
 
 class OffProduct(BaseModel):
@@ -68,8 +64,8 @@ class BuyXGetY(BaseModel):
     quantity_min: int | None = None
     amount_min: int | None = None
     quantity_get: int
-    products_buy: DiscountProductsList | None = None
-    variant_get: str | Variant
+    products_buy: DiscountProductsList | list[str] | None = None
+    variant_get: str
 
 
 class BuyXGetYUpdateProducts(BaseModel):
@@ -117,8 +113,8 @@ class DiscountUpdateCustomers(BaseModel):
 
 
 class DiscountUpdate(BaseModel):
-    active: bool | None
-    expires_at: datetime | None = None
+    active: bool | None = None
+    expires_at: int | None = None
     applies_max: int | None = None
 
     customers: DiscountUpdateCustomers | None = None

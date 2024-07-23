@@ -7,7 +7,6 @@ from lib.object import ObjectType
 
 class CollectionBase(BaseModel):
     name: str
-    handle: str
     image_web: str | None = None
     image_mobile: str | None = None
 
@@ -19,6 +18,7 @@ class CollectionCreate(CollectionBase):
 class Collection(CollectionBase, PyBaseModel):
     id: str
     object: str = ObjectType.COLLECTION
+    handle: str
     products: ProductList
 
 

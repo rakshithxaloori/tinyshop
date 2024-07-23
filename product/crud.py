@@ -5,6 +5,7 @@ from product import schema
 from product.utils import pydantify_products, expand_product, expand_products
 from lib.session import update_instance
 from lib.search import Operators
+from lib.form.handle import get_handle
 
 
 def create_product(
@@ -18,6 +19,7 @@ def create_product(
         new_product = Product(
             shop_id=shop_id,
             livemode=livemode,
+            handle=get_handle(product.name),
             **product_data,
         )
         db.add(new_product)
@@ -39,6 +41,8 @@ def update_product(
 ) -> schema.Product | None:
     try:
         data = product.model_dump(exclude_none=True)
+        if product.name:
+            data["handle"] = get_handle(product.name)
 
         statement = (
             select(Product)

@@ -1,10 +1,9 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from order import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from order import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +14,7 @@ router = APIRouter(prefix="/v1/orders")
 def create_order(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    order: Annotated[schema.OrderCreate, Depends(form.create_order_form)],
+    order: schema.OrderCreate = FormDep(schema.OrderCreate),
     db: Session = Depends(get_session),
 ):
     new_order = crud.create_order(
@@ -32,7 +31,7 @@ def update_order(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     order_id: str,
-    order: Annotated[schema.OrderUpdate, Depends(form.update_order_form)],
+    order: schema.OrderUpdate = FormDep(schema.OrderUpdate),
     db: Session = Depends(get_session),
 ):
     updated_order = crud.update_order(

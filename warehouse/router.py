@@ -1,10 +1,9 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from warehouse import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from warehouse import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +14,7 @@ router = APIRouter(prefix="/v1/warehouses")
 def create_warehouse(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    warehouse: Annotated[schema.WarehouseCreate, Depends(form.create_warehouse_form)],
+    warehouse: schema.WarehouseCreate = FormDep(schema.WarehouseCreate),
     db: Session = Depends(get_session),
 ):
     new_warehouse = crud.create_warehouse(
@@ -32,7 +31,7 @@ def update_warehouse(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     warehouse_id: str,
-    warehouse: Annotated[schema.WarehouseUpdate, Depends(form.update_warehouse_form)],
+    warehouse: schema.WarehouseUpdate = FormDep(schema.WarehouseUpdate),
     db: Session = Depends(get_session),
 ):
     warehouse = crud.update_warehouse(

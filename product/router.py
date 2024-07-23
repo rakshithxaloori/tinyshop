@@ -3,8 +3,8 @@ from sqlmodel import Session
 from fastapi import APIRouter, Depends, Query
 
 
-from product import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from product import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/v1/products")
 def create_product(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    product: schema.ProductCreate = Depends(form.create_product_form),
+    product: schema.ProductCreate = FormDep(schema.ProductCreate),
     db: Session = Depends(get_session),
 ):
     new_product = crud.create_product(
@@ -32,7 +32,7 @@ def update_product(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     product_id: str,
-    product: schema.ProductUpdate = Depends(form.update_product_form),
+    product: schema.ProductUpdate = FormDep(schema.ProductUpdate),
     db: Session = Depends(get_session),
 ):
     product = crud.update_product(

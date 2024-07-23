@@ -1,10 +1,9 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from inventory import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from inventory import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +14,7 @@ router = APIRouter(prefix="/v1/inventory")
 def create_inventory(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    inventory: Annotated[schema.InventoryCreate, Depends(form.create_inventory_form)],
+    inventory: schema.InventoryCreate = FormDep(schema.InventoryCreate),
     db: Session = Depends(get_session),
 ):
     new_inventory = crud.create_inventory(
@@ -32,7 +31,7 @@ def update_inventory(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     inventory_id: str,
-    inventory: Annotated[schema.InventoryUpdate, Depends(form.update_inventory_form)],
+    inventory: schema.InventoryUpdate = FormDep(schema.InventoryUpdate),
     db: Session = Depends(get_session),
 ):
     inventory = crud.update_inventory(

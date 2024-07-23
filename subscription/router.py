@@ -1,10 +1,9 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from subscription import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from subscription import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,9 +14,7 @@ router = APIRouter(prefix="/v1/subscriptions")
 def create_subscription(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    subscription: Annotated[
-        schema.SubscriptionCreate, Depends(form.create_subscription_form)
-    ],
+    subscription: schema.SubscriptionCreate = FormDep(schema.SubscriptionCreate),
     db: Session = Depends(get_session),
 ):
     new_subs = crud.create_subscription(
@@ -34,9 +31,7 @@ def update_subscription(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     subscription_id: str,
-    subscription: Annotated[
-        schema.SubscriptionUpdate, Depends(form.update_subscription_form)
-    ],
+    subscription: schema.SubscriptionUpdate = FormDep(schema.SubscriptionUpdate),
     db: Session = Depends(get_session),
 ):
     updated_subs = crud.update_subscription(

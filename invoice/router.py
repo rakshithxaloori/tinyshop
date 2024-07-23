@@ -1,10 +1,9 @@
-from typing import Annotated
 from sqlmodel import Session
 from fastapi import APIRouter, Depends
 
 
-from invoice import schema, crud, form
-from lib.dependencies import ShopIDDep, LivemodeDep
+from invoice import schema, crud
+from lib.dependencies import ShopIDDep, LivemodeDep, FormDep
 from lib.session import get_session
 
 
@@ -15,7 +14,7 @@ router = APIRouter(prefix="/v1/invoices")
 def create_invoice(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
-    invoice: Annotated[schema.InvoiceCreate, Depends(form.create_invoice_form)],
+    invoice: schema.InvoiceCreate = FormDep(schema.InvoiceCreate),
     db: Session = Depends(get_session),
 ):
     new_invoice = crud.create_invoice(
@@ -32,7 +31,7 @@ def update_invoice(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
     invoice_id: str,
-    invoice: Annotated[schema.InvoiceUpdate, Depends(form.update_invoice_form)],
+    invoice: schema.InvoiceUpdate = FormDep(schema.InvoiceUpdate),
     db: Session = Depends(get_session),
 ):
     updated_invoice = crud.update_invoice(
