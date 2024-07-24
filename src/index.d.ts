@@ -23,6 +23,6 @@ declare class Tinyshop {
   reviews: Reviews;
   discounts: Discounts;
   private api;
-  constructor(secret_key: string);
+  constructor(secret_key: string, base_url?: string);
 }
 export default Tinyshop;

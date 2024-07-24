@@ -25,8 +25,8 @@ class Tinyshop {
   public discounts: Discounts;
   private api: Api;
 
-  constructor(secret_key: string) {
-    this.api = new Api(secret_key);
+  constructor(secret_key: string, base_url?: string) {
+    this.api = new Api(secret_key, base_url);
     this.customers = new Customers(this.api);
     this.customerAddresses = new CustomerAddresses(this.api);
     this.products = new Products(this.api);

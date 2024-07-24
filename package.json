@@ -1,6 +1,6 @@
 {
   "name": "@tinyshop/tinyshop-node",
-  "version": "0.0.25",
+  "version": "0.0.27",
   "description": "This package contains SDK code for tinyshop APIs.",
   "main": "src/index.ts",
   "types": "src/index.d.ts",
