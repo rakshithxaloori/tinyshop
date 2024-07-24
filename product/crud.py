@@ -6,6 +6,8 @@ from product.utils import pydantify_products, expand_product, expand_products
 from lib.session import update_instance
 from lib.search import Operators
 from lib.form.handle import get_handle
+from collection.model import Collection
+from lib.many_to_many_tables import CollectionProductLink
 
 
 def create_product(
@@ -102,18 +104,29 @@ def list_products(
     livemode: bool,
     db: Session,
     expand: list[str] | None = None,
-    collection: str | None = None,
+    collection_id: str | None = None,
     skip: str = None,
     limit: int = 50,
 ) -> schema.ProductList:
-    results = db.exec(
-        select(Product)
-        .where(Product.shop_id == shop_id)
-        .where(Product.livemode == livemode)
-        .offset(skip)
-        .limit(limit)
-    )
-    product_rows = list(results.all())
+    product_rows = None
+    if collection_id:
+        link_res = db.exec(
+            select(CollectionProductLink)
+            .where(CollectionProductLink.collection_id == collection_id)
+            .offset(skip)
+            .limit(limit)
+        )
+        all_links = link_res.all()
+        product_rows = [link.product for link in all_links]
+    else:
+        results = db.exec(
+            select(Product)
+            .where(Product.shop_id == shop_id)
+            .where(Product.livemode == livemode)
+            .offset(skip)
+            .limit(limit)
+        )
+        product_rows = list(results.all())
     products = pydantify_products(product_rows)
     if expand:
         products = expand_products(
