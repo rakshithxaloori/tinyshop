@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="" data-theme="black">
+    <html lang="en" className="" data-theme="coffee">
       <body className={inter.className}>
         {/* <Transitions>
           <Animate> */}

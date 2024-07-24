@@ -32,7 +32,7 @@ const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
   const displayItem: TCartItemDisplay = cartItem as TCartItemDisplay
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[20%_1fr_auto] gap-3 w-full bg-base-200 max-h-24">
+    <div className="grid grid-cols-[20%_1fr_auto] gap-3 w-full bg-base-200 max-h-24">
       <div className="relative w-full aspect-square">
         <Image
           src={image}
@@ -115,7 +115,7 @@ const Cart = ({
           {cartItemsQty > 0 ? <CartList /> : <EmptyCart />}
         </div>
 
-        <div className="border-t border-neutral py-4 sm:px-6">
+        <div className="border-t border-secondary-content py-4 sm:px-6">
           <div className="flex justify-between text-base font-medium text-base-content">
             <p>Total</p>
             <span>
@@ -124,7 +124,7 @@ const Cart = ({
             </span>
           </div>
           <p className="mt-sm text-sm text-base-content">Shipping and taxes will be added at the next step</p>
-          <button className="btn btn-primary btn-block mt-md text-primary-content" disabled={cartItems === 0}>
+          <button className="btn btn-secondary btn-block mt-md" disabled={cartItems === 0}>
             Go to payment
           </button>
         </div>
