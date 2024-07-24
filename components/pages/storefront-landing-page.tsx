@@ -1,7 +1,13 @@
+"use server";
 import CollectionDisplayList from "@/components/collection-display-list";
-import ProductDisplayList from "@/components/product-display-list";
+
+const ClientProductDisplayList = dynamic(() => import("@/components/product-display-list"), {
+  ssr: false,
+  loading: () => <div>Loading...</div>
+});
 import Basic2DHeroSection from "@/template/hero/2d-basic";
 import Image3DCarousel from "../3d-image-carousel";
+import dynamic from "next/dynamic";
 
 const carouselImages = [
   // Add your image URLs here
@@ -26,17 +32,17 @@ const StorefrontLandingPage = ({
   }
 ) => {
   return (
-    <div className="overflow-y-auto scrollbar-hide">
+    <div className="overflow-y-auto scrollbar-hide" data-theme="black">
       <Basic2DHeroSection
         config={heroSectionConfig}
       />
 
-      <Image3DCarousel
+      {/* <Image3DCarousel
         title="Featured Products"
         images={carouselImages}
-      />
+      /> */}
 
-      <ProductDisplayList
+      <ClientProductDisplayList
         name="All Products"
         {...{ products }}
       />

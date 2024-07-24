@@ -1,3 +1,5 @@
+"use client";
+
 import { TProduct } from "@/types/product";
 import ProductCard from "./product/card-v1";
 

@@ -1,6 +1,18 @@
 import ProductDetailsPage from "@/components/pages/product-details-page"
-import { getProductByHandle, getProductCollections, getProductReviews } from "@/lib/storefront";
+import { getAllProductHandles, getProductByHandle, getProductCollections, getProductReviews } from "@/lib/storefront";
 import { Suspense } from "react";
+
+export const experimental_ppr = true
+export const dynamicParams = true
+
+export const generateStaticParams = async () => {
+  const productHandles = await getAllProductHandles();
+  const staticPaths = productHandles.map((handle) => ({
+    product_handle: handle
+  })
+  );
+  return staticPaths;
+}
 
 const ProductLandingPage = async (
   { params }: { params: { product_handle: string } },

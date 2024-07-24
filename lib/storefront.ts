@@ -62,12 +62,25 @@ export const getProductList = async () => {
     }
   );
   return all_products_raw
+}
 
+export const getAllProductHandles = async () => {
+  const all_products_raw = await getProductList();
+  const { data: all_products } = all_products_raw;
+  const productHandles = all_products.map((product: any) => product.handle);
+  return productHandles
 }
 
 export const getCollectionList = async () => {
   const collections = await tinyshop.collections.list();
   return collections
+}
+
+export const getAllCollectionHandles = async () => {
+  const collections = await getCollectionList();
+  const { data: all_collections } = collections;
+  const collectionHandles = all_collections.map((collection: any) => collection.handle);
+  return collectionHandles
 }
 
 export const getCollectionByHandle = async (handle: string) => {

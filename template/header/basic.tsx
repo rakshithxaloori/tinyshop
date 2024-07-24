@@ -27,13 +27,13 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-info/20 hover:text-info-content focus:bg-info/20 focus:text-info-content",
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-base-100/50 hover:text-base-content focus:bg-base-100/50 focus:text-base-content",
             className
           )}
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-info-content">
+          <p className="line-clamp-2 text-sm leading-snug text-base-content">
             {children}
           </p>
         </a>
@@ -54,14 +54,14 @@ const NavItems = ({ navItems }: { navItems: any[] }) => {
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-info/50 to-info p-6 no-underline outline-none focus:shadow-md"
+                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-primary/80 p-6 no-underline outline-none hover:bg-base-100/50 hover:text-base-content"
                     href="/"
                   >
                     <PizzaIcon size={40} />
                     <div className="mb-2 mt-4 text-lg font-medium">
                       Tinyshop
                     </div>
-                    <p className="text-sm leading-tight text-info-content">
+                    <p className="text-sm leading-tight text-primary-content">
                       Tinyshop is a modern e-commerce solution built using Tailwind CSS and Next.js.
                     </p>
                   </a>

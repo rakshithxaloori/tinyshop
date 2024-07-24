@@ -1,16 +1,15 @@
 "use client";
-import { useSearchParams } from 'next/navigation'
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import algoliasearch, { SearchClient } from 'algoliasearch/lite';
 import { TProduct } from '@/types/product';
-import ProductDisplayList from '../product-display-list';
 import { useSearchQuery } from '../hooks/search';
+import ProductDisplayList from '../product-display-list';
 
 const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!;
 const algoliaSearchApiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY!;
 
-let algoliaSearchClient = algoliasearch(algoliaAppId, algoliaSearchApiKey);
+let algoliaSearchClient: SearchClient = algoliasearch(algoliaAppId, algoliaSearchApiKey);
 
 const SearchPageComponent = ({
   indexName
@@ -19,27 +18,26 @@ const SearchPageComponent = ({
 }) => {
   const { query: searchQuery } = useSearchQuery()
   const [searchResults, setSearchResults] = useState<any[]>([])
-  let searchClient: SearchClient = algoliaSearchClient
-
-  const handleSearch = useCallback(async () => {
-    if (!searchQuery) {
-      return
-    }
-    const index = searchClient.initIndex(indexName)
-    const { hits } = await index.search(searchQuery)
-    setSearchResults(hits)
-  }, [searchQuery, indexName, searchClient]);
 
   useEffect(() => {
     // TODO: Add debounce to handleSearch
+    const handleSearch = async () => {
+      if (!searchQuery) {
+        return
+      }
+      const index = algoliaSearchClient.initIndex(indexName)
+      const { hits } = await index.search(searchQuery)
+      return hits
+    }
 
     const fetchData = async () => {
       if (searchQuery) {
-        await handleSearch()
+        const results = await handleSearch()
+        setSearchResults(results as any[])
       }
     }
     fetchData()
-  }, [searchQuery, handleSearch])
+  }, [searchQuery, indexName])
 
   return (
     <div className='flex flex-1 flex-col w-full'>

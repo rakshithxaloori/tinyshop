@@ -1,3 +1,4 @@
+"use server";
 const BasicFooter = () => {
   return (
     <footer className="footer bg-neutral text-neutral-content p-10 mt-2">

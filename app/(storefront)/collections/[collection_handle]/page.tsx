@@ -1,7 +1,17 @@
-"use server";
 import CollectionDetailsPage from "@/components/pages/collection-details-page";
-import { getCollectionByHandle } from "@/lib/storefront";
+import { getAllCollectionHandles, getCollectionByHandle } from "@/lib/storefront";
 import { Suspense } from "react";
+
+export const experimental_ppr = true
+export const dynamicParams = true
+
+export const generateStaticParams = async () => {
+  const collectionHandles = await getAllCollectionHandles();
+  const staticPaths = collectionHandles.map((handle) => ({
+    collection_handle: handle
+  }));
+  return staticPaths;
+}
 
 const CollectionDisplayPage = async (
   { params }: { params: { collection_handle: string } },
