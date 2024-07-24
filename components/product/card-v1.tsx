@@ -129,8 +129,6 @@ const ProductCard = ({ product,
         </section>
       </div>
     </div>
-
-
   )
 }
 
