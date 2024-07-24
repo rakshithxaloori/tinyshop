@@ -1,5 +1,4 @@
 from sqlmodel import Session, select
-from sqlalchemy.sql import func
 
 
 from product.model import Product
@@ -7,7 +6,8 @@ from product import schema
 from option import crud as opt_crud
 from variant.model import Variant
 from variant import crud as variant_crud
-from review.model import Review
+from lib.many_to_many_tables import CollectionProductLink
+from lib.limit import LIST_LIMIT_COUNT
 
 
 def pydantify_products(rows: list[Product]) -> list[schema.Product]:
@@ -59,6 +59,23 @@ def expand_product(
             livemode,
             product.id,
             db,
+        )
+
+    if "collections" in expand:
+        # Not using collection_crud.list_collections because
+        # of circular imports of schema
+        link_res = db.exec(
+            select(CollectionProductLink)
+            .where(CollectionProductLink.product_id == product.id)
+            .limit(LIST_LIMIT_COUNT)
+        )
+        all_links = link_res.all()
+        all_rows = [link.collection for link in all_links]
+        py_cols = [schema.Collection(**col.model_dump()) for col in all_rows]
+        product.collections = schema.CollectionList(
+            has_more=False,  # TODO
+            data=py_cols,
+            url=f"/v1/collections?product={product.id}",
         )
 
     return product

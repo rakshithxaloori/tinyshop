@@ -71,6 +71,7 @@ def retrieve_collection(
     expand: Annotated[list[str] | None, Query(alias="expand[]")] = None,
     db: Session = Depends(get_session),
 ):
+    # TODO expand
     collection = crud.retrieve_collection(
         shop_id,
         livemode,
@@ -84,6 +85,7 @@ def retrieve_collection(
 def list_collections(
     shop_id: ShopIDDep,
     livemode: LivemodeDep,
+    product: Annotated[str | None, Query()] = None,
     expand: Annotated[list[str] | None, Query(alias="expand[]")] = None,
     db: Session = Depends(get_session),
 ):
@@ -92,6 +94,8 @@ def list_collections(
         shop_id,
         livemode,
         db,
+        expand,
+        product,
     )
     return collections_list
 

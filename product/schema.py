@@ -6,6 +6,25 @@ from option.schema import OptionList
 from variant.schema import VariantList, Variant
 
 
+class CollectionBase(BaseModel):
+    name: str
+    image_web: str | None = None
+    image_mobile: str | None = None
+
+
+class Collection(CollectionBase, PyBaseModel):
+    id: str
+    object: str = ObjectType.COLLECTION
+    handle: str
+
+
+class CollectionList(BaseModel):
+    object: str = "list"
+    url: str = "/v1/collections"
+    has_more: bool
+    data: list[Collection] = []
+
+
 class ProductBase(BaseModel):
     # Create request's insensitive fields
     name: str
@@ -27,6 +46,7 @@ class Product(ProductBase, PyBaseModel):
     default_variant: Variant | None = None
     options: OptionList | None = None
     variants: VariantList | None = None
+    collections: CollectionList | None = None
     rating: int | None = None
 
 

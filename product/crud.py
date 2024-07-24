@@ -6,7 +6,6 @@ from product.utils import pydantify_products, expand_product, expand_products
 from lib.session import update_instance
 from lib.search import Operators
 from lib.form.handle import get_handle
-from collection.model import Collection
 from lib.many_to_many_tables import CollectionProductLink
 
 
@@ -109,6 +108,7 @@ def list_products(
     limit: int = 50,
 ) -> schema.ProductList:
     product_rows = None
+    url = "/v1/products"
     if collection_id:
         link_res = db.exec(
             select(CollectionProductLink)
@@ -118,6 +118,7 @@ def list_products(
         )
         all_links = link_res.all()
         product_rows = [link.product for link in all_links]
+        url += f"?collection={collection_id}"
     else:
         results = db.exec(
             select(Product)
@@ -140,6 +141,7 @@ def list_products(
     return schema.ProductList(
         has_more=False,  # TODO
         data=products,
+        url=url,
     )
 
 

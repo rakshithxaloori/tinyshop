@@ -118,7 +118,9 @@ def retrieve_collection(
     livemode: bool,
     collection_id: str,
     db: Session,
+    expand: list[str] | None = None,
 ) -> schema.Collection:
+    # TODO expand
     try:
         result = db.exec(
             select(Collection)
@@ -138,21 +140,38 @@ def list_collections(
     shop_id: str,
     livemode: bool,
     db: Session,
+    expand: list[str] | None = None,
+    product_id: str | None = None,
     skip: str = None,
     limit: int = 50,
 ) -> schema.CollectionList:
-    subquery = select(Collection.id).offset(skip).limit(limit)
-    results = db.exec(
-        select(Collection)
-        .where(Collection.shop_id == shop_id)
-        .where(Collection.livemode == livemode)
-        .where(Collection.id.in_(subquery))
-    )
-    all_rows = results.all()
+    # TODO expand
+    all_rows = None
+    url = "/v1/collections"
+    if product_id:
+        link_res = db.exec(
+            select(CollectionProductLink)
+            .where(CollectionProductLink.product_id == product_id)
+            .offset(skip)
+            .limit(limit)
+        )
+        all_links = link_res.all()
+        all_rows = [link.collection for link in all_links]
+        url += f"?product={product_id}"
+    else:
+        results = db.exec(
+            select(Collection)
+            .where(Collection.shop_id == shop_id)
+            .where(Collection.livemode == livemode)
+            .offset(skip)
+            .limit(limit)
+        )
+        all_rows = results.all()
     collections = pydantify_collections(all_rows)
     return schema.CollectionList(
         has_more=False,
         data=collections,
+        url=url,
     )
 
 
