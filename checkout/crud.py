@@ -8,6 +8,7 @@ from customer_address.model import CustomerAddress
 from checkout.utils import pydantify_checkouts
 from checkout import schema
 from cart.model import Cart
+from lib.many_to_many_tables import CheckoutDiscountLinks
 
 
 def create_checkout(
@@ -67,6 +68,14 @@ def create_checkout(
             **checkout_data,
         )
         new_checkout.url = checkout.url.replace("{CHECKOUT_ID}", new_checkout.id)
+        for dis_link in cart.discount_links:
+            new_cd_link = CheckoutDiscountLinks(
+                livemode=livemode,
+                checkout_id=new_checkout.id,
+                discount_id=dis_link.discount_id,
+            )
+            new_checkout.discount_links.append(new_cd_link)
+        # TODO update discount amount
         db.add(new_checkout)
         # Create Checkout Lines
         for ci in cart.items:

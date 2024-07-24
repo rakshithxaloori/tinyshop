@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from collection.model import Collection
     from product.model import Product
     from cart.model import Cart
+    from checkout.model import Checkout
 
 
 class DiscountCustomerLink(SqlBase, table=True):
@@ -30,6 +31,16 @@ class CartDiscountLinks(SqlBase, table=True):
 
     discount: "Discount" = Relationship(back_populates="cart_links")
     cart: "Cart" = Relationship(back_populates="discount_links")
+
+
+class CheckoutDiscountLinks(SqlBase, table=True):
+    """Discounts that are used in a Checkout."""
+
+    discount_id: str = Field(foreign_key="discount.id", primary_key=True)
+    checkout_id: str = Field(foreign_key="checkout.id", primary_key=True)
+
+    discount: "Discount" = Relationship(back_populates="checkout_links")
+    checkout: "Checkout" = Relationship(back_populates="discount_links")
 
 
 class CollectionProductLink(SqlBase, table=True):

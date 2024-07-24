@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from lib.model import PyBaseModel
 from lib.object import ObjectType
 from checkout.model import CheckoutStatusEnum
+from discount.schema import DiscountList
 
 
 class CheckoutBase(BaseModel):
@@ -30,6 +31,7 @@ class Checkout(CheckoutBase, PyBaseModel):
     customer: str
     customer_address: str
     invoice: str | None = None
+    discounts: DiscountList
 
 
 class CheckoutUpdate(BaseModel):

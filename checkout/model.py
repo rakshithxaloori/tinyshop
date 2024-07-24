@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from cart.model import Cart
     from invoice.model import Invoice
     from price.model import Price
+    from lib.many_to_many_tables import CheckoutDiscountLinks
 
 
 class CheckoutStatusEnum(str, Enum):
@@ -59,6 +60,10 @@ class Checkout(SqlBase, table=True):
 
     line_items: list["CheckoutLineItem"] = Relationship(
         back_populates="checkout",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    discount_links: list["CheckoutDiscountLinks"] = Relationship(
+        back_populates="cart",
         sa_relationship_kwargs={"cascade": "delete"},
     )
 
