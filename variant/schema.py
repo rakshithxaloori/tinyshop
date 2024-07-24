@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from datetime import datetime
 
 from lib.model import PyBaseModel
 from lib.object import ObjectType
@@ -24,7 +23,7 @@ class VariantBase(BaseModel):
     active: bool
     options: list[VariantOptionValue] | None = None
     accept_zero_inventory_orders: bool
-    next_refill: datetime
+    next_refill: int
     image: str | None = None
     package_dimensions: PackageDimensions | None = None
     is_default: bool
@@ -61,7 +60,7 @@ class VariantUpdate(BaseModel):
     active: bool | None = None
     options: list[VariantOptionValue] | None = None
     accept_zero_inventory_orders: bool | None = None
-    next_refill: datetime | None = None
+    next_refill: int | None = None
     image: str | None = None
     package_dimensions: PackageDimensionsUpdate | None = None
     is_default: bool | None = None

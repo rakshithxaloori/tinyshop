@@ -1,5 +1,4 @@
 import time
-from datetime import datetime
 from pydantic import BaseModel
 from sqlmodel import SQLModel, Field
 
@@ -13,7 +12,7 @@ class PyBaseModel(BaseModel):
 
 
 class SqlBase(SQLModel, table=False):
-    created: int = Field(default_factory=lambda x: int(datetime.utcnow().timestamp()))
+    created: int = Field(default_factory=lambda _: int(time.time()))
     updated: int = Field(
         default_factory=lambda _: int(time.time()),
         sa_column_kwargs={"onupdate": lambda _: int(time.time())},

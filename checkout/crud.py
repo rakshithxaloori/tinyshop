@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from sqlmodel import Session, select
 
 
-from checkout.model import Checkout, CheckoutLineItem, CheckoutStatusEnum
+from checkout.model import Checkout, CheckoutLineItem
 from customer.model import Customer
 from customer_address.model import CustomerAddress
 from checkout.utils import pydantify_checkouts

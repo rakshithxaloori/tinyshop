@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from datetime import datetime
 from sqlmodel import Field, Relationship
 
 
@@ -22,7 +21,7 @@ class Variant(SqlBase, table=True):
     active: bool = Field()
     options: str = Field(nullable=True)
     accept_zero_inventory_orders: bool = Field(default=False)
-    next_refill: datetime = Field(nullable=True)
+    next_refill: int = Field(nullable=True)
     unit_label: str = Field(nullable=True)
     image: str = Field(nullable=True)
     is_default: bool = Field(default=False, nullable=True)  # TODO remove nullable=True
