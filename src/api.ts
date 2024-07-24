@@ -30,8 +30,8 @@ class ApiService {
   private baseUrl: string;
   private secretKey: string;
 
-  constructor(secretKey: string) {
-    this.baseUrl = "http://localhost:8000"; // TODO
+  constructor(secretKey: string, baseUrl?: string) {
+    this.baseUrl = baseUrl ?? "http://localhost:8000";
     this.secretKey = secretKey;
   }
 
