@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { PizzaIcon } from "lucide-react";
 import Wishlist from "@/components/wishlist";
+import useWindowSize from "@/components/hooks/window-size";
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
@@ -84,8 +85,42 @@ const NavItems = ({ navItems }: { navItems: any[] }) => {
   )
 }
 
+export const BasicMobileHeader = ({
+  className,
+  navItems,
+  cartId
+}: {
+  navItems: any[],
+  cartId: string | null;
+  className?: string;
+}) => {
+  return (
+    <header className="border-b py-4 sticky top-0 z-50 bg-base-100 shadow-md">
+      <div className="flex max-w-7xl flex-col items-start gap-2 px-4">
+        <section className="flex flex-1 w-full items-center gap-2">
+          <Link id="basic-header-name" href="/">
+            <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold">Your Store</span>
+          </Link>
+          <div className="mr-auto grow" />
+          <section id="basic-header-wishlist" className="flex space-x-4">
+            <Wishlist />
+          </section>
+          <section id="basic-header-cart" className="flex space-x-4">
+            <Cart {...{ cartId }} />
+          </section>
+        </section>
+        <section id="basic-header-search" className="flex space-x-4 w-full mt-sm">
+          <Suspense fallback={<div>Loading...</div>}>
+            <SearchBar />
+          </Suspense>
+        </section>
 
-const BasicHeader = ({
+      </div>
+    </header>
+  );
+}
+
+export const BasicDesktopHeader = ({
   className,
   navItems,
   cartId
@@ -123,6 +158,24 @@ const BasicHeader = ({
 
       </div>
     </header>
+  );
+}
+
+
+const BasicHeader = ({
+  className,
+  navItems,
+  cartId
+}: {
+  navItems: any[],
+  cartId: string | null;
+  className?: string;
+}) => {
+  const { isMobile } = useWindowSize();
+  return isMobile ? (
+    <BasicMobileHeader {...{ className, navItems, cartId }} />
+  ) : (
+    <BasicDesktopHeader {...{ className, navItems, cartId }} />
   );
 }
 

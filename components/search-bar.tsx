@@ -29,7 +29,7 @@ const SearchBar = () => {
   }
 
   return (
-    <label className="input input-bordered flex bg-base-100 items-center gap-2">
+    <label className="input input-bordered flex bg-base-100 items-center gap-2 w-full">
       <input type="text" className="grow text-base-content" placeholder="Search products..."
         value={query || ""}
         onChange={handleSearchInput}

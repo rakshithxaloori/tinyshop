@@ -120,7 +120,7 @@ const ProductCard = ({ product,
         >
           <div className="card-action w-full px-2">
             <Button variant="outline"
-              className="w-full rounded-full"
+              className="w-full rounded-full border-primary text-primary"
               onClick={handleAddToCart}
             >
               Add

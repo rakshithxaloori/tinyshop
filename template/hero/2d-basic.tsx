@@ -21,8 +21,8 @@ const Basic2DHeroSection = ({ config }: Basic2DHeroSectionProps) => {
   const { title, description, cta, image } = config
   return (
     <section className="rounded-lg bg-base-100 py-8 sm:py-12 md-lg md:my-xl">
-      <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-8 px-8 sm:px-16 md:grid-cols-2">
-        <div className="max-w-md space-y-4">
+      <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-8 md:grid-cols-2">
+        <div className="space-y-4 w-full">
           <h2 className="text-base-content text-3xl font-bold tracking-tight md:text-4xl">
             {title}
           </h2>
@@ -41,7 +41,7 @@ const Basic2DHeroSection = ({ config }: Basic2DHeroSectionProps) => {
             {cta.text}
           </Link>
         </div>
-        <div className="relative min-h-[50dvh] w-full">
+        <div className="relative min-h-[50dvh] w-full max-sm:mt-lg">
           <Image
             alt={image.alt}
             className="rounded-lg object-cover"
