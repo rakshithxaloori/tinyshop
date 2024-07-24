@@ -84,7 +84,7 @@ const ProductDetails = ({ product, reviews }: { product: any; reviews: any[] }) 
 
 const ProductVariantSection = ({ product, fallbackOptions, reviews }: ProductVariantSectionProps) => {
   return (
-    <div className="flex flex-1 min-h-[40rem] max-h-[85vh] w-full rounded mt-lg">
+    <div className="flex flex-1 min-h-[40rem] w-full rounded mt-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-4 w-full min-h-full">
         <ProductImage product={product} fallbackImage={fallbackOptions?.fallbackImage} />
         <Variant>

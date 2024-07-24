@@ -71,26 +71,26 @@ const ProductCard = ({ product,
 
   return (
     <div onClick={handleLinkClick}
-      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary transition-colors duration-100	ease-linear bg-base-100 border-2 rounded-xl">
+      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary transition-colors duration-100ease-linear bg-base-100 border-2 rounded-xl">
       <div className="group card card-compact">
-        <figure className="aspect-square relative h-[15rem] rounded-t-xl">
+        <figure className="relative aspect-square rounded-t-xl">
           <Image src={
             productImage
           } alt={product.name}
-            className="w-full h-full group-hover:opacity-75 transition-opacity duration-200 ease-in-out"
+            className="w-full h-full group-hover:opacity-75 group-focus:opacity-100 transition-opacity duration-200 ease-in-out"
             fill
           />
         </figure>
         <WishlistItem product={product} />
         <div className="badge badge-primary ml-2 mb-2 absolute top-0 left-0 mt-2 ml-2">NEW</div>
-        <div className="flex p-1 px-2 m-0">
-          <div className="w-2/3">
+        <div className="flex m-0 mt-md mx-md">
+          <div className="w-full">
             <h2 className="group card-title text-base group-hover:opacity-75 transition-opacity duration-200 ease-in-out h-[3rem] line-clamp-2">
               {product.name}
             </h2>
           </div>
           <div className="grow" />
-          <div className="card-action flex-1">
+          <div className="card-action flex-1 hidden md:block">
             <Button className="btn btn-sm"
               onClick={handleAddToCart}
             >
@@ -100,7 +100,7 @@ const ProductCard = ({ product,
         </div>
 
         <section id="price_card-footer"
-          className="group flex justify-between p-2 m-0 mt-sm group-hover:opacity-75"
+          className="group flex justify-between p-2 m-0 mt-xs md:mt-sm  group-hover:opacity-75"
           suppressHydrationWarning={true}
         >
           <PriceCard
@@ -113,7 +113,19 @@ const ProductCard = ({ product,
           <NoSSRCartBagDisplay quantity={cartProductQuantity}
             cx={cartProductQuantity > 0 ? "block" : "hidden"}
           />
+        </section>
 
+        <section id="mobile_card-footer"
+          className="visible md:hidden my-sm"
+        >
+          <div className="card-action w-full px-2">
+            <Button variant="outline"
+              className="w-full rounded-full"
+              onClick={handleAddToCart}
+            >
+              Add
+            </Button>
+          </div>
         </section>
       </div>
     </div>

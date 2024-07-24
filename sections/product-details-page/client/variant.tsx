@@ -191,7 +191,7 @@ const VariantSelector = ({ product }: { product: any }) => {
     setSelectedVariant(localVariant)
   }
   return (
-    <div className={cn("flex flex-col w-full overflow-x-scroll",
+    <div className={cn("flex flex-col w-full overflow-x-scroll mt-md",
       (variantInfo.length === 1 && cartProductQty === 0) && "hidden"
     )}>
       {
