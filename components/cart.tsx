@@ -31,6 +31,18 @@ const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
   const itemChain: TItemChain = cartItem as TItemChain
   const displayItem: TCartItemDisplay = cartItem as TCartItemDisplay
 
+  const handleAddItem = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+    addItem(itemChain, displayItem, 1)
+  }
+
+  const handleRemoveItem = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+    removeItem(itemChain)
+  }
+
   return (
     <div className="grid grid-cols-[20%_1fr_auto] gap-3 w-full bg-base-200 max-h-24">
       <div className="relative w-full aspect-square">
@@ -51,11 +63,11 @@ const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
         </span>
       </div>
       <div className="flex flex-row gap-1 items-center px-1 align-end">
-        <button className="btn btn-circle btn-sm p-0 border-neutral/50 hover:border-neutral/80 border-2" onClick={() => removeItem(itemChain)}>
+        <button className="btn btn-circle btn-sm p-0 border-neutral border-2" onClick={handleRemoveItem}>
           <MinusIcon />
         </button>
         <span className="p-2 text-sm">{quantity}</span>
-        <button className="btn btn-circle btn-sm p-0 border-neutral/50 hover:border-neutral/80 border-2" onClick={() => addItem(itemChain, displayItem, 1)} >
+        <button className="btn btn-circle btn-sm p-0 border-neutral border-2" onClick={handleAddItem} >
           <PlusIcon />
         </button>
       </div>

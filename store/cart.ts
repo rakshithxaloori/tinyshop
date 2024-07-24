@@ -58,6 +58,7 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
 
         if (existingItem.quantity > 1) {
           existingItem.quantity -= 1;
+          set({ items: [...get().items] });
         } else {
           set({ items: get().items.filter(i => i.priceId !== chain.priceId) });
         }
