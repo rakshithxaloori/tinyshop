@@ -14,6 +14,10 @@ if TYPE_CHECKING:
     from price.model import Price
 
 
+class OrderChannelEnum(str, Enum):
+    TINYSHOP = "tinyshop"
+
+
 class OrderTypeEnum(str, Enum):
     PREORDER = "preorder"
     DEFERRED = "deferred"
@@ -34,6 +38,7 @@ class Order(SqlBase, table=True):
     number: int = Field()
     type: OrderTypeEnum = Field()
     status: OrderStatusEnum = Field()
+    channel: OrderChannelEnum = Field(default=OrderChannelEnum.TINYSHOP)
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="orders")
