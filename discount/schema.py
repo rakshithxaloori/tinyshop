@@ -104,7 +104,7 @@ class DiscountList(BaseModel):
     object: str = "list"
     url: str = "/v1/discounts"
     has_more: bool
-    data: list[Discount] = []
+    data: list[Discount] | list[str] = []
 
 
 class DiscountUpdateCustomers(BaseModel):

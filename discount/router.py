@@ -70,6 +70,7 @@ def list_discounts(
     livemode: LivemodeDep,
     db: Session = Depends(get_session),
 ):
+    # TODO list by cart
     discounts_list = crud.list_discounts(
         shop_id,
         livemode,

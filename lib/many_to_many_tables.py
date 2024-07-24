@@ -22,14 +22,14 @@ class DiscountCustomerLink(SqlBase, table=True):
     # TODO shop, shop id ?
 
 
-# class DiscountCartLink(SqlBase, table=True):
-#     """Discounts that are added to Cart."""
+class CartDiscountLinks(SqlBase, table=True):
+    """Discounts that are added to Cart."""
 
-#     discount_id: str = Field(foreign_key="discount.id", primary_key=True)
-#     cart_id: str = Field(foreign_key="cart.id", primary_key=True)
+    discount_id: str = Field(foreign_key="discount.id", primary_key=True)
+    cart_id: str = Field(foreign_key="cart.id", primary_key=True)
 
-#     discount: "Discount" = Relationship(back_populates="cart_links")
-#     cart: "Cart" = Relationship(back_populates="discount_links")
+    discount: "Discount" = Relationship(back_populates="cart_links")
+    cart: "Cart" = Relationship(back_populates="discount_links")
 
 
 class CollectionProductLink(SqlBase, table=True):

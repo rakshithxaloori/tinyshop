@@ -3,6 +3,10 @@ from pydantic import BaseModel
 from sqlmodel import SQLModel, Field
 
 
+def now_timestamp_factory():
+    return int(time.time())
+
+
 class PyBaseModel(BaseModel):
     created: int
     updated: int
@@ -12,10 +16,10 @@ class PyBaseModel(BaseModel):
 
 
 class SqlBase(SQLModel, table=False):
-    created: int = Field(default_factory=lambda _: int(time.time()))
+    created: int = Field(default_factory=now_timestamp_factory)
     updated: int = Field(
-        default_factory=lambda _: int(time.time()),
-        sa_column_kwargs={"onupdate": lambda _: int(time.time())},
+        default_factory=now_timestamp_factory,
+        sa_column_kwargs={"onupdate": now_timestamp_factory},
     )
     livemode: bool = Field()
     # TODO

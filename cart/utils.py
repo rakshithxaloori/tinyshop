@@ -2,6 +2,8 @@ from cart.model import Cart
 from cart import schema
 from cart_item import schema as ci_schema
 from cart_item.model import CartItem
+from discount import schema as dis_schema
+from lib.limit import LIST_LIMIT_COUNT
 
 
 def pydantify_carts(rows: list[tuple[Cart, CartItem | None]]) -> list[schema.Cart]:
@@ -14,6 +16,14 @@ def pydantify_carts(rows: list[tuple[Cart, CartItem | None]]) -> list[schema.Car
                     data=[],
                     has_more=False,  # TODO
                     url=f"/v1/carts/{cart.id}/cart_items",
+                ),
+                discounts=dis_schema.DiscountList(
+                    url=f"/v1/discounts?cart={cart.id}",
+                    data=[
+                        cd_link.discount_id
+                        for cd_link in cart.discount_links[:LIST_LIMIT_COUNT]
+                    ],
+                    has_more=False,  # TODO
                 ),
             )
         if cart_item:

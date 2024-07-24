@@ -10,8 +10,8 @@ from lib.primary_key import get_primary_key
 if TYPE_CHECKING:
     from shop.model import Shop
     from cart_item.model import CartItem
-    from discount.model import Discount
     from checkout.model import Checkout
+    from lib.many_to_many_tables import CartDiscountLinks
 
 
 class CartStatusEnum(str, enum.Enum):
@@ -31,7 +31,10 @@ class Cart(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     # TODO
-    # discounts: list["Discount"] = Relationship(back_populates="carts")
+    discount_links: list["CartDiscountLinks"] = Relationship(
+        back_populates="cart",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
     checkouts: list["Checkout"] = Relationship(back_populates="cart")
     # order_id = Field(Text, ForeignKey("order.id"))
     # order = relationship("Order", back_populates="cart")
