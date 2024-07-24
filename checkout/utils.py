@@ -7,11 +7,7 @@ def pydantify_checkouts(rows: list[Checkout]) -> list[schema.Checkout]:
     for ch_ins in rows:
         checkouts.append(
             schema.Checkout(
-                **ch_ins.model_dump(
-                    exclude={"created", "updated", "customer", "customer_address"}
-                ),
-                created=int(ch_ins.created.timestamp()),
-                updated=int(ch_ins.updated.timestamp()),
+                **ch_ins.model_dump(exclude={"customer", "customer_address"}),
                 customer=ch_ins.customer_id,
                 customer_address=ch_ins.customer_address_id
             )

@@ -9,8 +9,6 @@ def pydantify_subscriptions(rows: list[Subscription]) -> list[schema.Subscriptio
             schema.Subscription(
                 **sub_ins.model_dump(
                     exclude={
-                        "created",
-                        "updated",
                         "customer",
                         "customer_address",
                         "price",
@@ -19,8 +17,6 @@ def pydantify_subscriptions(rows: list[Subscription]) -> list[schema.Subscriptio
                         "cancellation_details",
                     }
                 ),
-                created=int(sub_ins.created.timestamp()),
-                updated=int(sub_ins.updated.timestamp()),
                 customer=sub_ins.customer_id,
                 customer_address=sub_ins.customer_address_id,
                 # TODO return variant?

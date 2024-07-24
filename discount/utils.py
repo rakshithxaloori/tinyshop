@@ -54,9 +54,7 @@ def pydantify_discounts(rows: list[Discount]) -> list[schema.Discount]:
                 )
             )
         discount_py = schema.Discount(
-            **discount_ins.model_dump(exclude={"created", "updated", "config"}),
-            created=int(discount_ins.created.timestamp()),
-            updated=int(discount_ins.updated.timestamp()),
+            **discount_ins.model_dump(exclude={"config"}),
             customers=schema.DiscountCustomersList(
                 data=[
                     cd_link.customer_id

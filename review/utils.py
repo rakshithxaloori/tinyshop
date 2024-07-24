@@ -9,14 +9,10 @@ def pydantify_reviews(rows: list[Review]) -> list[schema.Review]:
         cus = rev.customer
         reviews.append(
             schema.Review(
-                **rev.model_dump(exclude={"created", "updated", "customer"}),
-                created=int(rev.created.timestamp()),
-                updated=int(rev.updated.timestamp()),
+                **rev.model_dump(exclude={"customer"}),
                 customer=cus_schema.Customer(
-                    **cus.model_dump(exclude={"created", "updated", "phone", "email"}),
-                    created=int(cus.created.timestamp()),
-                    updated=int(cus.updated.timestamp())
-                )
+                    **cus.model_dump(exclude={"phone", "email"}),
+                ),
             )
         )
     return reviews

@@ -7,13 +7,9 @@ def pydantify_orders(rows: list[Order]) -> list[schema.Order]:
     for order_ins in rows:
         orders.append(
             schema.Order(
-                **order_ins.model_dump(
-                    exclude={"invoice", "customer", "created", "updated", "line_items"}
-                ),
+                **order_ins.model_dump(exclude={"invoice", "customer", "line_items"}),
                 customer=order_ins.customer_id,
                 invoice=order_ins.invoice_id,
-                created=int(order_ins.created.timestamp()),
-                updated=int(order_ins.updated.timestamp()),
                 line_items=[
                     schema.OrderLineItem(
                         **line_item.model_dump(exclude={"price"}),

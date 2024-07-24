@@ -10,14 +10,10 @@ def pydantify_inventories(rows: list[Inventory]) -> list[schema.Inventory]:
             schema.Inventory(
                 **row.model_dump(
                     exclude={
-                        "created",
-                        "updated",
                         "variant",
                         "warehouse",
                     }
                 ),
-                created=int(row.created.timestamp()),
-                updated=int(row.updated.timestamp()),
                 warehouse=row.warehouse_id,
                 variant=row.variant_id,
             )

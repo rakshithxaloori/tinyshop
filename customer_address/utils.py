@@ -7,9 +7,7 @@ def pydantify_addresses(rows: list[CustomerAddress]) -> list[PyCustomerAddress]:
     for address in rows:
         addresses.append(
             PyCustomerAddress(
-                **address.model_dump(exclude={"created", "updated"}),
-                created=int(address.created.timestamp()),
-                updated=int(address.updated.timestamp()),
+                **address.model_dump(),
             )
         )
     return addresses

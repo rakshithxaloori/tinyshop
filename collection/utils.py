@@ -12,9 +12,7 @@ def pydantify_collections(rows: list[Collection]) -> list[schema.Collection]:
     for col_ins in rows:
         collections.append(
             schema.Collection(
-                **col_ins.model_dump(exclude={"created", "updated", "product_links"}),
-                created=int(col_ins.created.timestamp()),
-                updated=int(col_ins.updated.timestamp()),
+                **col_ins.model_dump(exclude={"product_links"}),
                 products=schema.ProductList(
                     url=f"/v1/products?collection={col_ins.id}",
                     data=[
@@ -47,9 +45,7 @@ def expand_collection(
         col_ins = results.one()
         collection.products.data = [
             prod_schema.Product(
-                **cp_link.product.model_dump(exclude={"created", "updated"}),
-                created=int(cp_link.product.created.timestamp()),
-                updated=int(cp_link.product.updated.timestamp()),
+                **cp_link.product.model_dump(),
             )
             for cp_link in col_ins.product_links[:EXPAND_LIMIT]
         ]

@@ -9,9 +9,7 @@ def pydantify_warehouses(
     for wh, wha in rows:
         warehouses.append(
             schema.Warehouse(
-                **wh.model_dump(exclude={"created", "updated"}),
-                created=int(wh.created.timestamp()),
-                updated=int(wh.updated.timestamp()),
+                **wh.model_dump(),
                 address=schema.WarehouseAddress(**wha.model_dump()),
             )
         )

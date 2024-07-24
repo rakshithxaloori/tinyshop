@@ -9,9 +9,7 @@ def pydantify_carts(rows: list[tuple[Cart, CartItem | None]]) -> list[schema.Car
     for cart, cart_item in rows:
         if cart.id not in carts_dict:
             carts_dict[cart.id] = schema.Cart(
-                **cart.model_dump(exclude={"created", "updated"}),
-                created=int(cart.created.timestamp()),
-                updated=int(cart.updated.timestamp()),
+                **cart.model_dump(),
                 cart_items=ci_schema.CartItemList(
                     data=[],
                     has_more=False,  # TODO
@@ -21,9 +19,7 @@ def pydantify_carts(rows: list[tuple[Cart, CartItem | None]]) -> list[schema.Car
         if cart_item:
             carts_dict[cart.id].cart_items.data.append(
                 ci_schema.CartItem(
-                    **cart_item.model_dump(exclude={"created", "updated", "price"}),
-                    created=int(cart_item.created.timestamp()),
-                    updated=int(cart_item.updated.timestamp()),
+                    **cart_item.model_dump(exclude={"price"}),
                     price=cart_item.price_id,  # TODO
                 )
             )
