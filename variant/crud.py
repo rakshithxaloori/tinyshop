@@ -1,4 +1,4 @@
-from sqlmodel import Session, select
+from sqlmodel import Session, select, update
 
 from variant.model import Variant, PackageDimensions
 from variant import schema
@@ -28,6 +28,16 @@ def create_variant(
             **variant_data,
         )
         db.add(new_variant)
+        if variant.is_default:
+            # Make all other variants is_default False
+            db.exec(
+                update(Variant)
+                .where(Variant.shop_id == shop_id)
+                .where(Variant.livemode == livemode)
+                .where(Variant.product_id == variant.product)
+                .where(Variant.id != new_variant.id)
+                .values(is_default=False)
+            )
 
         new_package_dimensions = None
         if variant.package_dimensions:
@@ -71,6 +81,16 @@ def update_variant(
         var_ins = result.one()
 
         update_instance(db, variant_data, var_ins)
+        if variant.is_default:
+            # Make all other variants is_default False
+            db.exec(
+                update(Variant)
+                .where(Variant.shop_id == shop_id)
+                .where(Variant.livemode == livemode)
+                .where(Variant.product_id == var_ins.product_id)
+                .where(Variant.id != var_ins.id)
+                .values(is_default=False)
+            )
 
         pd = None
         if variant.package_dimensions:
