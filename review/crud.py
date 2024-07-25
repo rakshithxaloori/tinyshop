@@ -92,8 +92,10 @@ def list_reviews(
     limit: int = 50,
 ) -> schema.ReviewList:
     try:
-        subquery = (
-            select(Review.id)
+        results = db.exec(
+            select(Review)
+            .where(Review.shop_id == shop_id)
+            .where(Review.livemode == livemode)
             .where(
                 or_(
                     Review.product_id == product_id,
@@ -102,12 +104,6 @@ def list_reviews(
             )
             .offset(skip)
             .limit(limit)
-        )
-        results = db.exec(
-            select(Review)
-            .where(Review.shop_id == shop_id)
-            .where(Review.livemode == livemode)
-            .where(Review.id.in_(subquery))
         )
         all_rows = list(results.all())
         reviews = pydantify_reviews(all_rows)

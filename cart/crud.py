@@ -136,14 +136,13 @@ def list_carts(
     skip: str = None,
     limit: int = 50,
 ) -> schema.CartList:
-    subquery = select(Cart.id).offset(skip).limit(limit)
-
     results = db.exec(
         select(Cart, CartItem)
         .where(Cart.shop_id == shop_id)
         .where(Cart.livemode == livemode)
-        .where(Cart.id.in_(subquery))
         .where(Cart.id == CartItem.cart_id)
+        .offset(skip)
+        .limit(limit)
     )
     all_rows = list(results.all())
     carts = pydantify_carts(all_rows)

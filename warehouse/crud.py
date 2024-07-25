@@ -115,13 +115,12 @@ def list_warehouses(
     skip: str = None,
     limit: int = 50,
 ) -> schema.WarehouseList:
-    subquery = select(Warehouse.id).offset(skip).limit(limit)
-
     results = db.exec(
         select(Warehouse, WarehouseAddress)
         .where(Warehouse.shop_id == shop_id)
         .where(Warehouse.livemode == livemode)
-        .where(Warehouse.id.in_(subquery))
+        .offset(skip)
+        .limit(limit)
         .where(Warehouse.id == WarehouseAddress.warehouse_id)
     )
     all_rows = list(results.all())

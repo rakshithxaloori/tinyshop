@@ -155,14 +155,13 @@ def list_variants(
     skip: str = None,
     limit: int = 50,
 ) -> schema.VariantList:
-    subquery = select(Variant.id).offset(skip).limit(limit)
-
     results = db.exec(
         select(Variant, PackageDimensions)
         .where(Variant.shop_id == shop_id)
         .where(Variant.livemode == livemode)
         .where(Variant.product_id == product_id)
-        .where(Variant.id.in_(subquery))
+        .offset(skip)
+        .limit(limit)
         .where(Variant.id == PackageDimensions.variant_id)
     )
     all_rows = list(results.all())

@@ -312,13 +312,12 @@ def list_discounts(
     skip: str = None,
     limit: int = 50,
 ) -> schema.DiscountList:
-    subquery = select(Discount.id).offset(skip).limit(limit)
-
     results = db.exec(
         select(Discount)
         .where(Discount.shop_id == shop_id)
         .where(Discount.livemode == livemode)
-        .where(Discount.id.in_(subquery))
+        .offset(skip)
+        .limit(limit)
     )
     all_rows = list(results.all())
     discounts = pydantify_discounts(all_rows)
