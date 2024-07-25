@@ -10,7 +10,7 @@ const PreviewNav = () => {
   const alertText = `Mode: ${mode === "desktop" ? "Desktop" : "Phone"}`
   if (!preview) return null;
   return (
-    <div className="bg-primary flex flex-row p-2 px-10" data-theme="light">
+    <div className="bg-primary flex flex-row p-2 px-10">
       {alertText}
       <div className="grow" />
       <label className="swap swap-rotate">
