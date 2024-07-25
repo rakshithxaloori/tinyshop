@@ -1,5 +1,6 @@
-import { TPriceUI, TProductUICard } from "@/types/product";
+import { IProductExternalDetails, TPriceUI, TProductUICard } from "@/types/product";
 import { tinyshop } from "./tinyshop"
+import { connectToDatabase } from "./mongo";
 
 // "prices": {
 //   "object": "list",
@@ -168,4 +169,13 @@ export const getProductReviews = async (product: any) => {
   const { id: productId } = product;
   const { data: reviews } = await tinyshop.reviews.list(productId);
   return reviews
+}
+
+export const getProductExternalDetails = async (brandName: string, productHandle: string): Promise<IProductExternalDetails | null> => {
+  const { db } = await connectToDatabase();
+  const collectionName = process.env.MONGO_COLLECTION_NAME as string;
+  const collection = db.collection(collectionName);
+
+  const productDetails = await collection.findOne({ brand: brandName, product_handle: productHandle });
+  return productDetails;
 }

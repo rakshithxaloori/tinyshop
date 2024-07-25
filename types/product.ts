@@ -24,3 +24,33 @@ export type TProductUICard = {
 }
 export type TProduct = TProductUICard
 
+export type TProductFAQ = {
+  question: string;
+  answer: string;
+}
+
+export type TProductFAQSection = {
+  title: string;
+  data: TProductFAQ[];
+}
+
+export type TProductTabs = {
+  title: string;
+  content: {
+    text: string;
+    image: {
+      src: string;
+      alt: string;
+    }
+  }
+}
+
+export interface IProductExternalDetails {
+  brand: string;
+  product_handle: string;
+  faq: TProductFAQSection | null;
+  tabs: {
+    data: TProductTabs[];
+  }
+}
+

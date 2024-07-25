@@ -22,13 +22,14 @@ const ImageAndTextTabContent = ({ image, content }: {
 }) => {
   const { src, alt } = image
   return (
-    <div className={cn("flex flex-row flex-1 p-4 h-full",
-      "rounded-md justify-between",
-    )}>
-      <div className="relative w-1/2 h-full ">
-        <Image src={src} alt={alt} fill />
+    <div
+      className="grid grid-cols-1 md:grid-cols-2 gap-y-[1rem] p-4 h-full"
+    >
+      <div className="relative w-1/2 h-full mx-auto ">
+        <Image src={src} alt={alt} fill className="rounded-xl" />
       </div>
-      <p>{content}</p>
+      <p
+      >{content}</p>
     </div>
   )
 }

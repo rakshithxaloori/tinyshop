@@ -7,42 +7,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { TProductFAQSection } from "@/types/product";
 
 interface FAQSectionProps {
-  product: any;
+  data: TProductFAQSection | null;
   className?: string;
 }
 
-const faqList = [
-  {
-    question: "What is the return policy?",
-    answer: "We have a 30-day return policy. If you are not satisfied with your purchase, you can return it within 30 days of purchase."
-  },
-  {
-    question: "How do I track my order?",
-    answer: "You can track your order by logging into your account and checking the order status. You will also receive an email with the tracking information once your order has been shipped."
-  },
-  {
-    question: "How do I contact customer service?",
-    answer: "You can contact customer service by emailing us at shop@email.com or calling us at 1-800-123-4567."
-  },
-  {
-    question: "Do you offer gift wrapping?",
-    answer: "Yes, we offer gift wrapping for an additional fee. You can select the gift wrapping option at checkout."
-  },
-  {
-    question: "Can I cancel my order?",
-    answer: "You can cancel your order within 24 hours of placing it. After 24 hours, the order cannot be canceled."
-  }
-]
-
-const faqSpec = {
-  title: "Frequency Asked Questions",
-  list: faqList
-}
-
-const FAQBuilder = ({ faqSpec }: { faqSpec: any }) => {
-  const { title, list } = faqSpec
+const FAQBuilder = (props: TProductFAQSection) => {
+  const { title, data: list } = props
   return (
     <div className="flex flex-col w-full h-full py-2">
       <h1 className="text-3xl font-bold text-center">{title}</h1>
@@ -70,15 +43,19 @@ const FAQBuilder = ({ faqSpec }: { faqSpec: any }) => {
 
 const FAQSection = (props: FAQSectionProps) => {
   const {
-    product,
+    data,
     className
   } = props;
+
+  if (!data || !data.data || data.data.length === 0) {
+    return null;
+  }
 
   return (
     <section id="pdp-faq-section" className={
       cn("h-full w-full my-lg", className)
     }>
-      <FAQBuilder faqSpec={faqSpec} />
+      <FAQBuilder title={data.title} data={data.data} />
     </section >
   )
 

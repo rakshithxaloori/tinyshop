@@ -4,15 +4,20 @@ import FAQSection from "@/sections/product-details-page/faq";
 import ReviewsSection from "@/sections/product-details-page/reviews";
 import RelatedSection from "@/sections/product-details-page/related";
 import BreadcrumbSection from "@/sections/product-details-page/breadcrumb";
+import { TProductFAQSection, TProductTabs } from "@/types/product";
 
 const ProductDetailsPage = ({
   product,
   collections,
-  reviews
+  reviews,
+  faqs,
+  tabs,
 }: {
   product: any;
   collections: any[];
   reviews: any[];
+  faqs: TProductFAQSection | null;
+  tabs: TProductTabs[] | null;
 }
 ) => {
   return (
@@ -26,11 +31,11 @@ const ProductDetailsPage = ({
           }
         }
       />
-      <TabsSection product={product} config={{}} />
-      <FAQSection product={product} />
+      <TabsSection data={tabs} />
+      <FAQSection data={faqs} />
       <ReviewsSection reviews={reviews}
         config={{
-          title: "Customer Reviews"
+          title: "What our customers say",
         }}
       />
       {/* <RelatedSection product={product} /> */}

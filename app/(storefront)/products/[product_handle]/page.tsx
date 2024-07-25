@@ -1,10 +1,12 @@
 import ProductDetailsPage from "@/components/pages/product-details-page"
-import { getAllProductHandles, getProductByHandle, getProductCollections, getProductReviews } from "@/lib/storefront";
+import { getAllProductHandles, getProductByHandle, getProductCollections, getProductExternalDetails, getProductReviews } from "@/lib/storefront";
 import { Suspense } from "react";
 import Loading from "./loading";
 
 export const experimental_ppr = true
 export const dynamicParams = true
+
+const brandName = process.env.NEXT_PUBLIC_SHOP_NAME! as string;
 
 export const generateStaticParams = async () => {
   const productHandles = await getAllProductHandles();
@@ -28,11 +30,19 @@ const ProductLandingPage = async (
 
   const reviews = await getProductReviews(product);
 
+  const externalDetails = await getProductExternalDetails(brandName, product_handle);
+
   return (
     <Suspense fallback={
       <Loading />
     }>
-      <ProductDetailsPage product={product} collections={collections} reviews={reviews} />
+      <ProductDetailsPage
+        product={product}
+        collections={collections}
+        reviews={reviews}
+        faqs={externalDetails?.faq || null}
+        tabs={externalDetails?.tabs?.data || []}
+      />
     </Suspense>
   );
 }

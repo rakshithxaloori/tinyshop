@@ -16,6 +16,8 @@ import { PizzaIcon } from "lucide-react";
 import Wishlist from "@/components/wishlist";
 import useWindowSize from "@/components/hooks/window-size";
 
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! || "Your Store";
+
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
@@ -97,7 +99,7 @@ export const BasicMobileHeader = ({
       <div className="flex max-w-7xl flex-col items-start gap-2 px-4">
         <section className="flex flex-1 w-full items-center gap-2">
           <Link id="basic-header-name" href="/">
-            <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold">Your Store</span>
+            <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold">{shopName}</span>
           </Link>
           <div className="mr-auto grow" />
           <section id="basic-header-wishlist" className="flex space-x-4">
@@ -133,7 +135,7 @@ export const BasicDesktopHeader = ({
       <div className={cn("sm:items-centerm mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 md:flex-nowrap lg:px-8",
         className)}>
         <Link id="basic-header-name" href="/">
-          <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold">Your Store</span>
+          <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold uppercase">{shopName}</span>
         </Link>
         <div id="basic-header-nav" className="sm:mr-auto ml-sm">
           <NavItems navItems={navItems} />
