@@ -62,7 +62,7 @@ const convertToVariantCreate = (
       },
     ],
     accept_zero_inventory_orders: variant.inventory_policy === "continue",
-    next_refill: new Date().toISOString(), // Placeholder for next refill date
+    next_refill: Math.floor(Date.now() / 1000), // Placeholder for next refill date
     package_dimensions: {
       height: 0,
       width: 0,
