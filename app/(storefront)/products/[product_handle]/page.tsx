@@ -1,6 +1,7 @@
 import ProductDetailsPage from "@/components/pages/product-details-page"
 import { getAllProductHandles, getProductByHandle, getProductCollections, getProductReviews } from "@/lib/storefront";
 import { Suspense } from "react";
+import Loading from "./loading";
 
 export const experimental_ppr = true
 export const dynamicParams = true
@@ -29,7 +30,7 @@ const ProductLandingPage = async (
 
   return (
     <Suspense fallback={
-      <div>Loading...</div>
+      <Loading />
     }>
       <ProductDetailsPage product={product} collections={collections} reviews={reviews} />
     </Suspense>
