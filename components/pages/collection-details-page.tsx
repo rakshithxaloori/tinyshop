@@ -13,9 +13,9 @@ const CollectionDetailsPage = ({
   const { data: all_products } = products_raw;
 
   return (
-    <div className="my-lg">
+    <div className="my-lg w-full">
       {/* Collection display banner */}
-      <div className="my-sm min-h-[15rem] relative w-full">
+      <div className="my-sm min-h-[15rem] relative w-full max-content">
         <Image
           src={image}
           alt={name}

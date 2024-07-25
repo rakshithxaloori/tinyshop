@@ -99,7 +99,8 @@ export const getHeaderNavItems = async () => {
       url: `/collections/${collection.handle}`,
       description: 'All products in this collection'
     }
-  });
+  }).slice(0, 4);
+  // slice navItems to 4 items
 
   return navItems;
 }
