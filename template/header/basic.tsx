@@ -88,10 +88,8 @@ const NavItems = ({ navItems }: { navItems: any[] }) => {
 export const BasicMobileHeader = ({
   className,
   navItems,
-  cartId
 }: {
   navItems: any[],
-  cartId: string | null;
   className?: string;
 }) => {
   return (
@@ -106,7 +104,7 @@ export const BasicMobileHeader = ({
             <Wishlist />
           </section>
           <section id="basic-header-cart" className="flex space-x-4">
-            <Cart {...{ cartId }} />
+            <Cart />
           </section>
         </section>
         <section id="basic-header-search" className="flex space-x-4 w-full mt-sm">
@@ -123,10 +121,8 @@ export const BasicMobileHeader = ({
 export const BasicDesktopHeader = ({
   className,
   navItems,
-  cartId
 }: {
   navItems: any[],
-  cartId: string | null;
   className?: string;
 }) => {
   const sticky = true;
@@ -152,7 +148,7 @@ export const BasicDesktopHeader = ({
             <Wishlist />
           </section>
           <section id="basic-header-cart" className="flex space-x-4">
-            <Cart {...{ cartId }} />
+            <Cart />
           </section>
         </section>
 
@@ -165,17 +161,15 @@ export const BasicDesktopHeader = ({
 const BasicHeader = ({
   className,
   navItems,
-  cartId
 }: {
   navItems: any[],
-  cartId: string | null;
   className?: string;
 }) => {
   const { isMobile } = useWindowSize();
   return isMobile ? (
-    <BasicMobileHeader {...{ className, navItems, cartId }} />
+    <BasicMobileHeader {...{ className, navItems }} />
   ) : (
-    <BasicDesktopHeader {...{ className, navItems, cartId }} />
+    <BasicDesktopHeader {...{ className, navItems }} />
   );
 }
 

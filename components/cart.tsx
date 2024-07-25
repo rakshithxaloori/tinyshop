@@ -93,11 +93,7 @@ const CartList = () => {
   )
 }
 
-const Cart = ({
-  cartId,
-}: {
-  cartId: string | null
-}) => {
+const Cart = () => {
   const cartStore = useCartStore()
   const { items, clearCart } = cartStore
 

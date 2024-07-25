@@ -6,6 +6,7 @@ const allowedImageHosts = [
   'images.unsplash.com',
   'cdn.shopify.com',
   'plus.unsplash.com',
+  'cosmix.in'
 ]
 
 const nextConfig = {

@@ -42,7 +42,7 @@ const ProductCard = ({ product,
   const cartItemChain = {
     priceId: prices.length > 0 ? prices[0].id : "N/A",
     productId: product.id,
-    variantId: product.default_variant.id
+    variantId: product?.default_variant?.id ?? "N/A"
   }
 
   const itemPrice = prices.length > 0 ?
