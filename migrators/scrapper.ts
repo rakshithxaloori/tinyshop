@@ -11,9 +11,9 @@ import { CustomerCreate } from "../interfaces/customer";
 import { FeedbackEnum, ReviewCreate } from "../interfaces/review";
 
 const secret_key = "sk_test_1234abcd";
-const apiHost = "https://3def-103-242-196-164.ngrok-free.app"
+// const apiHost = "https://a804-103-242-196-164.ngrok-free.app"
 
-const tinyshop = new Tinyshop(secret_key, apiHost);
+const tinyshop = new Tinyshop(secret_key);
 
 type TScrapperVariant = {
   extId: number;
@@ -188,14 +188,20 @@ const processCombinedJSON = async (productFilePath: string, collectionFilePath: 
     const progress = Math.floor((index + 1) / numProducts * 100);
     if (progress !== lastProgressProduct) {
       lastProgressProduct = progress;
-      console.log(`Creating product ${index + 1}/${numProducts} (${progress}%)`);
     }
 
-    const { name } = product;
+    const { name, variants } = product;
+    if (variants.length === 0) {
+      console.log(`Skipping product with no variants ${index + 1}/${numProducts} (${progress}%)`);
+      continue;
+    }
+
     // if (product.extId !== 7013875712093) {
-    //   console.log(`Skipping product ${name} with extId ${product.extId}`);
+    //   console.log(`Skipping product with extId ${product.extId} ${index + 1}/${numProducts} (${progress}%)`);
     //   continue;
     // }
+
+    console.log(`Creating product ${index + 1}/${numProducts} (${progress}%)`);
     const productCreate = convertToProductCreate(product);
     const createdProduct = await tinyshop.products.create(productCreate);
 
@@ -222,6 +228,11 @@ const processCombinedJSON = async (productFilePath: string, collectionFilePath: 
       const priceCreate = convertToPriceCreate(variant, createdVariant.id);
 
       const priceCreated = await tinyshop.prices.create(priceCreate);
+      // if (product.extId === 7013875712093) {
+      //   console.log("variant", variant);
+      //   console.log("priceCreate", priceCreate);
+      //   console.log("priceCreated", priceCreated);
+      // }
     }
 
     // Add reviews. Insert atmost 20 reviews for each product

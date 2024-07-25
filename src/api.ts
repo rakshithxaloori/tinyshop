@@ -19,6 +19,8 @@ const apiFetch = async (
   if (!response.ok) {
     console.log(url);
     console.log(fetchOptions.body);
+    const responseHeaders = Array.from(response.headers.entries());
+    console.log(responseHeaders);
     console.log(await response.json());
     throw new Error(`API request failed with status ${response.status}`);
   }
