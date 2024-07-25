@@ -21,7 +21,7 @@ interface VariantBase {
   active: boolean;
   options?: VariantOptionValue[] | null;
   accept_zero_inventory_orders: boolean;
-  next_refill: string; // Using string to represent datetime in ISO format
+  next_refill: number; // Timestamp
   package_dimensions?: PackageDimensions | null;
   is_default: boolean;
 }

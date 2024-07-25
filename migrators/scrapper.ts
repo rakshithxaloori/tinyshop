@@ -57,8 +57,8 @@ type TScrapperProduct = {
           src: string;
           alt: string;
         };
-      }
-    }
+      };
+    };
   }[];
 };
 
@@ -75,20 +75,20 @@ type TScrapperCollection = {
     default_variant_name: string; // NO-USE
     product_image: string;
   }[];
-}
+};
 
 type TScrapperCollectionData = TScrapperCollection[];
 
 type TScrapperCollectionJson = {
   brand: string;
   data: TScrapperCollectionData;
-}
+};
 
 // Function to read JSON data
 const readJSON = (filePath: string) => {
   const data = fs.readFileSync(filePath, "utf-8");
   return JSON.parse(data);
-}
+};
 
 // Function to convert TScrapperProduct to ProductCreate
 const convertToProductCreate = (product: TScrapperProduct): ProductCreate => {
@@ -100,19 +100,25 @@ const convertToProductCreate = (product: TScrapperProduct): ProductCreate => {
     shippable: product.variants.some((variant) => variant.available),
     preorder: false,
   };
-}
+};
 
 // Function to convert TScrapperProduct to OptionCreate
-const convertToOptionCreate = (option: any, productId: string): OptionCreate => {
+const convertToOptionCreate = (
+  option: any,
+  productId: string
+): OptionCreate => {
   return {
     name: option.name,
     values: option.values,
     product: productId,
   };
-}
+};
 
 // Function to convert TScrapperProduct to VariantCreate
-const convertToVariantCreate = (variant: TScrapperVariant, productId: string): VariantCreate => {
+const convertToVariantCreate = (
+  variant: TScrapperVariant,
+  productId: string
+): VariantCreate => {
   return {
     name: variant.name,
     description: null,
@@ -121,10 +127,10 @@ const convertToVariantCreate = (variant: TScrapperVariant, productId: string): V
       {
         name: variant.name,
         value: variant.name,
-      }
+      },
     ],
     accept_zero_inventory_orders: true,
-    next_refill: new Date().toISOString(),
+    next_refill: Math.floor(Date.now() / 1000),
     package_dimensions: {
       height: 0,
       width: 0,
@@ -133,11 +139,14 @@ const convertToVariantCreate = (variant: TScrapperVariant, productId: string): V
     },
     product: productId,
     is_default: false,
-  }
-}
+  };
+};
 
 // Function to convert TScrapperProduct to PriceCreate
-const convertToPriceCreate = (variant: TScrapperVariant, tinyshopVariantId: string): PriceCreate => {
+const convertToPriceCreate = (
+  variant: TScrapperVariant,
+  tinyshopVariantId: string
+): PriceCreate => {
   const price = Math.floor(variant.price);
   const compareAtPrice = Math.floor(variant.compareAtPrice);
   return {
@@ -145,27 +154,28 @@ const convertToPriceCreate = (variant: TScrapperVariant, tinyshopVariantId: stri
     currency: "INR",
     type: PriceTypeEnum.ONE_TIME,
     unit_amount: price,
-    unit_compare_amount: (compareAtPrice > price) ? compareAtPrice : null,
+    unit_compare_amount: compareAtPrice > price ? compareAtPrice : null,
     is_default: false,
     customer_unit_amount: {
       preset: 1,
     },
     recurring: null,
     variant: tinyshopVariantId,
-  }
-}
-
+  };
+};
 
 // Function to convert TScrapperCollection to CollectionCreate
-const convertToCollectionCreate = (collection: TScrapperCollection, tinyshopProducts: string[]): CollectionCreate => {
+const convertToCollectionCreate = (
+  collection: TScrapperCollection,
+  tinyshopProducts: string[]
+): CollectionCreate => {
   return {
     name: collection.name,
     image_web: collection.data[0].product_image,
     image_mobile: collection.data[0].product_image,
     products: tinyshopProducts,
-  }
-}
-
+  };
+};
 
 function getRandomFeedbackEnum(): FeedbackEnum {
   const enumValues = Object.values(FeedbackEnum);
@@ -173,7 +183,10 @@ function getRandomFeedbackEnum(): FeedbackEnum {
   return enumValues[randomIndex] as FeedbackEnum;
 }
 
-const processCombinedJSON = async (productFilePath: string, collectionFilePath: string) => {
+const processCombinedJSON = async (
+  productFilePath: string,
+  collectionFilePath: string
+) => {
   const productData: TScrapperProductData = readJSON(productFilePath);
   const activeProducts = productData;
   const numProducts = activeProducts.length;
@@ -185,14 +198,18 @@ const processCombinedJSON = async (productFilePath: string, collectionFilePath: 
   let emailRangeCount = 1;
   let lastProgressProduct = 0;
   for (const [index, product] of activeProducts.entries()) {
-    const progress = Math.floor((index + 1) / numProducts * 100);
+    const progress = Math.floor(((index + 1) / numProducts) * 100);
     if (progress !== lastProgressProduct) {
       lastProgressProduct = progress;
     }
 
     const { name, variants } = product;
     if (variants.length === 0) {
-      console.log(`Skipping product with no variants ${index + 1}/${numProducts} (${progress}%)`);
+      console.log(
+        `Skipping product with no variants ${
+          index + 1
+        }/${numProducts} (${progress}%)`
+      );
       continue;
     }
 
@@ -220,7 +237,8 @@ const processCombinedJSON = async (productFilePath: string, collectionFilePath: 
 
     for (const [index, variant] of product.variants.entries()) {
       const variantCreate = convertToVariantCreate(variant, createdProduct.id);
-      if (index === 0) { // make the first variant the default
+      if (index === 0) {
+        // make the first variant the default
         variantCreate.is_default = true;
       }
       const createdVariant = await tinyshop.variants.create(variantCreate);
@@ -244,9 +262,12 @@ const processCombinedJSON = async (productFilePath: string, collectionFilePath: 
         email: `customer${emailRangeCount}@email.com`,
         phone: phNumberRangeCount.toString().padStart(10, "0"),
       };
-      emailRangeCount++; phNumberRangeCount--;
+      emailRangeCount++;
+      phNumberRangeCount--;
 
-      const { id: customerId } = await tinyshop.customers.create(customerCreate);
+      const { id: customerId } = await tinyshop.customers.create(
+        customerCreate
+      );
 
       const reviewCreate: ReviewCreate = {
         product: createdProduct.id,
@@ -258,51 +279,73 @@ const processCombinedJSON = async (productFilePath: string, collectionFilePath: 
       };
       await tinyshop.reviews.create(reviewCreate);
     }
-
   }
 
-  console.log("Done creating products, options, variants, prices and reviews. Now creating collections.")
+  console.log(
+    "Done creating products, options, variants, prices and reviews. Now creating collections."
+  );
 
   // Add collections
-  const { data: collectionData }: TScrapperCollectionJson = readJSON(collectionFilePath);
+  const { data: collectionData }: TScrapperCollectionJson =
+    readJSON(collectionFilePath);
   let lastProgressCollection = 0;
   for (const [index, collection] of collectionData.entries()) {
-    const progress = Math.floor((index + 1) / collectionData.length * 100);
+    const progress = Math.floor(((index + 1) / collectionData.length) * 100);
     if (progress !== lastProgressCollection) {
       lastProgressCollection = progress;
     }
 
     if (collection.length === 0) {
-      console.log(`Skipping empty collection ${index + 1}/${collectionData.length} (${progress}%)`);
+      console.log(
+        `Skipping empty collection ${index + 1}/${
+          collectionData.length
+        } (${progress}%)`
+      );
       continue;
     }
 
-    const products = collection.data.map((product) => shopifyIdToTinyshopProductId[product.product_id]).filter((product) => product !== undefined);
+    const products = collection.data
+      .map((product) => shopifyIdToTinyshopProductId[product.product_id])
+      .filter((product) => product !== undefined);
     if (products.length === 0) {
-      console.log(`Skipping collection with no products ${index + 1}/${collectionData.length} (${progress}%)`);
+      console.log(
+        `Skipping collection with no products ${index + 1}/${
+          collectionData.length
+        } (${progress}%)`
+      );
       continue;
     }
 
-    console.log(`Creating collection ${index + 1}/${collectionData.length} (${progress}%)`);
+    console.log(
+      `Creating collection ${index + 1}/${collectionData.length} (${progress}%)`
+    );
 
-    const collectionCreate = convertToCollectionCreate(collection, products.filter((product: any) => product !== undefined));
+    const collectionCreate = convertToCollectionCreate(
+      collection,
+      products.filter((product: any) => product !== undefined)
+    );
     const collection_res = await tinyshop.collections.create(collectionCreate);
   }
   console.log("Done creating collections.");
-}
+};
 
 async function main() {
-  const productFilePath = path.join(__dirname, "store_data/cosmix_products.json");
-  const collectionFilePath = path.join(__dirname, "store_data/cosmix_collections.json");
+  const productFilePath = path.join(
+    __dirname,
+    "store_data/cosmix_products.json"
+  );
+  const collectionFilePath = path.join(
+    __dirname,
+    "store_data/cosmix_collections.json"
+  );
 
   await processCombinedJSON(productFilePath, collectionFilePath);
 }
 
-main().then(() => {
-  console.log("Migration completed successfully");
-}).catch((error) => {
-  console.error("Migration failed with error:", error);
-});
-
-
-
+main()
+  .then(() => {
+    console.log("Migration completed successfully");
+  })
+  .catch((error) => {
+    console.error("Migration failed with error:", error);
+  });
