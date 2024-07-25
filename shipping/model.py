@@ -18,8 +18,6 @@ class ShippingStatusEnum(str, enum.Enum):
 
 
 class Shipping(SqlBase):
-    __tablename__ = "shipping"
-
     id = Column(Text, primary_key=True, default_factory=get_primary_key("sh"))
     status = Column(Enum(ShippingStatusEnum))
 
@@ -32,8 +30,8 @@ class Shipping(SqlBase):
     shipping_address = relationship("ShippingAddress", back_populates="shipping")
 
 
-class ShippingLine(SqlBase):
-    __tablename__ = "shipping_line"
+class ShippingLineItem(SqlBase):
+    __tablename__ = "_shipping_line_item"
 
     id = Column(Text, primary_key=True, default_factory=get_primary_key("sl"))
     quantity = Column(Integer)

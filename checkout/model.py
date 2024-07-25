@@ -63,7 +63,7 @@ class Checkout(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
     discount_links: list["CheckoutDiscountLinks"] = Relationship(
-        back_populates="cart",
+        back_populates="checkout",
         sa_relationship_kwargs={"cascade": "delete"},
     )
 

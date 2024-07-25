@@ -19,8 +19,6 @@ if TYPE_CHECKING:
 
 
 class Customer(SqlBase, table=True):
-    __tablename__ = "customer"
-
     id: str = Field(primary_key=True, default_factory=get_primary_key("cus"))
     name: str = Field()
     email: str = Field(nullable=True)  # TODO unique=True?

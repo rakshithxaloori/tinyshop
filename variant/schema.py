@@ -5,9 +5,9 @@ from lib.object import ObjectType
 from price.schema import PriceList
 
 
-class VariantOptionValue(BaseModel):
-    name: str
-    value: str
+# class VariantOptionValue(BaseModel):
+#     name: str
+#     value: str
 
 
 class PackageDimensions(BaseModel):
@@ -21,7 +21,7 @@ class VariantBase(BaseModel):
     name: str
     description: str | None = None
     active: bool
-    options: list[VariantOptionValue] | None = None
+    options: list[str] | None = None
     accept_zero_inventory_orders: bool
     next_refill: int
     image: str | None = None
@@ -58,7 +58,7 @@ class VariantUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
     active: bool | None = None
-    options: list[VariantOptionValue] | None = None
+    options: list[str] | None = None
     accept_zero_inventory_orders: bool | None = None
     next_refill: int | None = None
     image: str | None = None

@@ -30,8 +30,6 @@ class CollectionMethodEnum(str, enum.Enum):
 
 
 class Subscription(SqlBase, table=True):
-    __tablename__ = "subscription"
-
     id: str = Field(primary_key=True, default_factory=get_primary_key("sub"))
     cancel_at_period_end: bool = Field()
     current_period_end: int = Field()
@@ -72,6 +70,9 @@ class Subscription(SqlBase, table=True):
     # TODO subscription invoice link table
     # invoices: list["Invoice"] = Relationship(back_populates="subscriptions")
     # latest_invoice - Maybe have a is_latest field in Invoice
+
+
+# TODO subscription address model
 
 
 class SubscriptionPendingInvoiceIntervalEnum(str, enum.Enum):

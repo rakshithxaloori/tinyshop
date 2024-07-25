@@ -144,14 +144,13 @@ def list_prices(
     skip: str = None,
     limit: int = 50,
 ) -> schema.PriceList:
-    subquery = select(Price.id).offset(skip).limit(limit)
-
     results = db.exec(
         select(Price, CustomerUnitAmount, Recurring)
         .where(Price.shop_id == shop_id)
         .where(Price.livemode == livemode)
         .where(Price.variant_id == variant_id)
-        .where(Price.id.in_(subquery))
+        .offset(skip)
+        .limit(limit)
         .outerjoin(CustomerUnitAmount, Price.customer_unit_amount)
         .outerjoin(Recurring, Price.recurring)
     )
