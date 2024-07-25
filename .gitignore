@@ -8,3 +8,5 @@ migrators/output
 test.ts
 
 dist/
+
+.env

@@ -1,17 +1,20 @@
 // Migrator for the custom scrapper shopify data
+import dotenv from 'dotenv';
+dotenv.config();
+
 import * as fs from "fs";
 import * as path from "path";
 import Tinyshop from "../src";
-import { ProductCreate } from "../interfaces/product";
+import { Product, ProductCreate } from "../interfaces/product";
 import { OptionCreate } from "../interfaces/option";
 import { VariantCreate } from "../interfaces/variant";
 import { PriceCreate, PriceTypeEnum } from "../interfaces/price";
 import { CollectionCreate } from "../interfaces/collection";
 import { CustomerCreate } from "../interfaces/customer";
 import { FeedbackEnum, ReviewCreate } from "../interfaces/review";
+import { MongoClient, Collection } from 'mongodb';
 
-const secret_key = "sk_test_1234abcd";
-// const apiHost = "https://a804-103-242-196-164.ngrok-free.app"
+const secret_key = process.env.SECRET_KEY as string;
 
 const tinyshop = new Tinyshop(secret_key);
 
@@ -83,6 +86,40 @@ type TScrapperCollectionJson = {
   brand: string;
   data: TScrapperCollectionData;
 };
+
+// MongoDB connection string from environment variables
+const MONGO_URI = process.env.MONGO_URI as string;
+const DB_NAME = process.env.DB_NAME as string;
+const COLLECTION_NAME = process.env.COLLECTION_NAME as string;
+
+let mongoClient: MongoClient;
+let productDetailsCollection: Collection;
+
+// Function to connect to MongoDB
+async function connectToMongoDB() {
+  try {
+    mongoClient = new MongoClient(MONGO_URI);
+    await mongoClient.connect();
+    console.log('Connected to MongoDB');
+    const db = mongoClient.db(DB_NAME);
+    productDetailsCollection = db.collection(COLLECTION_NAME);
+
+    // Create indexes
+    await productDetailsCollection.createIndex({ brand: 1 });
+    await productDetailsCollection.createIndex({ 'product_handle': 1 });
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+    throw error;
+  }
+}
+
+// Function to close MongoDB connection
+async function closeMongoDBConnection() {
+  if (mongoClient) {
+    await mongoClient.close();
+    console.log('Closed MongoDB connection');
+  }
+}
 
 // Function to read JSON data
 const readJSON = (filePath: string) => {
@@ -183,11 +220,38 @@ function getRandomFeedbackEnum(): FeedbackEnum {
   return enumValues[randomIndex] as FeedbackEnum;
 }
 
+// TODO: upload to product data JSON to mongoDB
+async function uploadProductDetailsToMongoDB(tinyshopProduct: Product, scrapperProduct: TScrapperProduct, brand: string) {
+  const productHandle = tinyshopProduct.handle;
+  const productDetails = {
+    brand,
+    product_handle: productHandle,
+    faq: scrapperProduct.faq,
+    tabs: scrapperProduct.tabs
+  };
+
+  try {
+    await productDetailsCollection.updateOne(
+      { brand, product_handle: productHandle },
+      { $set: productDetails },
+      { upsert: true }
+    );
+    console.log(`Uploaded details for product: ${tinyshopProduct.name}`);
+  } catch (error) {
+    console.error(`Error uploading details for product ${tinyshopProduct.name}:`, error);
+  }
+}
+
 const processCombinedJSON = async (
   productFilePath: string,
   collectionFilePath: string
 ) => {
   const productData: TScrapperProductData = readJSON(productFilePath);
+  const { brand, data: collectionData }: TScrapperCollectionJson =
+    readJSON(collectionFilePath);
+
+  await connectToMongoDB();
+
   const activeProducts = productData;
   const numProducts = activeProducts.length;
   // this is a map of product's extId -> tinyshop product id
@@ -206,23 +270,20 @@ const processCombinedJSON = async (
     const { name, variants } = product;
     if (variants.length === 0) {
       console.log(
-        `Skipping product with no variants ${
-          index + 1
+        `Skipping product with no variants ${index + 1
         }/${numProducts} (${progress}%)`
       );
       continue;
     }
-
-    // if (product.extId !== 7013875712093) {
-    //   console.log(`Skipping product with extId ${product.extId} ${index + 1}/${numProducts} (${progress}%)`);
-    //   continue;
-    // }
 
     console.log(`Creating product ${index + 1}/${numProducts} (${progress}%)`);
     const productCreate = convertToProductCreate(product);
     const createdProduct = await tinyshop.products.create(productCreate);
 
     shopifyIdToTinyshopProductId[String(product.extId)] = createdProduct.id;
+
+    // upload to mongoDB
+    await uploadProductDetailsToMongoDB(createdProduct, product, brand);
 
     // maintain a set for unique options
     const optionSet = new Set<string>();
@@ -246,11 +307,6 @@ const processCombinedJSON = async (
       const priceCreate = convertToPriceCreate(variant, createdVariant.id);
 
       const priceCreated = await tinyshop.prices.create(priceCreate);
-      // if (product.extId === 7013875712093) {
-      //   console.log("variant", variant);
-      //   console.log("priceCreate", priceCreate);
-      //   console.log("priceCreated", priceCreated);
-      // }
     }
 
     // Add reviews. Insert atmost 20 reviews for each product
@@ -286,8 +342,7 @@ const processCombinedJSON = async (
   );
 
   // Add collections
-  const { data: collectionData }: TScrapperCollectionJson =
-    readJSON(collectionFilePath);
+
   let lastProgressCollection = 0;
   for (const [index, collection] of collectionData.entries()) {
     const progress = Math.floor(((index + 1) / collectionData.length) * 100);
@@ -297,8 +352,7 @@ const processCombinedJSON = async (
 
     if (collection.length === 0) {
       console.log(
-        `Skipping empty collection ${index + 1}/${
-          collectionData.length
+        `Skipping empty collection ${index + 1}/${collectionData.length
         } (${progress}%)`
       );
       continue;
@@ -309,8 +363,7 @@ const processCombinedJSON = async (
       .filter((product) => product !== undefined);
     if (products.length === 0) {
       console.log(
-        `Skipping collection with no products ${index + 1}/${
-          collectionData.length
+        `Skipping collection with no products ${index + 1}/${collectionData.length
         } (${progress}%)`
       );
       continue;
@@ -327,6 +380,9 @@ const processCombinedJSON = async (
     const collection_res = await tinyshop.collections.create(collectionCreate);
   }
   console.log("Done creating collections.");
+
+  // Close MongoDB connection
+  await closeMongoDBConnection();
 };
 
 async function main() {
@@ -348,4 +404,8 @@ main()
   })
   .catch((error) => {
     console.error("Migration failed with error:", error);
+  })
+  .finally(async () => {
+    await closeMongoDBConnection();
+    process.exit(0);
   });
