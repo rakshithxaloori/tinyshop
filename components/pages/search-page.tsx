@@ -8,6 +8,7 @@ import ProductDisplayList from '../product-display-list';
 
 const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!;
 const algoliaSearchApiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY!;
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME!;
 
 let algoliaSearchClient: SearchClient = algoliasearch(algoliaAppId, algoliaSearchApiKey);
 
@@ -18,6 +19,7 @@ const SearchPageComponent = ({
 }) => {
   const { query: searchQuery } = useSearchQuery()
   const [searchResults, setSearchResults] = useState<any[]>([])
+  const filter = `shopId:${shopName}`
 
   useEffect(() => {
     // TODO: Add debounce to handleSearch
@@ -26,7 +28,9 @@ const SearchPageComponent = ({
         return
       }
       const index = algoliaSearchClient.initIndex(indexName)
-      const { hits } = await index.search(searchQuery)
+      const { hits } = await index.search(searchQuery, {
+        filters: filter
+      })
       return hits
     }
 
@@ -37,7 +41,7 @@ const SearchPageComponent = ({
       }
     }
     fetchData()
-  }, [searchQuery, indexName])
+  }, [searchQuery, indexName, filter])
 
   return (
     <div className='flex flex-1 flex-col w-full'>
