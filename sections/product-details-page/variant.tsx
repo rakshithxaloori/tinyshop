@@ -46,10 +46,12 @@ const ProductImage = ({
   )
 }
 
+const htmlToText = (htmlString: string) => {
+  return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+};
 
 const ProductDetails = ({ product, reviews }: { product: any; reviews: any[] }) => {
-  const randomText = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque odit doloribus voluptate dolorum numquam quos dolores a quisquam culpa, et rem reprehenderit placeat odio fugiat ab iure corrupti! Doloribus, et?"
-  const summary = product.summary || randomText
+  const summary = product.description ? htmlToText(product.description) : "";
   // compute avg rating
   const numReviews = reviews.length;
   const avgRating = numReviews === 0 ? 0 : reviews.reduce((acc, review) => acc + review.product_rating, 0) / numReviews;

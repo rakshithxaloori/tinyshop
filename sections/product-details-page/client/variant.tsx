@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 
 const NoSSRCartBagDisplay = dynamic(() => import("@/components/cart-bag-display"), {
   ssr: false,
-  loading: () => <div className="h-6 w-6 animate-spin border-2 rounded-full border-base-300 border-t-primary" />
+  loading: () => <div className="mx-2.5 ml-2 block h-6 w-6 animate-spin border-2 rounded-full border-base-300 border-t-primary" />
 });
 
 const SingleOptionComponent = ({

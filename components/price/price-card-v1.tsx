@@ -23,7 +23,7 @@ const PriceCard = (props: PriceCardProps) => {
           <CurrencyIconComponent currency={currency} />
           {price}
         </span>
-        <span className="text-2xl line-through text-primary-content/60">
+        <span className="text-2xl line-through text-base-content/60">
           <CurrencyString currency={currency} />
           {comparePrice}
         </span>
