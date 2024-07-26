@@ -31,6 +31,7 @@
     "react": "^19.0.0-beta-26f2496093-20240514",
     "react-dom": "^19.0.0-beta-26f2496093-20240514",
     "react-nice-avatar": "^1.5.0",
+    "server-only": "^0.0.1",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",
     "tailwind-scrollbar-hide": "^1.1.7",

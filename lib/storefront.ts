@@ -1,47 +1,7 @@
-import { IProductExternalDetails, TPriceUI, TProductUICard } from "@/types/product";
+import 'server-only'
+import { IProductExternalDetails } from "@/types/product";
 import { tinyshop } from "./tinyshop"
 import { connectToDatabase } from "./mongo";
-
-// "prices": {
-//   "object": "list",
-//   "url": "/v1/prices",
-//   "has_more": false,
-//   "data": [
-//       {
-//           "created": 1720446037,
-//           "updated": 1720446037,
-//           "livemode": false,
-//           "active": true,
-//           "currency": "INR",
-//           "type": "one_time",
-//           "unit_amount": 885,
-//           "unit_compare_amount": null,
-//           "default": false,
-//           "customer_unit_amount": {
-//               "maximum": null,
-//               "minimum": null,
-//               "preset": 1
-//           },
-//           "recurring": null,
-//           "id": "price_T8oVetF7tNcP2sTS5ZDHuv",
-//           "object": "price"
-//       }
-//   ]
-// }
-export const processPricesResponse = (prices: any): TPriceUI => {
-  // Prices are returned as an array of objects
-  // return the currency, the unit_amount and the unit_compare_amount
-  // if available
-  return prices.map((price: any) => {
-    const { currency, unit_amount, unit_compare_amount, id } = price;
-    return {
-      id,
-      currency,
-      unit_amount,
-      unit_compare_amount
-    }
-  });
-}
 
 export const getRootCollection = async () => {
   const rootCollectionImage = "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";

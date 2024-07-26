@@ -12,7 +12,6 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
 import PriceCard from "@/components/price/price-card-v1";
-import { processPricesResponse } from "@/lib/storefront";
 import { useRouter } from "next/navigation";
 import { TPriceUI, TProductUICard } from "@/types/product";
 import WishlistItem from "./wishlist";
@@ -24,6 +23,21 @@ const NoSSRCartBagDisplay = dynamic(() => import("../cart-bag-display"), {
   ssr: false,
   loading: () => <div className="h-6 w-6 animate-spin border-2 rounded-full border-base-300 border-t-primary" />
 });
+
+const processPricesResponse = (prices: any): TPriceUI => {
+  // Prices are returned as an array of objects
+  // return the currency, the unit_amount and the unit_compare_amount
+  // if available
+  return prices.map((price: any) => {
+    const { currency, unit_amount, unit_compare_amount, id } = price;
+    return {
+      id,
+      currency,
+      unit_amount,
+      unit_compare_amount
+    }
+  });
+}
 
 const ProductCard = ({ product,
   fallbackOptions
