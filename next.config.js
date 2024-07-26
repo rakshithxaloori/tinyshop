@@ -19,9 +19,12 @@ const nextConfig = {
       )
     )
   },
-  experimental: {
-    ppr: 'incremental',
-  },
+  // Error: ENOENT: no such file or directory, open '/vercel/path0/.next/server/app/index.rsc'
+  // https://github.com/orgs/vercel/discussions/6981
+  // Fix is to disable experimental ppr
+  // experimental: {
+  //   ppr: 'incremental',
+  // },
   transpilePackages: ["@tinyshop/tinyshop-node"]
 }
 
