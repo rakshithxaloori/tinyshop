@@ -35,3 +35,6 @@ def read_root():
 
 # curl http://127.0.0.1/v1/products \
 #   -u sk_test_tR3PYbcVNZZ796tH88S4VQ2u:
+
+# curl http://ts-dev-lb-399352269.us-east-1.elb.amazonaws.com   \
+#   -u sk_test_tR3PYbcVNZZ796tH88S4VQ2u:
