@@ -1,8 +1,13 @@
-"use server";
-
 import StorefrontLandingPage from "@/components/pages/storefront-landing-page";
 import { getCollectionList, getHeroSectionDetails, getProductList } from "@/lib/storefront";
+import { Metadata } from "next";
 import { Suspense } from "react";
+
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! as string || "tinyshop";
+export const metadata: Metadata = {
+  title: `Home - ${shopName}`,
+  description: `Welcome to ${shopName}`,
+};
 
 const LandingPage = async () => {
   const all_products_raw = await getProductList();

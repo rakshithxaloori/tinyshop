@@ -2,9 +2,34 @@ import ProductDetailsPage from "@/components/pages/product-details-page"
 import { getAllProductHandles, getProductByHandle, getProductCollections, getProductExternalDetails, getProductReviews } from "@/lib/storefront";
 import { Suspense } from "react";
 import Loading from "./loading";
+import { Metadata } from "next";
 
 export const experimental_ppr = true
 export const dynamicParams = true
+
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! as string || "tinyshop";
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { product_handle: string };
+}): Promise<Metadata> => {
+  const product_handle = decodeURIComponent(params.product_handle);
+  const raw_product = await getProductByHandle(product_handle);
+  if (!raw_product) {
+    return {
+      title: "Product not found",
+      description: "Product not found",
+    };
+  }
+  const product = raw_product.data[0];
+
+  const pageName = `${product.name} - ${shopName}`;
+  return {
+    title: pageName,
+    description: product.name,
+  };
+}
 
 const brandName = process.env.NEXT_PUBLIC_SHOP_NAME! as string;
 
