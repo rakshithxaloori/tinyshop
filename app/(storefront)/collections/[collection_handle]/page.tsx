@@ -3,7 +3,6 @@ import { getAllCollectionHandles, getCollectionByHandle } from "@/lib/storefront
 import { Metadata } from "next";
 import { Suspense } from "react";
 
-export const experimental_ppr = true
 export const dynamicParams = true
 
 const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! as string || "tinyshop";

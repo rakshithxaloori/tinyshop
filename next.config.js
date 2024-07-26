@@ -20,7 +20,7 @@ const nextConfig = {
     )
   },
   experimental: {
-    ppr: true,
+    ppr: 'incremental',
   },
   transpilePackages: ["@tinyshop/tinyshop-node"]
 }

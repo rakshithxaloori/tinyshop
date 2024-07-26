@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import Loading from "./loading";
 import { Metadata } from "next";
 
-export const experimental_ppr = true
 export const dynamicParams = true
 
 const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! as string || "tinyshop";
