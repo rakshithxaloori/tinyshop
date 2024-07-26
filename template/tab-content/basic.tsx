@@ -34,9 +34,27 @@ const ImageAndTextTabContent = ({ image, content }: {
   )
 }
 
+const ImageOnlyTabContent = ({ image }: {
+  image: {
+    src: string
+    alt: string
+  }
+}) => {
+  const { src, alt } = image
+  return (
+    <div
+      className="grid grid-cols-1  gap-y-[1rem] p-4 h-full w-full justify-center"
+    >
+      <div className="relative w-full h-full mx-auto max-w-screen md:max-w-md lg:max-w-lg">
+        <Image src={src} alt={alt} fill className="rounded-xl" />
+      </div>
+    </div>
+  )
+}
 
 
 export {
   TextOnlyTabContent,
+  ImageOnlyTabContent,
   ImageAndTextTabContent
 }

@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 interface TabsSectionProps {
   data: TProductTabs[] | null
 }
-import { ImageAndTextTabContent, TextOnlyTabContent } from "@/template/tab-content/basic";
+import { ImageAndTextTabContent, ImageOnlyTabContent, TextOnlyTabContent } from "@/template/tab-content/basic";
 import { TProductTabs } from "@/types/product";
 
 type TabType = "text" | "text-image" | "image"
@@ -141,7 +141,7 @@ const TabsBuilder = ({ data }: { data: TProductTabs[] }) => {
             <TextOnlyTabContent content={tab.content as string} />
           ) :
             tab.type === "image" ? (
-              <ImageAndTextTabContent image={tab.content as TabContent as any} content={""} />
+              <ImageOnlyTabContent image={tab.content as TabContent as any} />
             ) :
 
               (
