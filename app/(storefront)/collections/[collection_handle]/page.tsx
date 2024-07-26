@@ -22,6 +22,12 @@ export const generateMetadata = async ({
     };
   }
   const collection = raw_collection.data[0];
+  if (!collection) {
+    return {
+      title: "Collection not found",
+      description: "Collection not found",
+    };
+  }
 
   const pageName = `${collection.name} - ${shopName}`;
   return {
