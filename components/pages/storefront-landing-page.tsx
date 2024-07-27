@@ -32,7 +32,7 @@ const StorefrontLandingPage = ({
   }
 ) => {
   return (
-    <div className="overflow-y-auto scrollbar-hide">
+    <div className="overflow-y-auto scrollbar-hide px-lg md:px-xl">
       <Basic2DHeroSection
         config={heroSectionConfig}
       />

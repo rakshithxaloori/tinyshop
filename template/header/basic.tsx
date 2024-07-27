@@ -135,7 +135,7 @@ export const BasicDesktopHeader = ({
       <div className={cn("sm:items-centerm mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 md:flex-nowrap lg:px-8",
         className)}>
         <Link id="basic-header-name" href="/">
-          <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold uppercase">{shopName}</span>
+          <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold lowercase">{shopName}</span>
         </Link>
         <div id="basic-header-nav" className="sm:mr-auto ml-sm">
           <NavItems navItems={navItems} />

@@ -32,6 +32,14 @@ const config = {
         "xl": "3.5rem",
         "2xl": "5.5rem",
       },
+      padding: {
+        "xs": "0.25rem",
+        "sm": "0.5rem",
+        "md": "1rem",
+        "lg": "2rem",
+        "xl": "3.5rem",
+        "2xl": "5.5rem",
+      },
       animation: {
         buttonheartbeat: 'buttonheartbeat 1s infinite linear',
         'hover-pulse': 'hover-pulse 1s infinite ease-in-out',

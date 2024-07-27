@@ -44,7 +44,7 @@ const SearchPageComponent = ({
   }, [searchQuery, indexName, filter])
 
   return (
-    <div className='flex flex-1 flex-col w-full'>
+    <div className='flex flex-1 flex-col w-full px-lg md:px-xl'>
       <h1 className="mt-lg mb-sm text-3xl font-bold leading-none tracking-tight text-base-content">
         Search results for &quot;{searchQuery}&quot;
       </h1>

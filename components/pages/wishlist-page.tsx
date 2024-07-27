@@ -11,7 +11,7 @@ const WishlistPage = async ({
 
 
   return (
-    <div className="w-full h-full grid grid-rows-[auto_1fr]">
+    <div className="w-full h-full grid grid-rows-[auto_1fr] px-lg md:px-xl">
       <div className="flex flex-row w-full grow items-center justify-between mt-lg mb-sm">
         <h1
           className="text-3xl font-bold leading-none tracking-tight text-base-content">

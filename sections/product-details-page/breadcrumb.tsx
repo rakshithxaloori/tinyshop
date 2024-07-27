@@ -18,8 +18,6 @@ import {
 
 const BreadcrumbSection = ({ product, collections }: { product: any; collections: any[] }) => {
   const { name } = product;
-  // TODO: handle multiple collections
-
   const isMultipleCollections = collections.length > 1
   const isImplicitCollection = collections.length === 0
 

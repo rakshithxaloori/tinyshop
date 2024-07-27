@@ -1,5 +1,5 @@
 import ProductDetailsPage from "@/components/pages/product-details-page"
-import { getAllProductHandles, getProductByHandle, getProductCollections, getProductExternalDetails, getProductReviews } from "@/lib/storefront";
+import { getAllProductHandles, getProductByHandle, getProductCollections, getProductDetailsPageTheme, getProductExternalDetails, getProductReviews } from "@/lib/storefront";
 import { Suspense } from "react";
 import Loading from "./loading";
 import { Metadata } from "next";
@@ -55,7 +55,6 @@ const ProductLandingPage = async (
   const reviews = await getProductReviews(product);
 
   const externalDetails = await getProductExternalDetails(brandName, product_handle);
-
   return (
     <Suspense fallback={
       <Loading />

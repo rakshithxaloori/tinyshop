@@ -1,19 +1,11 @@
 import ClientSideProvider from "../providers";
-import StorefrontLayout from "@/components/layout/storefront";
 
-const StorefrontTemplate = async (
-  { children }: Readonly<{
-    children: React.ReactNode;
-  }>,
-) => {
+const RootStorefrontLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ClientSideProvider>
-      <StorefrontLayout>
-        {children}
-      </StorefrontLayout>
-
+      {children}
     </ClientSideProvider>
   );
 }
 
-export default StorefrontTemplate;
+export default RootStorefrontLayout;

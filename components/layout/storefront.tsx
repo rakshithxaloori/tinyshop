@@ -3,13 +3,22 @@ import { cn } from "@/lib/utils";
 import BasicFooter from "@/template/footer/basic";
 import BasicHeader from "@/template/header/basic";
 
-const StorefrontLayout = async ({ children }: { children: React.ReactNode }) => {
+const StorefrontLayout = async ({
+  children,
+  theme
+}: {
+  children: React.ReactNode,
+  theme?: string
+}) => {
   const navItems = await getHeaderNavItems();
+
   return (
     <div className={cn("flex flex-col h-full min-h-screen w-full bg-base-100 text-base-content scrollbar-hide",)}
+      // inject theme into the data-theme attribute only if it exists
+      {...(theme ? { 'data-theme': theme } : {})}
     >
       <BasicHeader {...{ navItems }} />
-      <div className="flex flex-1 justify-center mx-lg md:mx-xl">
+      <div className="flex flex-1 justify-center">
         {children}
       </div>
       <BasicFooter />

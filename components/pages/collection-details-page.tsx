@@ -13,7 +13,7 @@ const CollectionDetailsPage = ({
   const { data: all_products } = products_raw;
 
   return (
-    <div className="my-lg w-full">
+    <div className="my-lg w-full px-lg md:px-xl">
       {/* Collection display banner */}
       <div className="my-sm min-h-[15rem] relative w-full max-content">
         <Image

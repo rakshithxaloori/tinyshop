@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="" data-theme="retro">
+    <html lang="en" className="" data-theme="lemonade">
       <body className={inter.className}>
         <Transitions>
           <Animate>

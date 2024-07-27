@@ -2,6 +2,7 @@ import 'server-only'
 import { IProductExternalDetails } from "@/types/product";
 import { tinyshop } from "./tinyshop"
 import { connectToDatabase } from "./mongo";
+import { daisyUIThemes } from './const';
 
 export const getRootCollection = async () => {
   const rootCollectionImage = "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -138,4 +139,9 @@ export const getProductExternalDetails = async (brandName: string, productHandle
 
   const productDetails = await collection.findOne({ brand: brandName, product_handle: productHandle });
   return productDetails;
+}
+
+export const getProductDetailsPageTheme = async (brandName: string, productHandle: string): Promise<string> => {
+  const theme = daisyUIThemes[Math.floor(Math.random() * daisyUIThemes.length)];
+  return theme
 }

@@ -21,7 +21,7 @@ const ProductDetailsPage = ({
 }
 ) => {
   return (
-    <div className="flex flex-col flex-1 h-full scroll-mt-[100vh]">
+    <div className="flex flex-col flex-1 h-full scroll-mt-[100vh] px-lg md:px-xl">
       <BreadcrumbSection product={product} collections={collections} />
       <ProductVariantSection product={product}
         reviews={reviews}
