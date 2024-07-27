@@ -18,6 +18,7 @@ import WishlistItem from "./wishlist";
 import useCartStore from "@/store/cart";
 import dynamic from "next/dynamic";
 import { ShoppingBagIcon, ShoppingCartIcon } from "lucide-react";
+import { useSearchQuery } from "../hooks/search";
 
 const NoSSRCartBagDisplay = dynamic(() => import("../cart-bag-display"), {
   ssr: false,
@@ -52,6 +53,7 @@ const ProductCard = ({ product,
   const cartStore = useCartStore();
   const { addItem, getProduct } = cartStore;
   const cartProductQuantity = getProduct(product.id).quantity ?? 0;
+  const { clearQuery } = useSearchQuery();
 
   const cartItemChain = {
     priceId: prices.length > 0 ? prices[0].id : "N/A",
@@ -80,7 +82,9 @@ const ProductCard = ({ product,
   };
 
   const handleLinkClick = () => {
+
     router.push(`/products/${product.handle}`);
+    clearQuery();
   };
 
   return (
