@@ -8,7 +8,7 @@ import Tinyshop from "../src";
 import { Product, ProductCreate } from "../interfaces/product";
 import { OptionCreate } from "../interfaces/option";
 import { VariantCreate } from "../interfaces/variant";
-import { PriceCreate, PriceTypeEnum } from "../interfaces/price";
+import { PriceCreate, PriceTypeEnum, RecurringTypeEnum } from "../interfaces/price";
 import { CollectionCreate } from "../interfaces/collection";
 import { CustomerCreate } from "../interfaces/customer";
 import { FeedbackEnum, ReviewCreate } from "../interfaces/review";
@@ -201,6 +201,30 @@ const convertToPriceCreate = (
   };
 };
 
+const convertToRecurringPriceCreate = (
+  variant: TScrapperVariant,
+  tinyshopVariantId: string
+): PriceCreate => {
+  const price = Math.floor(variant.price * 0.8);
+  const compareAtPrice = Math.floor(variant.compareAtPrice);
+  return {
+    active: variant.available,
+    currency: "INR",
+    type: PriceTypeEnum.SUBSCRIPTION,
+    unit_amount: price,
+    unit_compare_amount: null,
+    is_default: false,
+    customer_unit_amount: {
+      preset: 1,
+    },
+    recurring: {
+      interval: RecurringTypeEnum.MONTH,
+      interval_count: 1,
+    },
+    variant: tinyshopVariantId,
+  };
+}
+
 // Function to convert TScrapperCollection to CollectionCreate
 const convertToCollectionCreate = (
   collection: TScrapperCollection,
@@ -307,6 +331,9 @@ const processCombinedJSON = async (
       const priceCreate = convertToPriceCreate(variant, createdVariant.id);
 
       const priceCreated = await tinyshop.prices.create(priceCreate);
+
+      const recurringPriceCreate = convertToRecurringPriceCreate(variant, createdVariant.id);
+      await tinyshop.prices.create(recurringPriceCreate);
     }
 
     // Add reviews. Insert atmost 20 reviews for each product
@@ -317,6 +344,7 @@ const processCombinedJSON = async (
         name: review.name,
         email: `customer${emailRangeCount}@email.com`,
         phone: phNumberRangeCount.toString().padStart(10, "0"),
+        send_otp: true,
       };
       emailRangeCount++;
       phNumberRangeCount--;
@@ -324,6 +352,10 @@ const processCombinedJSON = async (
       const { id: customerId } = await tinyshop.customers.create(
         customerCreate
       );
+
+      const _ = await tinyshop.customers.update(customerId, {
+        otp: "000000",
+      });
 
       const reviewCreate: ReviewCreate = {
         product: createdProduct.id,
