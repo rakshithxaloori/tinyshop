@@ -6,12 +6,16 @@ type SearchQueryContext = {
   query: string | null;
   setQuery: (query: string | null) => void;
   clearQuery: () => void;
+  history: string | null;
+  setHistory: (history: string | null) => void;
 };
 
 const SearchQueryContext = createContext<SearchQueryContext>({
   query: null,
+  history: null,
   setQuery: () => { },
   clearQuery: () => { },
+  setHistory: () => { },
 });
 
 export const useSearchQuery = () => {
@@ -26,11 +30,12 @@ export const useSearchQuery = () => {
 
 const SearchQueryProvider = ({ children }: { children: React.ReactNode }) => {
   const [query, setQuery] = useState<string | null>(null);
+  const [history, setHistory] = useState<string | null>(null);
 
   const clearQuery = () => setQuery(null);
 
   return (
-    <SearchQueryContext.Provider value={{ query, setQuery, clearQuery }}>
+    <SearchQueryContext.Provider value={{ query, history, setQuery, clearQuery, setHistory }}>
       {children}
     </SearchQueryContext.Provider>
   );

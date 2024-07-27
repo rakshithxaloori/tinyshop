@@ -4,6 +4,7 @@ import { Inter, } from "next/font/google";
 import "./globals.css";
 import Transitions, { Animate } from "@/components/transitions";
 import { Toaster } from "@/components/ui/sonner";
+import ClientSideProvider from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <Transitions>
           <Animate>
-            {children}
+            <ClientSideProvider>
+              {children}
+            </ClientSideProvider>
           </Animate>
         </Transitions>
         <Toaster />

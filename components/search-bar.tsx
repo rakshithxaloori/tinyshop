@@ -1,29 +1,26 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useSearchQuery } from "./hooks/search";
-
 
 const SearchBar = () => {
   const pathname = usePathname();
-  const { query, setQuery } = useSearchQuery();
-  const historyPath = useRef("")
+  const { query, setQuery, history, setHistory } = useSearchQuery();
   const router = useRouter();
-
   useEffect(() => {
     if (query) {
       router.push(`/search?q=${query}`)
-    } else if (query !== null) {
-      router.push(historyPath.current)
+    } else if (query !== null && history) {
+      router.push(history)
     }
-  }, [query, router])
+  }, [query, router, history])
 
   const handleSearchInput = (e: any) => {
     e.preventDefault();
     // search non-search pages as history
     if (pathname !== "/search") {
-      historyPath.current = pathname;
+      setHistory(pathname)
     }
     setQuery(e.target.value);
   }
