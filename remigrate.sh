@@ -7,4 +7,4 @@ psql "postgresql://postgres:postgres@localhost:5432" -c "create database tinysho
 alembic revision --autogenerate
 alembic upgrade head
 PYTHONPATH=. python3 local/local_foundation.py
-PYTHONPATH=. python3 local/local_customer.py
+# PYTHONPATH=. python3 local/local_customer.py

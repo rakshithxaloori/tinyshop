@@ -7,18 +7,20 @@ from customer_address.schema import CustomerAddressList
 
 class CustomerBase(BaseModel):
     # Create request's insensitive fields
-    name: str
+    name: str | None = None
 
 
 class CustomerCreate(CustomerBase):
     # Create request's sensitive fields
     email: str | None = None
     phone: str
+    send_otp: bool = False
 
 
 class Customer(CustomerBase, PyBaseModel):
     id: str
     object: str = ObjectType.CUSTOMER
+    is_verified: bool
     email: str | None = None
     phone: str | None = None
     addresses: CustomerAddressList | None = None
@@ -35,6 +37,8 @@ class CustomerUpdate(BaseModel):
     name: str | None = None
     email: str | None = None
     phone: str | None = None
+    otp: str | None = None
+    send_otp: bool = False
 
 
 class CustomerDelete(BaseModel):

@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class User(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("user"))
-    name: str = Field()
+    name: str = Field(nullable=True)
     email: str = Field(nullable=True)  # TODO unique=True?
     phone: str = Field(unique=True)
 

@@ -1,9 +1,10 @@
+from datetime import datetime, timedelta
 from sqlmodel import Session, select
 
 from user.model import User
 from customer.model import Customer
 from customer import schema
-from customer.utils import pydantify_customers
+from customer.utils import pydantify_customers, send_otp
 from lib.session import update_instance
 
 
@@ -32,10 +33,19 @@ def create_customer(
             user = new_user
 
         # Create a customer
+        new_otp = None
+        if customer.send_otp:
+            new_otp = send_otp(phone)
         new_customer = Customer(
             shop_id=shop_id,
             livemode=livemode,
             user_id=user.id,
+            otp=new_otp,
+            expires_at=(
+                int((datetime.now() + timedelta(minutes=10)).timestamp())
+                if customer.send_otp
+                else None
+            ),
         )
         db.add(new_customer)
         db.commit()
@@ -56,7 +66,7 @@ def update_customer(
     db: Session,
 ) -> schema.Customer | None:
     try:
-        data = customer.model_dump(exclude_none=True)
+        data = customer.model_dump(exclude_none=True, exclude={"send_otp", "otp"})
 
         statement = (
             select(Customer)
@@ -67,7 +77,39 @@ def update_customer(
         result = db.exec(statement)
         cus_ins = result.one()
 
-        update_instance(db, data, cus_ins.user)
+        if customer.otp:
+            # Verify the OTP
+            if (
+                customer.otp == cus_ins.otp
+                and int(datetime.now().timestamp()) < cus_ins.expires_at
+            ):
+                cus_ins.is_verified = True
+            else:
+                # TODO throw exception
+                pass
+        elif customer.send_otp:
+            cus_ins.is_verified = False
+            new_otp = send_otp(cus_ins.user.phone)
+            cus_ins.otp = new_otp
+            cus_ins.expires_at = (
+                int((datetime.now() + timedelta(minutes=10)).timestamp())
+                if customer.send_otp
+                else None
+            )
+        else:
+            update_instance(db, data, cus_ins.user)
+            if customer.phone:
+                cus_ins.is_verified = False
+                new_otp = None
+                if customer.send_otp:
+                    new_otp = send_otp(customer.phone)
+                cus_ins.otp = new_otp
+                cus_ins.expires_at = (
+                    int((datetime.now() + timedelta(minutes=10)).timestamp())
+                    if customer.send_otp
+                    else None
+                )
+
         db.commit()
         db.refresh(cus_ins)
         py_customers = pydantify_customers([cus_ins])

@@ -20,6 +20,10 @@ if TYPE_CHECKING:
 
 class Customer(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("cus"))
+    otp: str = Field(nullable=True)
+    expires_at: int = Field(nullable=True)
+    is_verified: bool = Field(default=False)
+
     user_id: str = Field(foreign_key="user.id")
     user: "User" = Relationship(back_populates="customers")
     shop_id: str = Field(foreign_key="shop.id")
