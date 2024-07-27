@@ -35,7 +35,7 @@ def create_customer(
         # Create a customer
         new_otp = None
         if customer.send_otp:
-            new_otp = send_otp(phone)
+            new_otp = send_otp(livemode, phone)
         new_customer = Customer(
             shop_id=shop_id,
             livemode=livemode,
@@ -89,7 +89,7 @@ def update_customer(
                 pass
         elif customer.send_otp and not customer.phone:
             cus_ins.is_verified = False
-            new_otp = send_otp(cus_ins.user.phone)
+            new_otp = send_otp(livemode, cus_ins.user.phone)
             cus_ins.otp = new_otp
             cus_ins.expires_at = (
                 int((datetime.now() + timedelta(minutes=10)).timestamp())
@@ -102,7 +102,7 @@ def update_customer(
                 cus_ins.is_verified = False
                 new_otp = None
                 if customer.send_otp:
-                    new_otp = send_otp(customer.phone)
+                    new_otp = send_otp(livemode, customer.phone)
                 cus_ins.otp = new_otp
                 cus_ins.expires_at = (
                     int((datetime.now() + timedelta(minutes=10)).timestamp())

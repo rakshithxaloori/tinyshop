@@ -40,7 +40,9 @@ def pydantify_customers(rows: list[Customer]) -> list[schema.Customer]:
     return customers
 
 
-def send_otp(phone: str) -> str:
+def send_otp(livemode: bool, phone: str) -> str:
+    if not livemode:
+        return "000000"
     random_number = "".join([str(random.randint(0, 9)) for _ in range(6)])
     print("----------------------------")
     # TODO delete this
