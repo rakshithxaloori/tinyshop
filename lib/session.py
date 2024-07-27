@@ -1,14 +1,10 @@
 from typing import Any
+from fastapi import Request
 from sqlmodel import Session
-from database import engine
 
 
-def get_session():
-    db = Session(engine)
-    try:
-        yield db
-    finally:
-        db.close()
+def get_session(request: Request):
+    return request.state.db
 
 
 def update_instance(

@@ -1,14 +1,16 @@
 import base64
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, Session, select
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
 from lib.error import TinyshopException
+from database import engine
 
 import user.model as user_models
 import user_address.model as user_address_models
 import shop.model as shop_models
+
 
 import customer.model as customer_models
 
@@ -116,23 +118,34 @@ async def get_credentials(request: Request, call_next):
         )
 
     username, _ = base64.b64decode(data).decode().split(":", 1)
-    # TODO check secret key and get shop id
-    secret_key = "sk_test_1234abcd"
-    if username != secret_key:
-        return JSONResponse(
-            content={"message": "Secret key is invalid"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
     livemode = username.split("_")[1]
     if livemode not in ["live", "test"]:
         return JSONResponse(
             content={"message": "Secret key is invalid"},
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
-    request.state.shop_id = "shop_JMTkHkTynMFuD2VUZUy74a"
-    request.state.livemode = livemode == "live"
-    response = await call_next(request)
-    return response
+    livemode = livemode == "live"
+
+    with Session(engine) as db:
+        try:
+            request.state.db = db
+
+            key_res = request.state.db.exec(
+                select(shop_models.SecretKey)
+                .where(shop_models.SecretKey.livemode == livemode)
+                .where(shop_models.SecretKey.secret_key == username)
+            )
+            key_ins = key_res.one()
+            request.state.shop_id = key_ins.shop_id
+            request.state.livemode = livemode
+            response = await call_next(request)
+            return response
+        except Exception as e:
+            print("EXCEPTION get_credentials:", e)
+            return JSONResponse(
+                content={"message": "Secret key is invalid"},
+                status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            )
 
 
 app.include_router(customers_router)

@@ -1,3 +1,5 @@
+import random
+import string
 from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship
 
@@ -33,6 +35,11 @@ if TYPE_CHECKING:
 class Shop(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("shop"))
     name: str = Field(nullable=True)
+
+    secret_keys: list["SecretKey"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
 
     customers: list["Customer"] = Relationship(
         back_populates="shop",
@@ -98,3 +105,24 @@ class Shop(SqlBase, table=True):
         back_populates="shop",
         sa_relationship_kwargs={"cascade": "delete"},
     )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.secret_keys.append(SecretKey(shop_id=self.id, livemode=self.livemode))
+
+
+class SecretKey(SqlBase, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("key"))
+    secret_key: str = Field()
+
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="secret_keys")
+
+    def __init__(self, shop_id: str, livemode: bool, **kwargs):
+        super().__init__(livemode=livemode, **kwargs)
+        self.shop_id = shop_id
+        prefix = "sk_live_" if livemode else "sk_test_"
+        random_string = "".join(
+            random.choices(string.ascii_letters + string.digits, k=24)
+        )
+        self.secret_key = f"{prefix}{random_string}"

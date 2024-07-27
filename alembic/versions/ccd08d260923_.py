@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 6d6da716e339
+Revision ID: ccd08d260923
 Revises: 
-Create Date: 2024-07-27 15:43:32.726464
+Create Date: 2024-07-27 22:40:11.835839
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '6d6da716e339'
+revision: str = 'ccd08d260923'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -112,6 +112,16 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('shop_id', 'handle', name='unique_product_handle_shop')
+    )
+    op.create_table('secretkey',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('secret_key', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_address',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -611,6 +621,7 @@ def downgrade() -> None:
     op.drop_table('_discount_config')
     op.drop_table('warehouse')
     op.drop_table('user_address')
+    op.drop_table('secretkey')
     op.drop_table('product')
     op.drop_table('discount')
     op.drop_table('customer')
