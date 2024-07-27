@@ -87,7 +87,7 @@ def update_customer(
             else:
                 # TODO throw exception
                 pass
-        elif customer.send_otp:
+        elif customer.send_otp and not customer.phone:
             cus_ins.is_verified = False
             new_otp = send_otp(cus_ins.user.phone)
             cus_ins.otp = new_otp
