@@ -1,6 +1,6 @@
 from review.model import Review
 from review import schema
-from customer import schema as cus_schema
+from customer.utils import pydantify_customers
 
 
 def pydantify_reviews(rows: list[Review]) -> list[schema.Review]:
@@ -10,9 +10,7 @@ def pydantify_reviews(rows: list[Review]) -> list[schema.Review]:
         reviews.append(
             schema.Review(
                 **rev.model_dump(exclude={"customer"}),
-                customer=cus_schema.Customer(
-                    **cus.model_dump(exclude={"phone", "email"}),
-                ),
+                customer=pydantify_customers([cus]).pop(),
             )
         )
     return reviews
