@@ -24,10 +24,11 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 
 
+from user.model import *
+from user_address.model import *
 from shop.model import *
 
 from customer.model import *
-from customer_address.model import *
 
 from product.model import *
 from option.model import *

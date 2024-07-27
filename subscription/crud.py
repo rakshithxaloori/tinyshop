@@ -8,7 +8,7 @@ from subscription.model import (
     SubscriptionStatusEnum,
 )
 from customer.model import Customer
-from customer_address.model import CustomerAddress
+from user_address.model import UserAddress
 from price.model import Price
 from subscription.utils import pydantify_subscriptions
 from lib.session import update_instance
@@ -40,9 +40,9 @@ def create_subscription(
         customer_id = customer_res.one()
 
         customer_addr_res = db.exec(
-            select(CustomerAddress.id)
-            .where(CustomerAddress.livemode == livemode)
-            .where(CustomerAddress.id == subscription.customer_address)
+            select(UserAddress.id)
+            .where(UserAddress.livemode == livemode)
+            .where(UserAddress.id == subscription.customer_address)
         )
         cus_addr_id = customer_addr_res.one()
 
@@ -149,9 +149,9 @@ def update_subscription(
 
         if subscription.customer_address:
             customer_addr_res = db.exec(
-                select(CustomerAddress.id)
-                .where(CustomerAddress.livemode == livemode)
-                .where(CustomerAddress.id == subscription.customer_address)
+                select(UserAddress.id)
+                .where(UserAddress.livemode == livemode)
+                .where(UserAddress.id == subscription.customer_address)
             )
             cus_addr_id = customer_addr_res.one()
             sub_ins.customer_address_id = cus_addr_id

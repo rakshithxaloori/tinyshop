@@ -8,7 +8,7 @@ from lib.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
-    from customer_address.model import CustomerAddress
+    from user.model import User
     from review.model import Review
     from lib.many_to_many_tables import DiscountCustomerLink
 
@@ -20,16 +20,11 @@ if TYPE_CHECKING:
 
 class Customer(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("cus"))
-    name: str = Field()
-    email: str = Field(nullable=True)  # TODO unique=True?
-    phone: str = Field(unique=True)
-
+    user_id: str = Field(foreign_key="user.id")
+    user: "User" = Relationship(back_populates="customers")
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="customers")
-    addresses: list["CustomerAddress"] = Relationship(
-        back_populates="customer",
-        sa_relationship_kwargs={"cascade": "delete"},
-    )
+
     reviews: list["Review"] = Relationship(
         back_populates="customer",
         sa_relationship_kwargs={"cascade": "delete"},
@@ -51,3 +46,5 @@ class Customer(SqlBase, table=True):
         back_populates="customer",
         sa_relationship_kwargs={"cascade": "delete"},
     )
+
+    # TODO unique, shop id, user id

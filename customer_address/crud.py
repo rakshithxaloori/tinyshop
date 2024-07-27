@@ -1,7 +1,7 @@
 from sqlmodel import Session, select
 
+from user_address.model import UserAddress
 from customer.model import Customer
-from customer_address.model import CustomerAddress
 from customer_address import schema
 from customer_address.utils import pydantify_addresses
 from lib.session import update_instance
@@ -23,16 +23,15 @@ def create_address(
         customer = cus_result.one()
         address_data = address.model_dump(exclude={"customer"})
         # Create the address
-        new_address = CustomerAddress(
-            shop_id=shop_id,
+        new_user_addresss = UserAddress(
             livemode=livemode,
-            customer_id=customer.id,
+            user_id=customer.user.id,
             **address_data,
         )
-        db.add(new_address)
+        db.add(new_user_addresss)
         db.commit()
-        db.refresh(new_address)
-        py_addresses = pydantify_addresses([new_address])
+        db.refresh(new_user_addresss)
+        py_addresses = pydantify_addresses([new_user_addresss])
         return py_addresses.pop()
     except Exception as e:
         print("EXCEPTION create_address:", e)
@@ -47,12 +46,13 @@ def update_address(
     db: Session,
 ) -> schema.CustomerAddress | None:
     try:
+        # TODO check if the shop has access to this customer
         data = address.model_dump(exclude_none=True)
 
         statement = (
-            select(CustomerAddress)
-            .where(CustomerAddress.livemode == livemode)
-            .where(CustomerAddress.id == address_id)
+            select(UserAddress)
+            .where(UserAddress.livemode == livemode)
+            .where(UserAddress.id == address_id)
         )
         result = db.exec(statement)
         addr_ins = result.one()
@@ -74,10 +74,11 @@ def retrieve_address(
     db: Session,
 ) -> schema.CustomerAddress | None:
     try:
+        # TODO check if the shop has access to this customer
         results = db.exec(
-            select(CustomerAddress)
-            .where(CustomerAddress.livemode == livemode)
-            .where(CustomerAddress.id == address_id)
+            select(UserAddress)
+            .where(UserAddress.livemode == livemode)
+            .where(UserAddress.id == address_id)
         )
         address = results.one()
         py_addresses = pydantify_addresses([address])
@@ -96,10 +97,17 @@ def list_addresses(
     limit: int = 50,
 ) -> schema.CustomerAddressList:
     # TODO skip and limit
+    cus_res = db.exec(
+        select(Customer)
+        .where(Customer.shop_id == shop_id)
+        .where(Customer.livemode == livemode)
+        .where(Customer.id == customer_id)
+    )
+    customer = cus_res.one()
     results = db.exec(
-        select(CustomerAddress)
-        .where(CustomerAddress.livemode == livemode)
-        .where(CustomerAddress.customer_id == customer_id)
+        select(UserAddress)
+        .where(UserAddress.livemode == livemode)
+        .where(UserAddress.user_id == customer.user_id)
         .offset(skip)
         .limit(limit)
     )
@@ -119,10 +127,12 @@ def delete_address(
     db: Session,
 ) -> str | None:
     try:
+        # TODO check if the shop has access to this customer
+        # TODO only delete if no checkouts and subscriptions
         results = db.exec(
-            select(CustomerAddress)
-            .where(CustomerAddress.livemode == livemode)
-            .where(CustomerAddress.id == address_id)
+            select(UserAddress)
+            .where(UserAddress.livemode == livemode)
+            .where(UserAddress.id == address_id)
         )
         address = results.one()
         db.delete(address)

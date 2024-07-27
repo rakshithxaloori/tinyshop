@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 from lib.model import PyBaseModel
 from lib.object import ObjectType
-from customer_address.schema import CustomerAddressBase, CustomerAddressList
+from customer_address.schema import CustomerAddressList
 
 
 class CustomerBase(BaseModel):
@@ -14,7 +14,6 @@ class CustomerCreate(CustomerBase):
     # Create request's sensitive fields
     email: str | None = None
     phone: str
-    address: CustomerAddressBase | None = None
 
 
 class Customer(CustomerBase, PyBaseModel):

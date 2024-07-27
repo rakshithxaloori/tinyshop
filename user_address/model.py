@@ -7,16 +7,15 @@ from lib.primary_key import get_primary_key
 
 
 if TYPE_CHECKING:
-    from customer.model import Customer
-
-    from subscription.model import Subscription
+    from user.model import User
     from checkout.model import Checkout
+    from subscription.model import Subscription
 
 
-class CustomerAddress(SqlBase, table=True):
-    __tablename__ = "customer_address"
+class UserAddress(SqlBase, table=True):
+    __tablename__ = "user_address"
 
-    id: str = Field(primary_key=True, default_factory=get_primary_key("caddr"))
+    id: str = Field(primary_key=True, default_factory=get_primary_key("addr"))
     name: str = Field()
     line1: str = Field()
     line2: str = Field(nullable=True)
@@ -25,11 +24,9 @@ class CustomerAddress(SqlBase, table=True):
     country: str = Field(max_length=2)
     postal_code: str = Field()
 
-    customer_id: str = Field(foreign_key="customer.id")
-    customer: "Customer" = Relationship(back_populates="addresses")
-    checkouts: list["Checkout"] = Relationship(
-        back_populates="customer_address",
-    )
+    user_id: str = Field(foreign_key="user.id")
+    user: "User" = Relationship(back_populates="addresses")
+    checkouts: list["Checkout"] = Relationship(back_populates="customer_address")
     subscriptions: list["Subscription"] = Relationship(
         back_populates="customer_address",
         sa_relationship_kwargs={"cascade": "delete"},

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 3b78d860b80d
+Revision ID: 5aada7ca63e1
 Revises: 
-Create Date: 2024-07-25 12:06:09.263626
+Create Date: 2024-07-27 14:44:55.279661
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '3b78d860b80d'
+revision: str = '5aada7ca63e1'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,6 +28,17 @@ def upgrade() -> None:
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('user',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('email', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('phone', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('phone')
     )
     op.create_table('cart',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -57,13 +68,11 @@ def upgrade() -> None:
     sa.Column('updated', sa.Integer(), nullable=False),
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('email', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('phone', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('user_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('phone')
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('discount',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -100,6 +109,22 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('shop_id', 'handle', name='unique_product_handle_shop')
+    )
+    op.create_table('user_address',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('line1', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('line2', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('city', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('state', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('country', sqlmodel.sql.sqltypes.AutoString(length=2), nullable=False),
+    sa.Column('postal_code', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('user_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('warehouse',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -148,6 +173,32 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['discount_id'], ['discount.id'], ),
     sa.PrimaryKeyConstraint('discount_id', 'cart_id')
     )
+    op.create_table('checkout',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('status', sa.Enum('OPEN', 'ABANDONED', 'COMPLETE', 'EXPIRED', name='checkoutstatusenum'), nullable=False),
+    sa.Column('payment_status', sa.Enum('PAID', 'UNPAID', name='checkoutpaymentstatus'), nullable=False),
+    sa.Column('return_url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('success_url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('amount_total', sa.Integer(), nullable=False),
+    sa.Column('amount_subtotal', sa.Integer(), nullable=False),
+    sa.Column('amount_discount', sa.Integer(), nullable=False),
+    sa.Column('amount_shipping', sa.Integer(), nullable=False),
+    sa.Column('amount_tax', sa.Integer(), nullable=False),
+    sa.Column('expires_at', sa.Integer(), nullable=False),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('cart_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('customer_address_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.ForeignKeyConstraint(['cart_id'], ['cart.id'], ),
+    sa.ForeignKeyConstraint(['customer_address_id'], ['user_address.id'], ),
+    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('collectionproductlink',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
@@ -157,22 +208,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['collection_id'], ['collection.id'], ),
     sa.ForeignKeyConstraint(['product_id'], ['product.id'], ),
     sa.PrimaryKeyConstraint('collection_id', 'product_id')
-    )
-    op.create_table('customer_address',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('line1', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('line2', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('city', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('state', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('country', sqlmodel.sql.sqltypes.AutoString(length=2), nullable=False),
-    sa.Column('postal_code', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
-    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('discountcustomerlink',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -293,31 +328,15 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('config_id')
     )
-    op.create_table('checkout',
+    op.create_table('checkoutdiscountlinks',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
     sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('status', sa.Enum('OPEN', 'ABANDONED', 'COMPLETE', 'EXPIRED', name='checkoutstatusenum'), nullable=False),
-    sa.Column('payment_status', sa.Enum('PAID', 'UNPAID', name='checkoutpaymentstatus'), nullable=False),
-    sa.Column('return_url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('success_url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('amount_total', sa.Integer(), nullable=False),
-    sa.Column('amount_subtotal', sa.Integer(), nullable=False),
-    sa.Column('amount_discount', sa.Integer(), nullable=False),
-    sa.Column('amount_shipping', sa.Integer(), nullable=False),
-    sa.Column('amount_tax', sa.Integer(), nullable=False),
-    sa.Column('expires_at', sa.Integer(), nullable=False),
-    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('cart_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('customer_address_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.ForeignKeyConstraint(['cart_id'], ['cart.id'], ),
-    sa.ForeignKeyConstraint(['customer_address_id'], ['customer_address.id'], ),
-    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
-    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.Column('discount_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('checkout_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['checkout_id'], ['checkout.id'], ),
+    sa.ForeignKeyConstraint(['discount_id'], ['discount.id'], ),
+    sa.PrimaryKeyConstraint('discount_id', 'checkout_id')
     )
     op.create_table('inventory',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -333,6 +352,33 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['warehouse_id'], ['warehouse.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('variant_id', 'warehouse_id', name='unique_variant_warehouse')
+    )
+    op.create_table('invoice',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('amount_paid', sa.Integer(), nullable=False),
+    sa.Column('amount_remaining', sa.Integer(), nullable=False),
+    sa.Column('amount_shipping', sa.Integer(), nullable=False),
+    sa.Column('amount_tax', sa.Integer(), nullable=False),
+    sa.Column('amount_subtotal', sa.Integer(), nullable=False),
+    sa.Column('amount_total', sa.Integer(), nullable=False),
+    sa.Column('amount_discount', sa.Integer(), nullable=False),
+    sa.Column('attempt_count', sa.Integer(), nullable=False),
+    sa.Column('currency', sqlmodel.sql.sqltypes.AutoString(length=3), nullable=False),
+    sa.Column('attempted', sa.Boolean(), nullable=False),
+    sa.Column('status', sa.Enum('DRAFT', 'OPEN', 'PAID', 'UNCOLLECTIBLE', 'VOID', name='invoicestatusenum'), nullable=False),
+    sa.Column('due_date', sa.Integer(), nullable=True),
+    sa.Column('invoice_pdf', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('paid', sa.Boolean(), nullable=False),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('checkout_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.ForeignKeyConstraint(['checkout_id'], ['checkout.id'], ),
+    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('packagedimensions',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -390,6 +436,21 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('price_id')
     )
+    op.create_table('_invoice_customer_address',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('line1', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('line2', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('city', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('state', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('country', sqlmodel.sql.sqltypes.AutoString(length=2), nullable=False),
+    sa.Column('postal_code', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('invoice_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['invoice_id'], ['invoice.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('_recurring',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
@@ -416,40 +477,20 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('checkoutdiscountlinks',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('discount_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('checkout_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['checkout_id'], ['checkout.id'], ),
-    sa.ForeignKeyConstraint(['discount_id'], ['discount.id'], ),
-    sa.PrimaryKeyConstraint('discount_id', 'checkout_id')
-    )
-    op.create_table('invoice',
+    op.create_table('order',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('amount_paid', sa.Integer(), nullable=False),
-    sa.Column('amount_remaining', sa.Integer(), nullable=False),
-    sa.Column('amount_shipping', sa.Integer(), nullable=False),
-    sa.Column('amount_tax', sa.Integer(), nullable=False),
-    sa.Column('amount_subtotal', sa.Integer(), nullable=False),
-    sa.Column('amount_total', sa.Integer(), nullable=False),
-    sa.Column('amount_discount', sa.Integer(), nullable=False),
-    sa.Column('attempt_count', sa.Integer(), nullable=False),
-    sa.Column('currency', sqlmodel.sql.sqltypes.AutoString(length=3), nullable=False),
-    sa.Column('attempted', sa.Boolean(), nullable=False),
-    sa.Column('status', sa.Enum('DRAFT', 'OPEN', 'PAID', 'UNCOLLECTIBLE', 'VOID', name='invoicestatusenum'), nullable=False),
-    sa.Column('due_date', sa.Integer(), nullable=True),
-    sa.Column('invoice_pdf', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('paid', sa.Boolean(), nullable=False),
+    sa.Column('number', sa.Integer(), nullable=False),
+    sa.Column('type', sa.Enum('PREORDER', 'DEFERRED', 'NORMAL', name='ordertypeenum'), nullable=False),
+    sa.Column('status', sa.Enum('REQUIRES_INVENTORY', 'REQUIRES_SHIPPING', 'IN_SHIPPING', 'COMPLETED', 'RETURN_REQUESTED', name='orderstatusenum'), nullable=False),
+    sa.Column('channel', sa.Enum('TINYSHOP', name='orderchannelenum'), nullable=False),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('invoice_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('checkout_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.ForeignKeyConstraint(['checkout_id'], ['checkout.id'], ),
     sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
+    sa.ForeignKeyConstraint(['invoice_id'], ['invoice.id'], ),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -475,25 +516,23 @@ def upgrade() -> None:
     sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('customer_address_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['customer_address_id'], ['customer_address.id'], ),
+    sa.ForeignKeyConstraint(['customer_address_id'], ['user_address.id'], ),
     sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
     sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('_invoice_customer_address',
+    op.create_table('_order_line_item',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('line1', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('line2', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('city', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('state', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('country', sqlmodel.sql.sqltypes.AutoString(length=2), nullable=False),
-    sa.Column('postal_code', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('invoice_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['invoice_id'], ['invoice.id'], ),
+    sa.Column('quantity', sa.Integer(), nullable=False),
+    sa.Column('unit_amount', sa.Integer(), nullable=False),
+    sa.Column('order_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['order_id'], ['order.id'], ),
+    sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('_subscription_billing_cycle_anchor_config',
@@ -533,58 +572,27 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['subscription_id'], ['subscription.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('order',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('number', sa.Integer(), nullable=False),
-    sa.Column('type', sa.Enum('PREORDER', 'DEFERRED', 'NORMAL', name='ordertypeenum'), nullable=False),
-    sa.Column('status', sa.Enum('REQUIRES_INVENTORY', 'REQUIRES_SHIPPING', 'IN_SHIPPING', 'COMPLETED', 'RETURN_REQUESTED', name='orderstatusenum'), nullable=False),
-    sa.Column('channel', sa.Enum('TINYSHOP', name='orderchannelenum'), nullable=False),
-    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('invoice_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
-    sa.ForeignKeyConstraint(['invoice_id'], ['invoice.id'], ),
-    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('_order_line_item',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('quantity', sa.Integer(), nullable=False),
-    sa.Column('unit_amount', sa.Integer(), nullable=False),
-    sa.Column('order_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['order_id'], ['order.id'], ),
-    sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_table('_order_line_item')
-    op.drop_table('order')
     op.drop_table('_subscription_pending_invoice_interval')
     op.drop_table('_subscription_cancellation_details')
     op.drop_table('_subscription_billing_cycle_anchor_config')
-    op.drop_table('_invoice_customer_address')
+    op.drop_table('_order_line_item')
     op.drop_table('subscription')
-    op.drop_table('invoice')
-    op.drop_table('checkoutdiscountlinks')
+    op.drop_table('order')
     op.drop_table('cartitem')
     op.drop_table('_recurring')
+    op.drop_table('_invoice_customer_address')
     op.drop_table('_customer_unit_amount')
     op.drop_table('_checkout_line_item')
     op.drop_table('price')
     op.drop_table('packagedimensions')
+    op.drop_table('invoice')
     op.drop_table('inventory')
-    op.drop_table('checkout')
+    op.drop_table('checkoutdiscountlinks')
     op.drop_table('_discount_config_shipping')
     op.drop_table('_discount_config_off_product')
     op.drop_table('_discount_config_off_order')
@@ -593,16 +601,18 @@ def downgrade() -> None:
     op.drop_table('review')
     op.drop_table('option')
     op.drop_table('discountcustomerlink')
-    op.drop_table('customer_address')
     op.drop_table('collectionproductlink')
+    op.drop_table('checkout')
     op.drop_table('cartdiscountlinks')
     op.drop_table('_warehouse_address')
     op.drop_table('_discount_config')
     op.drop_table('warehouse')
+    op.drop_table('user_address')
     op.drop_table('product')
     op.drop_table('discount')
     op.drop_table('customer')
     op.drop_table('collection')
     op.drop_table('cart')
+    op.drop_table('user')
     op.drop_table('shop')
     # ### end Alembic commands ###

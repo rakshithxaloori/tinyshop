@@ -35,7 +35,7 @@ class Checkout(CheckoutBase, PyBaseModel):
 
 
 class CheckoutUpdate(BaseModel):
-    # ID of CustomerAddress instance
+    # ID of UserAddress instance
     customer_address: str | None = None
 
 

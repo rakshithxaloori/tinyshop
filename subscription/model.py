@@ -10,7 +10,7 @@ from lib.primary_key import get_primary_key
 if TYPE_CHECKING:
     from shop.model import Shop
     from customer.model import Customer
-    from customer_address.model import CustomerAddress
+    from user_address.model import UserAddress
     from price.model import Price
 
 
@@ -51,8 +51,8 @@ class Subscription(SqlBase, table=True):
     shop: "Shop" = Relationship(back_populates="subscriptions")
     customer_id: str = Field(foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="subscriptions")
-    customer_address_id: str = Field(foreign_key="customer_address.id")
-    customer_address: "CustomerAddress" = Relationship(back_populates="subscriptions")
+    customer_address_id: str = Field(foreign_key="user_address.id")
+    customer_address: "UserAddress" = Relationship(back_populates="subscriptions")
     price_id: str = Field(foreign_key="price.id")
     price: "Price" = Relationship(back_populates="subscriptions")
     billing_cycle_anchor_config: "SubscriptionBillingCycleAnchorConfig" = Relationship(

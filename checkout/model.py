@@ -9,8 +9,8 @@ from lib.primary_key import get_primary_key
 
 if TYPE_CHECKING:
     from shop.model import Shop
+    from user_address.model import UserAddress
     from customer.model import Customer
-    from customer_address.model import CustomerAddress
     from cart.model import Cart
     from invoice.model import Invoice
     from price.model import Price
@@ -50,8 +50,8 @@ class Checkout(SqlBase, table=True):
     cart: "Cart" = Relationship(back_populates="checkouts")
     customer_id: str = Field(foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="checkouts")
-    customer_address_id: str = Field(foreign_key="customer_address.id", nullable=True)
-    customer_address: "CustomerAddress" = Relationship(back_populates="checkouts")
+    customer_address_id: str = Field(foreign_key="user_address.id", nullable=True)
+    customer_address: "UserAddress" = Relationship(back_populates="checkouts")
     invoice: "Invoice" = Relationship(back_populates="checkout")
     # payment_intent_id: str = Field(foreign_key="payment_intent.id")
     # payment_intent:"PaymentIntent" = Relationship( back_populates="checkout")

@@ -4,7 +4,7 @@ from sqlmodel import Session, select
 
 from checkout.model import Checkout, CheckoutLineItem
 from customer.model import Customer
-from customer_address.model import CustomerAddress
+from user_address.model import UserAddress
 from checkout.utils import pydantify_checkouts
 from checkout import schema
 from cart.model import Cart
@@ -36,10 +36,10 @@ def create_checkout(
         )
         customer_id = customer_res.one()
         ca_res = db.exec(
-            select(CustomerAddress.id)
-            .where(CustomerAddress.livemode == livemode)
-            .where(CustomerAddress.customer_id == checkout.customer)
-            .where(CustomerAddress.id == checkout.customer_address)
+            select(UserAddress.id)
+            .where(UserAddress.livemode == livemode)
+            .where(UserAddress.customer_id == checkout.customer)
+            .where(UserAddress.id == checkout.customer_address)
         )
         ca_id = ca_res.one()
         amount_subtotal = 0
@@ -111,10 +111,10 @@ def update_checkout(
         )
         checkout_ins = checkout_res.one()
         ca_res = db.exec(
-            select(CustomerAddress.id)
-            .where(CustomerAddress.livemode == livemode)
-            .where(CustomerAddress.customer_id == checkout_ins.customer_id)
-            .where(CustomerAddress.id == checkout.customer_address)
+            select(UserAddress.id)
+            .where(UserAddress.livemode == livemode)
+            .where(UserAddress.customer_id == checkout_ins.customer_id)
+            .where(UserAddress.id == checkout.customer_address)
         )
         ca_id = ca_res.one()
         checkout_ins.customer_address_id = ca_id

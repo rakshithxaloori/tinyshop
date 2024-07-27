@@ -1,9 +1,8 @@
 from sqlmodel import Session, select
-from sqlalchemy.orm import joinedload
 
+from user.model import User
 from customer.model import Customer
 from customer import schema
-from customer_address.model import CustomerAddress
 from customer.utils import pydantify_customers
 from lib.session import update_instance
 
@@ -16,31 +15,33 @@ def create_customer(
 ) -> schema.Customer | None:
     try:
         customer_data = customer.model_dump(exclude={"address"})
-        # TODO make this a transaction
+        phone = customer.phone
+        user: User = None
+        try:
+            user_res = db.exec(
+                select(User).where(livemode == livemode).where(User.phone == phone)
+            )
+            user = user_res.one()
+        except Exception:
+            # Create user
+            new_user = User(
+                livemode=livemode,
+                **customer_data,
+            )
+            db.add(new_user)
+            user = new_user
+
         # Create a customer
         new_customer = Customer(
             shop_id=shop_id,
             livemode=livemode,
-            **customer_data,
+            user_id=user.id,
         )
         db.add(new_customer)
-
-        new_address = None
-        if customer.address:
-            address_data = customer.address.model_dump()
-            new_address = CustomerAddress(
-                livemode=livemode,
-                customer_id=new_customer.id,
-                **address_data,
-            )
-            db.add(new_address)
-
         db.commit()
         db.refresh(new_customer)
-        if new_address:
-            db.refresh(new_address)
 
-        py_customers = pydantify_customers([(new_customer, new_address)])
+        py_customers = pydantify_customers([new_customer])
         return py_customers.pop()
     except Exception as e:
         print("EXCEPTION create_customer:", e)
@@ -66,10 +67,10 @@ def update_customer(
         result = db.exec(statement)
         cus_ins = result.one()
 
-        update_instance(db, data, cus_ins)
+        update_instance(db, data, cus_ins.user)
         db.commit()
         db.refresh(cus_ins)
-        py_customers = pydantify_customers([(cus_ins, None)])
+        py_customers = pydantify_customers([cus_ins])
         return py_customers.pop()
     except Exception as e:
         # TODO create
@@ -85,15 +86,13 @@ def retrieve_customer(
 ) -> schema.Customer | None:
     try:
         results = db.exec(
-            select(Customer, CustomerAddress)
+            select(Customer)
             .where(Customer.shop_id == shop_id)
             .where(Customer.livemode == livemode)
             .where(Customer.id == customer_id)
-            .outerjoin(CustomerAddress, Customer.addresses)
-            .options(joinedload(Customer.addresses))
         )
-        all_rows = list(results.all())
-        py_customers = pydantify_customers(all_rows)
+        cus = results.one()
+        py_customers = pydantify_customers([cus])
         return py_customers.pop()
 
     except Exception as e:
@@ -109,14 +108,12 @@ def list_customers(
     limit: int = 50,
 ) -> schema.CustomerList:
     # TODO skip and limit
-    subquery = select(Customer.id).offset(skip).limit(limit)
-
     results = db.exec(
-        select(Customer, CustomerAddress)
+        select(Customer)
         .where(Customer.shop_id == shop_id)
         .where(Customer.livemode == livemode)
-        .where(Customer.id.in_(subquery))
-        .where(Customer.id == CustomerAddress.customer_id)
+        .offset(skip)
+        .limit(limit)
     )
     all_rows = list(results.all())
     customers = pydantify_customers(all_rows)
