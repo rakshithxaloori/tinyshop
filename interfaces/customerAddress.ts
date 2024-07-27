@@ -16,7 +16,7 @@ interface CustomerAddressCreate extends CustomerAddressBase {
 
 interface CustomerAddress extends CustomerAddressBase {
   id: string;
-  object: typeof ObjectType.CUSTOMER_ADDRESS;
+  object: "customer_address";
 }
 
 interface CustomerAddressList {
@@ -38,7 +38,7 @@ interface CustomerAddressUpdate {
 
 interface CustomerAddressDelete {
   id: string;
-  object: typeof ObjectType.CUSTOMER_ADDRESS;
+  object: "customer_address";
   deleted: boolean;
 }
 

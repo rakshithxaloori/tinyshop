@@ -1,22 +1,22 @@
-import { ObjectType } from "../utils/enum";
-import { CustomerAddressCreate, CustomerAddressList } from "./customerAddress";
+import { CustomerAddressList } from "./customerAddress";
 
 interface CustomerBase {
-  name: string;
+  name?: string | null;
 }
 
 interface CustomerCreate extends CustomerBase {
-  address?: CustomerAddressCreate | null;
   email?: string | null;
   phone: string;
+  send_otp?: boolean;
 }
 
 interface Customer extends CustomerBase {
   id: string;
-  object: typeof ObjectType.CUSTOMER;
-  addresses?: CustomerAddressList | null;
+  object: "customer";
+  is_verified: boolean;
   email?: string | null;
   phone?: string | null;
+  addresses?: CustomerAddressList | null;
 }
 
 interface CustomerList {
@@ -30,11 +30,13 @@ interface CustomerUpdate {
   name?: string | null;
   email?: string | null;
   phone?: string | null;
+  otp?: string | null;
+  send_otp?: boolean;
 }
 
 interface CustomerDelete {
   id: string;
-  object: typeof ObjectType.CUSTOMER;
+  object: "customer";
   deleted: boolean;
 }
 
