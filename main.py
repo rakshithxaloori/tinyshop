@@ -126,26 +126,28 @@ async def get_credentials(request: Request, call_next):
         )
     livemode = livemode == "live"
 
-    with Session(engine) as db:
-        try:
-            request.state.db = db
+    db = Session(engine)
+    response = None
+    try:
+        request.state.db = db
 
-            key_res = request.state.db.exec(
-                select(shop_models.SecretKey)
-                .where(shop_models.SecretKey.livemode == livemode)
-                .where(shop_models.SecretKey.secret_key == username)
-            )
-            key_ins = key_res.one()
-            request.state.shop_id = key_ins.shop_id
-            request.state.livemode = livemode
-            response = await call_next(request)
-            return response
-        except Exception as e:
-            print("EXCEPTION get_credentials:", e)
-            return JSONResponse(
-                content={"message": "Secret key is invalid"},
-                status_code=status.HTTP_406_NOT_ACCEPTABLE,
-            )
+        key_res = request.state.db.exec(
+            select(shop_models.SecretKey)
+            .where(shop_models.SecretKey.livemode == livemode)
+            .where(shop_models.SecretKey.secret_key == username)
+        )
+        key_ins = key_res.one()
+        request.state.shop_id = key_ins.shop_id
+        request.state.livemode = livemode
+        response = await call_next(request)
+    except Exception as e:
+        print("EXCEPTION get_credentials:", e)
+        response = JSONResponse(
+            content={"message": "Secret key is invalid"},
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+        )
+    db.close()
+    return response
 
 
 app.include_router(customers_router)
