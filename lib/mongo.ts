@@ -13,20 +13,13 @@ if (!MONGO_DB_NAME) {
   throw new Error('Please define the MONGO_DB_NAME environment variable');
 }
 
-let cachedClient: MongoClient | null = null;
-let cachedDb: any = null;
 
 export async function connectToDatabase() {
-  if (cachedClient && cachedDb) {
-    return { client: cachedClient, db: cachedDb };
-  }
-
   const client = await MongoClient.connect(MONGO_URI);
-
   const db = client.db(MONGO_DB_NAME);
-
-  cachedClient = client;
-  cachedDb = db;
-
   return { client, db };
+}
+
+export async function disconnectFromDatabase(client: MongoClient) {
+  await client.close();
 }

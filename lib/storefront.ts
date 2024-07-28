@@ -1,7 +1,7 @@
 import 'server-only'
 import { IProductExternalDetails } from "@/types/product";
 import { tinyshop } from "./tinyshop"
-import { connectToDatabase } from "./mongo";
+import { connectToDatabase, disconnectFromDatabase } from "./mongo";
 import { daisyUIThemes } from './const';
 
 export const getRootCollection = async () => {
@@ -133,11 +133,13 @@ export const getProductReviews = async (product: any) => {
 }
 
 export const getProductExternalDetails = async (brandName: string, productHandle: string): Promise<IProductExternalDetails | null> => {
-  const { db } = await connectToDatabase();
+  const { client, db } = await connectToDatabase();
   const collectionName = process.env.MONGO_COLLECTION_NAME as string;
   const collection = db.collection(collectionName);
 
-  const productDetails = await collection.findOne({ brand: brandName, product_handle: productHandle });
+  const productDetails = await collection.findOne({ brand: brandName, product_handle: productHandle }) as IProductExternalDetails | null;
+  // TODO: figure out a way to create pool of clients
+  await disconnectFromDatabase(client);
   return productDetails;
 }
 
