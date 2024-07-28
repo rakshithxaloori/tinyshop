@@ -95,7 +95,6 @@ const ProductVariantSection = ({ product, fallbackOptions, reviews }: ProductVar
       </div>
     </div >
   )
-
 }
 
 export default ProductVariantSection

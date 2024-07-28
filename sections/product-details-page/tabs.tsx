@@ -3,12 +3,14 @@
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Fragment } from "react";
-
-interface TabsSectionProps {
-  data: TProductTabs[] | null
-}
 import { ImageAndTextTabContent, ImageOnlyTabContent, TextOnlyTabContent } from "@/template/tab-content/basic";
 import { TProductTabs } from "@/types/product";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 type TabType = "text" | "text-image" | "image"
 type TabContent = string | {
@@ -27,6 +29,9 @@ type Tab = {
   id: string
   type: TabType
   content: TabContent
+}
+interface TabsSectionProps {
+  data: TProductTabs[] | null
 }
 
 function cleanString(str: string): string {
@@ -124,8 +129,6 @@ const DesktopTabBuilder = ({ data }: { data: TProductTabs[] }) => {
                   <ImageAndTextTabContent image={tab.content.image} content={tab.content.text} />
                 )
               )
-
-
           }
         </TabsContent>
       ))}
@@ -134,11 +137,51 @@ const DesktopTabBuilder = ({ data }: { data: TProductTabs[] }) => {
   )
 }
 
+const MobileTabsBuilder = ({ data }: { data: TProductTabs[] }) => {
+  const { tabs } = constructTabSpec(data)
+
+  // skip image only tabs in mobile view
+  const displayTabs = tabs.filter((tab: any) => tab.type !== "image")
+
+  return (
+    <Accordion type="multiple" className="h-full w-full">
+      {
+        displayTabs.map((tab: any, index: number) => {
+          return (
+            <AccordionItem key={index} value={tab.id} className="border-b-2 border-primary bg-nuetral my-sm px-4 rounded h-full">
+              <AccordionTrigger >
+                <h2 className="text-xl px-4 text-start">{tab.name}</h2>
+              </AccordionTrigger>
+              <AccordionContent className="min-h-max">
+                {tab.type === "text" ? (
+                  <TextOnlyTabContent content={tab.content as string} />
+                ) :
+                  (
+                    typeof tab.content !== 'string' && (
+                      <ImageAndTextTabContent image={tab.content.image} content={tab.content.text} />
+                    )
+                  )
+                }
+              </AccordionContent>
+            </AccordionItem>
+          )
+        })
+      }
+    </Accordion>
+  )
+
+
+}
+
 const TabsBuilder = ({ data }: { data: TProductTabs[] }) => {
   return (
     <Fragment>
       <div className="min-h-full w-full hidden md:flex">
         <DesktopTabBuilder data={data} />
+      </div>
+
+      <div className="w-full h-full visible md:hidden">
+        <MobileTabsBuilder data={data} />
       </div>
 
     </Fragment>
@@ -153,8 +196,8 @@ const TabsSection = ({ data }: TabsSectionProps) => {
     <div id="pdp-tabs-section" className={
       cn(
         "w-full mt-xl",
-        "flex min-h-[30rem] max-h-[50vh] overflow-y-auto",
-        "hidden md:flex"
+        "flex h-fit max-sm:min-h-max md:min-h-[30rem] overflow-y-auto",
+        ""
       )
     }>
       <TabsBuilder data={data} />
