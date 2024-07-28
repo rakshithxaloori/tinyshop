@@ -43,10 +43,10 @@ const StorefrontLandingPage = ({
         }
       />
 
-      <Image3DCarousel
+      {/* <Image3DCarousel
         title="Featured Products"
         images={carouselImages}
-      />
+      /> */}
       <ClientProductDisplayList
         title="COSMIX ESSENTIALS"
         {...{ products }}
