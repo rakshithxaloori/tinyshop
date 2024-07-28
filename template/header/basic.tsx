@@ -15,6 +15,7 @@ import {
 import { PizzaIcon } from "lucide-react";
 import Wishlist from "@/components/wishlist";
 import useWindowSize from "@/components/hooks/window-size";
+import CartV2 from "@/components/cart-v2";
 
 const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! || "Your Store";
 
@@ -106,7 +107,7 @@ export const BasicMobileHeader = ({
             <Wishlist />
           </section>
           <section id="basic-header-cart" className="flex space-x-4">
-            <Cart />
+            <CartV2 />
           </section>
         </section>
         <section id="basic-header-search" className="flex space-x-4 w-full mt-sm">
@@ -151,6 +152,7 @@ export const BasicDesktopHeader = ({
           </section>
           <section id="basic-header-cart" className="flex space-x-4">
             <Cart />
+            {/* <CartV2 /> */}
           </section>
         </section>
 
