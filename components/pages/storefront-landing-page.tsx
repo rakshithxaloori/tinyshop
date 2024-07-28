@@ -13,12 +13,14 @@ const ClientProductDisplayList = dynamic(() => import("@/components/product-disp
 const StorefrontLandingPage = ({
   products,
   collections,
-  heroSectionConfig
+  heroSectionConfig,
+  carouselImages
 }:
   {
     products: any,
     collections: any,
-    heroSectionConfig: any
+    heroSectionConfig: any,
+    carouselImages: string[]
   }
 ) => {
   return (
@@ -41,15 +43,16 @@ const StorefrontLandingPage = ({
         }
       />
 
-      {/* <Image3DCarousel
+      <Image3DCarousel
         title="Featured Products"
         images={carouselImages}
-      /> */}
+      />
       <ClientProductDisplayList
-        name="All Products"
+        title="COSMIX ESSENTIALS"
         {...{ products }}
       />
       <CollectionDisplayList
+        title="COMMUNITY FAVOURITES"
         {...{ collections }}
       />
     </div>

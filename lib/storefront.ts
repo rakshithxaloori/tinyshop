@@ -147,3 +147,17 @@ export const getProductDetailsPageTheme = async (brandName: string, productHandl
   const theme = daisyUIThemes[Math.floor(Math.random() * daisyUIThemes.length)];
   return theme
 }
+
+
+export const getAllProductImages = async () => {
+  const all_products_raw = await getProductList();
+  const { data: all_products } = all_products_raw;
+  const productImages = all_products.map((product: any) => {
+    const { images } = product;
+    if (images.length) {
+      return images[0]
+    }
+  });
+
+  return productImages
+}

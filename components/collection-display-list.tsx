@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface CollectionDisplayListProps {
+  title: string;
   collections: any[];
 }
 
@@ -30,10 +31,11 @@ const CollectionDisplayListItem = ({ collection }: {
   )
 }
 
-const CollectionDisplayList = ({ collections }: CollectionDisplayListProps) => {
+const CollectionDisplayList = ({ title, collections }: CollectionDisplayListProps) => {
   return (
     <section className="w-full my-xl">
-      <div className="grid lg:grid-cols-2 gap-8 overflow-x-scroll">
+      <h2 className="text-3xl md:text-5xl font-normal antialiased text-center uppercase">{title}</h2>
+      <div className="mt-lg md:mt-2xl grid lg:grid-cols-2 gap-8 overflow-x-scroll">
         {
           collections.map((collection) => (
             <CollectionDisplayListItem key={collection.name} collection={collection} />

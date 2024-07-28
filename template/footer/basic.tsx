@@ -9,7 +9,7 @@ const BasicFooter = () => {
         <p>
           {shopName}
           <br />
-          Providing reliable tech since 1992
+          Prioritizing Holistic Health
         </p>
       </aside>
       <nav>

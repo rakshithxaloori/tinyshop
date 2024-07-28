@@ -37,8 +37,14 @@
 
   .three-d-carousel-item {
     display: inline-block;
-    aspect-ratio: 1;
+    aspect-ratio: 0.25;
     background: transparent;
     scroll-snap-align: center;
+
+    @media screen and (min-width: 768px) {
+      aspect-ratio: 0.75;
+    }
   }
+
+
 }

@@ -9,10 +9,10 @@ const Image3DCarousel = (props: Image3DCarouselProps) => {
   const { title, images } = props
 
   return (
-    <div className="flex flex-col min-h-screen bg-transparent flex items-center justify-center">
-      <div className='flex flex-row justify-center'>
+    <div className="flex flex-col min-h-max bg-transparent flex items-center justify-center">
+      {/* <div className='flex flex-row justify-center'>
         <h1 className="text-4xl font-bold text-center mb-8">{title}</h1>
-      </div>
+      </div> */}
       {/* Add your 3D image carousel component here */}
       <div className="three-d-carousel-wrapper w-full">
         <div className="three-d-carousel-track">

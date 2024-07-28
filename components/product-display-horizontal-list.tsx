@@ -4,15 +4,13 @@ import { TProduct } from "@/types/product";
 import ProductCard from "./product/card-v1";
 
 interface ProductDisplayHorizonalListProps {
-  name: string;
+  title: string;
   products: TProduct[];
 }
 
-const ProductDisplayHorizonalList = (
-  { name, products }: ProductDisplayHorizonalListProps
-) => {
-  return (
 
+const ProductDisplayHorizonalList = ({ products }: { products: TProduct[] }) => {
+  return (
     <div className="flex flex-row overflow-x-hidden relative -px-md">
       <div className="my-lg flex flex-row overflow-x-auto gap-x-1 snap-x snap-mandatory scrollbar-hide relative">
         {products.map((product) => (
@@ -32,4 +30,17 @@ const ProductDisplayHorizonalList = (
   )
 }
 
-export default ProductDisplayHorizonalList
+
+
+const ProductDisplaySection = (
+  { title, products }: ProductDisplayHorizonalListProps
+) => {
+  return (
+    <section className="w-full my-xl">
+      <h2 className="mb-lg md:mb-2xl text-3xl md:text-5xl font-normal antialiased text-center uppercase">{title}</h2>
+      <ProductDisplayHorizonalList products={products} />
+    </section>
+  )
+}
+
+export default ProductDisplaySection
