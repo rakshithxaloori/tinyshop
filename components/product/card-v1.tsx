@@ -93,7 +93,7 @@ const ProductCard = ({ product,
 
   return (
     <div onClick={handleLinkClick}
-      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary transition-colors duration-100ease-linear bg-base-100 border-2 rounded-xl">
+      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary hover:m-1 transition-all duration-100 ease-linear bg-base-100 border-2 rounded-xl">
       <div className="group card card-compact">
         <figure className="relative aspect-square rounded-t-xl">
           <Image src={

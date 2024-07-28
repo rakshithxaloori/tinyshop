@@ -1,24 +1,14 @@
 "use server";
 import CollectionDisplayList from "@/components/collection-display-list";
-
-const ClientProductDisplayList = dynamic(() => import("@/components/product-display-list"), {
-  ssr: false,
-  loading: () => <div>Loading...</div>
-});
 import Basic2DHeroSection from "@/template/hero/2d-basic";
 import Image3DCarousel from "../3d-image-carousel";
 import dynamic from "next/dynamic";
+import ThreeStatementBanner from "../banner/three-statement";
 
-const carouselImages = [
-  // Add your image URLs here
-  "https://images.unsplash.com/photo-1523437237164-d442d57cc3c9",
-  "https://images.unsplash.com/photo-1421930866250-aa0594cea05c",
-  "https://images.unsplash.com/photo-1536152470836-b943b246224c",
-  "https://images.unsplash.com/photo-1518717202715-9fa9d099f58a",
-  "https://images.unsplash.com/photo-1495107334309-fcf20504a5ab",
-  "https://images.unsplash.com/photo-1584148721201-b6432e0d5106"
-];
-
+const ClientProductDisplayList = dynamic(() => import("@/components/product-display-horizontal-list"), {
+  ssr: false,
+  loading: () => <div>Loading...</div>
+});
 
 const StorefrontLandingPage = ({
   products,
@@ -37,11 +27,24 @@ const StorefrontLandingPage = ({
         config={heroSectionConfig}
       />
 
+      <ThreeStatementBanner
+        firstStatement="OUR MISSION"
+        secondStatement="Prioritizing Holistic Health"
+        thirdStatement="Overwhelmed by quick fixes, diet culture and toxic beauty standards, we set
+        out to revolutionize the health industry."
+        statementStyles={
+          [
+            'text-lg',
+            'font-semibold mt-md',
+            'mt-sm w-full md:max-w-md md:text-center font-normal text-md'
+          ]
+        }
+      />
+
       {/* <Image3DCarousel
         title="Featured Products"
         images={carouselImages}
       /> */}
-
       <ClientProductDisplayList
         name="All Products"
         {...{ products }}

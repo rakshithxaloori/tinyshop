@@ -89,15 +89,15 @@ export const getWishlistProductDetails = async (productIdList: string[]) => {
 
 export const getHeroSectionDetails = async () => {
   const heroSectionDetails = {
-    title: "Discover the best products",
-    description: "We have a wide range of products to suit your needs. Check them out now!",
+    title: "Gut Loving. Functional. Monsoon favourites.",
+    description: "",
     cta: {
-      text: "Shop Now",
-      url: "/collections",
+      text: "Subscribe & Save 20%",
+      url: "/collections/digestion",
     },
     image: {
-      src: "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      alt: "Hero Section Image"
+      src: "https://cosmix.in/cdn/shop/files/Gut_BFF_de4f04aa-5c0b-4bb6-83f1-ed155b95aefb.jpg",
+      alt: "Gut BFF Product Image"
     }
   }
   return heroSectionDetails

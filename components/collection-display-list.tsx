@@ -28,13 +28,12 @@ const CollectionDisplayListItem = ({ collection }: {
       </div>
     </Link>
   )
-
 }
 
 const CollectionDisplayList = ({ collections }: CollectionDisplayListProps) => {
   return (
     <section className="w-full my-xl">
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid lg:grid-cols-2 gap-8 overflow-x-scroll">
         {
           collections.map((collection) => (
             <CollectionDisplayListItem key={collection.name} collection={collection} />

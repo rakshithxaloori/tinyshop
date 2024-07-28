@@ -74,7 +74,7 @@ const ProductDetails = ({ product, reviews }: { product: any; reviews: any[] }) 
         </Link>
       </div>
       <PriceDisplay cx="mt-lg" />
-      <div className="mt-md line-clamp-4">
+      <div className="mt-md">
         {summary}
       </div>
       <div className="grow" />
