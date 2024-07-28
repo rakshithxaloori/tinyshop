@@ -26,10 +26,10 @@ const FAQBuilder = (props: TProductFAQSection) => {
               return (
                 <AccordionItem key={index} value={`faq-${index}`} className="border-2 border-primary bg-nuetral my-sm px-4 rounded">
                   <AccordionTrigger >
-                    <h2 className="text-xl px-4">{faq.question}</h2>
+                    <h2 className="text-xl px-4 text-start">{faq.question}</h2>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="px-4">{faq.answer}</p>
+                    <p className="px-4 text-start">{faq.answer}</p>
                   </AccordionContent>
                 </AccordionItem>
               )

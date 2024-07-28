@@ -23,7 +23,7 @@ const ProductImage = ({
     fallbackImage
   ]
   return (
-    <div className="flex flex-col w-full h-full justify-center">
+    <div className="flex flex-col w-full aspect-square h-fit justify-center md:sticky md:top-[10rem]">
       <div className="carousel flex-1 rounded-box w-full">
         {
           imageArray.map((image: string, index: number) => {
@@ -57,7 +57,7 @@ const ProductDetails = ({ product, reviews }: { product: any; reviews: any[] }) 
   const avgRating = numReviews === 0 ? 0 : reviews.reduce((acc, review) => acc + review.product_rating, 0) / numReviews;
   const displayRating = avgRating.toFixed(1)
   return (
-    <div className="flex flex-col w-full h-full p-2">
+    <div className="flex flex-col w-full h-full p-2 max-sm:mt-sm p-2">
       <h1 className="text-3xl font-bold">{product.name}</h1>
       <div className="flex items-center mt-sm">
         <div className="flex items-center gap-1">
@@ -87,7 +87,7 @@ const ProductDetails = ({ product, reviews }: { product: any; reviews: any[] }) 
 const ProductVariantSection = ({ product, fallbackOptions, reviews }: ProductVariantSectionProps) => {
   return (
     <div className="flex flex-1 min-h-[40rem] w-full rounded mt-lg">
-      <div className="grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-4 w-full min-h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-1 gap-4 w-full min-h-full">
         <ProductImage product={product} fallbackImage={fallbackOptions?.fallbackImage} />
         <Variant>
           <ProductDetails product={product} reviews={reviews} />

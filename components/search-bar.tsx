@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useSearchQuery } from "./hooks/search";
+import { SearchIcon } from "lucide-react"
 
 const SearchBar = () => {
   const pathname = usePathname();
@@ -40,8 +41,9 @@ const SearchBar = () => {
         value={query || ""}
         onChange={handleSearchInput}
       />
-      <kbd className="bg-neutral text-neutral-content kbd kbd-sm">⌘</kbd>
-      <kbd className="bg-neutral text-neutral-content kbd kbd-sm">K</kbd>
+      <SearchIcon />
+      <kbd className="bg-neutral text-neutral-content kbd kbd-sm hidden">⌘</kbd>
+      <kbd className="bg-neutral text-neutral-content kbd kbd-sm hidden">K</kbd>
     </label>
   )
 }

@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Fragment } from "react";
 
 interface TabsSectionProps {
   data: TProductTabs[] | null
@@ -26,32 +27,6 @@ type Tab = {
   id: string
   type: TabType
   content: TabContent
-}
-
-const tabList = [
-  {
-    name: "How to use",
-    id: "how-to-use",
-    type: "text",
-    content: "This is how you use this product. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi non quis exercitationem culpa nesciunt nihil aut nostrum explicabo reprehenderit optio amet ab temporibus asperiores quasi cupiditate. Voluptatum ducimus voluptates voluptas?",
-  },
-  {
-    name: "Ingredients",
-    id: "ingredients",
-    type: "text-image",
-    content: {
-      image: {
-        src: "https://images.unsplash.com/photo-1720692739658-ee952b1aebb1?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        alt: "Ingredients"
-      },
-      text: "This is the list of ingredients. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi non quis exercitationem culpa nesciunt nihil aut nostrum explicabo reprehenderit optio amet ab temporibus asperiores quasi cupiditate. Voluptatum ducimus voluptates voluptas?"
-    }
-  }
-]
-
-const tabSpec = {
-  defaultTab: "how-to-use",
-  tabs: tabList
 }
 
 function cleanString(str: string): string {
@@ -104,7 +79,7 @@ function constructTabSpec(tabs: TProductTabs[]): any {
   }
 }
 
-const TabsBuilder = ({ data }: { data: TProductTabs[] }) => {
+const DesktopTabBuilder = ({ data }: { data: TProductTabs[] }) => {
   const numtabs = data.length
   const tailwindClass =
     (numtabs === 1) ? "grid-cols-1" :
@@ -123,7 +98,7 @@ const TabsBuilder = ({ data }: { data: TProductTabs[] }) => {
 
   return (
     <Tabs defaultValue={defaultTab}
-      className="w-full min-h-full flex flex-1 flex-col border-2 border-primary rounded-lg shadow-sm">
+      className="w-full h-full flex flex-1 flex-col border-2 border-primary rounded-lg shadow-sm">
       <TabsList className={
         cn("grid w-full",
           tailwindClass,
@@ -159,6 +134,17 @@ const TabsBuilder = ({ data }: { data: TProductTabs[] }) => {
   )
 }
 
+const TabsBuilder = ({ data }: { data: TProductTabs[] }) => {
+  return (
+    <Fragment>
+      <div className="min-h-full w-full hidden md:flex">
+        <DesktopTabBuilder data={data} />
+      </div>
+
+    </Fragment>
+  )
+}
+
 const TabsSection = ({ data }: TabsSectionProps) => {
   if (!data || data.length === 0) {
     return null;
@@ -168,6 +154,7 @@ const TabsSection = ({ data }: TabsSectionProps) => {
       cn(
         "w-full mt-xl",
         "flex min-h-[30rem] max-h-[50vh] overflow-y-auto",
+        "hidden md:flex"
       )
     }>
       <TabsBuilder data={data} />

@@ -69,7 +69,7 @@ const ReviewCard = ({
           </div>
 
         </div>
-        <p className="mb-md" >{review.review}</p>
+        <p className="mb-md max-h-[7rem] overflow-y-scroll" >{review.review}</p>
         <div className="card-footer flex flex-row items-center gap-2">
           <Avatar className="flex-none w-6 h-6" {...config} />
           <p className="text-sm">{toTitleCase(formattedName)}</p>

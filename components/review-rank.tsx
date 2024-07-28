@@ -28,10 +28,10 @@ const ReviewsRankOverview = ({ reviews }: { reviews: any[] }) => {
       </CardHeader>
       <CardContent>
         {
-          stars.map((num, index) => (
+          stars.reverse().map((num, index) => (
             <div key={index} className="flex flex-1 gap-2 items-center">
               <div className="flex flex-row items-center  px-2 gap-2">
-                {index + 1} star
+                {5 - index} star
               </div>
               <div className="flex flex-1 gap-2 items-center">
                 <Progress className="w-full fill-primary bg-base-300" value={(num / numReviews) * 100} />
