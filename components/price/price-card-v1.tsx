@@ -7,18 +7,20 @@ interface PriceCardProps {
   price: string | number;
   currency: string;
   comparePrice?: number | string;
+  isSubscription?: boolean;
 }
 
 const PriceCard = (props: PriceCardProps) => {
   const {
     price,
     currency,
-    comparePrice
+    comparePrice,
+    isSubscription
   } = props;
 
   if (comparePrice) {
     return (
-      <div className="flex items-center w-full gap-2">
+      <div className="flex items-center w-max-content gap-2">
         <span className="text-2xl font-bold flex flex-row items-center">
           <CurrencyIconComponent currency={currency} />
           {price}
@@ -37,6 +39,11 @@ const PriceCard = (props: PriceCardProps) => {
       <span className="text-2xl font-bold">
         {price}
       </span>
+      {isSubscription && (
+        <span className="text-sm font-normal text-base-content/60 self-align-end">
+          /mo
+        </span>
+      )}
     </div >
   )
 }

@@ -5,14 +5,18 @@ import { createContext, useContext, useState } from "react";
 // TODO: handle multiple option-variants
 type VariantContext = {
   variant: any;
+  price: any;
   setVariant: any;
+  setPrice: any;
 }
 
 const VariantContext = createContext<VariantContext | null>({
   variant: {
     prices: {},
   },
+  price: null,
   setVariant: null,
+  setPrice: null
 })
 
 export const useVariant = () => {
@@ -27,9 +31,10 @@ export const useVariant = () => {
 
 const Variant = ({ children }: { children: React.ReactNode }) => {
   const [variant, setVariant] = useState(null)
+  const [price, setPrice] = useState(null)
 
   return (
-    <VariantContext.Provider value={{ variant, setVariant }}>
+    <VariantContext.Provider value={{ variant, setVariant, price, setPrice }}>
       {children}
     </VariantContext.Provider>
   )

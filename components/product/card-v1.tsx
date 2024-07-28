@@ -30,8 +30,9 @@ const processPricesResponse = (prices: any): TPriceUI => {
   // return the currency, the unit_amount and the unit_compare_amount
   // if available
   return prices.map((price: any) => {
-    const { currency, unit_amount, unit_compare_amount, id } = price;
+    const { currency, unit_amount, unit_compare_amount, id, type } = price;
     return {
+      type,
       id,
       currency,
       unit_amount,
@@ -49,6 +50,8 @@ const ProductCard = ({ product,
   const { image } = fallbackOptions;
   const productImage = product?.images && product.images[0] ? product.images[0] : image;
   const prices: TPriceUI[] = product?.default_variant?.prices ? processPricesResponse(product?.default_variant?.prices?.data) : [] as any;
+  const oneTimePrice = prices.find(price => price.type === "one_time") ?? prices[0];
+
   const router = useRouter();
   const cartStore = useCartStore();
   const { addItem, getProduct } = cartStore;
@@ -56,21 +59,23 @@ const ProductCard = ({ product,
   const { clearQuery } = useSearchQuery();
 
   const cartItemChain = {
-    priceId: prices.length > 0 ? prices[0].id : "N/A",
+    priceId: prices.length > 0 ? oneTimePrice.id : "N/A",
     productId: product.id,
     variantId: product?.default_variant?.id ?? "N/A"
   }
 
   const itemPrice = prices.length > 0 ?
-    prices[0].unit_amount ?? "N/A" :
+    oneTimePrice.unit_amount ?? "N/A" :
     "N/A"
   const itemCurrency = prices.length > 0 ?
-    prices[0].currency :
+    oneTimePrice.currency :
     "N/A"
 
   const cartItemDisplay = {
     image: productImage,
     name: product.name,
+    variantName: product?.default_variant?.name ?? null,
+    isSubscription: false,
     price: itemPrice,
     currency: itemCurrency
   }
@@ -82,7 +87,6 @@ const ProductCard = ({ product,
   };
 
   const handleLinkClick = () => {
-
     router.push(`/products/${product.handle}`);
     clearQuery();
   };

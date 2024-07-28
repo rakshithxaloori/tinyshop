@@ -25,7 +25,7 @@ const EmptyCart = () => {
 }
 
 const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
-  const { image, name, price, currency, quantity } = cartItem
+  const { image, name, price, currency, quantity, variantName, isSubscription: sub } = cartItem
   const { addItem, removeItem } = useCartStore()
 
   const itemChain: TItemChain = cartItem as TItemChain
@@ -54,12 +54,14 @@ const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
         />
       </div>
       <div className="flex flex-col gap-0.5 text-sm mt-2">
-        <span className="text-sm font-medium line-clamp-2">
+        <span className="text-sm font-medium line-clamp-1">
           {name}
         </span>
+        {variantName && <span className="text-sm text-base-content/70 line-clamp-1">{variantName}</span>}
         <span className="text-sm text-base-content/70">
           <CurrencyString currency={currency} />
           {price}
+          {sub && <span className="text-sm font-normal text-base-content/60 self-align-end ml-xs">/month</span>}
         </span>
       </div>
       <div className="flex flex-row gap-1 items-center px-1 align-end">

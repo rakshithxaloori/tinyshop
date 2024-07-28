@@ -4,7 +4,8 @@ import FAQSection from "@/sections/product-details-page/faq";
 import ReviewsSection from "@/sections/product-details-page/reviews";
 import RelatedSection from "@/sections/product-details-page/related";
 import BreadcrumbSection from "@/sections/product-details-page/breadcrumb";
-import { TProductFAQSection, TProductTabs } from "@/types/product";
+import { TPriceUI, TProductFAQSection, TProductTabs } from "@/types/product";
+
 
 const ProductDetailsPage = ({
   product,

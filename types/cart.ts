@@ -7,7 +7,9 @@ type TItemChain = {
 type TCartItemDisplay = {
   image: string;
   price: number | string;
+  isSubscription: boolean;
   name: string;
+  variantName: string | null;
   currency: string;
 }
 

@@ -4,6 +4,7 @@ type ProductConciseReview = {
 }
 
 export type TPriceUI = {
+  type: string;
   id: string;
   currency: string;
   unit_amount: number | null;
@@ -16,6 +17,7 @@ export type TProductUICard = {
   name: string;
   images: string[];
   default_variant: {
+    name: string;
     id: string;
     prices: {
       data: TPriceUI[]
