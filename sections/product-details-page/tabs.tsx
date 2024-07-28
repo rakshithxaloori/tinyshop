@@ -152,7 +152,7 @@ const MobileTabsBuilder = ({ data }: { data: TProductTabs[] }) => {
               <AccordionTrigger >
                 <h2 className="text-xl px-4 text-start">{tab.name}</h2>
               </AccordionTrigger>
-              <AccordionContent className="min-h-max">
+              <AccordionContent className="max-h-fit">
                 {tab.type === "text" ? (
                   <TextOnlyTabContent content={tab.content as string} />
                 ) :

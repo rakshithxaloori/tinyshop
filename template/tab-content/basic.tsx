@@ -23,12 +23,12 @@ const ImageAndTextTabContent = ({ image, content }: {
   const { src, alt } = image
   return (
     <div
-      className="grid grid-cols-2 gap-y-[1rem] p-4 h-full"
+      className="grid max-sm:grid-cols-1 grid-cols-2 gap-[1rem] p-4 h-full overflow-y-auto"
     >
-      <div className="relative w-1/2 h-full aspect-square mx-auto ">
+      <div className="relative md:h-full max-sm:w-full aspect-square  mx-auto ">
         <Image src={src} alt={alt} fill className="rounded-xl" />
       </div>
-      <p>{content}</p>
+      <p className="max-sm:mt-sm">{content}</p>
     </div>
   )
 }
@@ -43,7 +43,7 @@ const ImageOnlyTabContent = ({ image, className }: {
   const { src, alt } = image
   return (
     <div
-      className={cn("grid grid-cols-1 gap-y-[1rem] p-4 h-full border-2 border-primary",
+      className={cn("grid grid-cols-1 gap-y-[1rem] p-4 h-full",
         className
       )}
     >
