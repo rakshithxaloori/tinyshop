@@ -83,7 +83,7 @@ const CheckoutCartSection = () => {
 
 const CheckoutPage = () => {
   return (
-    <div className="grid lg:grid-cols-1 lg:grid-cols-12 lg:gap-x-8 w-fit px-4 pb-6 pt-6 sm:px-6 lg:px-8">
+    <div className="grid lg:grid-cols-1 lg:grid-cols-12 lg:gap-x-8 w-fit">
       <div className="my-lg lg:col-span-7">
         <CheckoutCartSection />
       </div>
