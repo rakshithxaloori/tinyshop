@@ -108,7 +108,7 @@ def update_customer(
             else:
                 # TODO throw exception
                 pass
-        elif customer.send_otp and not customer.phone:
+        elif customer.send_otp:
             cus_ins.is_verified = False
             new_otp = send_otp(livemode, cus_ins.user.phone)
             cus_ins.otp = new_otp
@@ -117,19 +117,8 @@ def update_customer(
                 if customer.send_otp
                 else None
             )
-        else:
+        elif cus_ins.is_verified:
             update_instance(db, data, cus_ins.user)
-            if customer.phone:
-                cus_ins.is_verified = False
-                new_otp = None
-                if customer.send_otp:
-                    new_otp = send_otp(livemode, customer.phone)
-                cus_ins.otp = new_otp
-                cus_ins.expires_at = (
-                    int((datetime.now() + timedelta(minutes=10)).timestamp())
-                    if customer.send_otp
-                    else None
-                )
 
         db.commit()
         db.refresh(cus_ins)

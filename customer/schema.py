@@ -36,7 +36,6 @@ class CustomerList(BaseModel):
 class CustomerUpdate(BaseModel):
     name: str | None = None
     email: str | None = None
-    phone: str | None = None
     otp: str | None = None
     send_otp: bool = False
 
