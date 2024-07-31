@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship
 
@@ -30,9 +31,23 @@ if TYPE_CHECKING:
     from order.model import Order
 
 
+class PaymentsProviderEnum(str, Enum):
+    RAZORPAY = "razorpay"
+
+
 class Shop(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("shop"))
     name: str = Field(nullable=True)
+
+    default_payments_provider: PaymentsProviderEnum = Field(nullable=True)
+
+    # Payment Providers
+    razorpay_key_id: str = Field(nullable=True)
+    razorpay_key_secret: str = Field(nullable=True)
+    razorpay_plans: list["RazorpayPlan"] = Relationship(
+        back_populates="shop",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
 
     secret_keys: list["SecretKey"] = Relationship(
         back_populates="shop",
@@ -111,3 +126,24 @@ class SecretKey(SqlBase, table=True):
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="secret_keys")
+
+
+from price.enum import RecurringTypeEnum
+
+
+class RazorpayPlan(SqlBase, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("rzpy_plan"))
+
+    # ID of the Plan in Razorpay
+    ext_id: str = Field()
+    interval: RecurringTypeEnum = Field()
+    interval_count: int = Field(default=1)
+
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="razorpay_plans")
+
+    # Notes
+    # Every Razorpay is created with 100 amount(1 INR)
+    # All subscription items are added as add-ons
+
+    # TODO shop_id, inteval are unique

@@ -1,18 +1,21 @@
-from datetime import datetime, timedelta
 from sqlmodel import Session, select
 
 from subscription.model import (
     Subscription,
-    SubscriptionBillingCycleAnchorConfig,
-    SubscriptionPendingInvoiceInterval,
     SubscriptionStatusEnum,
+    SubscriptionLineItem,
 )
 from customer.model import Customer
 from user_address.model import UserAddress
 from price.model import Price
-from subscription.utils import pydantify_subscriptions
+from subscription.utils.index import pydantify_subscriptions
 from lib.session import update_instance
 from subscription import schema
+from shop.model import Shop
+from lib.datetime import calculate_current_period_end
+from checkout.model import Checkout
+from subscription.utils.razorpay import create_razorpay_subscription
+from shop.model import PaymentsProviderEnum
 
 
 def create_subscription(
@@ -20,17 +23,36 @@ def create_subscription(
     livemode: bool,
     subscription: schema.SubscriptionCreate,
     db: Session,
+    can_commit: bool = True,
 ) -> schema.Subscription | None:
     try:
+        shop_payments_prov_res = db.exec(
+            select(Shop.default_payments_provider)
+            .where(Shop.id == shop_id)
+            .where(Shop.livemode == livemode)
+        )
+        payments_provider = shop_payments_prov_res.one()
+        print(payments_provider, type(payments_provider))
         sub_data = subscription.model_dump(
             exclude={
+                "checkout",
                 "customer",
                 "customer_address",
-                "price",
                 "billing_cycle_anchor_config",
                 "pending_invoice_interval",
+                "line_items",
             }
         )
+
+        if subscription.checkout:
+            checkout_res = db.exec(
+                select(Checkout.id)
+                .where(Checkout.shop_id == shop_id)
+                .where(Checkout.livemode == livemode)
+                .where(Checkout.id == subscription.checkout)
+            )
+            _ = checkout_res.one()
+
         customer_res = db.exec(
             select(Customer.id)
             .where(Customer.shop_id == shop_id)
@@ -46,75 +68,63 @@ def create_subscription(
         )
         cus_addr_id = customer_addr_res.one()
 
-        price_res = db.exec(
+        prices_res = db.exec(
             select(Price.id)
             .where(Price.shop_id == shop_id)
             .where(Price.livemode == livemode)
-            .where(Price.id == subscription.price)
+            .where(Price.id.in_([li.price for li in subscription.line_items]))
         )
-        price_id = price_res.one()
+        prices = list(prices_res.all())
+        if len(prices) != subscription.line_items:
+            # TODO throw error
+            pass
 
-        period_end = datetime.fromtimestamp(subscription.billing_cycle_anchor)
-        config = subscription.billing_cycle_anchor_config
-        while period_end <= datetime.now():
-            # Move to the next cycle
-            if config.month is not None:
-                # Yearly cycle
-                period_end = period_end.replace(year=period_end.year + 1)
-            else:
-                # Monthly cycle
-                if period_end.month == 12:
-                    period_end = period_end.replace(year=period_end.year + 1, month=1)
-                else:
-                    period_end = period_end.replace(month=period_end.month + 1)
-
-            # Adjust day, hour, minute, second according to config
-            period_end = period_end.replace(day=config.day_of_month)
-            if config.hour is not None:
-                period_end = period_end.replace(hour=config.hour)
-            if config.minute is not None:
-                period_end = period_end.replace(minute=config.minute)
-            if config.second is not None:
-                period_end = period_end.replace(second=config.second)
-
-            # Handle cases where the day of month exceeds the days in the month
-            while period_end.month != ((period_end - timedelta(days=1)).month + 1) % 12:
-                period_end -= timedelta(days=1)
-
-        period_end_timestamp = int(period_end.timestamp())
-        next_pending_invoice = period_end_timestamp
+        current_period_end = calculate_current_period_end(
+            subscription.start_date,
+            subscription.pending_invoice_interval.interval,
+            subscription.pending_invoice_interval.interval_count,
+        )
 
         new_sub = Subscription(
             shop_id=shop_id,
             livemode=livemode,
             customer_id=customer_id,
             customer_address_id=cus_addr_id,
-            price_id=price_id,
             status=SubscriptionStatusEnum.INCOMPLETE,
-            start_date=subscription.billing_cycle_anchor,
-            current_period_start=subscription.billing_cycle_anchor,
-            current_period_end=period_end_timestamp,
-            next_pending_invoice=next_pending_invoice,
+            current_period_start=subscription.start_date,
+            current_period_end=current_period_end,
+            next_pending_invoice=current_period_end,
+            provider=payments_provider,
+            checkout_id=subscription.checkout if subscription.checkout else None,
             **sub_data,
-        )
-        db.add(new_sub)
-        new_bca_config = SubscriptionBillingCycleAnchorConfig(
-            livemode=livemode,
-            subscription_id=new_sub.id,
             **subscription.billing_cycle_anchor_config.model_dump(),
-        )
-        db.add(new_bca_config)
-        new_pii = SubscriptionPendingInvoiceInterval(
-            livemode=livemode,
-            subscription_id=new_sub.id,
             **subscription.pending_invoice_interval.model_dump(),
         )
-        db.add(new_pii)
+        db.add(new_sub)
 
-        db.commit()
-        db.refresh(new_sub)
-        py_subs = pydantify_subscriptions([new_sub])
-        return py_subs.pop()
+        for line_item in subscription.line_items:
+            new_sli = SubscriptionLineItem(
+                livemode=livemode,
+                subscription_id=new_sub.id,
+                price_id=line_item.price,
+                quantity=line_item.quantity,
+            )
+            db.add(new_sli)
+
+        # Create external subscriptions
+        if payments_provider == PaymentsProviderEnum.RAZORPAY:
+            create_razorpay_subscription(new_sub)
+            # Creates an UPDATE statement
+            db.add(new_sub)
+
+        # TODO Create an invoice
+
+        if can_commit:
+            db.commit()
+            db.refresh(new_sub)
+            py_subs = pydantify_subscriptions([new_sub])
+            return py_subs.pop()
+        return None
 
     except Exception as e:
         print("EXCEPTION create_subscription:", e)
@@ -129,6 +139,7 @@ def update_subscription(
     db: Session,
 ) -> schema.Subscription | None:
     try:
+        # TODO handle cancel
         data = subscription.model_dump(
             exclude_none=True,
             exclude={

@@ -1,21 +1,27 @@
-from price.model import Price, CustomerUnitAmount, Recurring
+from price.model import Price, PriceTypeEnum
 from price import schema
 
 
-def pydantify_prices(
-    rows: list[tuple[Price, CustomerUnitAmount, Recurring]]
-) -> list[schema.Price]:
+def pydantify_prices(rows: list[Price]) -> list[schema.Price]:
     prices: list[schema.Price] = []
-    for price, cua, recurring in rows:
+    for price in rows:
         price_data = price.model_dump(exclude={"customer_unit_amount", "recurring"})
         prices.append(
             schema.Price(
                 **price_data,
                 customer_unit_amount=(
-                    schema.CustomerUnitAmount(**cua.model_dump()) if cua else None
+                    schema.CustomerUnitAmount(
+                        **price.model_dump(include={"maximum", "minimum", "preset"})
+                    )
                 ),
                 recurring=(
-                    schema.Recurring(**recurring.model_dump()) if recurring else None
+                    (
+                        schema.Recurring(
+                            **price.model_dump(include={"interval", "interval_count"})
+                        )
+                    )
+                    if price.type == PriceTypeEnum.SUBSCRIPTION
+                    else None
                 )
             )
         )

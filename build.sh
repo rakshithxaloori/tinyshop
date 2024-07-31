@@ -1,1 +1,1 @@
-docker build -t tinyshop-api .
+docker build -t ts-api-test .

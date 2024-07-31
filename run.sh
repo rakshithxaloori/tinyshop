@@ -1,1 +1,1 @@
-docker run -d --name tinyshop-api-container -p 80:80 tinyshop-api
+docker run -d --name ts-api-test-container -p 80:80 ts-api-test

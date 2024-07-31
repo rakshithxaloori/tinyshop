@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 5681aaa28860
+Revision ID: 1ca9be7f168b
 Revises: 
-Create Date: 2024-07-27 23:44:15.386558
+Create Date: 2024-07-31 15:22:28.393370
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '5681aaa28860'
+revision: str = '1ca9be7f168b'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,6 +27,9 @@ def upgrade() -> None:
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('default_payments_provider', sa.Enum('RAZORPAY', name='paymentsproviderenum'), nullable=True),
+    sa.Column('razorpay_key_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('razorpay_key_secret', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
@@ -46,6 +49,7 @@ def upgrade() -> None:
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('status', sa.Enum('REQUIRES_PAYMENT', 'ABANDONED', 'PAID', name='cartstatusenum'), nullable=False),
+    sa.Column('currency', sqlmodel.sql.sqltypes.AutoString(length=3), nullable=False),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -112,6 +116,18 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('shop_id', 'handle', name='unique_product_handle_shop')
+    )
+    op.create_table('razorpayplan',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('ext_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('interval', sa.Enum('DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR', name='recurringtypeenum'), nullable=False),
+    sa.Column('interval_count', sa.Integer(), nullable=False),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('secretkey',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -191,7 +207,7 @@ def upgrade() -> None:
     sa.Column('updated', sa.Integer(), nullable=False),
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('status', sa.Enum('OPEN', 'ABANDONED', 'COMPLETE', 'EXPIRED', name='checkoutstatusenum'), nullable=False),
+    sa.Column('status', sa.Enum('OPEN', 'PROCESSING', 'ABANDONED', 'COMPLETE', 'EXPIRED', name='checkoutstatusenum'), nullable=False),
     sa.Column('payment_status', sa.Enum('PAID', 'UNPAID', name='checkoutpaymentstatus'), nullable=False),
     sa.Column('return_url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('success_url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
@@ -202,6 +218,7 @@ def upgrade() -> None:
     sa.Column('amount_shipping', sa.Integer(), nullable=False),
     sa.Column('amount_tax', sa.Integer(), nullable=False),
     sa.Column('expires_at', sa.Integer(), nullable=False),
+    sa.Column('currency', sqlmodel.sql.sqltypes.AutoString(length=3), nullable=False),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('cart_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
@@ -366,33 +383,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('variant_id', 'warehouse_id', name='unique_variant_warehouse')
     )
-    op.create_table('invoice',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('amount_paid', sa.Integer(), nullable=False),
-    sa.Column('amount_remaining', sa.Integer(), nullable=False),
-    sa.Column('amount_shipping', sa.Integer(), nullable=False),
-    sa.Column('amount_tax', sa.Integer(), nullable=False),
-    sa.Column('amount_subtotal', sa.Integer(), nullable=False),
-    sa.Column('amount_total', sa.Integer(), nullable=False),
-    sa.Column('amount_discount', sa.Integer(), nullable=False),
-    sa.Column('attempt_count', sa.Integer(), nullable=False),
-    sa.Column('currency', sqlmodel.sql.sqltypes.AutoString(length=3), nullable=False),
-    sa.Column('attempted', sa.Boolean(), nullable=False),
-    sa.Column('status', sa.Enum('DRAFT', 'OPEN', 'PAID', 'UNCOLLECTIBLE', 'VOID', name='invoicestatusenum'), nullable=False),
-    sa.Column('due_date', sa.Integer(), nullable=True),
-    sa.Column('invoice_pdf', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('paid', sa.Boolean(), nullable=False),
-    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('checkout_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.ForeignKeyConstraint(['checkout_id'], ['checkout.id'], ),
-    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
-    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('packagedimensions',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
@@ -418,10 +408,55 @@ def upgrade() -> None:
     sa.Column('unit_amount', sa.Integer(), nullable=False),
     sa.Column('unit_compare_amount', sa.Integer(), nullable=True),
     sa.Column('is_default', sa.Boolean(), nullable=False),
+    sa.Column('maximum', sa.Integer(), nullable=True),
+    sa.Column('minimum', sa.Integer(), nullable=True),
+    sa.Column('preset', sa.Integer(), nullable=False),
+    sa.Column('interval', sa.Enum('DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR', name='recurringtypeenum'), nullable=True),
+    sa.Column('interval_count', sa.Integer(), nullable=True),
     sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('variant_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.ForeignKeyConstraint(['variant_id'], ['variant.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('subscription',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('cancel_at_period_end', sa.Boolean(), nullable=False),
+    sa.Column('current_period_end', sa.Integer(), nullable=False),
+    sa.Column('current_period_start', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('INCOMPLETE', 'INCOMPLETE_EXPIRED', 'ACTIVE', 'PAST_DUE', 'CANCELED', 'UNPAID', 'PAUSED', 'COMPLETED', name='subscriptionstatusenum'), nullable=False),
+    sa.Column('collection_method', sa.Enum('COLLECT_AUTOMATICALLY', 'SEND_INVOICE', name='collectionmethodenum'), nullable=False),
+    sa.Column('billing_cycle_anchor', sa.Integer(), nullable=False),
+    sa.Column('cancel_at', sa.Integer(), nullable=True),
+    sa.Column('canceled_at', sa.Integer(), nullable=True),
+    sa.Column('days_until_due', sa.Integer(), nullable=True),
+    sa.Column('ended_at', sa.Integer(), nullable=True),
+    sa.Column('start_date', sa.Integer(), nullable=False),
+    sa.Column('next_pending_invoice', sa.Integer(), nullable=False),
+    sa.Column('provider', sa.Enum('RAZORPAY', name='paymentsproviderenum'), nullable=False),
+    sa.Column('razorpay_plan_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('razorpay_subscription_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('interval', sa.Enum('DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR', name='recurringtypeenum'), nullable=False),
+    sa.Column('interval_count', sa.Integer(), nullable=False),
+    sa.Column('day_of_month', sa.Integer(), nullable=False),
+    sa.Column('hour', sa.Integer(), nullable=True),
+    sa.Column('minute', sa.Integer(), nullable=True),
+    sa.Column('month', sa.Integer(), nullable=True),
+    sa.Column('second', sa.Integer(), nullable=True),
+    sa.Column('review', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('feedback', sa.Enum('CUSTOMER_SERVICE', 'LOW_QUALITY', 'MISSING_FEATURES', 'SWITCHED_SERVICE', 'TOO_COMPLEX', 'TOO_EXPENSIVE', 'UNUSED', 'OTHER', name='subscriptioncancellationdetailsfeedbackenum'), nullable=True),
+    sa.Column('reason', sa.Enum('CANCELLATION_REQUESTED', 'PAYMENT_DISPUTED', 'PAYMENT_FAILED', name='subscriptioncancellationdetailsreasonenum'), nullable=True),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('customer_address_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('checkout_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['checkout_id'], ['checkout.id'], ),
+    sa.ForeignKeyConstraint(['customer_address_id'], ['user_address.id'], ),
+    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('_checkout_line_item',
@@ -436,18 +471,62 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('_customer_unit_amount',
+    op.create_table('cartitem',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('maximum', sa.Integer(), nullable=True),
-    sa.Column('minimum', sa.Integer(), nullable=True),
-    sa.Column('preset', sa.Integer(), nullable=False),
+    sa.Column('quantity', sa.Integer(), nullable=False),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('cart_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['cart_id'], ['cart.id'], ),
     sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('price_id')
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('invoice',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('amount_paid', sa.Integer(), nullable=False),
+    sa.Column('amount_remaining', sa.Integer(), nullable=False),
+    sa.Column('amount_shipping', sa.Integer(), nullable=False),
+    sa.Column('amount_tax', sa.Integer(), nullable=False),
+    sa.Column('amount_subtotal', sa.Integer(), nullable=False),
+    sa.Column('amount_total', sa.Integer(), nullable=False),
+    sa.Column('amount_discount', sa.Integer(), nullable=False),
+    sa.Column('attempt_count', sa.Integer(), nullable=False),
+    sa.Column('currency', sqlmodel.sql.sqltypes.AutoString(length=3), nullable=False),
+    sa.Column('attempted', sa.Boolean(), nullable=False),
+    sa.Column('status', sa.Enum('DRAFT', 'OPEN', 'PAID', 'UNCOLLECTIBLE', 'VOID', name='invoicestatusenum'), nullable=False),
+    sa.Column('due_date', sa.Integer(), nullable=True),
+    sa.Column('invoice_pdf', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('paid', sa.Boolean(), nullable=False),
+    sa.Column('provider', sa.Enum('RAZORPAY', name='paymentsproviderenum'), nullable=False),
+    sa.Column('razorpay_order_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('checkout_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('subscription_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.ForeignKeyConstraint(['checkout_id'], ['checkout.id'], ),
+    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
+    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
+    sa.ForeignKeyConstraint(['subscription_id'], ['subscription.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('subscriptionlineitem',
+    sa.Column('created', sa.Integer(), nullable=False),
+    sa.Column('updated', sa.Integer(), nullable=False),
+    sa.Column('livemode', sa.Boolean(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('quantity', sa.Integer(), nullable=False),
+    sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('subscription_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
+    sa.ForeignKeyConstraint(['subscription_id'], ['subscription.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('_invoice_customer_address',
     sa.Column('created', sa.Integer(), nullable=False),
@@ -464,30 +543,17 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['invoice_id'], ['invoice.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('_recurring',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('interval', sa.Enum('DAY', 'WEEK', 'MONTH', 'YEAR', name='recurringtypeenum'), nullable=False),
-    sa.Column('interval_count', sa.Integer(), nullable=False),
-    sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('price_id')
-    )
-    op.create_table('cartitem',
+    op.create_table('_invoice_line_item',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
     sa.Column('livemode', sa.Boolean(), nullable=False),
     sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('quantity', sa.Integer(), nullable=False),
-    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('cart_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('unit_amount', sa.Integer(), nullable=False),
+    sa.Column('invoice_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['cart_id'], ['cart.id'], ),
+    sa.ForeignKeyConstraint(['invoice_id'], ['invoice.id'], ),
     sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
-    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('order',
@@ -507,34 +573,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('subscription',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('cancel_at_period_end', sa.Boolean(), nullable=False),
-    sa.Column('current_period_end', sa.Integer(), nullable=False),
-    sa.Column('current_period_start', sa.Integer(), nullable=False),
-    sa.Column('status', sa.Enum('INCOMPLETE', 'INCOMPLETE_EXPIRED', 'ACTIVE', 'PAST_DUE', 'CANCELED', 'UNPAID', 'PAUSED', name='subscriptionstatusenum'), nullable=False),
-    sa.Column('collection_method', sa.Enum('COLLECT_AUTOMATICALLY', 'SEND_INVOICE', name='collectionmethodenum'), nullable=False),
-    sa.Column('billing_cycle_anchor', sa.Integer(), nullable=False),
-    sa.Column('cancel_at', sa.Integer(), nullable=True),
-    sa.Column('canceled_at', sa.Integer(), nullable=True),
-    sa.Column('days_until_due', sa.Integer(), nullable=True),
-    sa.Column('ended_at', sa.Integer(), nullable=True),
-    sa.Column('start_date', sa.Integer(), nullable=False),
-    sa.Column('quantity', sa.Integer(), nullable=False),
-    sa.Column('next_pending_invoice', sa.Integer(), nullable=False),
-    sa.Column('shop_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('customer_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('customer_address_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('price_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['customer_address_id'], ['user_address.id'], ),
-    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
-    sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
-    sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('_order_line_item',
     sa.Column('created', sa.Integer(), nullable=False),
     sa.Column('updated', sa.Integer(), nullable=False),
@@ -548,62 +586,22 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['price_id'], ['price.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('_subscription_billing_cycle_anchor_config',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('day_of_month', sa.Integer(), nullable=False),
-    sa.Column('hour', sa.Integer(), nullable=True),
-    sa.Column('minute', sa.Integer(), nullable=True),
-    sa.Column('month', sa.Integer(), nullable=True),
-    sa.Column('second', sa.Integer(), nullable=True),
-    sa.Column('subscription_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['subscription_id'], ['subscription.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('_subscription_cancellation_details',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('review', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('feedback', sa.Enum('CUSTOMER_SERVICE', 'LOW_QUALITY', 'MISSING_FEATURES', 'SWITCHED_SERVICE', 'TOO_COMPLEX', 'TOO_EXPENSIVE', 'UNUSED', 'OTHER', name='subscriptioncancellationdetailsfeedbackenum'), nullable=True),
-    sa.Column('reason', sa.Enum('CANCELLATION_REQUESTED', 'PAYMENT_DISPUTED', 'PAYMENT_FAILED', name='subscriptioncancellationdetailsreasonenum'), nullable=True),
-    sa.Column('subscription_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['subscription_id'], ['subscription.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('_subscription_pending_invoice_interval',
-    sa.Column('created', sa.Integer(), nullable=False),
-    sa.Column('updated', sa.Integer(), nullable=False),
-    sa.Column('livemode', sa.Boolean(), nullable=False),
-    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('interval', sa.Enum('DAY', 'WEEK', 'MONTH', 'YEAR', name='subscriptionpendinginvoiceintervalenum'), nullable=False),
-    sa.Column('interval_count', sa.Integer(), nullable=False),
-    sa.Column('subscription_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.ForeignKeyConstraint(['subscription_id'], ['subscription.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_table('_subscription_pending_invoice_interval')
-    op.drop_table('_subscription_cancellation_details')
-    op.drop_table('_subscription_billing_cycle_anchor_config')
     op.drop_table('_order_line_item')
-    op.drop_table('subscription')
     op.drop_table('order')
-    op.drop_table('cartitem')
-    op.drop_table('_recurring')
+    op.drop_table('_invoice_line_item')
     op.drop_table('_invoice_customer_address')
-    op.drop_table('_customer_unit_amount')
+    op.drop_table('subscriptionlineitem')
+    op.drop_table('invoice')
+    op.drop_table('cartitem')
     op.drop_table('_checkout_line_item')
+    op.drop_table('subscription')
     op.drop_table('price')
     op.drop_table('packagedimensions')
-    op.drop_table('invoice')
     op.drop_table('inventory')
     op.drop_table('checkoutdiscountlinks')
     op.drop_table('_discount_config_shipping')
@@ -622,6 +620,7 @@ def downgrade() -> None:
     op.drop_table('warehouse')
     op.drop_table('user_address')
     op.drop_table('secretkey')
+    op.drop_table('razorpayplan')
     op.drop_table('product')
     op.drop_table('discount')
     op.drop_table('customer')

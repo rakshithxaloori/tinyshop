@@ -34,6 +34,8 @@ class ProductBase(BaseModel):
     shippable: bool
     preorder: bool
 
+    # TODO images max length 20
+
 
 class ProductCreate(ProductBase):
     pass

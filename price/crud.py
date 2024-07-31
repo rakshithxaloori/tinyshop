@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 
-from price.model import Price, CustomerUnitAmount, Recurring
+from price.model import Price
 from price import schema
 from price.utils import pydantify_prices
 from lib.session import update_instance
@@ -28,31 +28,21 @@ def create_price(
         new_cua = None
         if price.customer_unit_amount:
             cua_data = price.customer_unit_amount.model_dump(exclude_none=True)
-            new_cua = CustomerUnitAmount(
-                shop_id=shop_id,
-                livemode=livemode,
-                price_id=new_price.id,
-                **cua_data,
-            )
-            db.add(new_cua)
+            update_instance(db, cua_data, new_price)
         new_recurring = None
         if price.recurring:
             recurring_data = price.recurring.model_dump()
-            new_recurring = Recurring(
-                shop_id=shop_id,
-                livemode=livemode,
-                price_id=new_price.id,
-                **recurring_data,
-            )
-            db.add(new_recurring)
+            update_instance(db, recurring_data, new_price)
 
         db.commit()
+
         db.refresh(new_price)
         if new_cua:
             db.refresh(new_cua)
         if new_recurring:
             db.refresh(new_recurring)
-        py_prices = pydantify_prices([(new_price, new_cua, new_recurring)])
+
+        py_prices = pydantify_prices([new_price])
         return py_prices.pop()
 
     except Exception as e:
@@ -80,32 +70,18 @@ def update_price(
         price_ins = result.one()
         update_instance(db, data, price_ins)
 
-        cua_ins = None
         if price.customer_unit_amount:
             data = price.customer_unit_amount.model_dump(exclude_none=True)
-            statement = select(CustomerUnitAmount).where(
-                CustomerUnitAmount.price_id == price_id
-            )
-            result = db.exec(statement)
-            cua_ins = result.one()
-            update_instance(db, data, cua_ins)
+            update_instance(db, data, price_ins)
 
-        recurr_ins = None
         if price.recurring:
             data = price.recurring.model_dump(exclude_none=True)
-            statement = select(Recurring).where(Recurring.price_id == price_id)
-            result = db.exec(statement)
-            recurr_ins = result.one()
-            update_instance(db, data, recurr_ins)
+            update_instance(db, data, price_ins)
 
         db.commit()
         db.refresh(price_ins)
-        if cua_ins:
-            db.refresh(cua_ins)
-        if recurr_ins:
-            db.refresh(recurr_ins)
 
-        py_prices = pydantify_prices([(price_ins, cua_ins, recurr_ins)])
+        py_prices = pydantify_prices([price_ins])
         return py_prices.pop()
     except Exception as e:
         print("EXCEPTION update_price:", e)
@@ -120,12 +96,10 @@ def retrieve_price(
 ) -> schema.Price | None:
     try:
         results = db.exec(
-            select(Price, CustomerUnitAmount, Recurring)
+            select(Price)
             .where(Price.shop_id == shop_id)
             .where(Price.livemode == livemode)
             .where(Price.id == price_id)
-            .outerjoin(CustomerUnitAmount, Price.customer_unit_amount)
-            .outerjoin(Recurring, Price.recurring)
         )
         all_rows = list(results.all())
         py_prices = pydantify_prices(all_rows)
@@ -145,14 +119,12 @@ def list_prices(
     limit: int = 50,
 ) -> schema.PriceList:
     results = db.exec(
-        select(Price, CustomerUnitAmount, Recurring)
+        select(Price)
         .where(Price.shop_id == shop_id)
         .where(Price.livemode == livemode)
         .where(Price.variant_id == variant_id)
         .offset(skip)
         .limit(limit)
-        .outerjoin(CustomerUnitAmount, Price.customer_unit_amount)
-        .outerjoin(Recurring, Price.recurring)
     )
     all_rows = list(results.all())
     prices = pydantify_prices(all_rows)

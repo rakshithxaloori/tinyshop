@@ -32,26 +32,46 @@ def create_customer(
             db.add(new_user)
             user = new_user
 
-        # Create a customer
-        new_otp = None
-        if customer.send_otp:
-            new_otp = send_otp(livemode, phone)
-        new_customer = Customer(
-            shop_id=shop_id,
-            livemode=livemode,
-            user_id=user.id,
-            otp=new_otp,
-            expires_at=(
-                int((datetime.now() + timedelta(minutes=10)).timestamp())
-                if customer.send_otp
-                else None
-            ),
-        )
-        db.add(new_customer)
-        db.commit()
-        db.refresh(new_customer)
+        customer_ins = None
+        try:
+            cus_res = db.exec(
+                select(Customer)
+                .where(Customer.shop_id == shop_id)
+                .where(Customer.livemode == livemode)
+                .where(Customer.user_id == user.id)
+            )
+            customer_ins = cus_res.one()
+            if customer.send_otp:
+                new_otp = send_otp(livemode, phone)
+                customer_ins.otp = new_otp
+                customer_ins.expires_at = (
+                    int((datetime.now() + timedelta(minutes=10)).timestamp())
+                    if customer.send_otp
+                    else None
+                )
+                db.add(customer_ins)
 
-        py_customers = pydantify_customers([new_customer])
+        except Exception:
+            # Create a customer
+            new_otp = None
+            if customer.send_otp:
+                new_otp = send_otp(livemode, phone)
+            customer_ins = Customer(
+                shop_id=shop_id,
+                livemode=livemode,
+                user_id=user.id,
+                otp=new_otp,
+                expires_at=(
+                    int((datetime.now() + timedelta(minutes=10)).timestamp())
+                    if customer.send_otp
+                    else None
+                ),
+            )
+            db.add(customer_ins)
+        db.commit()
+        db.refresh(customer_ins)
+
+        py_customers = pydantify_customers([customer_ins])
         return py_customers.pop()
     except Exception as e:
         print("EXCEPTION create_customer:", e)

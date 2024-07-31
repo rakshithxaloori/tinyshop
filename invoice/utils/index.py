@@ -21,7 +21,7 @@ def pydantify_invoices(rows: list[Invoice]) -> list[schema.Invoice]:
                     **invoice_ins.customer_address.model_dump(
                         exclude={"created", "updated"}
                     )
-                )
+                ),
             )
         )
     return invoices

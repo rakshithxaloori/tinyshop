@@ -5,13 +5,16 @@ from sqlmodel import Field, Relationship
 
 from lib.model import SqlBase
 from lib.primary_key import get_primary_key
+from shop.model import PaymentsProviderEnum
 
 
 if TYPE_CHECKING:
     from shop.model import Shop
     from customer.model import Customer
     from checkout.model import Checkout
+    from subscription.model import Subscription
     from order.model import Order
+    from price.model import Price
 
 
 class InvoiceStatusEnum(str, enum.Enum):
@@ -39,16 +42,25 @@ class Invoice(SqlBase, table=True):
     invoice_pdf: str = Field(nullable=True)
     paid: bool = Field()
 
-    # charge TODO
+    provider: PaymentsProviderEnum = Field()
+
+    # Razorpay
+    razorpay_order_id: str = Field(nullable=True)
+
+    line_items: list["InvoiceLineItem"] = Relationship(
+        back_populates="invoice",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="invoices")
     customer_id: str = Field(foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="invoices")
     checkout_id: str = Field(foreign_key="checkout.id", nullable=True)
-    checkout: "Checkout" = Relationship(back_populates="invoice")
+    checkout: "Checkout" = Relationship(back_populates="invoices")
+    subscription_id: str = Field(foreign_key="subscription.id", nullable=True)
+    subscription: "Subscription" = Relationship(back_populates="invoices")
     order: "Order" = Relationship(back_populates="invoice")
-    # TODO subscription invoice link table
-    # subscriptions:list["Subscription"] = Relationship( back_populates="invoices")
     customer_address: "InvoiceCustomerAddress" = Relationship(
         back_populates="invoice",
         sa_relationship_kwargs={"cascade": "delete"},
@@ -56,7 +68,17 @@ class Invoice(SqlBase, table=True):
     # TODO list[payment intent]
 
 
-# TODO invoice lines
+class InvoiceLineItem(SqlBase, table=True):
+    __tablename__ = "_invoice_line_item"
+
+    id: str = Field(primary_key=True, default_factory=get_primary_key("_ili"))
+    quantity: int = Field()
+    unit_amount: int = Field()
+
+    invoice_id: str = Field(foreign_key="invoice.id")
+    invoice: "Invoice" = Relationship(back_populates="line_items")
+    price_id: str = Field(foreign_key="price.id")
+    price: "Price" = Relationship(back_populates="invoice_line_items")
 
 
 class InvoiceCustomerAddress(SqlBase, table=True):

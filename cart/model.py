@@ -23,6 +23,7 @@ class CartStatusEnum(str, enum.Enum):
 class Cart(SqlBase, table=True):
     id: str = Field(primary_key=True, default_factory=get_primary_key("cart"))
     status: CartStatusEnum = Field(default=CartStatusEnum.REQUIRES_PAYMENT)
+    currency: str = Field(max_length=3)
 
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="carts")

@@ -2,7 +2,7 @@
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 662294483096.dkr.ecr.us-east-1.amazonaws.com
 
 # Tag local Docker image
-docker tag tinyshop-api:latest 662294483096.dkr.ecr.us-east-1.amazonaws.com/tinyshop-api:latest
+docker tag ts-api-test:latest 662294483096.dkr.ecr.us-east-1.amazonaws.com/ts-api-test:latest
 
 # Push the Docker image to ECR
-docker push 662294483096.dkr.ecr.us-east-1.amazonaws.com/tinyshop-api:latest
+docker push 662294483096.dkr.ecr.us-east-1.amazonaws.com/ts-api-test:latest

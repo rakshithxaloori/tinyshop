@@ -17,14 +17,12 @@ def create_variant(
         variant_data = variant.model_dump(
             exclude={"product", "package_dimensions", "options"}
         )
-        # TODO make this a transaction
         # Create a variant
         new_variant = Variant(
             shop_id=shop_id,
             livemode=livemode,
             product_id=variant.product,
-            # options="".join(variant.options) if variant.options else None,
-            options=None,  # TODO
+            options="".join(variant.options) if variant.options else None,
             **variant_data,
         )
         db.add(new_variant)
@@ -48,10 +46,12 @@ def create_variant(
                 **pd_data,
             )
             db.add(new_package_dimensions)
+
         db.commit()
         db.refresh(new_variant)
         if new_package_dimensions:
             db.refresh(new_package_dimensions)
+
         py_variants = pydantify_variants([(new_variant, new_package_dimensions)])
         return py_variants.pop()
     except Exception as e:

@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from checkout.model import Checkout
 from invoice.model import Invoice, InvoiceCustomerAddress
 from invoice import schema
-from invoice.utils import pydantify_invoices
+from invoice.utils.index import pydantify_invoices
 from lib.session import update_instance
 
 

@@ -1,10 +1,12 @@
-import enum
+from enum import Enum
 from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship
 
 
 from lib.model import SqlBase
 from lib.primary_key import get_primary_key
+from price.enum import RecurringTypeEnum
+from shop.model import PaymentsProviderEnum
 
 
 if TYPE_CHECKING:
@@ -12,9 +14,11 @@ if TYPE_CHECKING:
     from customer.model import Customer
     from user_address.model import UserAddress
     from price.model import Price
+    from checkout.model import Checkout
+    from invoice.model import Invoice
 
 
-class SubscriptionStatusEnum(str, enum.Enum):
+class SubscriptionStatusEnum(str, Enum):
     INCOMPLETE = "incomplete"
     INCOMPLETE_EXPIRED = "incomplete_expired"
     ACTIVE = "active"
@@ -22,11 +26,29 @@ class SubscriptionStatusEnum(str, enum.Enum):
     CANCELED = "canceled"
     UNPAID = "unpaid"
     PAUSED = "paused"
+    COMPLETED = "completed"
 
 
-class CollectionMethodEnum(str, enum.Enum):
+class CollectionMethodEnum(str, Enum):
     COLLECT_AUTOMATICALLY = "collect_automatically"
     SEND_INVOICE = "send_invoice"
+
+
+class SubscriptionCancellationDetailsFeedbackEnum(str, Enum):
+    CUSTOMER_SERVICE = "customer_service"
+    LOW_QUALITY = "low_quality"
+    MISSING_FEATURES = "missing_features"
+    SWITCHED_SERVICE = "switched_service"
+    TOO_COMPLEX = "too_complex"
+    TOO_EXPENSIVE = "too_expensive"
+    UNUSED = "unused"
+    OTHER = "other"
+
+
+class SubscriptionCancellationDetailsReasonEnum(str, Enum):
+    CANCELLATION_REQUESTED = "cancellation_requested"
+    PAYMENT_DISPUTED = "payment_disputed"
+    PAYMENT_FAILED = "payment_failed"
 
 
 class Subscription(SqlBase, table=True):
@@ -44,61 +66,19 @@ class Subscription(SqlBase, table=True):
     days_until_due: int = Field(nullable=True)
     ended_at: int = Field(nullable=True)
     start_date: int = Field()
-    quantity: int = Field(default=1)  # Quantity of the price
     next_pending_invoice: int = Field()
 
-    shop_id: str = Field(foreign_key="shop.id")
-    shop: "Shop" = Relationship(back_populates="subscriptions")
-    customer_id: str = Field(foreign_key="customer.id")
-    customer: "Customer" = Relationship(back_populates="subscriptions")
-    customer_address_id: str = Field(foreign_key="user_address.id")
-    customer_address: "UserAddress" = Relationship(back_populates="subscriptions")
-    price_id: str = Field(foreign_key="price.id")
-    price: "Price" = Relationship(back_populates="subscriptions")
-    billing_cycle_anchor_config: "SubscriptionBillingCycleAnchorConfig" = Relationship(
-        back_populates="subscription",
-        sa_relationship_kwargs={"cascade": "delete"},
-    )
-    pending_invoice_interval: "SubscriptionPendingInvoiceInterval" = Relationship(
-        back_populates="subscription",
-        sa_relationship_kwargs={"cascade": "delete"},
-    )
-    cancellation_details: "SubscriptionCancellationDetails" = Relationship(
-        back_populates="subscription",
-        sa_relationship_kwargs={"cascade": "delete"},
-    )
-    # TODO subscription invoice link table
-    # invoices: list["Invoice"] = Relationship(back_populates="subscriptions")
-    # latest_invoice - Maybe have a is_latest field in Invoice
+    provider: PaymentsProviderEnum = Field()
 
+    # Razorpay
+    razorpay_plan_id: str = Field(nullable=True)
+    razorpay_subscription_id: str = Field(nullable=True)
 
-# TODO subscription address model
-
-
-class SubscriptionPendingInvoiceIntervalEnum(str, enum.Enum):
-    DAY = "day"
-    WEEK = "week"
-    MONTH = "month"
-    YEAR = "year"
-
-
-class SubscriptionPendingInvoiceInterval(SqlBase, table=True):
-    __tablename__ = "_subscription_pending_invoice_interval"
-
-    id: str = Field(primary_key=True, default_factory=get_primary_key("_spiii"))
-    interval: SubscriptionPendingInvoiceIntervalEnum = Field()
+    # Pending Invoice Interval
+    interval: RecurringTypeEnum = Field()
     interval_count: int = Field(default=1)
 
-    subscription_id: str = Field(foreign_key="subscription.id")
-    subscription: "Subscription" = Relationship(
-        back_populates="pending_invoice_interval"
-    )
-
-
-class SubscriptionBillingCycleAnchorConfig(SqlBase, table=True):
-    __tablename__ = "_subscription_billing_cycle_anchor_config"
-
-    id: str = Field(primary_key=True, default_factory=get_primary_key("_sbcac"))
+    # Billing Cycle Anchor Config
     day_of_month: int = (
         Field()
     )  # TODO if it's 31, generate next invoice on the last day of the month
@@ -107,36 +87,40 @@ class SubscriptionBillingCycleAnchorConfig(SqlBase, table=True):
     month: int = Field(nullable=True)
     second: int = Field(nullable=True)
 
-    subscription_id: str = Field(foreign_key="subscription.id")
-    subscription: "Subscription" = Relationship(
-        back_populates="billing_cycle_anchor_config"
-    )
-
-
-class SubscriptionCancellationDetailsFeedbackEnum(str, enum.Enum):
-    CUSTOMER_SERVICE = "customer_service"
-    LOW_QUALITY = "low_quality"
-    MISSING_FEATURES = "missing_features"
-    SWITCHED_SERVICE = "switched_service"
-    TOO_COMPLEX = "too_complex"
-    TOO_EXPENSIVE = "too_expensive"
-    UNUSED = "unused"
-    OTHER = "other"
-
-
-class SubscriptionCancellationDetailsReasonEnum(str, enum.Enum):
-    CANCELLATION_REQUESTED = "cancellation_requested"
-    PAYMENT_DISPUTED = "payment_disputed"
-    PAYMENT_FAILED = "payment_failed"
-
-
-class SubscriptionCancellationDetails(SqlBase, table=True):
-    __tablename__ = "_subscription_cancellation_details"
-
-    id: str = Field(primary_key=True, default_factory=get_primary_key("_scd"))
+    # Cancellation Details
     review: str = Field(nullable=True)
     feedback: SubscriptionCancellationDetailsFeedbackEnum = Field(nullable=True)
     reason: SubscriptionCancellationDetailsReasonEnum = Field(nullable=True)
 
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="subscriptions")
+    customer_id: str = Field(foreign_key="customer.id")
+    customer: "Customer" = Relationship(back_populates="subscriptions")
+    customer_address_id: str = Field(foreign_key="user_address.id")
+    customer_address: "UserAddress" = Relationship(back_populates="subscriptions")
+    checkout_id: str = Field(foreign_key="checkout.id")
+    checkout: "Checkout" = Relationship(back_populates="subscriptions")
+    line_items: list["SubscriptionLineItem"] = Relationship(
+        back_populates="subscription",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    invoices: list["Invoice"] = Relationship(back_populates="subscription")
+
+    # TODO
+    # latest_invoice - Maybe have a is_latest field in Invoice
+
+
+class SubscriptionLineItem(SqlBase, table=True):
+    id: str = Field(primary_key=True, default_factory=get_primary_key("subli"))
+    quantity: int = Field(default=1)  # Quantity of the price
+
+    price_id: str = Field(foreign_key="price.id")
+    price: "Price" = Relationship(back_populates="subscription_line_items")
+
     subscription_id: str = Field(foreign_key="subscription.id")
-    subscription: "Subscription" = Relationship(back_populates="cancellation_details")
+    subscription: "Subscription" = Relationship(back_populates="line_items")
+
+    # Notes
+    # In Razorpay, these are added as add-ons when creating
+    # subscription, so if you want to edit add-ons,
+    # you need to cancel the subscription and create a new one.

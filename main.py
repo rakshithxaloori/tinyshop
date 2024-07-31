@@ -117,8 +117,8 @@ async def get_credentials(request: Request, call_next):
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
 
-    username, _ = base64.b64decode(data).decode().split(":", 1)
-    livemode = username.split("_")[1]
+    secret_key, _ = base64.b64decode(data).decode().split(":", 1)
+    livemode = secret_key.split("_")[1]
     if livemode not in ["live", "test"]:
         return JSONResponse(
             content={"message": "Secret key is invalid"},
@@ -130,22 +130,21 @@ async def get_credentials(request: Request, call_next):
     response = None
     try:
         request.state.db = db
-
-        key_res = request.state.db.exec(
-            select(shop_models.SecretKey)
+        key_res = db.exec(
+            select(shop_models.SecretKey.shop_id)
             .where(shop_models.SecretKey.livemode == livemode)
-            .where(shop_models.SecretKey.secret_key == username)
+            .where(shop_models.SecretKey.secret_key == secret_key)
         )
-        key_ins = key_res.one()
-        request.state.shop_id = key_ins.shop_id
+        shop_id = key_res.one()
+        request.state.shop_id = shop_id
         request.state.livemode = livemode
-        response = await call_next(request)
     except Exception as e:
         print("EXCEPTION get_credentials:", e)
         response = JSONResponse(
             content={"message": "Secret key is invalid"},
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
         )
+    response = await call_next(request)
     db.close()
     return response
 

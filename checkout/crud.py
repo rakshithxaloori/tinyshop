@@ -2,13 +2,14 @@ from datetime import datetime, timedelta
 from sqlmodel import Session, select
 
 
-from checkout.model import Checkout, CheckoutLineItem
+from checkout.model import Checkout, CheckoutLineItem, CheckoutStatusEnum
 from customer.model import Customer
 from user_address.model import UserAddress
 from checkout.utils import pydantify_checkouts
 from checkout import schema
 from cart.model import Cart
 from lib.many_to_many_tables import CheckoutDiscountLinks
+from subscription.utils.create import create_subscriptions_from_checkout
 
 
 def create_checkout(
@@ -29,16 +30,16 @@ def create_checkout(
         )
         cart = cart_res.one()
         customer_res = db.exec(
-            select(Customer.id)
+            select(Customer)
             .where(Customer.shop_id == shop_id)
             .where(Customer.livemode == livemode)
             .where(Customer.id == checkout.customer)
         )
-        customer_id = customer_res.one()
+        customer = customer_res.one()
         ca_res = db.exec(
             select(UserAddress.id)
             .where(UserAddress.livemode == livemode)
-            .where(UserAddress.customer_id == checkout.customer)
+            .where(UserAddress.user_id == customer.user_id)
             .where(UserAddress.id == checkout.customer_address)
         )
         ca_id = ca_res.one()
@@ -47,7 +48,7 @@ def create_checkout(
         amount_shipping = 0
         amount_tax = 0
         for ci in cart.items:
-            amount_subtotal += ci.price.unit_amount
+            amount_subtotal += ci.price.unit_amount * ci.quantity
 
         # TODO discount, shipping, tax
 
@@ -56,7 +57,7 @@ def create_checkout(
             shop_id=shop_id,
             livemode=livemode,
             cart_id=cart.id,
-            customer_id=customer_id,
+            customer_id=customer.id,
             customer_address_id=ca_id,
             amount_subtotal=amount_subtotal,
             amount_discount=amount_discount,
@@ -66,6 +67,7 @@ def create_checkout(
             # Expires in 1 hour
             expires_at=int((datetime.now() + timedelta(days=1)).timestamp()),
             **checkout_data,
+            currency=cart.currency,
         )
         new_checkout.url = checkout.url.replace("{CHECKOUT_ID}", new_checkout.id)
         for dis_link in cart.discount_links:
@@ -86,6 +88,7 @@ def create_checkout(
                 price_id=ci.price_id,
             )
             db.add(new_cli)
+
         db.commit()
         db.refresh(new_checkout)
         py_checkouts = pydantify_checkouts([new_checkout])
@@ -110,14 +113,21 @@ def update_checkout(
             .where(Checkout.id == checkout_id)
         )
         checkout_ins = checkout_res.one()
-        ca_res = db.exec(
-            select(UserAddress.id)
-            .where(UserAddress.livemode == livemode)
-            .where(UserAddress.customer_id == checkout_ins.customer_id)
-            .where(UserAddress.id == checkout.customer_address)
-        )
-        ca_id = ca_res.one()
-        checkout_ins.customer_address_id = ca_id
+        if checkout.customer_address:
+            ca_res = db.exec(
+                select(UserAddress.id)
+                .where(UserAddress.livemode == livemode)
+                .where(UserAddress.customer_id == checkout_ins.customer_id)
+                .where(UserAddress.id == checkout.customer_address)
+            )
+            ca_id = ca_res.one()
+            checkout_ins.customer_address_id = ca_id
+        if checkout.status:
+            checkout_ins.status = checkout.status
+            if checkout.status == CheckoutStatusEnum.PROCESSING:
+                # Create subscriptions and invoices
+                create_subscriptions_from_checkout(db, checkout_ins)
+
         db.add(checkout_ins)
         db.commit()
         db.refresh(checkout_ins)

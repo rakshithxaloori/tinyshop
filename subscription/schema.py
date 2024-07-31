@@ -5,14 +5,14 @@ from lib.object import ObjectType
 from subscription.model import (
     CollectionMethodEnum,
     SubscriptionStatusEnum,
-    SubscriptionPendingInvoiceIntervalEnum,
     SubscriptionCancellationDetailsFeedbackEnum,
     SubscriptionCancellationDetailsReasonEnum,
 )
+from price.enum import RecurringTypeEnum
 
 
 class PendingInvoiceInterval(BaseModel):
-    interval: SubscriptionPendingInvoiceIntervalEnum
+    interval: RecurringTypeEnum
     interval_count: int
 
 
@@ -30,28 +30,39 @@ class CancellationDetails(BaseModel):
     reason: SubscriptionCancellationDetailsReasonEnum | None = None
 
 
+class RazorpayDetails(BaseModel):
+    subscription_id: str
+
+
+class ProviderDetails(BaseModel):
+    razorpay: RazorpayDetails | None = None
+
+
+class SubscriptionLineItem(BaseModel):
+    price: str
+    quantity: int
+
+
 class SubscriptionBase(BaseModel):
     cancel_at_period_end: bool
     collection_method: CollectionMethodEnum
+    start_date: int
     billing_cycle_anchor: int
     cancel_at: int | None = None
-    quantity: int
     billing_cycle_anchor_config: BillingCycleAnchorConfig
     pending_invoice_interval: PendingInvoiceInterval
+    customer: str
+    customer_address: str
+    line_items: list[SubscriptionLineItem]
 
 
 class SubscriptionCreate(SubscriptionBase):
-    customer: str
-    customer_address: str
-    price: str
+    checkout: str | None = None
 
 
 class Subscription(PyBaseModel, SubscriptionBase):
     id: str
     object: str = ObjectType.SUBSCRIPTION
-    customer: str
-    customer_address: str
-    price: str
     current_period_end: int
     current_period_start: int
     status: SubscriptionStatusEnum
@@ -61,9 +72,11 @@ class Subscription(PyBaseModel, SubscriptionBase):
     start_date: int | None = None
     next_pending_invoice: int
     cancellation_details: CancellationDetails | None = None
+    provider_details: ProviderDetails
 
 
 class SubscriptionUpdate(BaseModel):
+    status: SubscriptionStatusEnum | None = None
     cancel_at_period_end: bool | None = None
     collection_method: CollectionMethodEnum | None = None
     billing_cycle_anchor: int | None = None

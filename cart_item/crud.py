@@ -30,6 +30,9 @@ def create_cart_item(
             .where(Price.id == cart_item.price)
         )
         price = price_res.one()
+        if cart.currency != price.currency:
+            # TODO throw error
+            pass
 
         ci_data = cart_item.model_dump(exclude={"cart", "price"})
         new_ci = CartItem(

@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from user_address.model import UserAddress
     from customer.model import Customer
     from cart.model import Cart
+    from subscription.model import Subscription
     from invoice.model import Invoice
     from price.model import Price
     from lib.many_to_many_tables import CheckoutDiscountLinks
@@ -19,6 +20,7 @@ if TYPE_CHECKING:
 
 class CheckoutStatusEnum(str, Enum):
     OPEN = "open"
+    PROCESSING = "processing"
     ABANDONED = "abandoned"
     COMPLETE = "complete"
     EXPIRED = "expired"
@@ -42,6 +44,7 @@ class Checkout(SqlBase, table=True):
     amount_shipping: int = Field()
     amount_tax: int = Field()
     expires_at: int = Field()
+    currency: str = Field(max_length=3)
 
     # Do not use cart for getting line items.
     shop_id: str = Field(foreign_key="shop.id")
@@ -52,11 +55,8 @@ class Checkout(SqlBase, table=True):
     customer: "Customer" = Relationship(back_populates="checkouts")
     customer_address_id: str = Field(foreign_key="user_address.id", nullable=True)
     customer_address: "UserAddress" = Relationship(back_populates="checkouts")
-    invoice: "Invoice" = Relationship(back_populates="checkout")
-    # payment_intent_id: str = Field(foreign_key="payment_intent.id")
-    # payment_intent:"PaymentIntent" = Relationship( back_populates="checkout")
-    # order_id: str = Field(foreign_key="order.id", nullable=True)
-    # order :"Order"= Relationship( back_populates="checkout")
+    invoices: list["Invoice"] = Relationship(back_populates="checkout")
+    subscriptions: list["Subscription"] = Relationship(back_populates="checkout")
 
     line_items: list["CheckoutLineItem"] = Relationship(
         back_populates="checkout",
@@ -78,3 +78,5 @@ class CheckoutLineItem(SqlBase, table=True):
     checkout: "Checkout" = Relationship(back_populates="line_items")
     price_id: str = Field(foreign_key="price.id")
     price: "Price" = Relationship(back_populates="checkout_line_items")
+
+    # TODO unique checkout_id, price_id

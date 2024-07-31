@@ -4,6 +4,7 @@ from lib.model import PyBaseModel
 from lib.object import ObjectType
 from checkout.model import CheckoutStatusEnum
 from discount.schema import DiscountList
+from subscription.schema import SubscriptionList
 
 
 class CheckoutBase(BaseModel):
@@ -22,6 +23,7 @@ class Checkout(CheckoutBase, PyBaseModel):
     id: str
     object: str = ObjectType.CHECKOUT
     status: CheckoutStatusEnum
+    currency: str
     amount_total: int
     amount_subtotal: int
     amount_discount: int
@@ -31,12 +33,14 @@ class Checkout(CheckoutBase, PyBaseModel):
     customer: str
     customer_address: str
     invoice: str | None = None
-    discounts: DiscountList
+    # discounts: DiscountList
+    subscriptions: SubscriptionList | None = None
 
 
 class CheckoutUpdate(BaseModel):
     # ID of UserAddress instance
     customer_address: str | None = None
+    status: CheckoutStatusEnum | None = None
 
 
 class CheckoutList(BaseModel):

@@ -13,7 +13,7 @@ class CartItemCreate(BaseModel):
 
 
 class CartBase(BaseModel):
-    pass
+    currency: str
 
 
 class CartCreate(CartBase):
