@@ -1,0 +1,344 @@
+"use client";
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { indianSubcontinentCountries, indianStatesAndUTs } from "@/components/countries";
+import { cn } from '@/lib/utils';
+
+const formSchema = z.object({
+  email: z.string().email(),
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  country: z.string(),
+  addressLine1: z.string(),
+  addressLine2: z.string().optional(),
+  city: z.string(),
+  pin: z.string(),
+  state: z.string(),
+  phoneNumber: z.string(),
+  sameAsBilling: z.boolean(),
+  billingAddressLine1: z.string().optional(),
+  billingAddressLine2: z.string().optional(),
+  billingCity: z.string().optional(),
+  billingPin: z.string().optional(),
+  billingState: z.string().optional(),
+});
+
+const CheckoutForm = ({ className }: { className?: string }) => {
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      fullName: '',
+      country: 'India',
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      pin: '',
+      state: '',
+      phoneNumber: '',
+      sameAsBilling: true,
+      billingAddressLine1: '',
+      billingAddressLine2: '',
+      billingCity: '',
+      billingPin: '',
+      billingState: '',
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data);
+    // Handle form submission
+  };
+
+  return (
+    <Card className={cn("max-w-2xl my-lg mx-auto mt-8 bg-base-200 text-nuetral-content", className)}>
+      <CardHeader>
+        <CardTitle>Checkout</CardTitle>
+        <CardDescription>Provide billing and shipping details below.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Email address" {...field} />
+                  </FormControl>
+                  <FormMessage className='text-error' />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="First and last name" {...field} />
+                  </FormControl>
+                  <FormMessage className='text-error' />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="country"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Country or region</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a country" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {
+                        indianSubcontinentCountries.map((country) => (
+                          <SelectItem key={country.code} value={country.name}>
+                            {country.flag} {"  "} {country.name}
+                          </SelectItem>
+                        ))
+                      }
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="addressLine1"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address line 1</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Street address" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="addressLine2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address line 2</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Apt., suite, unit number, etc. (optional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>City</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="pin"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>PIN</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="state"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>State</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a state" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {/* Create a group of Indian states */}
+
+                        {
+                          indianStatesAndUTs.states.map((state) => (
+                            <SelectItem key={state} value={state}>
+                              {state}
+                            </SelectItem>
+                          ))
+                        }
+                        {/* Add more state options */}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone number</FormLabel>
+                  <FormControl>
+                    <div className="flex">
+                      <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                        +91
+                      </span>
+                      <Input className="rounded-l-none" {...field} />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sameAsBilling"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Billing address same as shipping
+                    </FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+            {!form.watch('sameAsBilling') && (
+              <>
+                <h2 className="text-xl font-semibold mt-6 mb-4">Billing Address</h2>
+                <FormField
+                  control={form.control}
+                  name="billingAddressLine1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Street address" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="billingAddressLine2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Address (cont.)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Apt., suite, unit number, etc. (optional)" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="billingCity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="billingPin"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>PIN</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="billingState"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>State</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a state" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {/* Create a group of Indian states */}
+                            {
+                              indianStatesAndUTs.states.map((state) => (
+                                <SelectItem key={state} value={state}>
+                                  {state}
+                                </SelectItem>
+                              ))
+                            }
+                            {/* Add more state options */}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </>
+            )}
+            <Button type="submit" className="w-full">Submit</Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default CheckoutForm;

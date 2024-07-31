@@ -51,20 +51,20 @@ const NavItems = ({ navItems }: { navItems: any[] }) => {
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Shop</NavigationMenuTrigger>
-          <NavigationMenuContent className="bg-primary">
+          <NavigationMenuContent className="bg-base-200">
             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-primary/80 p-6 no-underline outline-none hover:bg-base-100/50 hover:text-base-content"
+                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-base-300 p-6 no-underline outline-none hover:bg-base-100/50 hover:text-base-content"
                     href="/"
                   >
                     <PizzaIcon size={40} />
                     <div className="mb-2 mt-4 text-lg font-medium">
-                      Tinyshop
+                      {shopName}
                     </div>
                     <p className="text-sm leading-tight text-primary-content">
-                      Tinyshop is a modern e-commerce solution built using Tailwind CSS and Next.js.
+                      cosmix is modern day protein shake for the modern day athlete.
                     </p>
                   </a>
                 </NavigationMenuLink>

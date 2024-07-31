@@ -11,10 +11,12 @@ import {
 import CartBagDisplay from "./cart-bag-display";
 import { CurrencyString } from "./price/currency-icon";
 import { CartList, EmptyCartList } from "./cart-list";
+import { useRouter } from "next/navigation";
 
 const Cart = () => {
   const cartStore = useCartStore()
   const { items, clearCart } = cartStore
+  const router = useRouter()
 
   const cartItems = items.length
   const cartItemsQty = items.reduce((acc, item) => acc + item.quantity, 0)
@@ -51,7 +53,11 @@ const Cart = () => {
             </span>
           </div>
           <p className="mt-sm text-sm text-base-content">Shipping and taxes will be added at the next step</p>
-          <button className="btn btn-secondary btn-block mt-md" disabled={cartItems === 0}>
+          <button className="btn btn-secondary btn-block mt-md" disabled={cartItems === 0}
+            onClick={() => {
+              router.push('/checkout')
+            }}
+          >
             Go to payment
           </button>
         </div>
