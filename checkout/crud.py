@@ -36,13 +36,14 @@ def create_checkout(
             .where(Customer.id == checkout.customer)
         )
         customer = customer_res.one()
-        ca_res = db.exec(
-            select(UserAddress.id)
-            .where(UserAddress.livemode == livemode)
-            .where(UserAddress.user_id == customer.user_id)
-            .where(UserAddress.id == checkout.customer_address)
-        )
-        ca_id = ca_res.one()
+        if checkout.customer_address:
+            ca_res = db.exec(
+                select(UserAddress.id)
+                .where(UserAddress.livemode == livemode)
+                .where(UserAddress.user_id == customer.user_id)
+                .where(UserAddress.id == checkout.customer_address)
+            )
+            ca_id = ca_res.one()
         amount_subtotal = 0
         amount_discount = 0
         amount_shipping = 0
@@ -58,7 +59,7 @@ def create_checkout(
             livemode=livemode,
             cart_id=cart.id,
             customer_id=customer.id,
-            customer_address_id=ca_id,
+            customer_address_id=ca_id if checkout.customer_address else None,
             amount_subtotal=amount_subtotal,
             amount_discount=amount_discount,
             amount_shipping=amount_shipping,
@@ -117,7 +118,7 @@ def update_checkout(
             ca_res = db.exec(
                 select(UserAddress.id)
                 .where(UserAddress.livemode == livemode)
-                .where(UserAddress.customer_id == checkout_ins.customer_id)
+                .where(UserAddress.user_id == checkout_ins.customer.user_id)
                 .where(UserAddress.id == checkout.customer_address)
             )
             ca_id = ca_res.one()

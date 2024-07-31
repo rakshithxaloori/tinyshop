@@ -11,11 +11,11 @@ class CheckoutBase(BaseModel):
     return_url: str
     success_url: str
     url: str
+    customer_address: str | None = None
 
 
 class CheckoutCreate(CheckoutBase):
     customer: str
-    customer_address: str | None = None
     cart: str
 
 
@@ -31,7 +31,6 @@ class Checkout(CheckoutBase, PyBaseModel):
     amount_tax: int
     expires_at: int
     customer: str
-    customer_address: str
     invoice: str | None = None
     # discounts: DiscountList
     subscriptions: SubscriptionList | None = None
