@@ -61,7 +61,6 @@ const CheckoutForm = ({ className }: { className?: string }) => {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
     // Handle form submission
   };
 

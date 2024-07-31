@@ -11,7 +11,7 @@ const ProductDetailsPageLayout = async (
 ) => {
   const product_handle = decodeURIComponent(params.product_handle);
   const theme = await getProductDetailsPageTheme(brandName, product_handle);
-  console.log(theme);
+  // console.log(theme);
 
   return (
     <StorefrontLayout theme={theme}>

@@ -12,6 +12,7 @@ import CartBagDisplay from "./cart-bag-display";
 import { CurrencyString } from "./price/currency-icon";
 import { CartList, EmptyCartList } from "./cart-list";
 import { useRouter } from "next/navigation";
+import SecureRedirect from "./secure-redirect";
 
 const Cart = () => {
   const cartStore = useCartStore()
@@ -53,13 +54,12 @@ const Cart = () => {
             </span>
           </div>
           <p className="mt-sm text-sm text-base-content">Shipping and taxes will be added at the next step</p>
-          <button className="btn btn-secondary btn-block mt-md" disabled={cartItems === 0}
-            onClick={() => {
-              router.push('/checkout')
-            }}
-          >
-            Go to payment
-          </button>
+          <SecureRedirect href="/checkout">
+            <button className="btn btn-secondary btn-block mt-md" disabled={cartItems === 0}
+            >
+              Go to payment
+            </button>
+          </SecureRedirect>
         </div>
       </SheetContent>
 
