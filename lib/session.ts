@@ -1,4 +1,5 @@
 'use server'
+import { CustomerSession } from '@/types/session'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 
@@ -8,7 +9,7 @@ if (!secretKey) {
 }
 const signKey = new TextEncoder().encode(secretKey)
 
-export const encrypt = async (data: Record<string, string>) => {
+export const encrypt = async (data: CustomerSession) => {
   const jwt = await new SignJWT(data)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -40,16 +41,16 @@ export const decrypt = async (): Promise<Record<string, string> | null> => {
   }
 }
 
-export const getSessionData = async (): Promise<{ customerId: string } | null> => {
+export const getSessionData = async (): Promise<CustomerSession | null> => {
   const data = await decrypt()
   if (data && 'customerId' in data) {
-    return { customerId: data.customerId }
+    return { customerId: data.customerId, phone: data.phone }
   }
   return null
 }
 
-export const setSessionData = async (customerId: string) => {
-  const data: Record<string, string> = { customerId }
+export const setSessionData = async (customerId: string, phoneNumber: string) => {
+  const data: CustomerSession = { customerId, phone: phoneNumber }
   await encrypt(data)
 }
 

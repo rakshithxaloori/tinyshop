@@ -161,3 +161,13 @@ export const getAllProductImages = async () => {
 
   return productImages
 }
+
+export const createOrGetCustomer = async (phoneNumber: string) => {
+  const { id, is_verified: verified } = await tinyshop.customers.create({ phone: phoneNumber, send_otp: true });
+  return { id, verified }
+}
+
+export const verifyCustomer = async (customerId: string, otp: string) => {
+  const customer = await tinyshop.customers.update(customerId, { otp });
+  return { id: customer.id, verified: customer.is_verified }
+}

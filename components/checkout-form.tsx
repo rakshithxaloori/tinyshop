@@ -19,6 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { indianSubcontinentCountries, indianStatesAndUTs } from "@/components/countries";
 import { cn } from '@/lib/utils';
+import { CustomerSession } from '@/types/session';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -38,7 +39,14 @@ const formSchema = z.object({
   billingState: z.string().optional(),
 });
 
-const CheckoutForm = ({ className }: { className?: string }) => {
+const CheckoutForm = ({
+  session,
+  className }: {
+    session: CustomerSession | null,
+    className?: string
+  }) => {
+  const auth = !!session?.customerId;
+  const phone = session?.phone || '';
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,7 +58,7 @@ const CheckoutForm = ({ className }: { className?: string }) => {
       city: '',
       pin: '',
       state: '',
-      phoneNumber: '',
+      phoneNumber: phone,
       sameAsBilling: true,
       billingAddressLine1: '',
       billingAddressLine2: '',
@@ -63,6 +71,8 @@ const CheckoutForm = ({ className }: { className?: string }) => {
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     // Handle form submission
   };
+
+
 
   return (
     <Card className={cn("max-w-2xl my-lg mx-auto mt-8 bg-base-200 text-nuetral-content", className)}>
@@ -219,7 +229,7 @@ const CheckoutForm = ({ className }: { className?: string }) => {
                       <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                         +91
                       </span>
-                      <Input className="rounded-l-none" {...field} />
+                      <Input className="rounded-l-none" {...field} value={phone} disabled />
                     </div>
                   </FormControl>
                   <FormMessage />
