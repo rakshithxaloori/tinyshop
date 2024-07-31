@@ -18,7 +18,7 @@ const StorefrontLayout = async ({
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <BasicHeader {...{ navItems }} />
-      <div className="flex flex-col flex-1 max-w-7xl self-center">
+      <div className="flex flex-col flex-1 md:max-w-7xl md:self-center">
         {children}
       </div>
       <BasicFooter />
