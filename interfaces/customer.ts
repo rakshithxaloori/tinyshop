@@ -29,7 +29,6 @@ interface CustomerList {
 interface CustomerUpdate {
   name?: string | null;
   email?: string | null;
-  phone?: string | null;
   otp?: string | null;
   send_otp?: boolean;
 }

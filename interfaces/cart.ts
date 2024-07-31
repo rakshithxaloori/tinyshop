@@ -11,7 +11,9 @@ interface CartItemCreate {
   quantity: number;
 }
 
-interface CartBase {}
+interface CartBase {
+  currency: string;
+}
 
 interface CartCreate extends CartBase {
   cart_item?: CartItemCreate | null;
@@ -32,7 +34,7 @@ interface CartList {
 }
 
 interface CartUpdate {
-  status?: "active" | "inactive";
+  status?: CartStatusEnum | null;
 }
 
 interface CartDelete {
