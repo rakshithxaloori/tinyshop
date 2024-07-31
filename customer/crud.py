@@ -44,6 +44,7 @@ def create_customer(
             if customer.send_otp:
                 new_otp = send_otp(livemode, phone)
                 customer_ins.otp = new_otp
+                customer_ins.is_verified = False
                 customer_ins.expires_at = (
                     int((datetime.now() + timedelta(minutes=10)).timestamp())
                     if customer.send_otp

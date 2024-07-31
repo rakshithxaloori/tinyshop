@@ -33,7 +33,7 @@ def pydantify_customers(rows: list[Customer]) -> list[schema.Customer]:
             customers.append(
                 schema.Customer(
                     phone=customer.user.phone,
-                    **customer.model_dump(exclude={"otp"}),
+                    **customer.model_dump(exclude={"otp", "name", "email"}),
                 )
             )
 
