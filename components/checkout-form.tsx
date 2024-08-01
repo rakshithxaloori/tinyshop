@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { use, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -20,6 +20,17 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { indianSubcontinentCountries, indianStatesAndUTs } from "@/components/countries";
 import { cn } from '@/lib/utils';
 import { CustomerSession } from '@/types/session';
+import useCartStore from '@/store/cart';
+import { Checkout } from '@tinyshop/tinyshop-node/interfaces/checkout';
+import { createCheckout, createCustomerAddress, deleteCheckout, updateCheckout, updateCustomerDetails } from '@/lib/checkout';
+import { Customer } from '@tinyshop/tinyshop-node/interfaces/customer';
+import { CustomerAddressCreate } from '@tinyshop/tinyshop-node/interfaces/customerAddress';
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -45,7 +56,12 @@ const CheckoutForm = ({
     session: CustomerSession | null,
     className?: string
   }) => {
-  const auth = !!session?.customerId;
+  const customerId = session?.customerId
+  const cartId = useCartStore(state => state.id);
+  const [checkout, setCheckout] = useState<Checkout | null>(null);
+  const [blurredFields, setBlurredFields] = useState({ email: false, fullName: false });
+  const [shouldUpdateCustomer, setShouldUpdateCustomer] = useState(false);
+
   const phone = session?.phone || '';
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -68,11 +84,139 @@ const CheckoutForm = ({
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    // Handle form submission
+  const handleBlur = useCallback((fieldName: string) => {
+    setBlurredFields((prev) => {
+      const newState = { ...prev, [fieldName]: true };
+      return newState;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (blurredFields.email && blurredFields.fullName && customerId) {
+      setShouldUpdateCustomer(true);
+    }
+  }, [blurredFields, customerId]);
+
+  useEffect(() => {
+    if (!customerId || !shouldUpdateCustomer)
+      return;
+
+    (async () => {
+      try {
+        const updatedCustomer = await updateCustomerDetails(customerId, {
+          email: form.getValues('email'),
+          name: form.getValues('fullName')
+        });
+        console.log('Updated customer details:', updatedCustomer);
+      } catch (error) {
+        console.error('Failed to update customer details:', error);
+      } finally {
+        setShouldUpdateCustomer(false);
+      }
+    })();
+  }, [shouldUpdateCustomer, customerId, form]);
+
+  useEffect(() => {
+    const auth = !!customerId;
+    let newCheckout: Checkout | null = null;
+
+    async function createCheckoutObject() {
+      if (auth && cartId) {
+        // create a checkout object
+        newCheckout = await createCheckout(cartId, customerId);
+        setCheckout(newCheckout);
+      }
+    }
+    createCheckoutObject();
+
+    return () => {
+      if (newCheckout) {
+        (async () => {
+          // delete the checkout object
+          await deleteCheckout(newCheckout.id);
+        })(); // Immediately invoke the async function
+      }
+    }
+  }, [customerId, cartId]);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const openRazorpay = ({ name, email, contact, subscriptionId }: {
+    name: string;
+    email: string;
+    contact: string;
+    subscriptionId: string;
+  }) => {
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      name: process.env.NEXT_PUBLIC_SHOP_NAME,
+      description: "Test Transaction",
+      callback_url: "http://localhost:3000/customer",
+      subscription_id: subscriptionId,
+      prefill: {
+        name: name,
+        email: email,
+        contact: contact
+      },
+      notes: {
+        address: "Razorpay Corporate Office"
+      },
+      recurring: true,
+      send_sms_hash: true,
+      readonly: {
+        name: true,
+        email: true,
+        contact: true
+      },
+      theme: {
+        color: "#3399cc"
+      }
+    };
+
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
   };
 
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    // Handle form submission
+    if (!customerId || !checkout)
+      return;
 
+    // console.log("form data", data);
+    const customerAddressObject: CustomerAddressCreate = {
+      customer: customerId,
+      name: "Home",
+      line1: data.addressLine1,
+      city: data.city,
+      state: data.state,
+      country: data.country.slice(0, 2).toUpperCase(),
+      postal_code: data.pin,
+    }
+
+    if (data.addressLine2) {
+      customerAddressObject.line2 = data.addressLine2;
+    }
+
+    const customerAddress = await createCustomerAddress(customerAddressObject);
+
+    const updatedCheckout = await updateCheckout(checkout.id, 'processing', customerAddress.id);
+
+    openRazorpay({
+      name: data.fullName,
+      email: data.email,
+      contact: `+91${phone}`,
+      subscriptionId: updatedCheckout.subscriptions?.data[0].provider_details.razorpay?.subscription_id || ''
+    });
+  };
 
   return (
     <Card className={cn("max-w-2xl my-lg mx-auto mt-8 bg-base-200 text-nuetral-content", className)}>
@@ -90,7 +234,12 @@ const CheckoutForm = ({
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email address" {...field} />
+                    <Input placeholder="Email address" {...field}
+                      onBlur={() => {
+                        field.onBlur();
+                        handleBlur('email');
+                      }}
+                    />
                   </FormControl>
                   <FormMessage className='text-error' />
                 </FormItem>
@@ -103,7 +252,12 @@ const CheckoutForm = ({
                 <FormItem>
                   <FormLabel>Full name</FormLabel>
                   <FormControl>
-                    <Input placeholder="First and last name" {...field} />
+                    <Input placeholder="First and last name" {...field}
+                      onBlur={() => {
+                        field.onBlur();
+                        handleBlur('fullName');
+                      }}
+                    />
                   </FormControl>
                   <FormMessage className='text-error' />
                 </FormItem>
