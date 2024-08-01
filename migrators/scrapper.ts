@@ -209,8 +209,8 @@ const convertToRecurringPriceCreate = (
   variant: TScrapperVariant,
   tinyshopVariantId: string
 ): PriceCreate => {
-  const price = Math.floor(variant.price * 0.8);
-  const compareAtPrice = Math.floor(variant.compareAtPrice);
+  const price = Math.floor(variant.price * 0.8 * 100);
+  const compareAtPrice = Math.floor(variant.compareAtPrice * 100);
   return {
     active: variant.available,
     currency: "INR",
