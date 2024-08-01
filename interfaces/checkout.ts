@@ -1,22 +1,38 @@
-// Base interface for Checkout
+import { SubscriptionList } from "./subscription";
+
+// Enums
+type CheckoutStatusEnum = "open" | "complete" | "expired" | "canceled";
+
+// Interfaces
+interface CheckoutLineItem {
+  price: string;
+  quantity: number;
+}
+
+interface CheckoutLineItemList {
+  object: "list";
+  data: CheckoutLineItem[];
+  has_more: boolean;
+  url: "/v1/checkout_items";
+}
+
 interface CheckoutBase {
   return_url: string;
   success_url: string;
   url: string;
+  customer_address?: string | null;
 }
 
-// Interface for CheckoutCreate
 interface CheckoutCreate extends CheckoutBase {
   customer: string;
-  customer_address?: string | null;
   cart: string;
 }
 
-// Interface for Checkout
 interface Checkout extends CheckoutBase {
   id: string;
-  object: string;
-  status: "open" | "abandoned" | "complete" | "expired" | "processing";
+  object: "checkout";
+  status: CheckoutStatusEnum;
+  currency: string;
   amount_total: number;
   amount_subtotal: number;
   amount_discount: number;
@@ -24,32 +40,30 @@ interface Checkout extends CheckoutBase {
   amount_tax: number;
   expires_at: number;
   customer: string;
-  customer_address?: string | null;
-  invoice?: string | null;
+  // invoice?: string | null;
+  subscriptions?: SubscriptionList | null;
+  line_items: CheckoutLineItemList;
 }
 
-// Interface for CheckoutUpdate
 interface CheckoutUpdate {
-  status?: "open" | "abandoned" | "complete" | "expired" | "processing";
   customer_address?: string | null;
+  status?: CheckoutStatusEnum | null;
 }
 
-// Interface for CheckoutList
 interface CheckoutList {
-  object: string;
+  object: "list";
   data: Checkout[];
   has_more: boolean;
-  url: string;
+  url: "/v1/checkouts";
 }
 
-// Interface for CheckoutDelete
 interface CheckoutDelete {
   id: string;
-  object: string;
+  object: "checkout";
   deleted: boolean;
 }
 
-export type {
+export {
   Checkout,
   CheckoutCreate,
   CheckoutUpdate,
