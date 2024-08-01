@@ -69,7 +69,7 @@ class Subscription(PyBaseModel, SubscriptionBase):
     canceled_at: int | None = None
     days_until_due: int | None = None
     ended_at: int | None = None
-    start_date: int | None = None
+    start_date: int
     next_pending_invoice: int
     cancellation_details: CancellationDetails | None = None
     provider_details: ProviderDetails

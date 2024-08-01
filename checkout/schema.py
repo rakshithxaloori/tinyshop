@@ -43,7 +43,7 @@ class Checkout(CheckoutBase, PyBaseModel):
     amount_tax: int
     expires_at: int
     customer: str
-    invoice: str | None = None
+    # invoice: str | None = None
     # discounts: DiscountList
     subscriptions: SubscriptionList | None = None
     line_items: CheckoutLineItemList

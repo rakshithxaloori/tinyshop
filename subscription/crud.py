@@ -69,7 +69,7 @@ def create_subscription(
         cus_addr_id = customer_addr_res.one()
 
         prices_res = db.exec(
-            select(Price.id)
+            select(Price)
             .where(Price.shop_id == shop_id)
             .where(Price.livemode == livemode)
             .where(Price.id.in_([li.price for li in subscription.line_items]))
@@ -78,6 +78,14 @@ def create_subscription(
         if len(prices) != subscription.line_items:
             # TODO throw error
             pass
+
+        prices_amount_dict: dict[str, int] = {}
+        for price in prices:
+            prices_amount_dict[price.id] = price.unit_amount
+
+        prices_quantity_dict: dict[str, int] = {}
+        for li in subscription.line_items:
+            prices_quantity_dict[li.price] = li.quantity
 
         current_period_end = calculate_current_period_end(
             subscription.start_date,
@@ -112,8 +120,11 @@ def create_subscription(
             db.add(new_sli)
 
         # Create external subscriptions
+        amount_subtotal = 0
+        for price_id, unit_amount in prices_amount_dict.items():
+            amount_subtotal += unit_amount * prices_quantity_dict[price_id]
         if payments_provider == PaymentsProviderEnum.RAZORPAY:
-            create_razorpay_subscription(new_sub)
+            create_razorpay_subscription(new_sub, amount_subtotal)
             # Creates an UPDATE statement
             db.add(new_sub)
 
