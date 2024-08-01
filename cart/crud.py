@@ -42,7 +42,7 @@ def create_cart(
         if new_ci:
             db.refresh(new_ci)
 
-        py_carts = pydantify_carts([(new_cart, new_ci)])
+        py_carts = pydantify_carts([new_cart])
         return py_carts.pop()
     except Exception as e:
         print("EXCEPTION create_cart:", e)
@@ -99,7 +99,7 @@ def update_cart(
             db.add(cart_ins)
         db.commit()
         db.refresh(cart_ins)
-        py_carts = pydantify_carts([(cart_ins, None)])
+        py_carts = pydantify_carts([cart_ins])
         return py_carts.pop()
 
     except Exception as e:
@@ -115,13 +115,13 @@ def retrieve_cart(
 ) -> schema.Cart | None:
     try:
         results = db.exec(
-            select(Cart, CartItem)
+            select(Cart)
             .where(Cart.shop_id == shop_id)
             .where(Cart.livemode == livemode)
             .where(Cart.id == cart_id)
-            .where(Cart.id == CartItem.cart_id)
         )
         all_rows = list(results.all())
+        print(all_rows)
         py_carts = pydantify_carts(all_rows)
         return py_carts.pop()
     except Exception as e:
@@ -137,10 +137,9 @@ def list_carts(
     limit: int = 50,
 ) -> schema.CartList:
     results = db.exec(
-        select(Cart, CartItem)
+        select(Cart)
         .where(Cart.shop_id == shop_id)
         .where(Cart.livemode == livemode)
-        .where(Cart.id == CartItem.cart_id)
         .offset(skip)
         .limit(limit)
     )
