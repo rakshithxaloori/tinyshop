@@ -1,5 +1,5 @@
 // Migrator for the custom scrapper shopify data
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 import * as fs from "fs";
@@ -8,11 +8,15 @@ import Tinyshop from "../src";
 import { Product, ProductCreate } from "../interfaces/product";
 import { OptionCreate } from "../interfaces/option";
 import { VariantCreate } from "../interfaces/variant";
-import { PriceCreate, PriceTypeEnum, RecurringTypeEnum } from "../interfaces/price";
+import {
+  PriceCreate,
+  PriceTypeEnum,
+  RecurringTypeEnum,
+} from "../interfaces/price";
 import { CollectionCreate } from "../interfaces/collection";
 import { CustomerCreate } from "../interfaces/customer";
 import { FeedbackEnum, ReviewCreate } from "../interfaces/review";
-import { MongoClient, Collection } from 'mongodb';
+import { MongoClient, Collection } from "mongodb";
 
 const secret_key = process.env.SECRET_KEY as string;
 
@@ -100,15 +104,15 @@ async function connectToMongoDB() {
   try {
     mongoClient = new MongoClient(MONGO_URI);
     await mongoClient.connect();
-    console.log('Connected to MongoDB');
+    console.log("Connected to MongoDB");
     const db = mongoClient.db(DB_NAME);
     productDetailsCollection = db.collection(COLLECTION_NAME);
 
     // Create indexes
     await productDetailsCollection.createIndex({ brand: 1 });
-    await productDetailsCollection.createIndex({ 'product_handle': 1 });
+    await productDetailsCollection.createIndex({ product_handle: 1 });
   } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
+    console.error("Error connecting to MongoDB:", error);
     throw error;
   }
 }
@@ -117,7 +121,7 @@ async function connectToMongoDB() {
 async function closeMongoDBConnection() {
   if (mongoClient) {
     await mongoClient.close();
-    console.log('Closed MongoDB connection');
+    console.log("Closed MongoDB connection");
   }
 }
 
@@ -184,8 +188,8 @@ const convertToPriceCreate = (
   variant: TScrapperVariant,
   tinyshopVariantId: string
 ): PriceCreate => {
-  const price = Math.floor(variant.price);
-  const compareAtPrice = Math.floor(variant.compareAtPrice);
+  const price = Math.floor(variant.price * 100);
+  const compareAtPrice = Math.floor(variant.compareAtPrice * 100);
   return {
     active: variant.available,
     currency: "INR",
@@ -223,7 +227,7 @@ const convertToRecurringPriceCreate = (
     },
     variant: tinyshopVariantId,
   };
-}
+};
 
 // Function to convert TScrapperCollection to CollectionCreate
 const convertToCollectionCreate = (
@@ -245,13 +249,17 @@ function getRandomFeedbackEnum(): FeedbackEnum {
 }
 
 // TODO: upload to product data JSON to mongoDB
-async function uploadProductDetailsToMongoDB(tinyshopProduct: Product, scrapperProduct: TScrapperProduct, brand: string) {
+async function uploadProductDetailsToMongoDB(
+  tinyshopProduct: Product,
+  scrapperProduct: TScrapperProduct,
+  brand: string
+) {
   const productHandle = tinyshopProduct.handle;
   const productDetails = {
     brand,
     product_handle: productHandle,
     faq: scrapperProduct.faq,
-    tabs: scrapperProduct.tabs
+    tabs: scrapperProduct.tabs,
   };
 
   try {
@@ -262,7 +270,10 @@ async function uploadProductDetailsToMongoDB(tinyshopProduct: Product, scrapperP
     );
     console.log(`Uploaded details for product: ${tinyshopProduct.name}`);
   } catch (error) {
-    console.error(`Error uploading details for product ${tinyshopProduct.name}:`, error);
+    console.error(
+      `Error uploading details for product ${tinyshopProduct.name}:`,
+      error
+    );
   }
 }
 
@@ -294,7 +305,8 @@ const processCombinedJSON = async (
     const { name, variants } = product;
     if (variants.length === 0) {
       console.log(
-        `Skipping product with no variants ${index + 1
+        `Skipping product with no variants ${
+          index + 1
         }/${numProducts} (${progress}%)`
       );
       continue;
@@ -332,7 +344,10 @@ const processCombinedJSON = async (
 
       const priceCreated = await tinyshop.prices.create(priceCreate);
 
-      const recurringPriceCreate = convertToRecurringPriceCreate(variant, createdVariant.id);
+      const recurringPriceCreate = convertToRecurringPriceCreate(
+        variant,
+        createdVariant.id
+      );
       await tinyshop.prices.create(recurringPriceCreate);
     }
 
@@ -384,7 +399,8 @@ const processCombinedJSON = async (
 
     if (collection.length === 0) {
       console.log(
-        `Skipping empty collection ${index + 1}/${collectionData.length
+        `Skipping empty collection ${index + 1}/${
+          collectionData.length
         } (${progress}%)`
       );
       continue;
@@ -395,7 +411,8 @@ const processCombinedJSON = async (
       .filter((product) => product !== undefined);
     if (products.length === 0) {
       console.log(
-        `Skipping collection with no products ${index + 1}/${collectionData.length
+        `Skipping collection with no products ${index + 1}/${
+          collectionData.length
         } (${progress}%)`
       );
       continue;
