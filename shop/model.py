@@ -1,10 +1,10 @@
-from enum import Enum
 from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship
 
 
 from lib.model import SqlBase
 from lib.primary_key import get_primary_key
+from lib.enum import PaymentsProviderEnum
 
 
 if TYPE_CHECKING:
@@ -29,10 +29,6 @@ if TYPE_CHECKING:
     from subscription.model import Subscription
     from invoice.model import Invoice
     from order.model import Order
-
-
-class PaymentsProviderEnum(str, Enum):
-    RAZORPAY = "razorpay"
 
 
 class Shop(SqlBase, table=True):

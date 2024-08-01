@@ -15,7 +15,7 @@ from shop.model import Shop
 from lib.datetime import calculate_current_period_end
 from checkout.model import Checkout
 from subscription.utils.razorpay import create_razorpay_subscription
-from shop.model import PaymentsProviderEnum
+from lib.enum import PaymentsProviderEnum
 
 
 def create_subscription(
@@ -31,8 +31,7 @@ def create_subscription(
             .where(Shop.id == shop_id)
             .where(Shop.livemode == livemode)
         )
-        payments_provider = shop_payments_prov_res.one()
-        print(payments_provider, type(payments_provider))
+        shop_payments_provider = shop_payments_prov_res.one()
         sub_data = subscription.model_dump(
             exclude={
                 "checkout",
@@ -102,7 +101,7 @@ def create_subscription(
             current_period_start=subscription.start_date,
             current_period_end=current_period_end,
             next_pending_invoice=current_period_end,
-            provider=payments_provider,
+            provider=shop_payments_provider,
             checkout_id=subscription.checkout if subscription.checkout else None,
             **sub_data,
             **subscription.billing_cycle_anchor_config.model_dump(),
@@ -123,7 +122,7 @@ def create_subscription(
         amount_subtotal = 0
         for price_id, unit_amount in prices_amount_dict.items():
             amount_subtotal += unit_amount * prices_quantity_dict[price_id]
-        if payments_provider == PaymentsProviderEnum.RAZORPAY:
+        if shop_payments_provider == PaymentsProviderEnum.RAZORPAY:
             create_razorpay_subscription(new_sub, amount_subtotal)
             # Creates an UPDATE statement
             db.add(new_sub)

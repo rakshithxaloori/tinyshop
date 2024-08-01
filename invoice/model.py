@@ -5,7 +5,7 @@ from sqlmodel import Field, Relationship
 
 from lib.model import SqlBase
 from lib.primary_key import get_primary_key
-from shop.model import PaymentsProviderEnum
+from lib.enum import PaymentsProviderEnum
 
 
 if TYPE_CHECKING:
