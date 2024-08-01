@@ -27,6 +27,16 @@ def pydantify_checkouts(rows: list[Checkout]) -> list[schema.Checkout]:
                     if ch_ins.subscriptions
                     else None
                 ),
+                line_items=schema.CheckoutLineItemList(
+                    data=[
+                        schema.CheckoutLineItem(
+                            price=line_item.price_id, quantity=line_item.quantity
+                        )
+                        for line_item in ch_ins.line_items[:LIST_LIMIT_COUNT]
+                    ],
+                    has_more=False,
+                    url=f"/v1/checkout_items?checkout={ch_ins.id}",
+                ),
             )
         )
     return checkouts

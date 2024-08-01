@@ -7,6 +7,18 @@ from discount.schema import DiscountList
 from subscription.schema import SubscriptionList
 
 
+class CheckoutLineItem(BaseModel):
+    price: str
+    quantity: int
+
+
+class CheckoutLineItemList(BaseModel):
+    object: str = "list"
+    data: list[CheckoutLineItem] = []
+    has_more: bool
+    url: str = "/v1/checkout_items"  # TODO checkout line item
+
+
 class CheckoutBase(BaseModel):
     return_url: str
     success_url: str
@@ -34,6 +46,7 @@ class Checkout(CheckoutBase, PyBaseModel):
     invoice: str | None = None
     # discounts: DiscountList
     subscriptions: SubscriptionList | None = None
+    line_items: CheckoutLineItemList
 
 
 class CheckoutUpdate(BaseModel):
