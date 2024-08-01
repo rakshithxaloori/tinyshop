@@ -1,7 +1,7 @@
 import { SubscriptionList } from "./subscription";
 
 // Enums
-type CheckoutStatusEnum = "open" | "complete" | "expired" | "canceled";
+type CheckoutStatusEnum = "open" | "complete" | "expired" | "canceled" | "abandoned" | "processing";
 
 // Interfaces
 interface CheckoutLineItem {
@@ -63,7 +63,7 @@ interface CheckoutDelete {
   deleted: boolean;
 }
 
-export {
+export type {
   Checkout,
   CheckoutCreate,
   CheckoutUpdate,
