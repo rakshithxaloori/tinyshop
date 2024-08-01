@@ -64,4 +64,10 @@ interface OrderDelete {
   deleted: boolean;
 }
 
-export { Order, OrderCreate, OrderUpdate, OrderList, OrderDelete };
+export type {
+  Order,
+  OrderCreate,
+  OrderUpdate,
+  OrderList,
+  OrderDelete
+};

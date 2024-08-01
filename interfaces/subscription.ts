@@ -117,7 +117,7 @@ interface SubscriptionDelete {
   deleted: boolean;
 }
 
-export {
+export type {
   Subscription,
   SubscriptionCreate,
   SubscriptionUpdate,

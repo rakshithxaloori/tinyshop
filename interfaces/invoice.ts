@@ -66,4 +66,10 @@ interface InvoiceDelete {
   deleted: boolean;
 }
 
-export { Invoice, InvoiceCreate, InvoiceUpdate, InvoiceList, InvoiceDelete };
+export type {
+  Invoice,
+  InvoiceCreate,
+  InvoiceUpdate,
+  InvoiceList,
+  InvoiceDelete
+};
