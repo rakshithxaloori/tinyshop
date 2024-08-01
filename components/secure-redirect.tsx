@@ -3,16 +3,8 @@ import { useRouter } from 'next/navigation'
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger
 } from "@/components/ui/drawer"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { getSessionData, setSessionData } from '@/lib/session'
 import { checkIfAuthenticated } from '@/lib/server-actions'
-import { InputOTP, InputOTPGroup, InputOTPSlot } from './ui/input-otp'
 import PhoneAuth from './phone-auth'
 
 interface SecureRedirectProps {
