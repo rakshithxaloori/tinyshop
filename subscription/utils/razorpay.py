@@ -3,16 +3,13 @@ from subscription.model import Subscription
 from lib.payment_providers.razorpay import razorpay
 
 
-RAZORPAY_MONTHLY_PLAN_ID = os.environ["RAZORPAY_MONTHLY_PLAN_ID"]
-
-
 def create_razorpay_subscription(subscription: Subscription, amount_subtotal: int):
     razorpay_plan = razorpay.plan.create(
         {
             "period": f"{subscription.interval.value}ly",
             "interval": subscription.interval_count,
             "item": {
-                "name": "Test plan - Weekly",
+                "name": "Test plan - Monthly",
                 "amount": amount_subtotal,
                 "currency": "INR",  # TODO
                 "description": "Description for the test plan",
