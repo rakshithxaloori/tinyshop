@@ -107,7 +107,6 @@ const CheckoutForm = ({
           email: form.getValues('email'),
           name: form.getValues('fullName')
         });
-        console.log('Updated customer details:', updatedCustomer);
       } catch (error) {
         console.error('Failed to update customer details:', error);
       } finally {

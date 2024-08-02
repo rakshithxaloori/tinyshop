@@ -141,16 +141,6 @@ const PhoneAuth = ({ className }: { className?: string }) => {
           handlePhoneChange={() => setStep(1)}
         />
       )}
-
-      {step === 3 && (
-        <div className="success">
-          <h2>Account verified!</h2>
-          <p>Welcome to fleeso</p>
-          <button onClick={() => console.log('Go to dashboard')}>
-            Go to dashboard
-          </button>
-        </div>
-      )}
     </div>
   );
 };

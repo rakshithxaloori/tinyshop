@@ -29,8 +29,8 @@ const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
   }
 
   return (
-    <div className="grid grid-cols-[20%_1fr_auto] gap-3 w-full bg-base-200 max-h-24">
-      <div className="relative w-full aspect-square">
+    <div className="grid grid-cols-[20%_1fr_auto] gap-3 w-full h-fit p-sm">
+      <div className="relative max-h-fit max-w-24">
         <Image
           src={image}
           alt={name}
@@ -68,7 +68,7 @@ const CartList = () => {
   const { items } = cartStore
 
   return (
-    <div className="flex flex-col gap-2 w-full justify-start max-h-full overflow-y-scroll">
+    <div className="flex flex-col gap-2 w-full justify-start max-h-full overflow-y-scroll divide-y-2 border-y-primary">
       {
         items.map((item, index) => {
           return (

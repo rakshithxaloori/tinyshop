@@ -20,6 +20,9 @@ import dynamic from "next/dynamic";
 import { ShoppingBagIcon, ShoppingCartIcon } from "lucide-react";
 import { useSearchQuery } from "../hooks/search";
 
+const disableOneTime = process.env.NEXT_PUBLIC_DISABLE_ONE_TIME! === "true";
+
+
 const NoSSRCartBagDisplay = dynamic(() => import("../cart-bag-display"), {
   ssr: false,
   loading: () => <div className="h-6 w-6 animate-spin border-2 rounded-full border-base-300 border-t-primary" />
@@ -51,6 +54,7 @@ const ProductCard = ({ product,
   const productImage = product?.images && product.images[0] ? product.images[0] : image;
   const prices: TPriceUI[] = product?.default_variant?.prices ? processPricesResponse(product?.default_variant?.prices?.data) : [] as any;
   const oneTimePrice = prices.find(price => price.type === "one_time") ?? prices[0];
+  const subscriptionPrice = prices.find(price => price.type === "subscription") ?? prices[0];
 
   const router = useRouter();
   const cartStore = useCartStore();
@@ -59,13 +63,17 @@ const ProductCard = ({ product,
   const { clearQuery } = useSearchQuery();
 
   const cartItemChain = {
-    priceId: prices.length > 0 ? oneTimePrice.id : "N/A",
+    priceId: prices.length > 0 ? (
+      disableOneTime ? subscriptionPrice.id :
+        oneTimePrice.id) : "N/A",
     productId: product.id,
     variantId: product?.default_variant?.id ?? "N/A"
   }
 
   const itemPrice = prices.length > 0 ?
-    oneTimePrice.unit_amount ?? "N/A" :
+    (disableOneTime ?
+      subscriptionPrice.unit_amount ?? "N/A" :
+      oneTimePrice.unit_amount ?? "N/A") :
     "N/A"
   const itemCurrency = prices.length > 0 ?
     oneTimePrice.currency :
@@ -75,7 +83,7 @@ const ProductCard = ({ product,
     image: productImage,
     name: product.name,
     variantName: product?.default_variant?.name ?? null,
-    isSubscription: false,
+    isSubscription: disableOneTime,
     price: itemPrice,
     currency: itemCurrency
   }
@@ -93,7 +101,7 @@ const ProductCard = ({ product,
 
   return (
     <div onClick={handleLinkClick}
-      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary hover:m-1 transition-all duration-100 ease-linear bg-base-100 border-2 rounded-xl">
+      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary md:hover:m-1 transition-all duration-100 ease-linear bg-base-100 border-2 rounded-xl">
       <div className="group card card-compact">
         <figure className="relative aspect-square rounded-t-xl">
           <Image src={
@@ -142,7 +150,7 @@ const ProductCard = ({ product,
         >
           <div className="card-action w-full px-2">
             <Button variant="outline"
-              className="w-full rounded-full border-primary text-primary"
+              className="w-full rounded-full border-primary text-primary hover:bg-primary hover:text-primary-content"
               onClick={handleAddToCart}
             >
               Add

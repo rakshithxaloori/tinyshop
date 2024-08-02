@@ -11,7 +11,7 @@ interface ProductVariantSectionProps {
 import {
   PriceAndAddToCardComponent,
   PriceDisplay,
-  VariantSelector
+  PriceSelector,
 } from "./client/variant";
 import Variant from "./hook/variant";
 import Link from "next/link";
@@ -78,7 +78,7 @@ const ProductDetails = ({ product, reviews }: { product: any; reviews: any[] }) 
         {summary}
       </div>
       <div className="grow" />
-      <VariantSelector product={product} />
+      <PriceSelector product={product} />
       <PriceAndAddToCardComponent product={product} />
     </div>
   )

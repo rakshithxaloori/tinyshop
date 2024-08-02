@@ -4,36 +4,12 @@ import PriceCard from "@/components/price/price-card-v1";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MinusIcon, PlusIcon, ShoppingBagIcon } from "lucide-react";
-import { Fragment, use, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useVariant } from "../hook/variant";
 import useCartStore from "@/store/cart";
 import dynamic from "next/dynamic";
-import { TPriceUI } from "@/types/product";
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { px } from "framer-motion";
 
-const processPricesResponse = (prices: any): TPriceUI[] => {
-  // Prices are returned as an array of objects
-  // return the currency, the unit_amount and the unit_compare_amount
-  // if available
-  return prices.map((price: any) => {
-    const { currency,
-      unit_amount,
-      unit_compare_amount,
-      id,
-      type,
-    } = price;
-    return {
-      type,
-      id,
-      currency,
-      unit_amount,
-      unit_compare_amount
-    }
-  });
-}
-
+const disableOneTime = process.env.NEXT_PUBLIC_DISABLE_ONE_TIME! === "true";
 
 const NoSSRCartBagDisplay = dynamic(() => import("@/components/cart-bag-display"), {
   ssr: false,
@@ -86,9 +62,9 @@ const AddToCart = ({ config, product }:
   }
 ) => {
   const [quantity, setQuantity] = useState<number>(1)
-  const { variant: selectedVariant, price: selectedPrice } = useVariant();
+  const { price: selectedPrice } = useVariant();
   const { shouldAnimateButton } = config
-  const { items, addItem } = useCartStore()
+  const { addItem } = useCartStore()
 
   const handleIncrement = () => {
     setQuantity(quantity + 1)
@@ -103,14 +79,14 @@ const AddToCart = ({ config, product }:
 
   const cartItemChain = {
     productId: product.id,
-    variantId: selectedVariant?.id || "",
+    variantId: selectedPrice?.variant || "",
     priceId: selectedPrice?.id || "",
   }
 
   const cartItemDisplay = {
     image: product.images.length ? product.images[0] : "",
     name: product.name,
-    variantName: selectedVariant?.name || "",
+    variantName: selectedPrice?.variantName || "",
     price: selectedPrice?.unit_amount || 0,
     currency: selectedPrice?.currency || "",
     isSubscription: selectedPrice?.type === "subscription",
@@ -120,6 +96,7 @@ const AddToCart = ({ config, product }:
     e.preventDefault();
     e.stopPropagation();
     addItem(cartItemChain, cartItemDisplay, quantity)
+    setQuantity(1)
   }
 
   return (
@@ -176,16 +153,17 @@ const QuantitySelector = ({
   )
 }
 
-const VariantItem = ({ variant, selectedVariant, onSelect, onPriceSelect }: {
-  variant: any; selectedVariant: any;
+const PriceItem = ({ price, selectedPrice, onSelect }: {
+  price: any; selectedPrice: any;
   onSelect: Function;
-  onPriceSelect: Function;
 }) => {
-  // display the one_time of the variant
-  const { prices } = variant;
-  const uiPrices = processPricesResponse(prices.data)
-  const hasSubscription = uiPrices.some(price => price.type === "subscription")
-  const isSelected = useMemo(() => selectedVariant.id === variant.id, [selectedVariant, variant])
+  const isSelected = useMemo(() => selectedPrice.id === price.id, [selectedPrice, price])
+  const { getPrice } = useCartStore()
+  const cartVariantQty = getPrice(price.id).quantity
+  const isSub = price.type === "subscription"
+
+  const priceAmount = price.unit_amount
+  const priceCurrency = price.currency
 
   return (
     <div className={cn("flex flex-row min-w-full item-center h-full p-2 mt-2",
@@ -194,139 +172,65 @@ const VariantItem = ({ variant, selectedVariant, onSelect, onPriceSelect }: {
       "hover:border-primary hover:border-opacity-100 cursor-pointer transition-all",
       // isSelected && "cursor-not-allowed",
     )}
-      onClick={() => onSelect(variant)}
+      onClick={() => onSelect(price)}
     >
-      {
-        hasSubscription ? (
-          <SubscriptionVariantDisplay variant={variant} isSelected={isSelected}
-            onPriceSelect={onPriceSelect} />
-        ) : (
-          <SansSubcriptionVariantDisplay variant={variant} />
-        )
-      }
-    </div>
-  )
-}
-
-const SubscriptionVariantDisplay = ({ variant, isSelected, onPriceSelect }: { variant: any; isSelected: boolean; onPriceSelect: Function }) => {
-  const { prices } = variant;
-  const uiPrices = useMemo(() => processPricesResponse(prices.data), [prices])
-  const { getPrice } = useCartStore()
-  const { price: selectedPrice } = useVariant()
-  const cartPriceQty = uiPrices.map((price: any) => getPrice(price.id).quantity)
-
-  const [pxValue, setPxValue] = useState<string>(prices.data[0].id)
-
-  useEffect(() => {
-    if (!isSelected) {
-      setPxValue("")
-    } else {
-      setPxValue(uiPrices[0].id)
-    }
-  }, [isSelected, uiPrices])
-
-  useEffect(() => {
-    if (isSelected) {
-      const uEPrice = uiPrices.find(price => price.id === pxValue)
-      onPriceSelect(uEPrice)
-    }
-  }, [isSelected, pxValue, uiPrices, onPriceSelect])
-
-
-  const onValueChange = (priceId: string) => {
-    setPxValue(priceId)
-
-    // const selectedPrice = uiPrices.find(price => price.id === priceId)
-    // onPriceSelect(selectedPrice)
-  }
-
-  return (
-    <div className="flex flex-row flex-1">
-      <span className="text-lg font-bold">{variant.name}</span>
-      <div className="grow"></div>
-      <div className="flex flex-col mt-sm gap-2">
-        <RadioGroup value={pxValue} disabled={!isSelected}
-          onValueChange={(value: string) => onValueChange(value)}
-        >
-          {
-            uiPrices.map((price: any, index: number) => {
-              return (
-                <div key={index} className="flex items-center space-x-2 w-full">
-                  <RadioGroupItem
-                    value={price.id}
-                    id={price.id}
-                  />
-                  <Label htmlFor={price.id} className="flex flex-row items-center w-full justify-between">
-                    <PriceCard price={price.unit_amount} currency={price.currency}
-                      isSubscription={price.type === "subscription"}
-                    />
-                    <NoSSRCartBagDisplay quantity={cartPriceQty[index]} cx="ml-2" />
-                  </Label>
-                </div>
-              )
-            }
-            )
-          }
-        </RadioGroup>
+      <div className="flex flex-row flex-1">
+        <span className={cn("text-lg font-bold")}>{price.variantName}</span>
+        <div className="grow"></div>
+        <PriceCard price={priceAmount} currency={priceCurrency} isSubscription={price.type === "subscription"} />
+        <NoSSRCartBagDisplay quantity={cartVariantQty} cx="ml-2" />
       </div>
     </div>
   )
 }
 
-const SansSubcriptionVariantDisplay = ({ variant }: { variant: any }) => {
-  const { prices } = variant;
-  const priceAmount = prices.data[0].unit_amount
-  const priceCurrency = prices.data[0].currency
-  const { getVariant } = useCartStore()
-  const cartVariantQty = getVariant(variant.id).quantity
-  return (
-    <div className="flex flex-row flex-1">
-      <span className="text-lg font-bold">{variant.name}</span>
-      <div className="grow"></div>
-      <PriceCard price={priceAmount} currency={priceCurrency} />
-      <NoSSRCartBagDisplay quantity={cartVariantQty} cx="ml-2" />
-    </div>
-  )
+const PriceSelector = ({ product }: { product: any }) => {
+  // flatten the prices array
 
-}
-
-
-const VariantSelector = ({ product }: { product: any }) => {
   const variantInfo = product.variants.data
-  const [selectedVariant, setSelectedVariant] = useState(variantInfo[0])
-  const { setVariant, setPrice } = useVariant();
+
+  let flattenedPrices = variantInfo.map((variant: any) => {
+    const prices = variant.prices.data
+    return prices.map((price: any) => {
+      return {
+        ...price,
+        variantName: variant.name
+      }
+    })
+  })
+
+  flattenedPrices = flattenedPrices.flat()
+
+  // if disable one time is set, filter out the one time prices
+  if (disableOneTime) {
+    flattenedPrices = flattenedPrices.filter((price: any) => price.type === "subscription")
+  }
+
+  const [selectedPrice, setSelectedPrice] = useState(flattenedPrices[0])
+  const { setPrice } = useVariant();
   const { getProduct } = useCartStore()
   const cartProductQty = getProduct(product.id).quantity
 
   useEffect(() => {
-    setVariant(selectedVariant)
-  }, [setVariant, selectedVariant])
+    setPrice(selectedPrice)
+  }, [setPrice, selectedPrice])
 
-  const handleSelectVariant = (localVariant: any) => {
-    setSelectedVariant(localVariant)
-    // if the local variant has a single price then set it to the price
-    // const { prices } = localVariant;
-    // const uiPrices = processPricesResponse(prices.data)
-    // const selectedPrice = uiPrices.find(price => price.type === "one_time")
-    // setPrice(selectedPrice)
-  }
-
-  const handleSelectPrice = (price: any) => {
-    setPrice(price)
+  const handleSelectPrice = (localPrice: any) => {
+    setSelectedPrice(localPrice)
   }
 
   return (
     <div className={cn("flex flex-col w-full overflow-x-scroll mt-md",
-      (variantInfo.length === 1 && cartProductQty === 0) && "hidden"
+      (flattenedPrices.length === 1 && cartProductQty === 0) && "hidden"
     )}>
       {
-        variantInfo.map((variant: any, index: number) => {
+        flattenedPrices.map((price: any, index: number) => {
           return (
-            <VariantItem
+            <PriceItem
               key={index}
-              {...{ variant, selectedVariant, }}
-              onSelect={handleSelectVariant}
-              onPriceSelect={handleSelectPrice}
+              price={price}
+              selectedPrice={selectedPrice}
+              onSelect={handleSelectPrice}
             />
           )
         })
@@ -340,10 +244,7 @@ const PriceAndAddToCardComponent = ({
 }: {
   product: any
 }
-
 ) => {
-  const { option, variant } = product
-
   return (
     <div>
       <AddToCart config={{
@@ -360,57 +261,25 @@ const PriceDisplay = ({
 }: {
   cx?: string
 }) => {
-  const { variant, price } = useVariant()
-  if (!variant) {
-    return null
-  }
-  const { prices } = variant;
+  const { price } = useVariant()
   // check if it's a subscription variant
-  const hasSubscription = prices.data.some((price: any) => price.type === "subscription")
-  let displayPriceAmount = prices.data[0].unit_amount
-  const displayPriceCurrency = prices.data[0].currency
-  const displayComparePrice = prices.data[0].unit_compare_amount
+  const isSubscription = price.type === "subscription"
+  let displayPriceAmount = price.unit_amount
+  const displayPriceCurrency = price.currency
+  const displayComparePrice = price.unit_compare_amount
 
   return (
     <div className={cn("flex flex-col justify-end items-start",
       !!cx && cx,
     )}
     >
-      {!hasSubscription &&
-        (<PriceCard
-          price={displayPriceAmount}
-          currency={displayPriceCurrency}
-          comparePrice={displayComparePrice}
-        />)
-      }
-      {
-        hasSubscription && (
-          (
-            <Fragment>
-              <div className="flex flex-row items-center gap-1 md:gap-2">
-                <span className="text-sm font-bold">{"Buy    "} @ </span>
-
-                <PriceCard
-                  price={prices.data[0].unit_amount}
-                  currency={prices.data[0].currency}
-                  comparePrice={prices.data[0].unit_compare_amount}
-                />
-              </div>
-              <div className="flex flex-row items-center gap-1 md:gap-2">
-                <span className="text-sm font-bold">Subscribe @ </span>
-                <PriceCard
-                  price={prices.data[1].unit_amount}
-                  currency={prices.data[1].currency}
-                  comparePrice={prices.data[1].unit_compare_amount}
-                  isSubscription
-                />
-              </div>
-            </Fragment>
-          )
-        )
-      }
+      <PriceCard
+        price={displayPriceAmount}
+        currency={displayPriceCurrency}
+        comparePrice={displayComparePrice}
+        isSubscription={isSubscription}
+      />
     </div>
-
   )
 }
 
@@ -418,6 +287,6 @@ export {
   SingleOptionComponent,
   MultiOptionComponent,
   PriceAndAddToCardComponent,
-  VariantSelector,
+  PriceSelector,
   PriceDisplay
 }
