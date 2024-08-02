@@ -1,26 +1,30 @@
 "use client";
 
 import { CurrencyString } from '@/components/price/currency-icon'
+import { deleteCartId } from '@/lib/cookie/cart';
 import { getSubscriptionItems } from '@/lib/server-actions'
+import useCartStore from '@/store/cart';
 import { TCheckoutItem } from '@/types/product'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 
 const ThanksPage = () => {
   const subscriptionId = useSearchParams().get('subId')
   const [subscriptionItems, setSubscriptionItems] = useState<TCheckoutItem[]>([])
+  const clearCart = useCartStore(state => state.clearCart)
 
   useEffect(() => {
     async function fetchData() {
       if (subscriptionId) {
         const items = await getSubscriptionItems(subscriptionId)
-        console.log(items)
         setSubscriptionItems(items as any)
+        deleteCartId();
+        clearCart();
       }
     }
     fetchData()
-  }, [subscriptionId])
+  }, [subscriptionId, clearCart])
 
   const total = subscriptionItems.reduce((acc, item) => acc + (Number(item.unitAmount) / 100 * item.quantity), 0).toFixed(2)
 

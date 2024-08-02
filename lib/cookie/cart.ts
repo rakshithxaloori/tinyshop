@@ -37,3 +37,8 @@ export const getCartId = async () => {
   }
   return cartId;
 }
+
+export const deleteCartId = () => {
+  const cookieStore = cookies()
+  cookieStore.delete(cartCookieName)
+}

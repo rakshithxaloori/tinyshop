@@ -92,7 +92,7 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
         for (const item of get().items) {
           get().clearCartItem(item.id);
         }
-        set({ items: [] });
+        set({ items: [], id: '' });
       },
 
       // the getter functions. DO NOT rehydrate here
