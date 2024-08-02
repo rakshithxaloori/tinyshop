@@ -114,8 +114,8 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
           // delete the previous cart 
           await deleteCart(zustandCartId);
           // TODO: rehydrate the cart items
-          set({ id: cartId });
         }
+        set({ id: cartId });
       }
     })
     ,
