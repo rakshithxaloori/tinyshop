@@ -891,10 +891,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tinyshop/tinyshop-node@^0.0.40":
-  version "0.0.40"
-  resolved "https://registry.yarnpkg.com/@tinyshop/tinyshop-node/-/tinyshop-node-0.0.40.tgz#872eb3908c3f09f005691064ab31c9643c81496a"
-  integrity sha512-kVWijfgwuCi67V6bcGP70dHYhPr7j3VjA/1DxE70+RCjXP5UNfWqDngxxi49tu8GaktFJIIwP9LxYm+gHAvI7w==
+"@tinyshop/tinyshop-node@^0.0.41":
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/@tinyshop/tinyshop-node/-/tinyshop-node-0.0.41.tgz#06adea2edf7ccd46f1761467ba5c05d164d990ce"
+  integrity sha512-WNRtp0mkNg19vv/sE2Z7y1SNOgECiN20LB0tZgIUuLFLlg3A/KmJWWNpU2wo1bvBhZxsdnkrW2wy3IEbd9M7Qg==
 
 "@types/json5@^0.0.29":
   version "0.0.29"

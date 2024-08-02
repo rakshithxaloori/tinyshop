@@ -56,3 +56,11 @@ export interface IProductExternalDetails {
   }
 }
 
+export type TCheckoutItem = {
+  id: string;
+  productName: string;
+  variantName: string;
+  unitAmount: number;
+  quantity: number;
+  image: string;
+}

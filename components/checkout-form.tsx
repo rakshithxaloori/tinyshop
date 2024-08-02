@@ -150,18 +150,19 @@ const CheckoutForm = ({
     };
   }, []);
 
-  const openRazorpay = ({ name, email, contact, subscriptionId }: {
+  const openRazorpay = ({ name, email, contact, tinyshopSubscriptionId, providerSubscriptionId }: {
     name: string;
     email: string;
     contact: string;
-    subscriptionId: string;
+    tinyshopSubscriptionId: string;
+    providerSubscriptionId: string;
   }) => {
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       name: process.env.NEXT_PUBLIC_SHOP_NAME,
       description: "Test Transaction",
-      callback_url: "http://localhost:3000/customer",
-      subscription_id: subscriptionId,
+      callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/thanks?subId=${tinyshopSubscriptionId}`,
+      subscription_id: providerSubscriptionId,
       prefill: {
         name: name,
         email: email,
@@ -214,7 +215,8 @@ const CheckoutForm = ({
       name: data.fullName,
       email: data.email,
       contact: `+91${phone}`,
-      subscriptionId: updatedCheckout.subscriptions?.data[0].provider_details.razorpay?.subscription_id || ''
+      tinyshopSubscriptionId: updatedCheckout.subscriptions?.data[0].id || '',
+      providerSubscriptionId: updatedCheckout.subscriptions?.data[0].provider_details.razorpay?.subscription_id || ''
     });
   };
 

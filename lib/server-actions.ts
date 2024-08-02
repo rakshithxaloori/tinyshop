@@ -1,7 +1,7 @@
 "use server";
 
 import { clearSessionData, getSessionData, setSessionData } from "./session";
-import { createOrGetCustomer, verifyCustomer } from "./storefront";
+import { createOrGetCustomer, getSubscriptionDetails, verifyCustomer } from "./storefront";
 
 export const checkIfAuthenticated = async () => {
   "use server";
@@ -29,4 +29,10 @@ export const logoutCustomer = async () => {
 export const signInCustomer = async (customerId: string, phoneNumber: string) => {
   "use server"
   await setSessionData(customerId, phoneNumber)
+}
+
+export const getSubscriptionItems = async (subscriptionId: string) => {
+  "use server"
+  const subscriptionItems = await getSubscriptionDetails(subscriptionId)
+  return subscriptionItems
 }

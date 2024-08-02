@@ -1,5 +1,5 @@
 import 'server-only'
-import { IProductExternalDetails } from "@/types/product";
+import { IProductExternalDetails, TCheckoutItem } from "@/types/product";
 import { tinyshop } from "./tinyshop"
 import { connectToDatabase, disconnectFromDatabase } from "./mongo";
 import { daisyUIThemes } from './const';
@@ -172,3 +172,34 @@ export const verifyCustomer = async (customerId: string, otp: string) => {
   const customer = await tinyshop.customers.update(customerId, { otp });
   return { id: customer.id, verified: customer.is_verified }
 }
+
+
+export const getSubscriptionDetails = async (subscriptionId: string): Promise<TCheckoutItem[]> => {
+  const subscription = await tinyshop.subscriptions.retrieve(subscriptionId);
+
+  const itemPromises = subscription.line_items.map(async (lineItem) => {
+    const { price, quantity } = lineItem;
+    const { product, variant, unit_amount } = await tinyshop.prices.retrieve(price);
+
+    const [productData, variantData] = await Promise.all([
+      tinyshop.products.retrieve(product),
+      tinyshop.variants.retrieve(variant)
+    ]);
+
+    const { name: productName, images } = productData;
+    const { name: variantName } = variantData;
+
+    const productImage = images ? images[0] : '';
+
+    return {
+      id: price,
+      image: productImage,
+      productName,
+      variantName,
+      quantity,
+      unitAmount: unit_amount
+    };
+  });
+
+  return Promise.all(itemPromises);
+};
