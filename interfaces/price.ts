@@ -36,17 +36,17 @@ interface PriceBase {
   is_default: boolean;
   customer_unit_amount?: CustomerUnitAmount | null;
   recurring?: Recurring | null;
+  variant: string;
 }
 
 // Interface for PriceCreate
-interface PriceCreate extends PriceBase {
-  variant: string;
-}
+interface PriceCreate extends PriceBase {}
 
 // Interface for Price
 interface Price extends PriceBase {
   id: string;
   object: typeof ObjectType.PRICE;
+  product: string;
 }
 
 // Interface for PriceList
