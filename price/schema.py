@@ -25,15 +25,17 @@ class PriceBase(BaseModel):
     is_default: bool
     customer_unit_amount: CustomerUnitAmount | None = None
     recurring: Recurring | None = None
+    variant: str
 
 
 class PriceCreate(PriceBase):
-    variant: str
+    pass
 
 
 class Price(PriceBase, PyBaseModel):
     id: str
     object: str = ObjectType.PRICE
+    product: str
 
 
 class PriceList(BaseModel):
