@@ -27,7 +27,7 @@ const Cart = () => {
     clearCart()
   }
 
-  const cartItemsTotal = items.reduce((acc, item) => acc + (item.price as number) * item.quantity, 0)
+  const cartItemsTotal = items.reduce((acc, item) => acc + (item.price as number) * item.quantity, 0) / 100
   const cartItemsTotalCurrency = (items[0]?.currency || 'INR')
 
   return (

@@ -18,7 +18,9 @@ import {
 import { CurrencyString } from "./price/currency-icon";
 
 const CheckoutCartTable = () => {
-  const cartStore = useCartStore();
+  const cartItems = useCartStore((state) => state.items);
+  const cartTotal = cartItems.reduce((acc, item) => acc + (item.price as number) * item.quantity, 0) / 100
+
   return (
     <div>
       <Table>
@@ -32,7 +34,7 @@ const CheckoutCartTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {cartStore.items.map((item: TCartItem) => (
+          {cartItems.map((item: TCartItem) => (
             <TableRow key={item.id}>
               <TableCell className="relative h-24 w-24">
                 <Image
@@ -49,10 +51,10 @@ const CheckoutCartTable = () => {
                 {item.variantName && <span className="text-sm text-base-content/70 line-clamp-1">{item.variantName}</span>}
 
               </TableCell>
-              <TableCell className="text-right"><CurrencyString currency="inr" />{" "}{item.price}</TableCell>
+              <TableCell className="text-right"><CurrencyString currency="inr" />{" "}{Number(item.price) / 100}</TableCell>
               <TableCell className="text-right">{item.quantity}</TableCell>
               <TableCell className="text-right">
-                <CurrencyString currency="inr" />{" "}{Number(item.price) * item.quantity}
+                <CurrencyString currency="inr" />{" "}{Number(item.price) / 100 * item.quantity}
               </TableCell>
             </TableRow>
           ))}
@@ -62,7 +64,7 @@ const CheckoutCartTable = () => {
           <TableRow>
             <TableCell colSpan={4} className="text-right">Total</TableCell>
             <TableCell className="text-right">
-              <CurrencyString currency="inr" />{" "}{cartStore.items.reduce((acc, item) => acc + (item.price as number) * item.quantity, 0)}
+              <CurrencyString currency="inr" />{" "}{cartTotal}
             </TableCell>
           </TableRow>
         </TableFooter>

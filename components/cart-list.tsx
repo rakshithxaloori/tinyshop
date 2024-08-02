@@ -10,6 +10,7 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 
 const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
   const { image, name, price, currency, quantity, variantName, isSubscription: sub } = cartItem
+  const displayPrice = (Number(price) / 100).toString()
   const { addItem, removeItem } = useCartStore()
 
   const itemChain: TItemChain = cartItem as TItemChain
@@ -44,7 +45,7 @@ const CartListItem = ({ cartItem }: { cartItem: TCartItem }) => {
         {variantName && <span className="text-sm text-base-content/70 line-clamp-1">{variantName}</span>}
         <span className="text-sm text-base-content/70">
           <CurrencyString currency={currency} />
-          {price}
+          {displayPrice}
           {sub && <span className="text-sm font-normal text-base-content/60 self-align-end ml-xs">/month</span>}
         </span>
       </div>
