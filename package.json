@@ -1,13 +1,13 @@
 {
   "name": "@tinyshop/tinyshop-node",
-  "version": "0.0.37",
+  "version": "0.0.40",
   "description": "This package contains SDK code for tinyshop APIs.",
   "main": "src/index.ts",
   "types": "src/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "publish": "npm publish --access public"
+    "deploy": "npm publish --access public"
   },
   "keywords": [],
   "author": "tinyshop",
