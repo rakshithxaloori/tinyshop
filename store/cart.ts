@@ -15,7 +15,7 @@ type TCartStoreReturnType = {
 }
 
 type TCartStoreGetters = {
-  getId: () => string;
+  getId: () => Promise<string>;
   getProduct: (productId: string) => TCartStoreReturnType;
   getVariant: (variantId: string) => TCartStoreReturnType;
   getPrice: (priceId: string) => TCartStoreReturnType;
@@ -38,12 +38,17 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
     (set, get) => ({
       id: '',
       setId: (id: string) => set({ id }),
-      getId: () => get().id,
+      getId: async () => {
+        const zustandCartId = get().id;
+        if (zustandCartId.length === 0) {
+          return await get().rehydrate();
+        }
+        return zustandCartId;
+      },
       items: [],
       // the setter functions
       addItem: async (chain: TItemChain, display: TCartItemDisplay, quantity: number = 1) => {
-        // await the rehydrate function
-        const cartId = await get().rehydrate();
+        const cartId = await get().getId();
         const existingItem = get().items.find(i => i.priceId === chain.priceId);
         if (existingItem) {
           existingItem.quantity += quantity;
@@ -63,7 +68,7 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
         }
       },
       removeItem: async (chain: TItemChain) => {
-        const cartId = await get().rehydrate();
+        const cartId = await get().getId();
         const existingItem = get().items.find(i => i.priceId === chain.priceId);
         if (!existingItem) {
           return;
@@ -78,12 +83,12 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
         }
       },
       clearCartItem: async (cartItemId: string) => {
-        const cartId = await get().rehydrate();
+        const cartId = await get().getId();
         const removeItem = await removeCartItem(cartItemId);
         set({ items: get().items.filter(i => i.id !== cartItemId) });
       },
       clearCart: async () => {
-        const cartId = await get().rehydrate();
+        const cartId = await get().getId();
         for (const item of get().items) {
           get().clearCartItem(item.id);
         }
