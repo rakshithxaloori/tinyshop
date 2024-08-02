@@ -28,7 +28,6 @@ type SubscriptionCancellationDetailsReasonEnum =
   | "payment_disputed"
   | "payment_failed";
 
-// Interfaces
 interface PendingInvoiceInterval {
   interval: RecurringTypeEnum;
   interval_count: number;
@@ -36,16 +35,16 @@ interface PendingInvoiceInterval {
 
 interface BillingCycleAnchorConfig {
   day_of_month: number;
-  hour?: number;
-  minute?: number;
-  month?: number;
-  second?: number;
+  hour?: number | null;
+  minute?: number | null;
+  month?: number | null;
+  second?: number | null;
 }
 
 interface CancellationDetails {
-  review?: string;
-  feedback?: SubscriptionCancellationDetailsFeedbackEnum;
-  reason?: SubscriptionCancellationDetailsReasonEnum;
+  review?: string | null;
+  feedback?: SubscriptionCancellationDetailsFeedbackEnum | null;
+  reason?: SubscriptionCancellationDetailsReasonEnum | null;
 }
 
 interface RazorpayDetails {
@@ -53,7 +52,7 @@ interface RazorpayDetails {
 }
 
 interface ProviderDetails {
-  razorpay?: RazorpayDetails;
+  razorpay?: RazorpayDetails | null;
 }
 
 interface SubscriptionLineItem {
@@ -66,7 +65,7 @@ interface SubscriptionBase {
   collection_method: CollectionMethodEnum;
   start_date: number;
   billing_cycle_anchor: number;
-  cancel_at?: number;
+  cancel_at?: number | null;
   billing_cycle_anchor_config: BillingCycleAnchorConfig;
   pending_invoice_interval: PendingInvoiceInterval;
   customer: string;
@@ -75,47 +74,47 @@ interface SubscriptionBase {
 }
 
 interface SubscriptionCreate extends SubscriptionBase {
-  checkout?: string;
+  checkout?: string | null;
 }
 
 interface Subscription extends SubscriptionBase {
   id: string;
-  object: "subscription";
+  object: string;
   current_period_end: number;
   current_period_start: number;
   status: SubscriptionStatusEnum;
-  canceled_at?: number;
-  days_until_due?: number;
-  ended_at?: number;
+  canceled_at?: number | null;
+  days_until_due?: number | null;
+  ended_at?: number | null;
   start_date: number;
   next_pending_invoice: number;
-  cancellation_details?: CancellationDetails;
+  cancellation_details?: CancellationDetails | null;
   provider_details: ProviderDetails;
 }
 
 interface SubscriptionUpdate {
-  status?: SubscriptionStatusEnum;
-  cancel_at_period_end?: boolean;
-  collection_method?: CollectionMethodEnum;
-  billing_cycle_anchor?: number;
-  quantity?: number;
-  billing_cycle_anchor_config?: BillingCycleAnchorConfig;
-  pending_invoice_interval?: PendingInvoiceInterval;
-  cancellation_details?: CancellationDetails;
-  customer_address?: string;
-  days_until_due?: number;
+  status?: SubscriptionStatusEnum | null;
+  cancel_at_period_end?: boolean | null;
+  collection_method?: CollectionMethodEnum | null;
+  billing_cycle_anchor?: number | null;
+  quantity?: number | null;
+  billing_cycle_anchor_config?: BillingCycleAnchorConfig | null;
+  pending_invoice_interval?: PendingInvoiceInterval | null;
+  cancellation_details?: CancellationDetails | null;
+  customer_address?: string | null;
+  days_until_due?: number | null;
 }
 
 interface SubscriptionList {
-  object: "list";
-  url: "/v1/subscriptions";
+  object: string;
+  url: string;
   has_more: boolean;
   data: Subscription[];
 }
 
 interface SubscriptionDelete {
   id: string;
-  object: "subscription";
+  object: string;
   deleted: boolean;
 }
 
