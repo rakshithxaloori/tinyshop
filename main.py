@@ -1,6 +1,8 @@
 import os
 import base64
 import requests
+from urllib.parse import urlencode
+
 
 from fastapi import FastAPI, Request, Response, status
 from fastapi.responses import JSONResponse
@@ -30,18 +32,22 @@ async def get_credentials(request: Request, call_next):
         )
 
     if mode == "test":
+        # Construct the new URL with the original path
         new_url = f"{TEST_ENDPOINT.rstrip('/')}{request.url.path}"
 
         # Extract headers and remove 'host' as it's set by requests automatically
         headers = {k: v for k, v in request.headers.items() if k.lower() != "host"}
 
+        # Properly encode query parameters
+        full_url = f"{new_url}?{request.url.query}"
+
         # Make the request to the TEST_ENDPOINT
         response = requests.request(
             method=request.method,
-            url=new_url,
+            url=full_url,
             headers=headers,
             data=await request.body(),
-            params=request.query_params,
+            timeout=10,
         )
 
         # Return the response from the TEST_ENDPOINT
@@ -74,3 +80,6 @@ def read_root():
 
 # curl http://internal-ts-dev-api-lb-1872903523.us-east-1.elb.amazonaws.com/v1/products   \
 #   -u sk_test_tR3PYbcVNZZ796tH88S4VQ2u:
+
+# curl https://api.tinyshop.me/v1/products \
+#     -u sk_test_hUSong4VleAs44H4fwnYAsIa:

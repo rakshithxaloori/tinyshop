@@ -18,4 +18,4 @@ ARG TEST_ENDPOINT
 ENV PYTHONPATH=.
 
 # 
-CMD ["fastapi", "run", "main.py", "--port", "8081"]
+CMD ["fastapi", "run", "main.py", "--port", "80"]
