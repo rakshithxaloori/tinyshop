@@ -22,7 +22,7 @@ type TCartStoreGetters = {
 };
 
 type TCartRehydrateActions = {
-  rehydrate: () => void;
+  rehydrate: () => Promise<string>;
 }
 
 type TCartStoreActions = {
@@ -42,9 +42,9 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
       items: [],
       // the setter functions
       addItem: async (chain: TItemChain, display: TCartItemDisplay, quantity: number = 1) => {
-        get().rehydrate();
+        // await the rehydrate function
+        const cartId = await get().rehydrate();
         const existingItem = get().items.find(i => i.priceId === chain.priceId);
-        const cartId = get().id;
         if (existingItem) {
           existingItem.quantity += quantity;
           const updateItem = await updateCartItem(existingItem.id, existingItem.quantity);
@@ -63,7 +63,7 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
         }
       },
       removeItem: async (chain: TItemChain) => {
-        get().rehydrate();
+        const cartId = await get().rehydrate();
         const existingItem = get().items.find(i => i.priceId === chain.priceId);
         if (!existingItem) {
           return;
@@ -78,12 +78,12 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
         }
       },
       clearCartItem: async (cartItemId: string) => {
-        get().rehydrate();
+        const cartId = await get().rehydrate();
         const removeItem = await removeCartItem(cartItemId);
         set({ items: get().items.filter(i => i.id !== cartItemId) });
       },
-      clearCart: () => {
-        get().rehydrate();
+      clearCart: async () => {
+        const cartId = await get().rehydrate();
         for (const item of get().items) {
           get().clearCartItem(item.id);
         }
@@ -110,12 +110,13 @@ const useCartStore = create<TCartStore & TCartStoreActions>()(
       rehydrate: async () => {
         const cartId = await getCartId();
         const zustandCartId = get().id;
-        if (zustandCartId !== cartId) {
+        if (zustandCartId !== cartId && zustandCartId.length > 0) {
           // delete the previous cart 
           await deleteCart(zustandCartId);
           // TODO: rehydrate the cart items
         }
         set({ id: cartId });
+        return cartId;
       }
     })
     ,
