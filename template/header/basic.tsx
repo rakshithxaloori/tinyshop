@@ -16,6 +16,7 @@ import { PizzaIcon } from "lucide-react";
 import Wishlist from "@/components/wishlist";
 import useWindowSize from "@/components/hooks/window-size";
 import CartV2 from "@/components/cart-v2";
+import BetaBanner from "@/components/beta-banner";
 
 const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! || "Your Store";
 
@@ -96,8 +97,9 @@ export const BasicMobileHeader = ({
   className?: string;
 }) => {
   return (
-    <header className="border-b py-4 sticky top-0 z-50 bg-base-100 shadow-md">
-      <div className="flex max-w-7xl flex-col items-start gap-2 px-4">
+    <header className="border-b  sticky top-0 z-50 bg-base-100 shadow-md">
+      <BetaBanner text="For more information, write to" email="founders@tinyshop.me" />
+      <div className="flex max-w-7xl py-sm flex-col items-start gap-2 px-4">
         <section className="flex flex-1 w-full items-center gap-2">
           <Link id="basic-header-name" href="/">
             <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold">{shopName}</span>
@@ -130,10 +132,11 @@ export const BasicDesktopHeader = ({
 }) => {
   const sticky = true;
   return (
-    <header className={cn("border-b py-4",
+    <header className={cn("border-b",
       sticky ? "sticky top-0 z-50 bg-base-100 border-b border-base-content" : "",
     )}>
-      <div className={cn("sm:items-centerm mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 md:flex-nowrap lg:px-8",
+      <BetaBanner text={"Want subscriptions on your store too? Write to us at"} email="founders@tinyshop.me" />
+      <div className={cn("sm:items-centerm py-sm mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 md:flex-nowrap lg:px-8",
         className)}>
         <Link id="basic-header-name" href="/">
           <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold lowercase">{shopName}</span>

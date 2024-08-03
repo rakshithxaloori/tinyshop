@@ -5,8 +5,13 @@ import { z } from 'zod';
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from './ui/input-otp'
-import { PencilIcon } from "lucide-react";
+import { MessageCircleIcon, PencilIcon, PhoneIncomingIcon, QrCodeIcon } from "lucide-react";
 import { sendCustomerOtp, signInCustomer, verifyCustomerOtp } from "@/lib/server-actions";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 
 const phoneSchema = z.string().regex(/^[6-9]\d{9}$/, 'Invalid phone number');
 const otpSchema = z.string().length(6, 'OTP must be 6 digits');
@@ -20,14 +25,21 @@ const PhoneNumberInput = ({ phone, setPhone, error, handlePhoneSubmit }: {
     <form onSubmit={handlePhoneSubmit}>
       <div className="mb-md text-lg font-semibold">Enter your phone number</div>
 
-      <div className="flex flex-row items-center">
+      <Alert>
+        <PhoneIncomingIcon className="h-5 w-5" />
+        <AlertDescription className="my-auto">
+          Enter your <strong>real</strong> phone number to get the confirmation SMS.
+        </AlertDescription>
+      </Alert>
+
+      <div className="flex flex-row items-center mt-md w-full">
         <div className="flex h-10 items-center flex-row px-sm gap-1 border-2 border-r-0 border-primary border-r-none rounded-l-lg bg-base-200">
           <span >🇮🇳</span>
           <span >+91</span>
         </div>
         <Input
           type="tel"
-          className="rounded-l-none border-2 border-l-0 border-primary text-primary-content focus-visible:ring-0 focus-visible:ring-offset-0 w-fit"
+          className="rounded-l-none border-2 border-l-0 border-primary text-primary-content focus-visible:ring-0 focus-visible:ring-offset-0"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder=""
@@ -50,6 +62,12 @@ const VerifyOTP = ({ otp, setOtp, error, handleOtpSubmit, handlePhoneChange }: {
       <Button variant="link" className="text-primary-content p-0 mt-0 mb-md h-fit" onClick={handlePhoneChange}>
         <PencilIcon className="h-3 w-3 mr-sm" /> {" Edit number"}
       </Button>
+      <Alert className="mb-md">
+        <MessageCircleIcon className="h-5 w-5" />
+        <AlertDescription className="my-auto">
+          Enter <strong>000000</strong> as the OTP (all zeros)
+        </AlertDescription>
+      </Alert>
       <InputOTP maxLength={6} value={otp}
         onChange={(value: any) => setOtp(value)}
       >

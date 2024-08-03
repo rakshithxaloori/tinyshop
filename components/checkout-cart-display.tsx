@@ -51,10 +51,10 @@ const CheckoutCartTable = () => {
                 {item.variantName && <span className="text-sm text-base-content/70 line-clamp-1">{item.variantName}</span>}
 
               </TableCell>
-              <TableCell className="text-right"><CurrencyString currency="inr" />{" "}{Number(item.price) / 100}</TableCell>
+              <TableCell className="text-right whitespace-no-wrap text-sm"><CurrencyString currency="inr" />{" "}{(Number(item.price) / 100).toFixed(2)}</TableCell>
               <TableCell className="text-right">{item.quantity}</TableCell>
               <TableCell className="text-right">
-                <CurrencyString currency="inr" />{" "}{Number(item.price) / 100 * item.quantity}
+                <CurrencyString currency="inr" />{" "}{(Number(item.price) / 100 * item.quantity).toFixed(2)}
               </TableCell>
             </TableRow>
           ))}
@@ -64,7 +64,7 @@ const CheckoutCartTable = () => {
           <TableRow>
             <TableCell colSpan={4} className="text-right">Total</TableCell>
             <TableCell className="text-right">
-              <CurrencyString currency="inr" />{" "}{cartTotal}
+              <CurrencyString currency="inr" />{" "}{cartTotal.toFixed(2)}
             </TableCell>
           </TableRow>
         </TableFooter>

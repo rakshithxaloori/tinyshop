@@ -13,6 +13,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -24,6 +29,7 @@ import useCartStore from '@/store/cart';
 import { Checkout } from '@tinyshop/tinyshop-node/interfaces/checkout';
 import { createCheckout, createCustomerAddress, deleteCheckout, updateCheckout, updateCustomerDetails } from '@/lib/checkout';
 import { CustomerAddressCreate } from '@tinyshop/tinyshop-node/interfaces/customerAddress';
+import { InfoIcon, QrCodeIcon, RocketIcon } from 'lucide-react';
 
 declare global {
   interface Window {
@@ -496,11 +502,19 @@ const CheckoutForm = ({
                 </div>
               </>
             )}
+
+            <Alert>
+              <QrCodeIcon className="h-fit w-fit" />
+              <AlertTitle>Test Credentials</AlertTitle>
+              <AlertDescription>
+                Pay using UPI ID <strong>success@razorpay</strong>
+              </AlertDescription>
+            </Alert>
             <Button type="submit" className="w-full">Submit</Button>
           </form>
         </Form>
       </CardContent>
-    </Card>
+    </Card >
   );
 };
 
