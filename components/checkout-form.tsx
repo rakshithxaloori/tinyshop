@@ -159,7 +159,7 @@ const CheckoutForm = ({
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       name: process.env.NEXT_PUBLIC_SHOP_NAME,
       description: "Test Transaction",
-      callback_url: `/thanks?subId=${tinyshopSubscriptionId}`,
+      callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/thanks?subId=${tinyshopSubscriptionId}`,
       subscription_id: providerSubscriptionId,
       prefill: {
         name: name,
