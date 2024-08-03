@@ -19,6 +19,7 @@ const PhoneNumberInput = ({ phone, setPhone, error, handlePhoneSubmit }: {
   return (
     <form onSubmit={handlePhoneSubmit}>
       <div className="mb-md text-lg font-semibold">Enter your phone number</div>
+
       <div className="flex flex-row items-center">
         <div className="flex h-10 items-center flex-row px-sm gap-1 border-2 border-r-0 border-primary border-r-none rounded-l-lg bg-base-200">
           <span >🇮🇳</span>

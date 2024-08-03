@@ -23,7 +23,6 @@ import { CustomerSession } from '@/types/session';
 import useCartStore from '@/store/cart';
 import { Checkout } from '@tinyshop/tinyshop-node/interfaces/checkout';
 import { createCheckout, createCustomerAddress, deleteCheckout, updateCheckout, updateCustomerDetails } from '@/lib/checkout';
-import { Customer } from '@tinyshop/tinyshop-node/interfaces/customer';
 import { CustomerAddressCreate } from '@tinyshop/tinyshop-node/interfaces/customerAddress';
 
 declare global {
@@ -160,7 +159,7 @@ const CheckoutForm = ({
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       name: process.env.NEXT_PUBLIC_SHOP_NAME,
       description: "Test Transaction",
-      callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/thanks?subId=${tinyshopSubscriptionId}`,
+      callback_url: `/thanks?subId=${tinyshopSubscriptionId}`,
       subscription_id: providerSubscriptionId,
       prefill: {
         name: name,
