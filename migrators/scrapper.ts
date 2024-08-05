@@ -19,8 +19,8 @@ import { FeedbackEnum, ReviewCreate } from "../interfaces/review";
 import { MongoClient, Collection } from "mongodb";
 
 const secret_key = process.env.SECRET_KEY as string;
-
-const tinyshop = new Tinyshop(secret_key);
+const apiHost = process.env.API_HOST as string;
+const tinyshop = new Tinyshop(secret_key, apiHost);
 
 type TScrapperVariant = {
   extId: number;
@@ -74,7 +74,7 @@ type TScrapperProductData = TScrapperProduct[];
 type TScrapperCollection = {
   length: number;
   url: string;
-  extId: string; // there is a mismatch of extId in the collection and product data. fix it in the scraper
+  extId: string; // there is a mismatch of extId in the collection and product data. fix it in the scrapper
   name: string;
   data: {
     product_id: string;
@@ -188,8 +188,8 @@ const convertToPriceCreate = (
   variant: TScrapperVariant,
   tinyshopVariantId: string
 ): PriceCreate => {
-  const price = Math.floor(variant.price * 100);
-  const compareAtPrice = Math.floor(variant.compareAtPrice * 100);
+  const price = Math.floor(variant.price);
+  const compareAtPrice = Math.floor(variant.compareAtPrice);
   return {
     active: variant.available,
     currency: "INR",
@@ -209,8 +209,8 @@ const convertToRecurringPriceCreate = (
   variant: TScrapperVariant,
   tinyshopVariantId: string
 ): PriceCreate => {
-  const price = Math.floor(variant.price * 0.8 * 100);
-  const compareAtPrice = Math.floor(variant.compareAtPrice * 100);
+  const price = Math.floor(variant.price * 0.8);
+  const compareAtPrice = Math.floor(variant.compareAtPrice);
   return {
     active: variant.available,
     currency: "INR",
@@ -277,6 +277,20 @@ async function uploadProductDetailsToMongoDB(
   }
 }
 
+function getHandle(name: string): string {
+  // Normalize the product name to NFKD form
+  let handle: string = name.normalize("NFKD");
+  // Convert to lowercase
+  handle = handle.toLowerCase();
+  // Replace spaces and special characters with hyphens
+  handle = handle.replace(/\s+/g, "-");
+  // Remove non-alphanumeric characters except for hyphens
+  handle = handle.replace(/[^a-z0-9-]/g, "");
+  // Remove leading and trailing hyphens
+  handle = handle.replace(/^-+|-+$/g, "");
+  return handle;
+}
+
 const processCombinedJSON = async (
   productFilePath: string,
   collectionFilePath: string
@@ -293,8 +307,8 @@ const processCombinedJSON = async (
   let shopifyIdToTinyshopProductId: any = {};
 
   // Add products, options, variants, prices and reviews
-  let phNumberRangeCount = 9999999999;
-  let emailRangeCount = 1;
+  let phNumberRangeCount = 999997999;
+  let emailRangeCount = 2000;
   let lastProgressProduct = 0;
   for (const [index, product] of activeProducts.entries()) {
     const progress = Math.floor(((index + 1) / numProducts) * 100);
@@ -305,18 +319,30 @@ const processCombinedJSON = async (
     const { name, variants } = product;
     if (variants.length === 0) {
       console.log(
-        `Skipping product with no variants ${
-          index + 1
+        `Skipping product with no variants ${index + 1
         }/${numProducts} (${progress}%)`
       );
       continue;
     }
 
+    let uniqueProductNames: string[] = []
+
     console.log(`Creating product ${index + 1}/${numProducts} (${progress}%)`);
     const productCreate = convertToProductCreate(product);
-    const createdProduct = await tinyshop.products.create(productCreate);
+    const productHandle = getHandle(productCreate.name);
 
-    shopifyIdToTinyshopProductId[String(product.extId)] = createdProduct.id;
+    const existingProduct = uniqueProductNames.find((ph) => ph == productHandle);
+    console.log(`Product handle: ${productHandle}`, existingProduct);
+    if (existingProduct) {
+      console.log(
+        `Product with name ${productCreate.name} already exists. Skipping.`
+      );
+      continue;
+    }
+    uniqueProductNames.push(productHandle);
+
+    const createdProduct = await tinyshop.products.create(productCreate);
+    shopifyIdToTinyshopProductId[product.extId] = createdProduct.id;
 
     // upload to mongoDB
     await uploadProductDetailsToMongoDB(createdProduct, product, brand);
@@ -399,8 +425,7 @@ const processCombinedJSON = async (
 
     if (collection.length === 0) {
       console.log(
-        `Skipping empty collection ${index + 1}/${
-          collectionData.length
+        `Skipping empty collection ${index + 1}/${collectionData.length
         } (${progress}%)`
       );
       continue;
@@ -411,8 +436,7 @@ const processCombinedJSON = async (
       .filter((product) => product !== undefined);
     if (products.length === 0) {
       console.log(
-        `Skipping collection with no products ${index + 1}/${
-          collectionData.length
+        `Skipping collection with no products ${index + 1}/${collectionData.length
         } (${progress}%)`
       );
       continue;
@@ -437,11 +461,11 @@ const processCombinedJSON = async (
 async function main() {
   const productFilePath = path.join(
     __dirname,
-    "store_data/cosmix_products.json"
+    "store_data/earthful_products.json"
   );
   const collectionFilePath = path.join(
     __dirname,
-    "store_data/cosmix_collections.json"
+    "store_data/earthful_collections.json"
   );
 
   await processCombinedJSON(productFilePath, collectionFilePath);
