@@ -1,10 +1,9 @@
 import os
 import base64
-import requests
-from urllib.parse import urlencode
+import httpx
 
 
-from fastapi import FastAPI, Request, Response, status
+from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
 app = FastAPI()
@@ -13,7 +12,7 @@ TEST_ENDPOINT = os.environ["TEST_ENDPOINT"]
 
 
 @app.middleware("http")
-async def get_credentials(request: Request, call_next):
+async def get_credentials(request: Request, _):
     auth = request.headers.get("Authorization")
     scheme, data = (auth or " ").split(" ", 1)
     if scheme != "Basic":
@@ -32,30 +31,26 @@ async def get_credentials(request: Request, call_next):
         )
 
     if mode == "test":
-        # Construct the new URL with the original path
-        new_url = f"{TEST_ENDPOINT.rstrip('/')}{request.url.path}"
+        async with httpx.AsyncClient() as client:
+            # Construct the new URL with the original path
+            new_url = f"{TEST_ENDPOINT.rstrip('/')}{request.url.path}"
+            # Properly encode query parameters
+            if request.url.query:
+                new_url = f"{new_url}?{request.url.query}"
 
-        # Extract headers and remove 'host' as it's set by requests automatically
-        headers = {k: v for k, v in request.headers.items() if k.lower() != "host"}
-
-        # Properly encode query parameters
-        full_url = f"{new_url}?{request.url.query}"
-
-        # Make the request to the TEST_ENDPOINT
-        response = requests.request(
-            method=request.method,
-            url=full_url,
-            headers=headers,
-            data=await request.body(),
-            timeout=10,
-        )
-
-        # Return the response from the TEST_ENDPOINT
-        return Response(
-            content=response.content,
-            status_code=response.status_code,
-            headers=dict(response.headers),
-        )
+            response = await client.request(
+                method=request.method,
+                url=new_url,
+                headers=request.headers.raw,
+                content=await request.body(),
+                timeout=10,
+            )
+            # Return the response from the TEST_ENDPOINT
+            return JSONResponse(
+                content=response.json(),
+                status_code=response.status_code,
+                headers=dict(response.headers),
+            )
 
     return JSONResponse(
         content={"message": f"Type: {key_type}; Mode: {mode}"},
