@@ -15,14 +15,19 @@ if TYPE_CHECKING:
 
 # An enum that has quick feedback
 class FeedbackEnum(str, enum.Enum):
-    # TODO more enums
-    CUSTOMER_SERVICE = "customer_service"
+    # Negative feedback
     LOW_QUALITY = "low_quality"
-    MISSING_FEATURES = "missing_features"
-    TOO_COMPLEX = "too_complex"
     TOO_EXPENSIVE = "too_expensive"
-    UNUSED = "unused"
     OTHER = "other"
+
+    # Positive feedback
+    HIGH_QUALITY = "high_quality"
+    EASY_TO_USE = "easy_to_use"
+    GOOD_VALUE = "good_value"
+
+    # Neutral feedback
+    SATISFACTORY = "satisfactory"
+    AVERAGE = "average"
 
 
 class Review(SqlBase, table=True):
