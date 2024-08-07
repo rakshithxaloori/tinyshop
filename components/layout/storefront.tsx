@@ -13,12 +13,14 @@ const StorefrontLayout = async ({
   const navItems = await getHeaderNavItems();
 
   return (
-    <div className={cn("flex flex-col h-full min-h-screen w-full bg-base-100 text-base-content scrollbar-hide",)}
+    <div className={cn("flex flex-col h-full min-h-screen w-full bg-base-100 text-base-content scrollbar-hide",
+    )}
       // inject theme into the data-theme attribute only if it exists
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <BasicHeader {...{ navItems }} />
-      <div className="flex flex-col flex-1 md:max-w-7xl md:self-center">
+      <div className={cn("flex flex-col flex-1 w-full md:max-w-7xl md:self-center",
+      )}>
         {children}
       </div>
       <BasicFooter />

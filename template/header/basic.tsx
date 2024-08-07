@@ -12,7 +12,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import { PizzaIcon } from "lucide-react";
+import { PizzaIcon, UserIcon } from "lucide-react";
 import Wishlist from "@/components/wishlist";
 import useWindowSize from "@/components/hooks/window-size";
 import CartV2 from "@/components/cart-v2";
@@ -152,6 +152,11 @@ export const BasicDesktopHeader = ({
           </section>
           <section id="basic-header-wishlist" className="flex space-x-4">
             <Wishlist />
+          </section>
+          <section id="basic-header-account" className="flex space-x-4">
+            <Link href="/customer">
+              <UserIcon />
+            </Link>
           </section>
           <section id="basic-header-cart" className="flex space-x-4">
             <Cart />

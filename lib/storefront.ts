@@ -203,3 +203,8 @@ export const getSubscriptionDetails = async (subscriptionId: string): Promise<TC
 
   return Promise.all(itemPromises);
 };
+
+export const getCustomerAddresses = async (customerId: string) => {
+  const addresses = await tinyshop.customerAddresses.list(customerId);
+  return addresses
+}

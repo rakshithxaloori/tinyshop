@@ -99,6 +99,7 @@ const config = {
     require('tailwind-scrollbar-hide'),
     require('daisyui'),
     require("tailwindcss-animate"),
+    // require('@tailwindcss/aspect-ratio'),
     addVariablesForColors,
 
   ],
