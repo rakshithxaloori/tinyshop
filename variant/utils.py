@@ -1,19 +1,19 @@
-from variant.model import Variant, PackageDimensions
+from variant.model import Variant
 from variant import schema
 
 
-def pydantify_variants(
-    rows: list[tuple[Variant, PackageDimensions | None]]
-) -> list[schema.Variant]:
+def pydantify_variants(rows: list[Variant]) -> list[schema.Variant]:
     variants: list[schema.Variant] = []
-    for variant, pd in rows:
-        variant_data = variant.model_dump(exclude={"package_dimensions"})
-        if pd:
-            pd_data = pd.model_dump()
+    for variant in rows:
+        variant_data = variant.model_dump()
         variants.append(
             schema.Variant(
                 **variant_data,
-                package_dimensions=schema.PackageDimensions(**pd_data) if pd else None,
+                package_dimensions=schema.PackageDimensions(
+                    **variant.model_dump(
+                        include={"height", "width", "length", "weight"}
+                    )
+                ),
             )
         )
     return variants

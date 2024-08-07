@@ -1,6 +1,6 @@
 from sqlmodel import Session, select, update
 
-from variant.model import Variant, PackageDimensions
+from variant.model import Variant
 from variant import schema
 from variant.utils import pydantify_variants
 from lib.session import update_instance
@@ -24,6 +24,7 @@ def create_variant(
             product_id=variant.product,
             options="".join(variant.options) if variant.options else None,
             **variant_data,
+            **variant.package_dimensions.model_dump(exclude_none=True),
         )
         db.add(new_variant)
         if variant.is_default:
@@ -37,22 +38,10 @@ def create_variant(
                 .values(is_default=False)
             )
 
-        new_package_dimensions = None
-        if variant.package_dimensions:
-            pd_data = variant.package_dimensions.model_dump(exclude_none=True)
-            new_package_dimensions = PackageDimensions(
-                livemode=livemode,
-                variant_id=new_variant.id,
-                **pd_data,
-            )
-            db.add(new_package_dimensions)
-
         db.commit()
         db.refresh(new_variant)
-        if new_package_dimensions:
-            db.refresh(new_package_dimensions)
 
-        py_variants = pydantify_variants([(new_variant, new_package_dimensions)])
+        py_variants = pydantify_variants([new_variant])
         return py_variants.pop()
     except Exception as e:
         print("EXCEPTION create_variant:", e)
@@ -92,25 +81,13 @@ def update_variant(
                 .values(is_default=False)
             )
 
-        pd = None
         if variant.package_dimensions:
-            package_dimensions_data = variant.package_dimensions.model_dump(
-                exclude_none=True
-            )
-            statement = select(PackageDimensions).where(
-                PackageDimensions.variant_id == variant_id
-            )
-            # TODO create a pd if it doesn't exist - use merge?
-            results = db.exec(statement)
-            pd = results.one()
+            pd_data = variant.package_dimensions.model_dump(exclude_none=True)
+            update_instance(db, pd_data, var_ins)
 
-            update_instance(db, package_dimensions_data, pd)
-            db.refresh(var_ins)
         db.commit()
         db.refresh(var_ins)
-        if pd:
-            db.refresh(pd)
-        py_variants = pydantify_variants([(var_ins, pd)])
+        py_variants = pydantify_variants([var_ins])
         return py_variants.pop()
     except Exception as e:
         print("EXCEPTION update_variant:", e)
@@ -125,11 +102,10 @@ def retrieve_variant(
 ) -> schema.Variant | None:
     try:
         results = db.exec(
-            select(Variant, PackageDimensions)
+            select(Variant)
             .where(Variant.shop_id == shop_id)
             .where(Variant.livemode == livemode)
             .where(Variant.id == variant_id)
-            .where(Variant.id == PackageDimensions.variant_id)
         )
         row = results.one()
         py_variants = pydantify_variants([row])
@@ -156,13 +132,12 @@ def list_variants(
     limit: int = 50,
 ) -> schema.VariantList:
     results = db.exec(
-        select(Variant, PackageDimensions)
+        select(Variant)
         .where(Variant.shop_id == shop_id)
         .where(Variant.livemode == livemode)
         .where(Variant.product_id == product_id)
         .offset(skip)
         .limit(limit)
-        .where(Variant.id == PackageDimensions.variant_id)
     )
     all_rows = list(results.all())
     variants = pydantify_variants(all_rows)

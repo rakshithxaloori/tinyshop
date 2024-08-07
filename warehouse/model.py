@@ -17,20 +17,7 @@ class Warehouse(SqlBase, table=True):
     active: bool = Field()
     phone: str = Field(nullable=True)
 
-    shop_id: str = Field(foreign_key="shop.id")
-    shop: "Shop" = Relationship(back_populates="warehouses")
-    address: "WarehouseAddress" = Relationship(
-        back_populates="warehouse",
-        sa_relationship_kwargs={"cascade": "delete"},
-    )
-    inventories: list["Inventory"] = Relationship(back_populates="warehouse")
-    # shippings = relationship("Shipping", back_populates="warehouse")
-
-
-class WarehouseAddress(SqlBase, table=True):
-    __tablename__ = "_warehouse_address"
-
-    id: str = Field(primary_key=True, default_factory=get_primary_key("_waddr"))
+    # Warehouse Address
     line1: str = Field()
     line2: str = Field(nullable=True)
     city: str = Field()
@@ -38,5 +25,7 @@ class WarehouseAddress(SqlBase, table=True):
     country: str = Field(max_length=2)
     postal_code: str = Field()
 
-    warehouse_id: str = Field(foreign_key="warehouse.id")
-    warehouse: "Warehouse" = Relationship(back_populates="address")
+    shop_id: str = Field(foreign_key="shop.id")
+    shop: "Shop" = Relationship(back_populates="warehouses")
+    inventories: list["Inventory"] = Relationship(back_populates="warehouse")
+    # shippings = relationship("Shipping", back_populates="warehouse")

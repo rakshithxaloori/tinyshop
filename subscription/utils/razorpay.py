@@ -1,4 +1,3 @@
-import os
 from subscription.model import Subscription
 from lib.payment_providers.razorpay import razorpay
 

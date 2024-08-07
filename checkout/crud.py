@@ -127,6 +127,7 @@ def update_checkout(
             checkout_ins.status = checkout.status
             if checkout.status == CheckoutStatusEnum.PROCESSING:
                 # Create subscriptions and invoices
+                # TODO make this a task
                 create_subscriptions_from_checkout(db, checkout_ins)
 
         db.add(checkout_ins)

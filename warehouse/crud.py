@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 
-from warehouse.model import Warehouse, WarehouseAddress
+from warehouse.model import Warehouse
 from warehouse import schema
 from warehouse.utils import pydantify_warehouses
 from lib.session import update_instance
@@ -14,28 +14,20 @@ def create_warehouse(
 ) -> schema.Warehouse | None:
     try:
         warehouse_data = warehouse.model_dump(exclude={"address"})
+        wha_data = warehouse.address.model_dump(exclude_none=True)
         new_warehouse = Warehouse(
             shop_id=shop_id,
             livemode=livemode,
             **warehouse_data,
+            **wha_data,
         )
         db.add(new_warehouse)
 
         new_wha = None
-        if warehouse.address:
-            wha_data = warehouse.address.model_dump(exclude_none=True)
-            new_wha = WarehouseAddress(
-                shop_id=shop_id,
-                livemode=livemode,
-                warehouse_id=new_warehouse.id,
-                **wha_data,
-            )
-            db.add(new_wha)
+
         db.commit()
         db.refresh(new_warehouse)
-        if new_wha:
-            db.refresh(new_wha)
-        py_warehouses = pydantify_warehouses([(new_warehouse, new_wha)])
+        py_warehouses = pydantify_warehouses([new_warehouse])
         return py_warehouses.pop()
 
     except Exception as e:
@@ -63,20 +55,12 @@ def update_warehouse(
         wh_ins = results.one()
         update_instance(db, wh_data, wh_ins)
 
-        wha = None
         if warehouse.address:
             wha_data = warehouse.address.model_dump(exclude_none=True)
-            statement = select(WarehouseAddress).where(
-                WarehouseAddress.warehouse_id == warehouse_id
-            )
-            results = db.exec(statement)
-            wha = results.one()
-            update_instance(db, wha_data, wha)
+            update_instance(db, wha_data, wh_ins)
         db.commit()
         db.refresh(wh_ins)
-        if wha:
-            db.refresh(wha)
-        py_warehouses = pydantify_warehouses([(wh_ins, wha)])
+        py_warehouses = pydantify_warehouses([wh_ins])
         return py_warehouses.pop()
 
     except Exception as e:
@@ -92,13 +76,10 @@ def retrieve_warehouse(
 ) -> schema.Warehouse | None:
     try:
         results = db.exec(
-            select(Warehouse, WarehouseAddress)
+            select(Warehouse)
             .where(Warehouse.shop_id == shop_id)
             .where(Warehouse.livemode == livemode)
             .where(Warehouse.id == warehouse_id)
-            .where(
-                Warehouse.id == WarehouseAddress.warehouse_id
-            )  # TODO this is optional, TODO for customer address too
         )
         wh = results.one()
         py_warehouses = pydantify_warehouses([wh])
@@ -116,12 +97,11 @@ def list_warehouses(
     limit: int = 50,
 ) -> schema.WarehouseList:
     results = db.exec(
-        select(Warehouse, WarehouseAddress)
+        select(Warehouse)
         .where(Warehouse.shop_id == shop_id)
         .where(Warehouse.livemode == livemode)
         .offset(skip)
         .limit(limit)
-        .where(Warehouse.id == WarehouseAddress.warehouse_id)
     )
     all_rows = list(results.all())
     warehouses = pydantify_warehouses(all_rows)

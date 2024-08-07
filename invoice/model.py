@@ -52,6 +52,14 @@ class Invoice(SqlBase, table=True):
         sa_relationship_kwargs={"cascade": "delete"},
     )
 
+    # Customer Address
+    line1: str = Field()
+    line2: str = Field(nullable=True)
+    city: str = Field()
+    state: str = Field()
+    country: str = Field(max_length=2)
+    postal_code: str = Field()
+
     shop_id: str = Field(foreign_key="shop.id")
     shop: "Shop" = Relationship(back_populates="invoices")
     customer_id: str = Field(foreign_key="customer.id")
@@ -61,10 +69,6 @@ class Invoice(SqlBase, table=True):
     subscription_id: str = Field(foreign_key="subscription.id", nullable=True)
     subscription: "Subscription" = Relationship(back_populates="invoices")
     order: "Order" = Relationship(back_populates="invoice")
-    customer_address: "InvoiceCustomerAddress" = Relationship(
-        back_populates="invoice",
-        sa_relationship_kwargs={"cascade": "delete"},
-    )
     # TODO list[payment intent]
 
 
@@ -79,18 +83,3 @@ class InvoiceLineItem(SqlBase, table=True):
     invoice: "Invoice" = Relationship(back_populates="line_items")
     price_id: str = Field(foreign_key="price.id")
     price: "Price" = Relationship(back_populates="invoice_line_items")
-
-
-class InvoiceCustomerAddress(SqlBase, table=True):
-    __tablename__ = "_invoice_customer_address"
-
-    id: str = Field(primary_key=True, default_factory=get_primary_key("_ica"))
-    line1: str = Field()
-    line2: str = Field(nullable=True)
-    city: str = Field()
-    state: str = Field()
-    country: str = Field(max_length=2)
-    postal_code: str = Field()
-
-    invoice_id: str = Field(foreign_key="invoice.id")
-    invoice: "Invoice" = Relationship(back_populates="customer_address")
