@@ -6,4 +6,6 @@ python-multipart==0.0.9
 psycopg2==2.9.9
 python-dotenv==1.0.1
 python-dateutil==2.9.0.post0
+celery==5.4.0
+redis==5.0.8
 razorpay==1.4.2

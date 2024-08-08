@@ -11,7 +11,7 @@ COPY ./requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # 
-COPY . /code
+COPY ./app /code/app
 
 # ENV DB_URL=$DB_URL
 # ENV RAZORPAY_KEY_ID=$RAZORPAY_KEY_ID
@@ -23,4 +23,4 @@ ARG RAZORPAY_KEY_SECRET
 ENV PYTHONPATH=.
 
 # 
-CMD ["fastapi", "run", "main.py", "--port", "80"]
+CMD ["fastapi", "run", "app.main.py", "--port", "80"]

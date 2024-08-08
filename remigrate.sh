@@ -1,5 +1,5 @@
 rm sql_app.db
-rm -rf alembic/versions/*
+rm -rf app/alembic/versions/*
 export DB_URL="postgresql://postgres:postgres@localhost:5432/tinyshop"
 export RAZORPAY_KEY_ID="rzp_test_8QOi10g0rrtKkL"
 export RAZORPAY_KEY_SECRET="pEd2da1kixxyLJmPlwxvOVX7"
