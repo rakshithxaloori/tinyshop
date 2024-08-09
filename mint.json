@@ -74,86 +74,132 @@
       "pages": ["api-reference/introduction"]
     },
     {
-      "group": "Store",
+      "group": "Storefront",
       "pages": [
         {
           "group": "Products",
           "pages": [
-            "api-reference/store/products/create",
-            "api-reference/store/products/update",
-            "api-reference/store/products/retrieve",
-            "api-reference/store/products/list",
-            "api-reference/store/products/delete"
+            "api-reference/storefront/products/create",
+            "api-reference/storefront/products/update",
+            "api-reference/storefront/products/retrieve",
+            "api-reference/storefront/products/list",
+            "api-reference/storefront/products/delete"
           ]
         },
         {
           "group": "Options",
           "pages": [
-            "api-reference/store/options/create",
-            "api-reference/store/options/update",
-            "api-reference/store/options/retrieve",
-            "api-reference/store/options/list",
-            "api-reference/store/options/delete"
+            "api-reference/storefront/options/create",
+            "api-reference/storefront/options/update",
+            "api-reference/storefront/options/retrieve",
+            "api-reference/storefront/options/list",
+            "api-reference/storefront/options/delete"
           ]
         },
         {
           "group": "Variants",
           "pages": [
-            "api-reference/store/variants/create",
-            "api-reference/store/variants/update",
-            "api-reference/store/variants/retrieve",
-            "api-reference/store/variants/list",
-            "api-reference/store/variants/delete"
+            "api-reference/storefront/variants/create",
+            "api-reference/storefront/variants/update",
+            "api-reference/storefront/variants/retrieve",
+            "api-reference/storefront/variants/list",
+            "api-reference/storefront/variants/delete"
           ]
         },
         {
           "group": "Prices",
           "pages": [
-            "api-reference/store/prices/create",
-            "api-reference/store/prices/update",
-            "api-reference/store/prices/retrieve",
-            "api-reference/store/prices/list",
-            "api-reference/store/prices/delete"
+            "api-reference/storefront/prices/create",
+            "api-reference/storefront/prices/update",
+            "api-reference/storefront/prices/retrieve",
+            "api-reference/storefront/prices/list",
+            "api-reference/storefront/prices/delete"
           ]
         },
         {
           "group": "Collections",
           "pages": [
-            "api-reference/store/collections/create",
-            "api-reference/store/collections/update",
-            "api-reference/store/collections/retrieve",
-            "api-reference/store/collections/list",
-            "api-reference/store/collections/delete"
+            "api-reference/storefront/collections/create",
+            "api-reference/storefront/collections/update",
+            "api-reference/storefront/collections/retrieve",
+            "api-reference/storefront/collections/list",
+            "api-reference/storefront/collections/delete"
           ]
         },
         {
           "group": "Carts",
           "pages": [
-            "api-reference/store/carts/create",
-            "api-reference/store/carts/update",
-            "api-reference/store/carts/retrieve",
-            "api-reference/store/carts/list",
-            "api-reference/store/carts/delete"
+            "api-reference/storefront/carts/create",
+            "api-reference/storefront/carts/update",
+            "api-reference/storefront/carts/retrieve",
+            "api-reference/storefront/carts/list",
+            "api-reference/storefront/carts/delete"
           ]
         },
         {
           "group": "Cart Items",
           "pages": [
-            "api-reference/store/cart_items/create",
-            "api-reference/store/cart_items/update",
-            "api-reference/store/cart_items/retrieve",
-            "api-reference/store/cart_items/list",
-            "api-reference/store/cart_items/delete"
+            "api-reference/storefront/cart_items/create",
+            "api-reference/storefront/cart_items/update",
+            "api-reference/storefront/cart_items/retrieve",
+            "api-reference/storefront/cart_items/list",
+            "api-reference/storefront/cart_items/delete"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Customers",
+      "pages": [
+        {
+          "group": "Customers",
+          "pages": [
+            "api-reference/customers/customers/create",
+            "api-reference/customers/customers/update",
+            "api-reference/customers/customers/retrieve",
+            "api-reference/customers/customers/list",
+            "api-reference/customers/customers/delete",
+            "api-reference/customers/customers/verify"
           ]
         },
         {
+          "group": "Customer Addresses",
+          "pages": [
+            "api-reference/customers/customer_addresses/create",
+            "api-reference/customers/customer_addresses/update",
+            "api-reference/customers/customer_addresses/retrieve",
+            "api-reference/customers/customer_addresses/list",
+            "api-reference/customers/customer_addresses/delete"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Billing",
+      "pages": [
+        {
+          "group": "Checkouts",
+          "pages": [
+            "api-reference/billing/checkouts/create",
+            "api-reference/billing/checkouts/update",
+            "api-reference/billing/checkouts/retrieve",
+            "api-reference/billing/checkouts/list",
+            "api-reference/billing/checkouts/delete"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Orders",
+      "pages": [
+        {
           "group": "Reviews",
           "pages": [
-            "api-reference/store/reviews/create",
-            "api-reference/store/reviews/update",
-            "api-reference/store/reviews/retrieve",
-            "api-reference/store/reviews/list",
-            "api-reference/store/reviews/delete"
+            "api-reference/orders/reviews/create",
+            "api-reference/orders/reviews/update",
+            "api-reference/orders/reviews/retrieve",
+            "api-reference/orders/reviews/list",
+            "api-reference/orders/reviews/delete"
           ]
         }
       ]

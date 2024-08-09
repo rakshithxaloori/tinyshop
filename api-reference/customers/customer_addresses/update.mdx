@@ -1,0 +1,22 @@
+---
+title: "Update a Customer Address"
+openapi: "POST /v1/customer_addresses/{address_id}"
+---
+
+<RequestExample>
+
+```javascript javascript
+const customer_address = await tinyshop.customer_addresses.update(
+  "addr_xxxaaa",
+  {
+    name: "Home 🫶🏻",
+    line1: "Hokage Residence",
+    city: "Hidden Leaf",
+    state: "Land of Fire",
+    country: "IN",
+    postal_code: "503003",
+  }
+);
+```
+
+</RequestExample>

@@ -1,0 +1,21 @@
+---
+title: "Create a Customer Address"
+openapi: "POST /v1/customer_addresses"
+---
+
+<RequestExample>
+
+```javascript javascript
+const customer_address = await tinyshop.customer_addresses.create({
+  customer: "cus_xxxaaa",
+  name: "Home 🫶🏻",
+  line1: "302, an apartment building",
+  line2: "Beside Ichiraku Ramen",
+  city: "Hidden Leaf",
+  state: "Land of Fire",
+  country: "IN",
+  postal_code: "503001",
+});
+```
+
+</RequestExample>
