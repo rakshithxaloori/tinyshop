@@ -3,7 +3,7 @@ import { ObjectType } from "../utils/enum";
 // Enums for PriceTypeEnum and RecurringTypeEnum
 enum PriceTypeEnum {
   ONE_TIME = "one_time",
-  SUBSCRIPTION = "subscription",
+  RECURRING = "recurring",
 }
 
 enum RecurringTypeEnum {

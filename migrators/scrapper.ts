@@ -214,7 +214,7 @@ const convertToRecurringPriceCreate = (
   return {
     active: variant.available,
     currency: "INR",
-    type: PriceTypeEnum.SUBSCRIPTION,
+    type: PriceTypeEnum.RECURRING,
     unit_amount: price,
     unit_compare_amount: null,
     is_default: false,
@@ -319,19 +319,22 @@ const processCombinedJSON = async (
     const { name, variants } = product;
     if (variants.length === 0) {
       console.log(
-        `Skipping product with no variants ${index + 1
+        `Skipping product with no variants ${
+          index + 1
         }/${numProducts} (${progress}%)`
       );
       continue;
     }
 
-    let uniqueProductNames: string[] = []
+    let uniqueProductNames: string[] = [];
 
     console.log(`Creating product ${index + 1}/${numProducts} (${progress}%)`);
     const productCreate = convertToProductCreate(product);
     const productHandle = getHandle(productCreate.name);
 
-    const existingProduct = uniqueProductNames.find((ph) => ph == productHandle);
+    const existingProduct = uniqueProductNames.find(
+      (ph) => ph == productHandle
+    );
     console.log(`Product handle: ${productHandle}`, existingProduct);
     if (existingProduct) {
       console.log(
@@ -425,7 +428,8 @@ const processCombinedJSON = async (
 
     if (collection.length === 0) {
       console.log(
-        `Skipping empty collection ${index + 1}/${collectionData.length
+        `Skipping empty collection ${index + 1}/${
+          collectionData.length
         } (${progress}%)`
       );
       continue;
@@ -436,7 +440,8 @@ const processCombinedJSON = async (
       .filter((product) => product !== undefined);
     if (products.length === 0) {
       console.log(
-        `Skipping collection with no products ${index + 1}/${collectionData.length
+        `Skipping collection with no products ${index + 1}/${
+          collectionData.length
         } (${progress}%)`
       );
       continue;
