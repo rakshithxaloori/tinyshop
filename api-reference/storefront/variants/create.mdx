@@ -11,7 +11,7 @@ const variant = await tinyshop.variants.create({
   name: "Red Cybertruck",
   active: true,
   accept_zero_inventory_orders: true,
-  next_refill: Date.now().toString(),
+  next_refill: Math.floor(Date.now() / 1000), // Current timestamp in seconds
   is_default: true,
 });
 ```

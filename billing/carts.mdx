@@ -1,19 +1,16 @@
 ---
-title: "Carts"
-description: "Carts contain items that a customer intends to buy."
+title: "Create a Cart"
 ---
 
-Use [Carts](/api-reference/store/carts) to understand customer buying behavior.
+[Carts](/api-reference/billing/carts) contain items that a customer intends to buy. Carts are useful in understanding customer buying behavior.
 
-## Create a Cart
-
-```javascript javascript
-const cart = await tinyshop.carts.create();
-```
-
-## Add an item
+## Create a Cart and add an item
 
 ```javascript javascript
+const cart = await tinyshop.carts.create({
+  currency: "INR",
+});
+
 const cartItem = await tinyshop.cartItems.create({
   cart: cart.id,
   price: "price_xxxaaa", // A variant's one_time or subscription price

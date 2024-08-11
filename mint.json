@@ -22,12 +22,12 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:founders@tinyshop.me"
     }
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "url": "https://dashboard.tinyshop.me"
   },
   "tabs": [
     {
@@ -39,17 +39,17 @@
     {
       "name": "Documentation",
       "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "url": "/docs"
     },
     {
       "name": "Community",
       "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "url": "https://community.tinyshop.me"
     },
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://blog.tinyshop.me"
     }
   ],
   "navigation": [
@@ -61,13 +61,17 @@
       "group": "Storefront",
       "pages": [
         "storefront/products",
-        "storefront/collections",
-        "storefront/discounts"
+        "storefront/discounts",
+        "storefront/collections"
       ]
     },
     {
+      "group": "Billing",
+      "pages": ["billing/carts", "billing/checkouts"]
+    },
+    {
       "group": "Orders",
-      "pages": ["orders/carts", "orders/reviews"]
+      "pages": ["orders/reviews"]
     },
     {
       "group": "API Documentation",
@@ -125,26 +129,6 @@
             "api-reference/storefront/collections/list",
             "api-reference/storefront/collections/delete"
           ]
-        },
-        {
-          "group": "Carts",
-          "pages": [
-            "api-reference/storefront/carts/create",
-            "api-reference/storefront/carts/update",
-            "api-reference/storefront/carts/retrieve",
-            "api-reference/storefront/carts/list",
-            "api-reference/storefront/carts/delete"
-          ]
-        },
-        {
-          "group": "Cart Items",
-          "pages": [
-            "api-reference/storefront/cart_items/create",
-            "api-reference/storefront/cart_items/update",
-            "api-reference/storefront/cart_items/retrieve",
-            "api-reference/storefront/cart_items/list",
-            "api-reference/storefront/cart_items/delete"
-          ]
         }
       ]
     },
@@ -177,6 +161,26 @@
     {
       "group": "Billing",
       "pages": [
+        {
+          "group": "Carts",
+          "pages": [
+            "api-reference/billing/carts/create",
+            "api-reference/billing/carts/update",
+            "api-reference/billing/carts/retrieve",
+            "api-reference/billing/carts/list",
+            "api-reference/billing/carts/delete"
+          ]
+        },
+        {
+          "group": "Cart Items",
+          "pages": [
+            "api-reference/billing/cart_items/create",
+            "api-reference/billing/cart_items/update",
+            "api-reference/billing/cart_items/retrieve",
+            "api-reference/billing/cart_items/list",
+            "api-reference/billing/cart_items/delete"
+          ]
+        },
         {
           "group": "Checkouts",
           "pages": [
