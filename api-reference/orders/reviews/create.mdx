@@ -9,6 +9,7 @@ openapi: "POST /v1/reviews"
 const review = await tinyshop.reviews.create({
   product: "prod_xxxaaa",
   customer: "cus_xxxbbb",
+  feedback: "high_quality",
   product_rating: 4,
   shipping_rating: 5,
   review: "Great product. I use it everyday.",
