@@ -214,19 +214,19 @@
         {
           "group": "Warehouses",
           "pages": [
-            "api-reference/fulfillment/warehouses/create",
-            "api-reference/fulfillment/warehouses/update",
-            "api-reference/fulfillment/warehouses/retrieve",
-            "api-reference/fulfillment/warehouses/list",
-            "api-reference/fulfillment/warehouses/delete"
+            "api-reference/fulfillments/warehouses/create",
+            "api-reference/fulfillments/warehouses/update",
+            "api-reference/fulfillments/warehouses/retrieve",
+            "api-reference/fulfillments/warehouses/list",
+            "api-reference/fulfillments/warehouses/delete"
           ]
         },
         {
           "group": "Inventory",
           "pages": [
-            "api-reference/fulfillment/inventory/create",
-            "api-reference/fulfillment/inventory/update",
-            "api-reference/fulfillment/inventory/delete"
+            "api-reference/fulfillments/inventory/create",
+            "api-reference/fulfillments/inventory/update",
+            "api-reference/fulfillments/inventory/delete"
           ]
         }
       ]

@@ -11,9 +11,10 @@ const cart = await tinyshop.carts.create({
   currency: "INR",
 });
 
+// Add an item to the cart
 const cartItem = await tinyshop.cartItems.create({
   cart: cart.id,
-  price: "price_xxxaaa", // A variant's one_time or subscription price
+  price: "price_xxxaaa", // A variant's price
   quantity: 1,
 });
 ```
