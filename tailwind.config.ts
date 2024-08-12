@@ -8,17 +8,6 @@ const config = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
-  safelist: [
-    {
-      pattern: /bg-(red|green|blue|cyan)-(100|200|300|400|500|600|700|800|900)/,
-      variants: ['hover', 'focus'],
-    },
-    {
-      pattern: /text-(sm|base|lg|xl|2xl)/,
-    },
-    // Add more patterns as needed
-  ],
-
   prefix: "",
   theme: {
     container: {

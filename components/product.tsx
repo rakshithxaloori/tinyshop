@@ -4,6 +4,9 @@ import { Badge } from "@/components/ui/badge"
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { LayoutClasses as TProductLayoutClass } from "@/types/layout";
+import { tailwindToCSS } from "@/lib/tailwind";
+import { twMerge } from "tailwind-merge";
+import { twj } from "tw-to-css";
 
 export type TPriceUI = {
   type: string;
@@ -44,31 +47,40 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, layout }) => {
     }).format(amount / 100); // Assuming the amount is in cents
   };
 
-  console.log(layout);
-
   return (
-    <Card className={cn(`w-full h-fit max-w-sm mx-auto bg-blue-100`, layout.containerClass)}>
-      <div className={cn("relative h-24 w-24", layout.imageClass)}>
+    <Card className={cn(`w-full h-fit max-w-sm mx-auto bg-blue-100`)}
+      style={
+        tailwindToCSS(layout.containerClass)
+      }
+    >
+      <div className={cn("relative")}
+        style={
+          tailwindToCSS(layout.imageClass)
+        }
+      >
         <Image
           src={images[0] || '/api/placeholder/400/400'}
           alt={name}
-          width={96}
-          height={96}
-          className="aspect-square rounded-lg"
+          fill
+          className="rounded-lg"
         />
       </div>
-      <div className={layout.contentClass}>
-        <h2 className={layout.titleClass}>{name}</h2>
-        <p className={layout.variantClass}>{default_variant.name}</p>
-        <div className={layout.priceClass}>
+      <div style={tailwindToCSS(layout.contentClass)}>
+        <h2 className={layout.titleClass} style={tailwindToCSS(layout.titleClass)} >{name}</h2>
+        <p style={tailwindToCSS(layout.variantClass)}>{default_variant.name}</p>
+        <div
+          style={tailwindToCSS(layout.priceClass)}
+        >
           <span>{formatPrice(price.unit_amount)}</span>
           {price.unit_compare_amount && (
-            <span className={layout.compareAtPriceClass}>
+            <span style={tailwindToCSS(layout.compareAtPriceClass)}>
               {formatPrice(price.unit_compare_amount)}
             </span>
           )}
         </div>
-        <Badge className={layout.badgeClass} variant="secondary">{price.type}</Badge>
+        <Badge
+          style={tailwindToCSS(layout.badgeClass)}
+          variant="secondary">{price.type}</Badge>
       </div>
     </Card>
   );
