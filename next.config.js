@@ -7,7 +7,8 @@ const allowedImageHosts = [
   'cdn.shopify.com',
   'plus.unsplash.com',
   'cosmix.in',
-  'tailwindui.com'
+  'tailwindui.com',
+  'vercel.com',
 ]
 
 const nextConfig = {
