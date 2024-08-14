@@ -2,11 +2,11 @@
 
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { EmotionLayoutStyles, EmotionLayoutStylesSchema } from '@/types/layout';
+import { ProductLayout, ProductLayoutSchema } from '@/components/structure/product';
 
 export type LayoutHistory = {
   messages: string[] | null;
-  lastGeneratedObject: EmotionLayoutStyles | null;
+  lastGeneratedObject: ProductLayout | null;
 }
 
 export const generateProductLayoutObject = async (input: string,
@@ -34,21 +34,30 @@ export const generateProductLayoutObject = async (input: string,
     This will be used in conjunction with the css\`...\` function from @emotion/css to style product cards in a web application.
     For example:
     {
-      container: "background-color: white; border-radius: 8px; padding: 16px;",
-      image: "aspect-ratio: 1; object-fit: cover;",
-      content: "padding: 16px;",
+      outerContainer: "background-color: white; border-radius: 8px; padding: 16px;",
+      innerContainer: "display: flex; flex-direction: column;",
+      imageContainer: "position: relative; overflow: hidden; aspect-ratio: 1;",
+      image: "width: 100%; height: 100%; object-fit: cover;",
+      wishlistContainer: "position: absolute; top: 0; right: 0; padding: 8px;",
+      badge: "position: absolute; top: 0; left: 0; padding: 8px; border-radius: 9999px; background-color: red; color: white;",
+      cardBodyContainer: "padding: 16px;",
+      titleContainer: "",
       title: "font-size: 1.25rem; font-weight: 600;",
-      variant: "font-size: 1rem; font-weight: 400;",
+      priceContainer: "",
       price: "font-size: 1.25rem; font-weight: 600; color: green;",
-      compareAtPrice: "font-size: 1rem; text-decoration: line-through; color: gray;",
-      badge: "font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 9999px; background-color: blue; color: white;"
+      addToCartContainer: "display: flex; align-items: center; justify-content: space-between; margin-top: 16px;",
+      addToCartButton: "padding: 8px 16px; border-radius: 8px; background-color: blue; color: white;",
+      quantityContainer: "display: flex; align-items: center;",
+      quantity: "margin: 0 8px; font-size: 1rem; font-weight: 600;",
+      iconButtonContainer: "display: flex; align-items: center;",
+      iconButton: "padding: 8px; border-radius: 9999px; background-color: blue; color: white;"
     }
     You can also use media queries, container queries and other CSS features to make the layout responsive and visually appealing.
     `,
     prompt,
-    schema: EmotionLayoutStylesSchema,
-    schemaName: 'EmotionLayoutStylesSchema',
-    schemaDescription: EmotionLayoutStylesSchema.description,
+    schema: ProductLayoutSchema,
+    schemaName: 'ProductCardLayout',
+    schemaDescription: ProductLayoutSchema.description,
   });
 
 

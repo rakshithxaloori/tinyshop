@@ -27,7 +27,7 @@ const nextConfig = {
   // experimental: {
   //   ppr: 'incremental',
   // },
-  // transpilePackages: ["@tinyshop/tinyshop-node"]
+  transpilePackages: ["@tinyshop/tinyshop-node"]
 }
 
 module.exports = nextConfig
