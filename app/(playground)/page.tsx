@@ -3,14 +3,14 @@ import ProductCard from '@/components/product';
 import { generateProductLayoutObject } from '@/lib/actions';
 import { EmotionLayoutStyles } from '@/types/layout';
 import { css } from '@emotion/css';
-import { useChat } from 'ai/react';
-import { GitCommitHorizontalIcon, PaletteIcon, RefreshCwIcon, SaveAllIcon, SaveIcon, SendHorizontalIcon, ThumbsDownIcon } from 'lucide-react';
+import { PaletteIcon, RefreshCwIcon, SaveIcon, SendHorizontalIcon, ThumbsDownIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 
 
 const PlaygroundPage = () => {
   const [query, setQuery] = useState('');
+  const [history, setHistory] = useState<string[]>([]);
   const [isQuerying, setIsQuerying] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -31,11 +31,19 @@ const PlaygroundPage = () => {
 
     // generate the layout object
     const layoutPromptString = `${input}`;
-    const layoutObject = await generateProductLayoutObject(layoutPromptString);
+    let generatedLayoutObject;
+    if (layout === null) {
+      generatedLayoutObject = await generateProductLayoutObject(layoutPromptString);
+    } else {
+      generatedLayoutObject = await generateProductLayoutObject(layoutPromptString, {
+        messages: null,
+        lastGeneratedObject: layout
+      });
+    }
     setIsQuerying(false);
-    setLayout(layoutObject);
-
+    setLayout(generatedLayoutObject);
     setQuery(input)
+    setHistory((currHistory) => [...currHistory, input]);
 
     formRef.current?.reset();
   }
@@ -43,10 +51,7 @@ const PlaygroundPage = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] h-[calc(100svh-60px)] md:h-[calc(100vh-64px)] md:h-[calc(100svh-64px)]">
       <div className="flex flex-1 flex-col gap-3 bg-white border-t lg:border-t-0 p-4 pb-2 pt-3 lg:border-t-0 lg:pt-0">
-
         <div className="flex flex-1 flex-col items-start gap-4 md:flex-row">
-
-
           <div className='relative flex size-full flex-1 flex-col gap-3 sm:order-2 lg:overflow-hidden lg:rounded-xl lg:p-3 lg:bg-gray-50'>
             <div>
               <div className="flex w-full items-center gap-8" data-id="toolbar-top">
@@ -190,7 +195,9 @@ const PlaygroundPage = () => {
                   </a>
                   <button className="relative max-w-full overflow-hidden" title={query}>
                     <div className="relative flex-1 overflow-hidden text-ellipsis rounded-2xl bg-[#ebebeb] px-3 py-1">
-                      <span className="text-left text-sm line-clamp-1 break-all">{query}</span>
+                      <span className="text-left text-sm line-clamp-1 break-all">
+                        {isQuerying ? 'Querying...' : query}
+                      </span>
                     </div></button><div className="flex items-center gap-2">
                     <span className="flex items-center justify-center" data-state="closed">
                       <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-gray-500 hover:text-gray-900 h-[28px] w-[28px] rounded-full p-0 hover:bg-[#f2f2f2]" data-id="toolbar-downvote-button">
@@ -230,6 +237,7 @@ const PlaygroundPage = () => {
                       className="min-h-[1.5rem] h-[1rem] flex-[1_0_50%] resize-none border-0 bg-transparent text-sm leading-relaxed shadow-none outline-none ring-0 [scroll-padding-block:0.75rem] selection:bg-teal-300 selection:text-black disabled:bg-transparent disabled:opacity-80 text-white placeholder:text-zinc-400 w-full"
                       name='input'
                       placeholder={query || "Make the heading larger and darker"}
+                      disabled={isQuerying}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
                           e.preventDefault();

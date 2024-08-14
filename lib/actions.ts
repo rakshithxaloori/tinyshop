@@ -2,15 +2,37 @@
 
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { EmotionLayoutStylesSchema } from '@/types/layout';
+import { EmotionLayoutStyles, EmotionLayoutStylesSchema } from '@/types/layout';
 
-export const generateProductLayoutObject = async (input: string) => {
+export type LayoutHistory = {
+  messages: string[] | null;
+  lastGeneratedObject: EmotionLayoutStyles | null;
+}
+
+export const generateProductLayoutObject = async (input: string,
+  history?: LayoutHistory
+) => {
   "use server";
   console.log('Generating product layout object with input:', input);
+  let prompt;
+
+  if (history) {
+    if (history.messages) {
+      prompt = `${prompt}\n\nHistory:\n${history.messages.join('\n')}`;
+    }
+    if (history.lastGeneratedObject) {
+      prompt = `${prompt}\n\nLast generated object:\n${JSON.stringify(history.lastGeneratedObject, null, 2)}`;
+    }
+    prompt = `${prompt}\n\n Modify the exisiting product layout object with inline CSS style using the input : ${input}`
+  } else {
+    prompt = `Generate product layout object with inline CSS style using the input : ${input}`
+  }
 
   const { object } = await generateObject({
     model: openai('gpt-4o-mini'),
-    system: `You are a helpful assistant that generates Emotion class strings for product card layouts. For example:
+    system: `You are a helpful assistant that generates inline style strings for product card layouts. 
+    This will be used in conjunction with the css\`...\` function from @emotion/css to style product cards in a web application.
+    For example:
     {
       container: "background-color: white; border-radius: 8px; padding: 16px;",
       image: "aspect-ratio: 1; object-fit: cover;",
@@ -23,11 +45,12 @@ export const generateProductLayoutObject = async (input: string) => {
     }
     You can also use media queries, container queries and other CSS features to make the layout responsive and visually appealing.
     `,
-    prompt: input,
+    prompt,
     schema: EmotionLayoutStylesSchema,
-    schemaName: 'LayoutClasses',
+    schemaName: 'EmotionLayoutStylesSchema',
     schemaDescription: EmotionLayoutStylesSchema.description,
   });
+
 
   return object;
 }
