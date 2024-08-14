@@ -29,8 +29,6 @@ interface CustomerList {
 interface CustomerUpdate {
   name?: string | null;
   email?: string | null;
-  otp?: string | null;
-  send_otp?: boolean;
 }
 
 interface CustomerDelete {
@@ -39,10 +37,16 @@ interface CustomerDelete {
   deleted: boolean;
 }
 
+interface CustomerVerify {
+  otp?: string | null;
+  send_otp?: boolean;
+}
+
 export type {
   Customer,
   CustomerCreate,
   CustomerUpdate,
   CustomerList,
   CustomerDelete,
+  CustomerVerify,
 };

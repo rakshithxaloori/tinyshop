@@ -30,7 +30,7 @@ interface Recurring {
 interface PriceBase {
   active: boolean;
   currency: string;
-  type: "one_time" | "subscription";
+  type: PriceTypeEnum;
   unit_amount: number;
   unit_compare_amount?: number | null;
   is_default: boolean;

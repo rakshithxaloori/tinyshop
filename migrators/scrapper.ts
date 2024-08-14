@@ -397,7 +397,7 @@ const processCombinedJSON = async (
         customerCreate
       );
 
-      const _ = await tinyshop.customers.update(customerId, {
+      const _ = await tinyshop.customers.verify(customerId, {
         otp: "000000",
       });
 
@@ -466,11 +466,11 @@ const processCombinedJSON = async (
 async function main() {
   const productFilePath = path.join(
     __dirname,
-    "store_data/earthful_products.json"
+    "store_data/cosmix_products.json"
   );
   const collectionFilePath = path.join(
     __dirname,
-    "store_data/earthful_collections.json"
+    "store_data/cosmix_collections.json"
   );
 
   await processCombinedJSON(productFilePath, collectionFilePath);

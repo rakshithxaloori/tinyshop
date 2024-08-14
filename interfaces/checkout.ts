@@ -1,7 +1,12 @@
 import { SubscriptionList } from "./subscription";
 
 // Enums
-type CheckoutStatusEnum = "open" | "complete" | "expired" | "canceled" | "abandoned" | "processing";
+type CheckoutStatusEnum =
+  | "open"
+  | "complete"
+  | "expired"
+  | "canceled"
+  | "abandoned";
 
 // Interfaces
 interface CheckoutLineItem {
@@ -47,7 +52,6 @@ interface Checkout extends CheckoutBase {
 
 interface CheckoutUpdate {
   customer_address?: string | null;
-  status?: CheckoutStatusEnum | null;
 }
 
 interface CheckoutList {

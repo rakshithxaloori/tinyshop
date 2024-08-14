@@ -5,6 +5,7 @@ import {
   CustomerUpdate,
   CustomerList,
   CustomerDelete,
+  CustomerVerify,
 } from "../interfaces/customer";
 
 export class Customers {
@@ -44,6 +45,14 @@ export class Customers {
   async delete(id: string): Promise<CustomerDelete> {
     const response_json: CustomerDelete = await this.api.delete(
       `${this.endpoint}/${id}`
+    );
+    return response_json;
+  }
+
+  async verify(id: string, data: CustomerVerify): Promise<Customer> {
+    const response_json: Customer = await this.api.post(
+      `${this.endpoint}/${id}/verify`,
+      data
     );
     return response_json;
   }
