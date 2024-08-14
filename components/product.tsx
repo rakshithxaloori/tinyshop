@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge"
 
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { LayoutClasses as TProductLayoutClass } from "@/types/layout";
+import { EmotionLayoutStyles as TProductLayoutClass } from "@/types/layout";
 import { tailwindToEmotionCSS } from "@/lib/tailwind";
 import { twMerge } from "tailwind-merge";
 import { twj } from "tw-to-css";
@@ -49,13 +49,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, layout }) => {
   };
 
   console.log(layout);
-  console.log(tailwindToEmotionCSS(layout.containerClass));
+  console.log(layout.container);
 
   return (
     <Card className={
       cn(
         css`
-      ${tailwindToEmotionCSS(layout.containerClass)};
+      ${(layout.container)};
       `,
         "h-fit w-full max-w-md"
       )
@@ -64,7 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, layout }) => {
     >
       <div className={cn("relative",
         css`
-        ${tailwindToEmotionCSS(layout.imageClass)};
+        ${(layout.image)};
         `
       )}
       >
@@ -78,24 +78,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, layout }) => {
       <div
         className={cn(
           css`
-          ${tailwindToEmotionCSS(layout.contentClass)};`
+          ${(layout.content)};`
         )}
       >
-        <h2 className={css`${tailwindToEmotionCSS(layout.titleClass)};`}>{name}</h2>
-        <p className={css`${tailwindToEmotionCSS(layout.variantClass)};`}>{default_variant.name}</p>
+        <h2 className={css`${(layout.title)};`}>{name}</h2>
+        <p className={css`${(layout.variant)};`}>{default_variant.name}</p>
         <div
-          className={css`${tailwindToEmotionCSS(layout.priceClass)};`}
+          className={css`${(layout.price)};`}
         >
           <span>{formatPrice(price.unit_amount)}</span>
           {price.unit_compare_amount && (
             <span
-              className={css`${tailwindToEmotionCSS(layout.compareAtPriceClass)};`}>
+              className={css`${(layout.compareAtPrice)};`}>
               {formatPrice(price.unit_compare_amount)}
             </span>
           )}
         </div>
         <Badge
-          className={css`${tailwindToEmotionCSS(layout.badgeClass)};`}
+          className={css`${(layout.badge)};`}
           variant="secondary">{price.type}</Badge>
       </div>
     </Card>

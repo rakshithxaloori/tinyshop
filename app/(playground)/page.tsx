@@ -1,7 +1,7 @@
 "use client";
 import ProductCard from '@/components/product';
 import { generateProductLayoutObject } from '@/lib/actions';
-import { LayoutClasses } from '@/types/layout';
+import { EmotionLayoutStyles } from '@/types/layout';
 import { css } from '@emotion/css';
 import { useChat } from 'ai/react';
 import { GitCommitHorizontalIcon, PaletteIcon, RefreshCwIcon, SaveAllIcon, SaveIcon, SendHorizontalIcon, ThumbsDownIcon } from 'lucide-react';
@@ -14,7 +14,7 @@ const PlaygroundPage = () => {
   const [isQuerying, setIsQuerying] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [layout, setLayout] = useState<LayoutClasses | null>(null);
+  const [layout, setLayout] = useState<EmotionLayoutStyles | null>(null);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -30,7 +30,7 @@ const PlaygroundPage = () => {
     const input = formData.get('input') as string;
 
     // generate the layout object
-    const layoutPromptString = `Generate a layout object for a product card using Tailwind CSS classes based on the following input: "${input}"`;
+    const layoutPromptString = `${input}`;
     const layoutObject = await generateProductLayoutObject(layoutPromptString);
     setIsQuerying(false);
     setLayout(layoutObject);
@@ -164,15 +164,16 @@ const PlaygroundPage = () => {
                   }
                 }}
                 layout={layout || {
-                  containerClass: '',
-                  imageClass: 'bg-blue-100 w-full aspect-square',
-                  contentClass: 'bg-blue-100',
-                  titleClass: 'bg-blue-100',
-                  variantClass: 'bg-blue-100',
-                  priceClass: 'bg-blue-100',
-                  compareAtPriceClass: 'bg-blue-100',
-                  badgeClass: 'bg-blue-100',
-                }}
+                  container: css``,
+                  image: css``,
+                  content: css``,
+                  title: css``,
+                  variant: css``,
+                  price: css``,
+                  compareAtPrice: css``,
+                  badge: css``,
+                }
+                }
               />
 
 
