@@ -21,7 +21,7 @@ export const ProductLayoutSchema = z.object({
   quantity: z.string().describe("Emotion css string for the quantity of the product card."),
   iconButtonContainer: z.string().describe("Emotion css string for the icon button container of the product card. This will be placed alongside className = \"card-action flex-1 hidden md:block\"."),
   iconButton: z.string().describe("Emotion css string for the icon button of the product card."),
-}).describe("Layout styles for a product card using inline style strings to be used as an input to css`` from @emotion/css. These styles are used in conjunction with the daisyUI and tailwind classes.")
+}).describe("Layout styles for a product card using inline style strings to be used as an input to css`` from @emotion/css. These styles are used in conjunction with the daisyUI and tailwind classes. Generate background using CSS variables of the daisy UI theme colors.");
 
 export type ProductLayout = z.infer<typeof ProductLayoutSchema>;
 
@@ -91,10 +91,11 @@ const ProductCardStructure = (props: ProductCardStructureProps) => {
   return (
     <div
       className={cn(
-        "card-wrapper cursor-pointer border-primary/60 hover:border-primary md:hover:m-1 transition-all duration-100 ease-linear bg-base-100 border-2 rounded-xl",
+        "card-wrapper cursor-pointer border-primary/60 hover:border-primary bg-primary md:hover:m-1 transition-all duration-100 ease-linear bg-base-100 border-2 rounded-xl",
         css`${layout.outerContainer}`
       )}
       onClick={actions.handleCardClick}
+      data-theme="retro"
     >
       <div className={cn("group card card-compact",
         css`${layout.innerContainer}`
@@ -119,7 +120,7 @@ const ProductCardStructure = (props: ProductCardStructureProps) => {
           >{data.badgeTitle}</div>
         }
 
-        <div className={cn("flex m-0 mt-md mx-md", css`${layout.cardBodyContainer}`)}>
+        <div className={cn("flex m-0 mt-md mx-md bg-primary", css`${layout.cardBodyContainer}`)}>
           {/* Title structure */}
           <div className={cn("w-full", css`${layout.titleContainer}`)}>
             <h2 className={cn("group card-title text-base group-hover:opacity-75 transition-opacity duration-200 ease-in-out h-[3rem] line-clamp-2",

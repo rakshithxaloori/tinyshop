@@ -31,7 +31,6 @@ const PlaygroundPage = ({
     setIsQuerying(true);
     // disable the form
 
-
     // get the form data
     const formData = new FormData(event.currentTarget);
     const input = formData.get('input') as string;
@@ -49,6 +48,7 @@ const PlaygroundPage = ({
     }
     setIsQuerying(false);
     setLayout(generatedLayoutObject);
+    console.log('Generated layout object:', generatedLayoutObject);
     setQuery(input)
     setHistory((currHistory) => [...currHistory, input]);
 
@@ -143,7 +143,7 @@ const PlaygroundPage = ({
                       <PaletteIcon className="h-4 w-4" />
                     </button>
                     {/* <!-- Code Button --> */}
-                    <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 px-3 py-2 gap-1.5 @[95px]:w-[95px] sm:w-[95px] ml-0">
+                    <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary-default text-primary-foreground shadow hover:bg-primary-default/90 h-8 px-3 py-2 gap-1.5 @[95px]:w-[95px] sm:w-[95px] ml-0">
                       <span className="hidden @[95px]:inline-block sm:inline-block">Publish</span>
                       <SaveIcon className="h-4 w-4" />
                     </button>
