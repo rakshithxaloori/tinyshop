@@ -1,4 +1,4 @@
-import { ObjectType } from "../utils/enum";
+type OPTION_OBJECT = "option";
 
 // Base interface for Option
 interface OptionBase {
@@ -14,15 +14,15 @@ interface OptionCreate extends OptionBase {
 // Interface for Option
 interface Option extends OptionBase {
   id: string;
-  object: typeof ObjectType.OPTION;
+  object: OPTION_OBJECT;
 }
 
 // Interface for OptionList
 interface OptionList {
   object: "list";
-  url: string;
+  url: "/v1/options";
   has_more: boolean;
-  data: Option[] | null;
+  data: Option[];
 }
 
 // Interface for OptionUpdate
@@ -34,7 +34,7 @@ interface OptionUpdate {
 // Interface for OptionDelete
 interface OptionDelete {
   id: string;
-  object: typeof ObjectType.OPTION;
+  object: OPTION_OBJECT;
   deleted: boolean;
 }
 

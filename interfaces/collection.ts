@@ -1,5 +1,6 @@
-import { ObjectType } from "../utils/enum";
 import { ProductList } from "./product";
+
+type COLLECTION_OBJECT = "collection";
 
 interface CollectionBase {
   name: string;
@@ -14,13 +15,13 @@ interface CollectionCreate extends CollectionBase {
 interface Collection extends CollectionBase {
   id: string;
   handle: string;
-  object: typeof ObjectType.COLLECTION;
+  object: COLLECTION_OBJECT;
   products: ProductList;
 }
 
 interface CollectionList {
-  object: string; // should be "list"
-  url: string; // should be "/v1/collections"
+  object: "list";
+  url: "/v1/collections";
   has_more: boolean;
   data: Collection[];
 }
@@ -39,7 +40,7 @@ interface CollectionUpdate {
 
 interface CollectionDelete {
   id: string;
-  object: typeof ObjectType.COLLECTION;
+  object: COLLECTION_OBJECT;
   deleted: boolean;
 }
 

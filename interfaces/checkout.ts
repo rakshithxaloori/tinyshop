@@ -1,5 +1,7 @@
 import { SubscriptionList } from "./subscription";
 
+type CHECKOUT_OBJECT = "checkout";
+
 // Enums
 type CheckoutStatusEnum =
   | "open"
@@ -18,7 +20,7 @@ interface CheckoutLineItemList {
   object: "list";
   data: CheckoutLineItem[];
   has_more: boolean;
-  url: "/v1/checkout_items";
+  url: "/v1/checkouts/items";
 }
 
 interface CheckoutBase {
@@ -35,7 +37,7 @@ interface CheckoutCreate extends CheckoutBase {
 
 interface Checkout extends CheckoutBase {
   id: string;
-  object: "checkout";
+  object: CHECKOUT_OBJECT;
   status: CheckoutStatusEnum;
   currency: string;
   amount_total: number;
@@ -63,7 +65,7 @@ interface CheckoutList {
 
 interface CheckoutDelete {
   id: string;
-  object: "checkout";
+  object: CHECKOUT_OBJECT;
   deleted: boolean;
 }
 

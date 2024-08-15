@@ -1,4 +1,6 @@
-import { ObjectType } from "../utils/enum";
+import { CartItemList } from "./cartItem";
+
+type CART_OBJECT = "cart";
 
 enum CartStatusEnum {
   // Define your CartStatusEnum values here
@@ -21,14 +23,14 @@ interface CartCreate extends CartBase {
 
 interface Cart extends CartBase {
   id: string;
-  object: typeof ObjectType.CART;
+  object: CART_OBJECT;
   status: CartStatusEnum;
   cart_items: CartItemList;
 }
 
 interface CartList {
-  object: string;
-  url: string;
+  object: "list";
+  url: "/v1/carts";
   has_more: boolean;
   data: Cart[];
 }
@@ -39,12 +41,8 @@ interface CartUpdate {
 
 interface CartDelete {
   id: string;
-  object: typeof ObjectType.CART;
+  object: CART_OBJECT;
   deleted: boolean;
-}
-
-interface CartItemList {
-  // Define the structure of CartItemList here
 }
 
 export type { Cart, CartCreate, CartUpdate, CartList, CartDelete };

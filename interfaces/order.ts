@@ -36,7 +36,7 @@ interface OrderCreate extends OrderBase {
 // Interface for Order
 interface Order extends OrderBase {
   id: string;
-  object: string;
+  object: "list";
   number: number;
   status: OrderStatusEnum;
   type: OrderTypeEnum;
@@ -45,7 +45,7 @@ interface Order extends OrderBase {
 
 // Interface for OrderList
 interface OrderList {
-  object: string;
+  object: "list";
   url: string;
   data: Order[];
   has_more: boolean;
@@ -60,14 +60,8 @@ interface OrderUpdate {
 // Interface for OrderDelete
 interface OrderDelete {
   id: string;
-  object: string;
+  object: "list";
   deleted: boolean;
 }
 
-export type {
-  Order,
-  OrderCreate,
-  OrderUpdate,
-  OrderList,
-  OrderDelete
-};
+export type { Order, OrderCreate, OrderUpdate, OrderList, OrderDelete };

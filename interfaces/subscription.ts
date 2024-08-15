@@ -79,7 +79,7 @@ interface SubscriptionCreate extends SubscriptionBase {
 
 interface Subscription extends SubscriptionBase {
   id: string;
-  object: string;
+  object: "list";
   current_period_end: number;
   current_period_start: number;
   status: SubscriptionStatusEnum;
@@ -106,7 +106,7 @@ interface SubscriptionUpdate {
 }
 
 interface SubscriptionList {
-  object: string;
+  object: "list";
   url: string;
   has_more: boolean;
   data: Subscription[];
@@ -114,7 +114,7 @@ interface SubscriptionList {
 
 interface SubscriptionDelete {
   id: string;
-  object: string;
+  object: "list";
   deleted: boolean;
 }
 

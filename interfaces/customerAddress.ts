@@ -1,4 +1,4 @@
-import { ObjectType } from "../utils/enum";
+type CUSTOMER_ADDRESS_OBJECT = "customer_address";
 
 interface CustomerAddressBase {
   name: string;
@@ -16,11 +16,11 @@ interface CustomerAddressCreate extends CustomerAddressBase {
 
 interface CustomerAddress extends CustomerAddressBase {
   id: string;
-  object: "customer_address";
+  object: CUSTOMER_ADDRESS_OBJECT;
 }
 
 interface CustomerAddressList {
-  object: string;
+  object: "list";
   url: string; // TODO
   has_more: boolean;
   data: CustomerAddress[];
@@ -38,7 +38,7 @@ interface CustomerAddressUpdate {
 
 interface CustomerAddressDelete {
   id: string;
-  object: "customer_address";
+  object: CUSTOMER_ADDRESS_OBJECT;
   deleted: boolean;
 }
 

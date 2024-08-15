@@ -44,7 +44,7 @@ interface Invoice extends InvoiceBase {
 
 // Interface for InvoiceList
 interface InvoiceList {
-  object: string;
+  object: "list";
   data: Invoice[];
   has_more: boolean;
   url: string;
@@ -62,7 +62,7 @@ interface InvoiceUpdate {
 // Interface for InvoiceDelete
 interface InvoiceDelete {
   id: string;
-  object: string;
+  object: "list";
   deleted: boolean;
 }
 
@@ -71,5 +71,5 @@ export type {
   InvoiceCreate,
   InvoiceUpdate,
   InvoiceList,
-  InvoiceDelete
+  InvoiceDelete,
 };

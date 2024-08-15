@@ -1,4 +1,6 @@
-import { ObjectType } from "../utils/enum";
+import { Variant } from "./variant";
+
+type PRODUCT_OBJECT = "product";
 
 interface ProductBase {
   name: string;
@@ -14,7 +16,9 @@ interface ProductCreate extends ProductBase {}
 interface Product extends ProductBase {
   id: string;
   handle: string;
-  object: typeof ObjectType.PRODUCT;
+  object: PRODUCT_OBJECT;
+  default_variant?: Variant | null;
+  rating?: number | null;
 }
 
 interface ProductList {
@@ -26,7 +30,6 @@ interface ProductList {
 
 interface ProductUpdate {
   name?: string;
-  handle?: string;
   description?: string;
   active?: boolean;
   shippable?: boolean;
@@ -35,7 +38,7 @@ interface ProductUpdate {
 
 interface ProductDelete {
   id: string;
-  object: typeof ObjectType.PRODUCT;
+  object: PRODUCT_OBJECT;
   deleted: boolean;
 }
 

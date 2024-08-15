@@ -1,4 +1,4 @@
-import { ObjectType } from "../utils/enum";
+type PRICE_OBJECT = "price";
 
 // Enums for PriceTypeEnum and RecurringTypeEnum
 enum PriceTypeEnum {
@@ -45,7 +45,7 @@ interface PriceCreate extends PriceBase {}
 // Interface for Price
 interface Price extends PriceBase {
   id: string;
-  object: typeof ObjectType.PRICE;
+  object: PRICE_OBJECT;
   product: string;
 }
 
@@ -69,7 +69,7 @@ interface PriceUpdate {
 // Interface for PriceDelete
 interface PriceDelete {
   id: string;
-  object: typeof ObjectType.PRICE;
+  object: PRICE_OBJECT;
   deleted: boolean;
 }
 

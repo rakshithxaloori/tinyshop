@@ -1,6 +1,8 @@
-import { ObjectType } from "../utils/enum";
+import { Customer } from "./customer";
 import { Product } from "./product";
 import { Variant } from "./variant";
+
+type DISCOUNT_OBJECT = "discount";
 
 enum DiscountTypeEnum {
   OFF_PRODUCT = "off_product",
@@ -18,19 +20,18 @@ interface DiscountBase {
 }
 
 interface DiscountProductsList {
-  object: string;
+  object: "list";
   url: string;
   has_more: boolean;
   data: (Product | string)[];
 }
 
-// TODO after adding customers to SDK
-// interface DiscountCustomersList {
-//   object: string;
-//   url: string;
-//   has_more: boolean;
-//   data: (Customer | string)[];
-// }
+interface DiscountCustomersList {
+  object: "list";
+  url: string;
+  has_more: boolean;
+  data: (Customer | string)[];
+}
 
 interface OffProduct {
   quantity_min?: number | null;
@@ -100,15 +101,14 @@ interface DiscountCreate extends DiscountBase {
 
 interface Discount extends DiscountBase {
   id: string;
-  object: typeof ObjectType.DISCOUNT;
+  object: DISCOUNT_OBJECT;
   config: DiscountConfig;
-  // TODO after adding customers to SDK
-  //   customers: DiscountCustomersList;
+  customers: DiscountCustomersList;
 }
 
 interface DiscountList {
-  object: string;
-  url: string;
+  object: "list";
+  url: "/v1/discounts";
   has_more: boolean;
   data: Discount[];
 }
@@ -128,7 +128,7 @@ interface DiscountUpdate {
 
 interface DiscountDelete {
   id: string;
-  object: typeof ObjectType.DISCOUNT;
+  object: DISCOUNT_OBJECT;
   deleted: boolean;
 }
 

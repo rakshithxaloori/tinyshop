@@ -1,5 +1,6 @@
 import { Customer } from "./customer";
-import { ObjectType } from "../utils/enum";
+
+type REVIEW_OBJECT = "review";
 
 enum FeedbackEnum {
   // Negative feedback
@@ -22,6 +23,7 @@ interface ReviewBase {
   shipping_rating: number;
   feedback?: FeedbackEnum | null;
   review?: string | null;
+  image?: string | null;
 }
 
 interface ReviewCreate extends ReviewBase {
@@ -31,13 +33,13 @@ interface ReviewCreate extends ReviewBase {
 
 interface Review extends ReviewBase {
   id: string;
-  object: typeof ObjectType.REVIEW;
+  object: REVIEW_OBJECT;
   customer: Customer;
 }
 
 interface ReviewList {
-  object: string;
-  url: string;
+  object: "list";
+  url: "/v1/reviews";
   has_more: boolean;
   data: Review[];
 }
@@ -51,7 +53,7 @@ interface ReviewUpdate {
 
 interface ReviewDelete {
   id: string;
-  object: typeof ObjectType.REVIEW;
+  object: REVIEW_OBJECT;
   deleted: boolean;
 }
 

@@ -1,10 +1,12 @@
-import { ObjectType } from "../utils/enum";
+import { PriceList } from "./price";
+
+type VARIANT_OBJECT = "variant";
 
 // Interface for VariantOptionValue
-interface VariantOptionValue {
-  name: string;
-  value: string;
-}
+// interface VariantOptionValue {
+//   name: string;
+//   value: string;
+// }
 
 // Interface for PackageDimensions
 interface PackageDimensions {
@@ -19,8 +21,9 @@ interface VariantBase {
   name: string;
   description?: string | null;
   active: boolean;
-  options?: VariantOptionValue[] | null;
+  options?: string | null;
   accept_zero_inventory_orders: boolean;
+  image?: string | null;
   next_refill: number; // Timestamp
   package_dimensions?: PackageDimensions | null;
   is_default: boolean;
@@ -34,13 +37,14 @@ interface VariantCreate extends VariantBase {
 // Interface for Variant
 interface Variant extends VariantBase {
   id: string;
-  object: typeof ObjectType.VARIANT;
+  object: VARIANT_OBJECT;
+  prices?: PriceList | null;
 }
 
 // Interface for VariantList
 interface VariantList {
   object: "list";
-  url: string;
+  url: "/v1/variants";
   has_more: boolean;
   data: Variant[];
 }
@@ -58,16 +62,18 @@ interface VariantUpdate {
   name?: string | null;
   description?: string | null;
   active?: boolean | null;
-  options?: VariantOptionValue[] | null;
+  options?: string | null;
   accept_zero_inventory_orders?: boolean | null;
-  next_refill?: string | null; // Using string to represent datetime in ISO format
+  image?: string | null;
+  next_refill?: number | null; // Timestamp
   package_dimensions?: PackageDimensionsUpdate | null;
+  is_default?: boolean | null;
 }
 
 // Interface for VariantDelete
 interface VariantDelete {
   id: string;
-  object: typeof ObjectType.VARIANT;
+  object: VARIANT_OBJECT;
   deleted: boolean;
 }
 
