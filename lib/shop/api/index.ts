@@ -73,6 +73,8 @@ class Shops {
   }
 
   async create(shop: ShopCreate): Promise<{
+    shop_id: string;
+    user_id: string;
     dashboard_key: string;
   }> {
     const response = await this.api.post(this.endpoint, shop);

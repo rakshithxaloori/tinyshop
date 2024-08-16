@@ -31,13 +31,15 @@ const createDashboardKey = async () => {
     stack_auth_team_id: user.selectedTeam?.id,
     stack_auth_user_id: user.id,
   });
+  // TODO Save the shop id to team
+  const { shop_id, dashboard_key } = data;
   // Save the dashboard key user
   const newDashboardKeys = {
     ...(user.serverMetadata?.dashboardKeys || {}), // Safely access dashboardKeys
   };
 
   // TODO hash this?
-  newDashboardKeys[user.selectedTeam.id] = data.dashboard_key;
+  newDashboardKeys[user.selectedTeam.id] = dashboard_key;
 
   await user.update({
     serverMetadata: {

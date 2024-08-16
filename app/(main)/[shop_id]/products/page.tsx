@@ -1,22 +1,23 @@
 import { stackServerApp } from "@/stack";
 import Tinyshop from "@tinyshop/tinyshop-node";
-import ProductComponent from "./product";
+import { redirect } from "next/navigation";
+
+import ProductTable from "./table";
 
 const Products = async () => {
   const user = await stackServerApp.getUser();
+  if (!user?.selectedTeam?.id) {
+    redirect("/");
+  }
   const dk = user?.serverMetadata.dashboardKeys[user.selectedTeam?.id];
-  console.log(dk);
+
   const tinyshop = new Tinyshop(dk, "http://localhost:8000");
   const products = await tinyshop.products.list();
 
   return (
     <div>
       <span>Products</span>
-      <div>
-        {products.data.map((product) => (
-          <ProductComponent key={product.id} product={product} />
-        ))}
-      </div>
+      <ProductTable products={products.data} />
     </div>
   );
 };

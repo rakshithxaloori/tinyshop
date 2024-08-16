@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Team } from "@stackframe/stack";
 
 export default function Shops({ teams }: { teams: Array<Team> }) {
+  // TODO set selected team
   return (
     <ul
       role="list"
