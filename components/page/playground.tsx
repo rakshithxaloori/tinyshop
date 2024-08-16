@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { nullProductLayout, ProductLayout } from '../structure/product';
 import AIProduct from '../ai-product';
+import { Themes } from '../theme';
 
 
 const PlaygroundPage = ({
@@ -17,6 +18,7 @@ const PlaygroundPage = ({
   const [history, setHistory] = useState<string[]>([]);
   const [isQuerying, setIsQuerying] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const [theme, setTheme] = useState<string>('light');
 
   const [layout, setLayout] = useState<ProductLayout | null>(null);
 
@@ -42,7 +44,7 @@ const PlaygroundPage = ({
         messages: history,
         lastGeneratedObject: layout
       },
-        "coffee"
+        theme
       );
     }
     setIsQuerying(false);
@@ -137,10 +139,7 @@ const PlaygroundPage = ({
                   </div>
                   <div className="flex flex-1 gap-2 @container sm:@container-normal">
                     {/* <!-- Theme Button --> */}
-                    <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-gray-100 gap-1 py-1 text-[#666666] hover:text-[#171717] px-2 h-8 w-auto rounded-md border bg-white ml-auto">
-                      <span className="sr-only sm:not-sr-only">Theme</span>
-                      <PaletteIcon className="h-4 w-4" />
-                    </button>
+                    <Themes selectedTheme={theme} setSelectedTheme={setTheme} />
                     {/* <!-- Code Button --> */}
                     <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-sh-primary text-sh-primary-foreground shadow hover:bg-sh-primary/90 h-8 px-3 py-2 gap-1.5 @[95px]:w-[95px] sm:w-[95px] ml-0">
                       <span className="hidden @[95px]:inline-block sm:inline-block">Publish</span>
@@ -160,46 +159,11 @@ const PlaygroundPage = ({
                       layout={layout ||
                         nullProductLayout
                       }
+                      theme={theme}
                     />
                   ))
                 }
               </div>
-
-              {/* <ProductCard
-                data={{
-                  id: '123',
-                  handle: 'product',
-                  name: 'Product Name',
-                  images: ['https://via.placeholder.com/400'],
-                  default_variant: {
-                    name: 'Default Variant',
-                    id: '123',
-                    prices: {
-                      data: [
-                        {
-                          type: 'price',
-                          id: '123',
-                          currency: 'usd',
-                          unit_amount: 1000,
-                          unit_compare_amount: 1200,
-                        }
-                      ]
-                    }
-                  }
-                }}
-                layout={layout || {
-                  container: css``,
-                  image: css``,
-                  content: css``,
-                  title: css``,
-                  variant: css``,
-                  price: css``,
-                  compareAtPrice: css``,
-                  badge: css``,
-                }
-                }
-              /> */}
-
 
             </div>
             <div className="w-full lg:hidden" data-id="toolbar-bottom">

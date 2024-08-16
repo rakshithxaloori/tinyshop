@@ -3,6 +3,11 @@ import { css } from "@emotion/css";
 import { LockIcon } from "lucide-react";
 import Image from "next/image";
 
+export const metadata = {
+  title: "AI Editor",
+  tags: ["ai", "editor"],
+}
+
 const PlaygroundLayout = ({ children }: {
   children: React.ReactNode;
 }) => {

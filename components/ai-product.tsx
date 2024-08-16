@@ -15,8 +15,8 @@ const NoSSRQuantityStructure = dynamic(() => import("@/components/structure/quan
 });
 
 
-const AIProduct = ({ product, layout }:
-  { product: Product; layout: ProductLayout }
+const AIProduct = ({ product, layout, theme }:
+  { product: Product; layout: ProductLayout; theme: string }
 ) => {
   const productImage = product?.images && product.images[0] ? product.images[0] : "/api/placeholder/400/400"
   const [cartProductQuantity, setCartProductQuantity] = useState<number>(0)
@@ -42,16 +42,18 @@ const AIProduct = ({ product, layout }:
   }
 
   return (
-    <ProductCardStructure
-      data={data}
-      actions={actions}
-      layout={layout}
-      wishlist={WishlistStructure}
-      addToCartButton={AddToCartButtonStructure}
-      iconButton={IconButtonStructure}
-      priceCard={PriceStructure}
-      quantityDisplay={NoSSRQuantityStructure}
-    />
+    <div data-theme={theme}>
+      <ProductCardStructure
+        data={data}
+        actions={actions}
+        layout={layout}
+        wishlist={WishlistStructure}
+        addToCartButton={AddToCartButtonStructure}
+        iconButton={IconButtonStructure}
+        priceCard={PriceStructure}
+        quantityDisplay={NoSSRQuantityStructure}
+      />
+    </div>
   )
 }
 

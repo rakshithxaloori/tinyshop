@@ -95,7 +95,7 @@ const ProductCardStructure = (props: ProductCardStructureProps) => {
         css`${layout.outerContainer}`
       )}
       onClick={actions.handleCardClick}
-    // data-theme="coffee"
+    // data-theme="retro"
     >
       <div className={cn("group card card-compact",
         css`${layout.innerContainer}`
