@@ -4,7 +4,7 @@ const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
 // TODO
 const ENV_VARIABLES = [];
 
-const GIT_REPO = "storefront";
+const GIT_REPO = "tinyshop-me/storefront";
 
 export const createProject = async (handle: string) => {
   const data = {
@@ -57,17 +57,14 @@ export const redeployProject = async (handle: string) => {
   const data = {
     name: handle,
     gitSource: {
-      ref: "cosmix", // TODO
+      ref: "main",
       repoId: 820312336,
       type: "github",
     },
-    // meta: "{foo:bar}",
-    // project: handle,
     projectSettings: {
       framework: "nextjs",
     },
     target: "production",
-    // withLatestCommit: true,
   };
   const response = await fetch(
     `https://api.vercel.com/v13/deployments?forceNew=0&skipAutoDetectionConfirmation=0&teamId=${VERCEL_TEAM_ID}`,
@@ -89,7 +86,7 @@ export const editEnvVariable = async (
   value: string
 ) => {
   const data = {
-    gitBranch: "cosmix", // TODO
+    gitBranch: "main",
     key: name,
     target: "[production]",
     type: "encrypted",
