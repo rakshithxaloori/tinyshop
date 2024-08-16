@@ -1,5 +1,5 @@
 "use client";
-import { generateProductLayoutObject } from '@/lib/actions';
+import { generateProductLayoutObject, LayoutHistory } from '@/lib/actions';
 import { Product } from '@tinyshop/tinyshop-node/interfaces/product';
 import { PaletteIcon, RefreshCwIcon, SaveIcon, SendHorizontalIcon, ThumbsDownIcon } from 'lucide-react';
 import Image from 'next/image';
@@ -7,20 +7,35 @@ import { useRef, useState } from 'react';
 import { nullProductLayout, ProductLayout } from '../structure/product';
 import AIProduct from '../ai-product';
 import { Themes } from '../theme';
+import { Button } from '../ui/button';
 
+type UIMessage = {
+  input: string;
+  layout: ProductLayout;
+}
+
+type UIHistory = {
+  index: number;
+  message: UIMessage | null;
+}
 
 const PlaygroundPage = ({
   data
 }: {
   data: Product[]
 }) => {
-  const [query, setQuery] = useState('');
-  const [history, setHistory] = useState<string[]>([]);
   const [isQuerying, setIsQuerying] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [theme, setTheme] = useState<string>('light');
+  const [messages, setMessages] = useState<UIMessage[]>([]);
+  const [selectedHistory, setSelectedHistory] = useState<UIHistory>({ index: -1, message: null });
 
-  const [layout, setLayout] = useState<ProductLayout | null>(null);
+  const onHistorySelect = (index: number) => {
+    setSelectedHistory({
+      index,
+      message: messages[index]
+    });
+  }
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -37,21 +52,25 @@ const PlaygroundPage = ({
     // generate the layout object
     const layoutPromptString = `${input}`;
     let generatedLayoutObject;
-    if (layout === null) {
-      generatedLayoutObject = await generateProductLayoutObject(layoutPromptString);
+    if (messages.length === 0) {
+      generatedLayoutObject = await generateProductLayoutObject(layoutPromptString, {} as LayoutHistory, theme);
     } else {
       generatedLayoutObject = await generateProductLayoutObject(layoutPromptString, {
-        messages: history,
-        lastGeneratedObject: layout
+        messages: messages.map((msg) => msg.input),
+        lastGeneratedObject: messages[messages.length - 1]?.layout || null
       },
         theme
       );
     }
     setIsQuerying(false);
-    setLayout(generatedLayoutObject);
     console.log('Generated layout object:', generatedLayoutObject);
-    setQuery(input)
-    setHistory((currHistory) => [...currHistory, input]);
+    const message = {
+      input,
+      layout: generatedLayoutObject
+    }
+    setMessages((msgArr) => [...msgArr, message]);
+    setSelectedHistory((prev) => ({ index: prev.index + 1, message }));
+
 
     formRef.current?.reset();
   }
@@ -77,7 +96,7 @@ const PlaygroundPage = ({
                         <div className="relative flex-1 overflow-hidden text-ellipsis rounded-2xl bg-[#ebebeb] px-3 py-1">
                           <span className="text-left text-sm line-clamp-1 break-all">
                             {
-                              isQuerying ? 'Querying...' : query
+                              isQuerying ? 'Querying...' : selectedHistory.message?.input
                             }
                           </span>
                         </div>
@@ -156,9 +175,7 @@ const PlaygroundPage = ({
                     <AIProduct
                       key={product.id}
                       product={product}
-                      layout={layout ||
-                        nullProductLayout
-                      }
+                      layout={selectedHistory.message?.layout || nullProductLayout}
                       theme={theme}
                     />
                   ))
@@ -176,10 +193,10 @@ const PlaygroundPage = ({
                       height="32" width="32" className="relative flex shrink-0 rounded-full"
                     />
                   </a>
-                  <button className="relative max-w-full overflow-hidden" title={query}>
+                  <button className="relative max-w-full overflow-hidden" title={selectedHistory.message?.input}>
                     <div className="relative flex-1 overflow-hidden text-ellipsis rounded-2xl bg-[#ebebeb] px-3 py-1">
                       <span className="text-left text-sm line-clamp-1 break-all">
-                        {isQuerying ? 'Querying...' : query}
+                        {isQuerying ? 'Querying...' : selectedHistory.message?.input}
                       </span>
                     </div></button><div className="flex items-center gap-2">
                     <span className="flex items-center justify-center" data-state="closed">
@@ -197,6 +214,22 @@ const PlaygroundPage = ({
                     </span>
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className='hidden shrink-0 origin-left select-none flex-col overflow-hidden rounded-lg bg-gray-50 py-2 transition-all duration-300 ease-out @container lg:flex max-h-[calc(100vh-190px)] h-auto w-[44px]'>
+            <div className="no-scrollbar flex flex-1 flex-col-reverse overflow-auto">
+              <div className="flex flex-col gap-3 px-[6px] py-1">
+                {
+                  messages.map((msg, index) => (
+                    <Button key={index} variant="outline" className={`${index === selectedHistory.index ? 'ring-2' : ''} text-sm font-semibold`}
+                      onClick={() => onHistorySelect(index)}
+                      size="sm"
+                    >
+                      v{index + 1}
+                    </Button>
+                  ))
+                }
               </div>
             </div>
           </div>
@@ -219,7 +252,7 @@ const PlaygroundPage = ({
                     <textarea
                       className="min-h-[1.5rem] h-[1rem] flex-[1_0_50%] resize-none border-0 bg-transparent text-sm leading-relaxed shadow-none outline-none ring-0 [scroll-padding-block:0.75rem] selection:bg-teal-300 selection:text-black disabled:bg-transparent disabled:opacity-80 text-white placeholder:text-zinc-400 w-full"
                       name='input'
-                      placeholder={query || "Make the heading larger and darker"}
+                      placeholder={selectedHistory.message?.input || "Make the heading larger and darker"}
                       disabled={isQuerying}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
@@ -246,7 +279,7 @@ const PlaygroundPage = ({
 
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 
