@@ -20,8 +20,6 @@ import { CartList, EmptyCartList } from "./cart-list";
 import { CurrencyString } from "./price/currency-icon";
 import { useRouter } from "next/navigation";
 
-
-
 const CartV2 = () => {
   const cartStore = useCartStore()
   const { items, clearCart } = cartStore
@@ -29,7 +27,6 @@ const CartV2 = () => {
 
   const cartItems = items.length;
   const cartItemsQty = items.reduce((acc, item) => acc + item.quantity, 0);
-
 
   const onClearClick = (e: any) => {
     e.preventDefault()

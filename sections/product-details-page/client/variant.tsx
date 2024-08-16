@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useVariant } from "../hook/variant";
 import useCartStore from "@/store/cart";
 import dynamic from "next/dynamic";
+import { PriceTypeEnum } from "@tinyshop/tinyshop-node/interfaces/price";
 
 const disableOneTime = process.env.NEXT_PUBLIC_DISABLE_ONE_TIME! === "true";
 
@@ -89,7 +90,7 @@ const AddToCart = ({ config, product }:
     variantName: selectedPrice?.variantName || "",
     price: selectedPrice?.unit_amount || 0,
     currency: selectedPrice?.currency || "",
-    isSubscription: selectedPrice?.type === "subscription",
+    isSubscription: selectedPrice?.type === PriceTypeEnum.RECURRING,
   }
 
   const handleAddToCart = (e: any) => {
@@ -160,7 +161,6 @@ const PriceItem = ({ price, selectedPrice, onSelect }: {
   const isSelected = useMemo(() => selectedPrice.id === price.id, [selectedPrice, price])
   const { getPrice } = useCartStore()
   const cartVariantQty = getPrice(price.id).quantity
-  const isSub = price.type === "subscription"
 
   const priceAmount = price.unit_amount
   const priceCurrency = price.currency
@@ -177,8 +177,8 @@ const PriceItem = ({ price, selectedPrice, onSelect }: {
       <div className="flex flex-row flex-1">
         <span className={cn("text-lg font-bold")}>{price.variantName}</span>
         <div className="grow"></div>
-        <PriceCard price={priceAmount} currency={priceCurrency} isSubscription={price.type === "subscription"} />
-        <NoSSRCartBagDisplay quantity={cartVariantQty} cx="ml-2" />
+        <PriceCard price={priceAmount} currency={priceCurrency} isSubscription={price.type === PriceTypeEnum.RECURRING} />
+        <NoSSRCartBagDisplay quantity={cartVariantQty} className="ml-2" />
       </div>
     </div>
   )
@@ -203,8 +203,10 @@ const PriceSelector = ({ product }: { product: any }) => {
 
   // if disable one time is set, filter out the one time prices
   if (disableOneTime) {
-    flattenedPrices = flattenedPrices.filter((price: any) => price.type === "subscription")
+    flattenedPrices = flattenedPrices.filter((price: any) => price.type === PriceTypeEnum.RECURRING)
   }
+
+  console.log(flattenedPrices)
 
   const [selectedPrice, setSelectedPrice] = useState(flattenedPrices[0])
   const { setPrice } = useVariant();
@@ -263,7 +265,7 @@ const PriceDisplay = ({
 }) => {
   const { price } = useVariant()
   // check if it's a subscription variant
-  const isSubscription = price.type === "subscription"
+  const isSubscription = price.type === PriceTypeEnum.RECURRING
   let displayPriceAmount = price.unit_amount
   const displayPriceCurrency = price.currency
   const displayComparePrice = price.unit_compare_amount

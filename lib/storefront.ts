@@ -4,6 +4,9 @@ import { tinyshop } from "./tinyshop"
 import { connectToDatabase, disconnectFromDatabase } from "./mongo";
 import { daisyUIThemes } from './const';
 import { CustomerUpdate } from '@tinyshop/tinyshop-node/interfaces/customer';
+import { Product } from '@tinyshop/tinyshop-node/interfaces/product';
+import { OptionList } from '@tinyshop/tinyshop-node/interfaces/option';
+import { VariantList } from '@tinyshop/tinyshop-node/interfaces/variant';
 
 export const getRootCollection = async () => {
   const rootCollectionImage = "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -71,10 +74,28 @@ export const getHeaderNavItems = async () => {
 export const getProductByHandle = async (handle: string) => {
   const expanded_product = await tinyshop.products.search(
     `handle:${handle}`,
-    { expand: ["default_variant", "variants", "options"] }
+    { expand: ["default_variant"] }
   );
 
-  return expanded_product
+  if (expanded_product.data.length === 0) {
+    return null
+  }
+
+  const product = expanded_product.data[0];
+  const { id: productId } = product;
+  const [productVariants, productOptions] = await Promise.all([
+    tinyshop.variants.list(productId),
+    tinyshop.options.list(productId)
+  ]);
+
+  // add variants to and options to product
+  let augmentedProduct: Product & { options: OptionList, variants: VariantList } = product as any;
+  augmentedProduct.options = productOptions
+  augmentedProduct.variants = productVariants
+
+  console.log(augmentedProduct)
+
+  return augmentedProduct
 }
 
 export const getWishlistProductDetails = async (productIdList: string[]) => {
@@ -144,11 +165,20 @@ export const getProductExternalDetails = async (brandName: string, productHandle
   return productDetails;
 }
 
+export const getProductLayoutDetails = async (brandName: string) => {
+  const { client } = await connectToDatabase();
+  const layoutDb = client.db('layouts');
+  const storefrontLayouts = layoutDb.collection('storefront');
+  // find the latest layout for the brand, the collection has createdAt field
+  const layout = await storefrontLayouts.findOne({ shop: brandName });
+  await disconnectFromDatabase(client);
+  return layout
+}
+
 export const getProductDetailsPageTheme = async (brandName: string, productHandle: string): Promise<string> => {
   const theme = daisyUIThemes[Math.floor(Math.random() * daisyUIThemes.length)];
   return theme
 }
-
 
 export const getAllProductImages = async () => {
   const all_products_raw = await getProductList();
@@ -169,10 +199,9 @@ export const createOrGetCustomer = async (phoneNumber: string) => {
 }
 
 export const verifyCustomer = async (customerId: string, otp: string) => {
-  const customer = await tinyshop.customers.update(customerId, { otp });
+  const customer = await tinyshop.customers.verify(customerId, { otp });
   return { id: customer.id, verified: customer.is_verified }
 }
-
 
 export const getSubscriptionDetails = async (subscriptionId: string): Promise<TCheckoutItem[]> => {
   const subscription = await tinyshop.subscriptions.retrieve(subscriptionId);

@@ -4,6 +4,7 @@ import Basic2DHeroSection from "@/template/hero/2d-basic";
 import Image3DCarousel from "../3d-image-carousel";
 import dynamic from "next/dynamic";
 import ThreeStatementBanner from "../banner/three-statement";
+import { ProductLayout } from "../product/card-structure";
 
 const ClientProductDisplayList = dynamic(() => import("@/components/product-display-horizontal-list"), {
   ssr: false,
@@ -14,13 +15,15 @@ const StorefrontLandingPage = ({
   products,
   collections,
   heroSectionConfig,
-  carouselImages
+  carouselImages,
+  productCardLayout
 }:
   {
     products: any,
     collections: any,
     heroSectionConfig: any,
-    carouselImages: string[]
+    carouselImages: string[];
+    productCardLayout: ProductLayout
   }
 ) => {
   return (
@@ -50,6 +53,7 @@ const StorefrontLandingPage = ({
       <ClientProductDisplayList
         title="COSMIX ESSENTIALS"
         {...{ products }}
+        layout={productCardLayout}
       />
       <CollectionDisplayList
         title="COMMUNITY FAVOURITES"

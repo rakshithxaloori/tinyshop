@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   CurrencyIconComponent,
   CurrencyString
@@ -8,6 +9,7 @@ interface PriceCardProps {
   currency: string;
   comparePrice?: number | string;
   isSubscription?: boolean;
+  className?: string;
 }
 
 const PriceCard = (props: PriceCardProps) => {
@@ -15,9 +17,9 @@ const PriceCard = (props: PriceCardProps) => {
     price,
     currency,
     comparePrice,
-    isSubscription
+    isSubscription,
+    className
   } = props;
-
 
   // Remove 2 zeros from the price from the end
   const displayPrice = (Number(price) / 100).toString()
@@ -25,7 +27,7 @@ const PriceCard = (props: PriceCardProps) => {
 
   if (comparePrice) {
     return (
-      <div className="flex items-center w-max-content gap-2">
+      <div className={cn("flex items-center w-max-content gap-2", className)}>
         <span className="text-2xl font-bold flex flex-row items-center">
           <CurrencyIconComponent currency={currency} />
           {displayPrice}
@@ -39,7 +41,7 @@ const PriceCard = (props: PriceCardProps) => {
   }
 
   return (
-    <div className="flex items-center">
+    <div className={cn("flex items-center", className)}>
       <CurrencyIconComponent currency={currency} />
       <span className="text-2xl font-bold">
         {displayPrice}

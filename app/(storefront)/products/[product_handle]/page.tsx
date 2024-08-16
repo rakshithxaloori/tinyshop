@@ -21,7 +21,7 @@ export const generateMetadata = async ({
       description: "Product not found",
     };
   }
-  const product = raw_product.data[0];
+  const product = raw_product
 
   const pageName = `${product.name} - ${shopName}`;
   return {
@@ -49,7 +49,7 @@ const ProductLandingPage = async (
   if (!raw_product) {
     return <div>Product not found</div>;
   }
-  const product = raw_product.data[0];
+  const product = raw_product
   const collections = await getProductCollections(product);
 
   const reviews = await getProductReviews(product);

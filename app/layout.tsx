@@ -9,6 +9,7 @@ import ClientSideProvider from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 const shopName = process.env.NEXT_PUBLIC_SHOP_NAME || "tinyshop";
+const globalTheme = process.env.NEXT_PUBLIC_THEME || "retro";
 
 export const metadata: Metadata = {
   title: `${shopName}`,
@@ -21,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="" data-theme="retro">
+    <html lang="en" className="" data-theme={globalTheme}>
       <body className={inter.className}>
         <Transitions>
           <Animate>

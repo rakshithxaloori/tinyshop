@@ -5,6 +5,7 @@ import algoliasearch, { SearchClient } from 'algoliasearch/lite';
 import { TProduct } from '@/types/product';
 import { useSearchQuery } from '../hooks/search';
 import ProductDisplayList from '../product-display-list';
+import { ProductLayout } from '../product/card-structure';
 
 const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!;
 const algoliaSearchApiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY!;
@@ -13,9 +14,11 @@ const shopName = process.env.NEXT_PUBLIC_SHOP_NAME!;
 let algoliaSearchClient: SearchClient = algoliasearch(algoliaAppId, algoliaSearchApiKey);
 
 const SearchPageComponent = ({
-  indexName
+  indexName,
+  layout
 }: {
-  indexName: string
+  indexName: string;
+  layout: ProductLayout;
 }) => {
   const { query: searchQuery } = useSearchQuery()
   const [searchResults, setSearchResults] = useState<any[]>([])
@@ -52,6 +55,7 @@ const SearchPageComponent = ({
       <ProductDisplayList
         name="All Products"
         products={searchResults as TProduct[]}
+        layout={layout}
       />
     </div>
   )

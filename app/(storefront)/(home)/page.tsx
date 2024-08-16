@@ -1,5 +1,5 @@
 import StorefrontLandingPage from "@/components/pages/storefront-landing-page";
-import { getAllProductImages, getCollectionList, getHeroSectionDetails, getProductList } from "@/lib/storefront";
+import { getAllProductImages, getCollectionList, getHeroSectionDetails, getProductLayoutDetails, getProductList } from "@/lib/storefront";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -28,6 +28,12 @@ const LandingPage = async () => {
 
   const carouselImages = await getAllProductImages();
 
+  const mongoLayout = await getProductLayoutDetails(shopName);
+  const cardLayout = mongoLayout?.layout || null;
+  if (!cardLayout) {
+    throw new Error('No layout found for the brand');
+  }
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <StorefrontLandingPage
@@ -35,6 +41,7 @@ const LandingPage = async () => {
         products={all_products}
         collections={featuredCollections}
         carouselImages={carouselImages}
+        productCardLayout={cardLayout}
       />
     </Suspense>
   );

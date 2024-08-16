@@ -13,7 +13,6 @@ if (!MONGO_DB_NAME) {
   throw new Error('Please define the MONGO_DB_NAME environment variable');
 }
 
-
 export async function connectToDatabase() {
   const client = await MongoClient.connect(MONGO_URI);
   const db = client.db(MONGO_DB_NAME);

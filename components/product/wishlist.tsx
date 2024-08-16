@@ -5,8 +5,9 @@ import { TProduct } from "@/types/product"
 import { HeartIcon } from "lucide-react"
 import { useCallback, useEffect, useState } from "react";
 
-const WishlistItem = ({ product }: {
-  product: TProduct
+const WishlistItem = ({ id, className }: {
+  id: string;
+  className?: string;
 }) => {
   const [wish, setWish] = useState<boolean | null>(null)
 
@@ -17,26 +18,26 @@ const WishlistItem = ({ product }: {
       if (currentWish === null) return
       setWish(!currentWish)
       if (!currentWish) {
-        await addToWishlist(product.id)
+        await addToWishlist(id)
       } else {
-        await removeFromWishlist(product.id)
+        await removeFromWishlist(id)
       }
     }
-    , [product.id])
+    , [id])
 
   useEffect(() => {
     // Check if product is in wishlist
     // If it is, setWish to true
     // else setWish to false
     async function fetchWishListCookie() {
-      const hasWish = await hasWishlistItem(product.id)
+      const hasWish = await hasWishlistItem(id)
       setWish(hasWish)
     }
     fetchWishListCookie()
-  }, [product.id])
+  }, [id])
 
   return (
-    <div className="absolute top-0 right-0 m-0 mt-2 mr-2 p-0">
+    <div className={cn("absolute top-0 right-0 m-0 mt-2 mr-2 p-0", className)}>
       <label className={cn("swap swap-flip p-0 m-0",
         { "swap-active": wish }
       )}

@@ -8,8 +8,6 @@
 // 6. Cart actions
 // 7. Wishlist actions
 "use client";
-
-import Image from "next/image";
 import { Button } from "../ui/button";
 import PriceCard from "@/components/price/price-card-v1";
 import { useRouter } from "next/navigation";
@@ -17,11 +15,13 @@ import { TPriceUI, TProductUICard } from "@/types/product";
 import WishlistItem from "./wishlist";
 import useCartStore from "@/store/cart";
 import dynamic from "next/dynamic";
-import { ShoppingBagIcon, ShoppingCartIcon } from "lucide-react";
+import { ShoppingCartIcon } from "lucide-react";
 import { useSearchQuery } from "../hooks/search";
+import ProductCardStructure, { nullProductLayout, ProductLayout } from "./card-structure";
+import { cn } from "@/lib/utils";
+import { PriceTypeEnum } from "@tinyshop/tinyshop-node/interfaces/price";
 
 const disableOneTime = process.env.NEXT_PUBLIC_DISABLE_ONE_TIME! === "true";
-
 
 const NoSSRCartBagDisplay = dynamic(() => import("../cart-bag-display"), {
   ssr: false,
@@ -44,17 +44,41 @@ const processPricesResponse = (prices: any): TPriceUI => {
   });
 }
 
+const IconButton = ({ className, onClick }: { className?: string, onClick: React.MouseEventHandler<HTMLButtonElement> }) => {
+  return (
+    <Button className={cn("btn btn-sm", className)}
+      onClick={onClick}
+    >
+      <ShoppingCartIcon color="#fff" size={24} />
+    </Button>
+
+  )
+}
+
+const AddToCartButton = ({ className, onClick }: { className?: string, onClick: React.MouseEventHandler<HTMLButtonElement> }) => {
+  return (
+    <Button variant="outline"
+      className={cn("w-full rounded-full border-primary text-primary hover:bg-primary hover:text-primary-content", className)}
+      onClick={onClick}
+    >
+      Add
+    </Button>
+  )
+}
+
 const ProductCard = ({ product,
-  fallbackOptions
+  fallbackOptions,
+  layout
 }: {
   product: TProductUICard;
   fallbackOptions: any;
+  layout: ProductLayout;
 }) => {
   const { image } = fallbackOptions;
   const productImage = product?.images && product.images[0] ? product.images[0] : image;
   const prices: TPriceUI[] = product?.default_variant?.prices ? processPricesResponse(product?.default_variant?.prices?.data) : [] as any;
-  const oneTimePrice = prices.find(price => price.type === "one_time") ?? prices[0];
-  const subscriptionPrice = prices.find(price => price.type === "subscription") ?? prices[0];
+  const oneTimePrice = prices.find(price => price.type === PriceTypeEnum.ONE_TIME) ?? prices[0];
+  const subscriptionPrice = prices.find(price => price.type === PriceTypeEnum.RECURRING) ?? prices[0];
 
   const router = useRouter();
   const cartStore = useCartStore();
@@ -99,69 +123,37 @@ const ProductCard = ({ product,
     clearQuery();
   };
 
+  const actions = {
+    handleCardClick: handleLinkClick,
+    handleAddToCart
+  }
+
+  const data = {
+    id: product.id,
+    productImage,
+    name: product.name,
+    badgeTitle: "NEW",
+    quantity: cartProductQuantity,
+    price: itemPrice,
+    currency: itemCurrency
+  }
+
+  if (!layout) {
+    layout = nullProductLayout
+  }
+
   return (
-    <div onClick={handleLinkClick}
-      className="card-wrapper cursor-pointer border-primary/60 hover:border-primary md:hover:m-1 transition-all duration-100 ease-linear bg-base-100 border-2 rounded-xl">
-      <div className="group card card-compact">
-        <figure className="relative aspect-square rounded-t-xl">
-          <Image src={
-            productImage
-          } alt={product.name}
-            className="w-full h-full group-hover:opacity-75 group-focus:opacity-100 transition-opacity duration-200 ease-in-out"
-            fill
-          />
-        </figure>
-        <WishlistItem product={product} />
-        <div className="badge badge-primary ml-2 mb-2 absolute top-0 left-0 mt-2 ml-2">NEW</div>
-        <div className="flex m-0 mt-md mx-md">
-          <div className="w-full">
-            <h2 className="group card-title text-base group-hover:opacity-75 transition-opacity duration-200 ease-in-out h-[3rem] line-clamp-2">
-              {product.name}
-            </h2>
-          </div>
-          <div className="grow" />
-          <div className="card-action flex-1 hidden md:block">
-            <Button className="btn btn-sm"
-              onClick={handleAddToCart}
-            >
-              <ShoppingCartIcon color="#fff" size={24} />
-            </Button>
-          </div>
-        </div>
-
-        <section id="price_card-footer"
-          className="group flex justify-between p-2 m-0 mt-xs md:mt-sm  group-hover:opacity-75"
-          suppressHydrationWarning={true}
-        >
-          <PriceCard
-            price={itemPrice}
-            currency={itemCurrency}
-          />
-
-          <div className="grow" />
-
-          <NoSSRCartBagDisplay quantity={cartProductQuantity}
-            cx={cartProductQuantity > 0 ? "block" : "hidden"}
-          />
-        </section>
-
-        <section id="mobile_card-footer"
-          className="visible md:hidden my-sm"
-        >
-          <div className="card-action w-full px-2">
-            <Button variant="outline"
-              className="w-full rounded-full border-primary text-primary hover:bg-primary hover:text-primary-content"
-              onClick={handleAddToCart}
-            >
-              Add
-            </Button>
-          </div>
-        </section>
-      </div>
-    </div>
+    <ProductCardStructure
+      data={data}
+      layout={layout}
+      actions={actions}
+      quantityDisplay={NoSSRCartBagDisplay}
+      priceCard={PriceCard}
+      wishlist={WishlistItem}
+      iconButton={IconButton}
+      addToCartButton={AddToCartButton}
+    />
   )
 }
 
 export default ProductCard;
-
-export type { TProductUICard };

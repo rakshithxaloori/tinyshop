@@ -2,14 +2,16 @@
 
 import { TProduct } from "@/types/product";
 import ProductCard from "./product/card-v1";
+import { ProductLayout } from "./product/card-structure";
 
 interface ProductDisplayHorizonalListProps {
   title: string;
   products: TProduct[];
+  layout: ProductLayout;
 }
 
 
-const ProductDisplayHorizonalList = ({ products }: { products: TProduct[] }) => {
+const ProductDisplayHorizonalList = ({ products, layout }: { products: TProduct[]; layout: ProductLayout }) => {
   return (
     <div className="flex flex-row overflow-x-hidden relative -px-md">
       <div className="my-lg flex flex-row overflow-x-auto gap-x-1 snap-x snap-mandatory scrollbar-hide relative">
@@ -20,6 +22,7 @@ const ProductDisplayHorizonalList = ({ products }: { products: TProduct[] }) => 
               fallbackOptions={{
                 image: "https://images.unsplash.com/photo-1620987278429-ab178d6eb547?q=80&w=2825&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               }}
+              layout={layout}
             />
           </div>
         ))}
@@ -33,12 +36,12 @@ const ProductDisplayHorizonalList = ({ products }: { products: TProduct[] }) => 
 
 
 const ProductDisplaySection = (
-  { title, products }: ProductDisplayHorizonalListProps
+  { title, products, layout }: ProductDisplayHorizonalListProps
 ) => {
   return (
     <section className="w-full my-xl">
       <h2 className="mb-lg md:mb-2xl text-3xl md:text-5xl font-normal antialiased text-center uppercase">{title}</h2>
-      <ProductDisplayHorizonalList products={products} />
+      <ProductDisplayHorizonalList {...{ products, layout }} />
     </section>
   )
 }
