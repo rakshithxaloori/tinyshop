@@ -123,7 +123,7 @@ const ProductCardStructure = (props: ProductCardStructureProps) => {
         <div className={cn("flex flex-col m-0 mt-md mx-md", css`${layout.cardBodyContainer}`)}>
           {/* Title structure */}
           <div className={cn("w-full", css`${layout.titleContainer}`)}>
-            <h2 className={cn("group card-title text-base-content group-hover:opacity-75 transition-opacity duration-200 ease-in-out h-[3rem] line-clamp-2",
+            <h2 className={cn("group card-title text-base-content group-hover:opacity-75 transition-opacity duration-200 ease-in-out h-fit min-h-[3.5rem] line-clamp-2",
               css`${layout.title}`
             )}>
               {data.name}

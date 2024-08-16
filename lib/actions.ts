@@ -3,10 +3,18 @@
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { ProductLayout, ProductLayoutSchema } from '@/components/structure/product';
+import { connectToDatabase, disconnectFromDatabase } from './mongo';
+
+const MONGO_COLLECTION_NAME = process.env.MONGO_COLLECTION_NAME as string;
 
 export type LayoutHistory = {
   messages: string[] | null;
   lastGeneratedObject: ProductLayout | null;
+}
+
+export type MongoLayoutInformation = {
+  layout: ProductLayout;
+  theme: string;
 }
 
 const createPrompt = (input: string, history?: LayoutHistory, theme?: string) => {
@@ -99,4 +107,21 @@ export const generateProductLayoutObject = async (input: string,
 
 
   return object;
+}
+
+export const uploadLayoutInformationToMongo = async (object: MongoLayoutInformation) => {
+  "use server";
+  const { client, db } = await connectToDatabase();
+  const collection = db.collection(MONGO_COLLECTION_NAME);
+
+  // Create index for the collection, if it doesn't exist. create index on the shop field
+  await collection.createIndex({ shop: 1, createdAt: -1 });
+
+  const mongoObject = {
+    ...object,
+    createdAt: new Date(),
+  };
+
+  await collection.insertOne(mongoObject);
+  await disconnectFromDatabase(client);
 }

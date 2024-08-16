@@ -1,5 +1,5 @@
 "use client";
-import { generateProductLayoutObject, LayoutHistory } from '@/lib/actions';
+import { generateProductLayoutObject, LayoutHistory, uploadLayoutInformationToMongo } from '@/lib/actions';
 import { Product } from '@tinyshop/tinyshop-node/interfaces/product';
 import { PaletteIcon, RefreshCwIcon, SaveIcon, SendHorizontalIcon, ThumbsDownIcon } from 'lucide-react';
 import Image from 'next/image';
@@ -25,6 +25,7 @@ const PlaygroundPage = ({
   data: Product[]
 }) => {
   const [isQuerying, setIsQuerying] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [theme, setTheme] = useState<string>('light');
   const [messages, setMessages] = useState<UIMessage[]>([]);
@@ -35,6 +36,20 @@ const PlaygroundPage = ({
       index,
       message: messages[index]
     });
+  }
+
+  const handlePublish = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    const mongoLayoutInformation = {
+      layout: selectedHistory.message?.layout || nullProductLayout,
+      theme
+    }
+    console.log('Publishing to mongo:', mongoLayoutInformation);
+    setIsPublishing(true);
+    await uploadLayoutInformationToMongo(mongoLayoutInformation);
+    setIsPublishing(false);
   }
 
   const handleSubmit = async (
@@ -160,9 +175,12 @@ const PlaygroundPage = ({
                     {/* <!-- Theme Button --> */}
                     <Themes selectedTheme={theme} setSelectedTheme={setTheme} />
                     {/* <!-- Code Button --> */}
-                    <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-sh-primary text-sh-primary-foreground shadow hover:bg-sh-primary/90 h-8 px-3 py-2 gap-1.5 @[95px]:w-[95px] sm:w-[95px] ml-0">
+                    <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-sh-primary text-sh-primary-foreground shadow hover:bg-sh-primary/90 h-8 px-3 py-2 gap-1.5 @[95px]:w-[95px] sm:w-[95px] ml-0"
+                      onClick={handlePublish}
+                    >
                       <span className="hidden @[95px]:inline-block sm:inline-block">Publish</span>
-                      <SaveIcon className="h-4 w-4" />
+                      {isPublishing ? <div className="h-4 w-4 animate-spin rounded-full border-4 border-gray-800 border-t-white" /> :
+                        <SaveIcon className="h-4 w-4" />}
                     </button>
                   </div>
                 </div>
