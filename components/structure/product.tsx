@@ -95,7 +95,7 @@ const ProductCardStructure = (props: ProductCardStructureProps) => {
         css`${layout.outerContainer}`
       )}
       onClick={actions.handleCardClick}
-      data-theme="retro"
+    // data-theme="coffee"
     >
       <div className={cn("group card card-compact",
         css`${layout.innerContainer}`
@@ -120,10 +120,10 @@ const ProductCardStructure = (props: ProductCardStructureProps) => {
           >{data.badgeTitle}</div>
         }
 
-        <div className={cn("flex m-0 mt-md mx-md bg-primary", css`${layout.cardBodyContainer}`)}>
+        <div className={cn("flex flex-col m-0 mt-md mx-md", css`${layout.cardBodyContainer}`)}>
           {/* Title structure */}
           <div className={cn("w-full", css`${layout.titleContainer}`)}>
-            <h2 className={cn("group card-title text-base group-hover:opacity-75 transition-opacity duration-200 ease-in-out h-[3rem] line-clamp-2",
+            <h2 className={cn("group card-title text-base-content group-hover:opacity-75 transition-opacity duration-200 ease-in-out h-[3rem] line-clamp-2",
               css`${layout.title}`
             )}>
               {data.name}
@@ -141,35 +141,37 @@ const ProductCardStructure = (props: ProductCardStructureProps) => {
             )
           }
 
-          {/* Quantity Structure */}
-          {
-            QuantityStructure && (
-              <div className={cn(css`${layout.quantityContainer}`)}>
-                <QuantityStructure quantity={data.quantity} className={css`${layout.quantity}`} />
-              </div>
-            )
-          }
-
           {/* Price Structure*/}
-          {
-            PriceStructure && (
-              <div
-                className={cn("group flex justify-between p-2 m-0 mt-xs md:mt-sm  group-hover:opacity-75",
-                  css`${layout.priceContainer}`
-                )}>
-                <PriceStructure
-                  price={data.price}
-                  currency={data.currency}
-                  className={css`${layout.price}`}
-                />
-              </div>
-            )
-          }
+          <section className="flex flex-row w-full">
+            {
+              PriceStructure && (
+                <div
+                  className={cn("group flex justify-between p-2 m-0 mt-xs md:mt-sm  group-hover:opacity-75",
+                    css`${layout.priceContainer}`
+                  )}>
+                  <PriceStructure
+                    price={data.price}
+                    currency={data.currency}
+                    className={css`${layout.price}`}
+                  />
+                </div>
+              )
+            }
+            <div className="grow" />
+            {/* Quantity Structure */}
+            {
+              QuantityStructure && (
+                <div className={cn(css`${layout.quantityContainer}`)}>
+                  <QuantityStructure quantity={data.quantity} className={css`${layout.quantity}`} />
+                </div>
+              )
+            }
 
+          </section>
           {/* Add to cart button Structure */}
           {
             AddToCartButtonStructure && (
-              <div className={cn("card-action w-full px-2 visible md:hidden my-sm",
+              <div className={cn("card-action w-full visible my-sm",
                 css`${layout.addToCartContainer}`
               )}>
                 <AddToCartButtonStructure onClick={actions.handleAddToCart}

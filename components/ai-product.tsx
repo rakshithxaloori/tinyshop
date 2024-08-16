@@ -3,6 +3,16 @@
 import { Product } from "@tinyshop/tinyshop-node/interfaces/product";
 import ProductCardStructure, { ProductLayout } from "./structure/product";
 import { useState } from "react";
+import WishlistStructure from "./structure/wishlist";
+import AddToCartButtonStructure from "./structure/add-to-cart-btn";
+import IconButtonStructure from "./structure/icon-btn";
+import PriceStructure from "./structure/price";
+import dynamic from "next/dynamic";
+
+const NoSSRQuantityStructure = dynamic(() => import("@/components/structure/quantity"), {
+  ssr: false,
+  loading: () => <div className="h-6 w-6 animate-spin border-2 rounded-full border-base-300 border-t-primary" />
+});
 
 
 const AIProduct = ({ product, layout }:
@@ -36,6 +46,11 @@ const AIProduct = ({ product, layout }:
       data={data}
       actions={actions}
       layout={layout}
+      wishlist={WishlistStructure}
+      addToCartButton={AddToCartButtonStructure}
+      iconButton={IconButtonStructure}
+      priceCard={PriceStructure}
+      quantityDisplay={NoSSRQuantityStructure}
     />
   )
 }

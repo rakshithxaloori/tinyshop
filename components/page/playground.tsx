@@ -1,8 +1,5 @@
 "use client";
-import ProductCard from '@/components/product';
 import { generateProductLayoutObject } from '@/lib/actions';
-import { EmotionLayoutStyles } from '@/types/layout';
-import { css } from '@emotion/css';
 import { Product } from '@tinyshop/tinyshop-node/interfaces/product';
 import { PaletteIcon, RefreshCwIcon, SaveIcon, SendHorizontalIcon, ThumbsDownIcon } from 'lucide-react';
 import Image from 'next/image';
@@ -42,9 +39,11 @@ const PlaygroundPage = ({
       generatedLayoutObject = await generateProductLayoutObject(layoutPromptString);
     } else {
       generatedLayoutObject = await generateProductLayoutObject(layoutPromptString, {
-        messages: null,
+        messages: history,
         lastGeneratedObject: layout
-      });
+      },
+        "coffee"
+      );
     }
     setIsQuerying(false);
     setLayout(generatedLayoutObject);
@@ -81,7 +80,7 @@ const PlaygroundPage = ({
                           </span>
                         </div>
                       </button>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 hidden">
                         <span className="flex items-center justify-center" data-state="closed">
                           <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-gray-500 hover:text-gray-900 h-[28px] w-[28px] rounded-full p-0 hover:bg-[#f2f2f2]" data-id="toolbar-downvote-button">
                             <span className="sr-only">Downvote Result</span>
@@ -100,7 +99,7 @@ const PlaygroundPage = ({
                   </div>
                 </div>
                 <div className="flex w-full items-center gap-2 lg:ml-auto lg:w-auto">
-                  <div className="box-content flex h-6 items-center gap-2 rounded-md border border-gs-gray-alpha-400 bg-white p-1">
+                  <div className="box-content flex h-6 items-center gap-2 rounded-md border border-gs-gray-alpha-400 bg-white p-1 hidden">
                     {/* <!-- Desktop Button --> */}
                     <button className="shrink-0 items-center justify-center ... hidden lg:flex bg-gray-100 text-gray-900">
                       <span className="sr-only">Desktop</span>
@@ -143,7 +142,7 @@ const PlaygroundPage = ({
                       <PaletteIcon className="h-4 w-4" />
                     </button>
                     {/* <!-- Code Button --> */}
-                    <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary-default text-primary-foreground shadow hover:bg-primary-default/90 h-8 px-3 py-2 gap-1.5 @[95px]:w-[95px] sm:w-[95px] ml-0">
+                    <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-sh-primary text-sh-primary-foreground shadow hover:bg-sh-primary/90 h-8 px-3 py-2 gap-1.5 @[95px]:w-[95px] sm:w-[95px] ml-0">
                       <span className="hidden @[95px]:inline-block sm:inline-block">Publish</span>
                       <SaveIcon className="h-4 w-4" />
                     </button>

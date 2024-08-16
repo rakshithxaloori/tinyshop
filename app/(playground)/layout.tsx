@@ -18,7 +18,7 @@ const PlaygroundLayout = ({ children }: {
               </a>
             </div>
             <div className="ml-auto flex items-center gap-2 sm:gap-4" data-testid="header-right">
-              <a className="inline-flex shrink-0 items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary-default text-primary-foreground shadow hover:bg-primary-default/90 h-8 px-3 text-xs gap-[6px] rounded-full" data-id="header-new-button" href="/">
+              <a className="inline-flex shrink-0 items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-sh-primary text-sh-primary-foreground shadow hover:bg-sh-primary/90 h-8 px-3 text-xs gap-[6px] rounded-full" data-id="header-new-button" href="/">
                 <span className="hidden sm:inline">New Generation</span><span className="sm:hidden">New</span>
               </a>
               <button className="shrink-0 items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background font-medium hover:bg-accent hover:text-accent-foreground h-8 px-3 text-xs hidden gap-[6px] rounded-full shadow-none sm:flex" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:rgd:" data-state="closed">
