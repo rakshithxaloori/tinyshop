@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "cosmix.in",
       },
+      {
+        protocol: "https",
+        hostname: "vercel.com",
+      }
     ],
   },
   transpilePackages: ["@tinyshop/tinyshop-node"],

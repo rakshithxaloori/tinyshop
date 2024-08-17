@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/logo";
+import { Badge } from "@/components/ui/badge";
 
 function classNames(...classes: (string | undefined | null)[]) {
   return classes.filter(Boolean).join(" ");
@@ -26,8 +27,8 @@ const navLinks = [
     href: "/customers",
   },
   {
-    name: "Analytics",
-    href: "/analytics",
+    name: "AI Editor",
+    href: "/ai-editor",
   },
 ];
 
@@ -49,12 +50,17 @@ const DashboardLinks = () => {
           href={`/${teamId}${navLink.href}`}
           className={classNames(
             pathname === `/${teamId}${navLink.href}`
-              ? "text-foreground"
-              : "text-muted-foreground",
-            "transition-colors hover:text-foreground"
+              ? "text-foreground bg-muted"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            "transition-colors duration-100 ease-in-out hover:text-foreground w-auto px-4 py-2  rounded-lg text-nowrap"
           )}
         >
           {navLink.name}
+          {
+            (navLink.name === "AI Editor") &&
+            <Badge className="ml-2">
+              Beta
+            </Badge>}
         </Link>
       ))}
     </nav>
