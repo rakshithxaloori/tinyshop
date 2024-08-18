@@ -9,26 +9,42 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 TEST_ENDPOINT = os.environ["TEST_ENDPOINT"]
+TEST_DASHBOARD_SECRET = os.environ["TEST_DASHBOARD_SECRET"]
+LIVE_DASHBOARD_SECRET = os.environ["LIVE_DASHBOARD_SECRET"]
+
+
+DASHBOARD_ERROR_RESPONSE = JSONResponse(
+    content={},
+    status_code=status.HTTP_404_NOT_FOUND,
+)
 
 
 @app.middleware("http")
 async def get_credentials(request: Request, _):
-    auth = request.headers.get("Authorization")
-    scheme, data = (auth or " ").split(" ", 1)
-    if scheme != "Basic":
-        return JSONResponse(
-            content={"message": "Only Basic Authentication is allowed"},
-            status_code=status.HTTP_406_NOT_ACCEPTABLE,
-        )
+    mode = None
+    if request.url.path.startswith("/v1/shops"):
+        dashboard_secret = request.headers.get("X-Tinyshop-Dashboard-Secret")
+        if dashboard_secret not in [TEST_DASHBOARD_SECRET, LIVE_DASHBOARD_SECRET]:
+            return DASHBOARD_ERROR_RESPONSE
+        mode, _ = dashboard_secret.split("_")
 
-    try:
-        username, _ = base64.b64decode(data).decode().split(":", 1)
-        key_type, mode, _ = username.split("_")
-    except (ValueError, base64.binascii.Error):
-        return JSONResponse(
-            content={"message": "Invalid authorization format"},
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
+    else:
+        auth = request.headers.get("Authorization")
+        scheme, data = (auth or " ").split(" ", 1)
+        if scheme != "Basic":
+            return JSONResponse(
+                content={"message": "Only Basic Authentication is allowed"},
+                status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            )
+
+        try:
+            username, _ = base64.b64decode(data).decode().split(":", 1)
+            key_type, mode, _ = username.split("_")
+        except (ValueError, base64.binascii.Error):
+            return JSONResponse(
+                content={"message": "Invalid authorization format"},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
     if mode == "test":
         async with httpx.AsyncClient() as client:
@@ -51,6 +67,8 @@ async def get_credentials(request: Request, _):
                 status_code=response.status_code,
                 headers=dict(response.headers),
             )
+
+    # TODO live
 
     return JSONResponse(
         content={"message": f"Type: {key_type}; Mode: {mode}"},
