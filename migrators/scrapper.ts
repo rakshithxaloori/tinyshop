@@ -164,12 +164,12 @@ const convertToVariantCreate = (
     name: variant.name,
     description: null,
     active: variant.available,
-    options: [
+    options: JSON.stringify([
       {
         name: variant.name,
         value: variant.name,
       },
-    ],
+    ]),
     accept_zero_inventory_orders: true,
     next_refill: Math.floor(Date.now() / 1000),
     package_dimensions: {
