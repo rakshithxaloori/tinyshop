@@ -12,13 +12,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { createNewTeam } from "@/lib/shop";
+import { redirect } from "next/navigation";
 
 export function DialogCreate() {
   const createShop = async (formdata: FormData) => {
     "use server";
-    console.log("FORM DATA", formdata.get("name"));
     if (!formdata.get("name")) return;
-    await createNewTeam(formdata.get("name") as string);
+    const teamId = await createNewTeam(formdata.get("name") as string);
+    if (teamId) {
+      redirect(`/${teamId}`);
+    }
   };
 
   return (

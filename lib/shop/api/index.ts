@@ -2,7 +2,8 @@ import { ShopCreate } from "./interfaces";
 
 const DASHBOARD_SECRET = process.env.DASHBOARD_SECRET as string;
 
-const baseUrl = "http://127.0.0.1:8000";
+const baseUrl = "http://127.0.0.1:8001";
+// const baseUrl = "https://api.tinyshop.me";
 
 const apiFetch = async (
   url: string,
@@ -31,12 +32,6 @@ const apiFetch = async (
 };
 
 class Api {
-  private dashboard_secret: string;
-
-  constructor() {
-    this.dashboard_secret = DASHBOARD_SECRET;
-  }
-
   async post(endpoint: string, data: any): Promise<Response> {
     const options = {
       method: "POST",
@@ -59,6 +54,7 @@ class DashboardKeys {
     this.api = api;
     this.endpoint = "/v1/shops/dashboard_keys";
   }
+  // TODO
 }
 
 class Shops {
@@ -74,6 +70,7 @@ class Shops {
 
   async create(shop: ShopCreate): Promise<{
     shop_id: string;
+    shop_handle: string;
     user_id: string;
     dashboard_key: string;
   }> {

@@ -15,6 +15,7 @@ export const createNewTeam = async (displayName: string) => {
 
   try {
     await createDashboardKey();
+    return newTeam.id;
   } catch (error) {
     await newTeam.delete();
     // TODO return error
@@ -32,19 +33,24 @@ const createDashboardKey = async () => {
     stack_auth_user_id: user.id,
   });
   // TODO Save the shop id to team
-  const { shop_id, dashboard_key } = data;
+  const { shop_id, shop_handle, dashboard_key } = data;
   // Save the dashboard key user
   const newDashboardKeys = {
     ...(user.serverMetadata?.dashboardKeys || {}), // Safely access dashboardKeys
   };
+  const newShopHandles = {
+    ...(user.serverMetadata?.shopHandles || {}),
+  };
 
   // TODO hash this?
   newDashboardKeys[user.selectedTeam.id] = dashboard_key;
+  newShopHandles[user.selectedTeam.id] = shop_handle;
 
   await user.update({
     serverMetadata: {
       ...(user.serverMetadata || {}), // Safely include existing serverMetadata
       dashboardKeys: newDashboardKeys,
+      shopHandles: newShopHandles,
     },
   });
 };

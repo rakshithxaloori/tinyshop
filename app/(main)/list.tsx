@@ -16,8 +16,9 @@ export default function Shops({ teams }: { teams: Array<Team> }) {
               <h2 className="text-lg font-bold">{team.displayName}</h2>
               <p className="text-sm text-muted-foreground">{team.id}</p>
               <div className="flex justify-between text-sm text-muted-foreground">
+                {/* TODO */}
                 <span>1 users</span>
-                <span>2 days ago</span>
+                <span>today</span>
               </div>
             </div>
           </Card>
