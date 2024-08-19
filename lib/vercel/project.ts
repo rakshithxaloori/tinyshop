@@ -2,7 +2,15 @@ const VERCEL_AUTH_TOKEN = process.env.VERCEL_AUTH_TOKEN;
 const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
 
 // TODO
-const ENV_VARIABLES = [];
+const ENV_VARIABLES = [
+  {
+    gitBranch: "main",
+    key: "name", // TODO
+    target: "[production]",
+    type: "encrypted",
+    value: "value", // TODO
+  },
+];
 
 const GIT_REPO = "tinyshop-me/storefront";
 
