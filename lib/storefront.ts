@@ -93,8 +93,6 @@ export const getProductByHandle = async (handle: string) => {
   augmentedProduct.options = productOptions
   augmentedProduct.variants = productVariants
 
-  console.log(augmentedProduct)
-
   return augmentedProduct
 }
 

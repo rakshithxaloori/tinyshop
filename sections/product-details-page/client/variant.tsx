@@ -206,8 +206,6 @@ const PriceSelector = ({ product }: { product: any }) => {
     flattenedPrices = flattenedPrices.filter((price: any) => price.type === PriceTypeEnum.RECURRING)
   }
 
-  console.log(flattenedPrices)
-
   const [selectedPrice, setSelectedPrice] = useState(flattenedPrices[0])
   const { setPrice } = useVariant();
   const { getProduct } = useCartStore()
