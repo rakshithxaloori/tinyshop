@@ -18,6 +18,9 @@ import { CustomerCreate } from "../interfaces/customer";
 import { FeedbackEnum, ReviewCreate } from "../interfaces/review";
 import { MongoClient, Collection } from "mongodb";
 
+import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
+
+
 const secret_key = process.env.SECRET_KEY as string;
 const apiHost = process.env.API_HOST as string;
 const tinyshop = new Tinyshop(secret_key, apiHost);
@@ -319,8 +322,7 @@ const processCombinedJSON = async (
     const { name, variants } = product;
     if (variants.length === 0) {
       console.log(
-        `Skipping product with no variants ${
-          index + 1
+        `Skipping product with no variants ${index + 1
         }/${numProducts} (${progress}%)`
       );
       continue;
@@ -428,8 +430,7 @@ const processCombinedJSON = async (
 
     if (collection.length === 0) {
       console.log(
-        `Skipping empty collection ${index + 1}/${
-          collectionData.length
+        `Skipping empty collection ${index + 1}/${collectionData.length
         } (${progress}%)`
       );
       continue;
@@ -440,8 +441,7 @@ const processCombinedJSON = async (
       .filter((product) => product !== undefined);
     if (products.length === 0) {
       console.log(
-        `Skipping collection with no products ${index + 1}/${
-          collectionData.length
+        `Skipping collection with no products ${index + 1}/${collectionData.length
         } (${progress}%)`
       );
       continue;
@@ -466,14 +466,102 @@ const processCombinedJSON = async (
 async function main() {
   const productFilePath = path.join(
     __dirname,
-    "store_data/cosmix_products.json"
+    "store_data/yc_products.json"
   );
   const collectionFilePath = path.join(
     __dirname,
-    "store_data/cosmix_collections.json"
+    "store_data/yc_collections.json"
   );
 
   await processCombinedJSON(productFilePath, collectionFilePath);
+
+  // Post migration
+  await postMigration();
+}
+
+const cleanDescription = (description: string): string => {
+  return description.replace(/<[^>]*>?/gm, '');
+}
+
+const processProduct = (product: any): any => {
+  return {
+    id: product.id,
+    description: product.description ? cleanDescription(product.description) : "",
+    handle: product.handle,
+    name: product.name,
+    images: product.images || [],
+    default_variant: {
+      name: product.default_variant.name,
+      id: product.default_variant.id,
+      prices: {
+        data: product.default_variant.prices.data.map((price: any) => {
+          return {
+            type: price.type,
+            id: price.id,
+            currency: price.currency,
+            unit_amount: price.unit_amount,
+            unit_compare_amount: price.unit_compare_amount,
+          };
+        }),
+      },
+    },
+  };
+}
+
+const configureAlgoliaIndex = async (index: SearchIndex, settings: any) => {
+  const algoliaSettings = {
+    searchableAttributes: settings.searchableAttributes || [],
+    attributesForFaceting: [
+      ...settings.filterableAttributes.map((attr: string) => `filterOnly(${attr})`) || [],
+      ...settings.facets || [],
+    ],
+  };
+  const resp = await index.setSettings(algoliaSettings);
+  return resp;
+}
+
+const postMigration = async () => {
+  const productList = await tinyshop.products.list({ expand: ["default_variant"], });
+  const algoliaRecordList = productList.data.map((product: any) => {
+    const productRecord = processProduct(product);
+    return {
+      shopId: process.env.SHOP_ID,
+      ...productRecord
+    };
+  }
+  );
+
+  const appId = process.env.ALGOLIA_APP_ID as string;
+  const apiKey = process.env.ALGOLIA_API_KEY as string;
+  const indexName = process.env.ALGOLIA_INDEX_NAME as string;
+
+  const client = algoliasearch(appId, apiKey);
+  const index = client.initIndex(indexName);
+
+  // check if index exists
+  const indexExists = await client.listIndices().then((resp) => {
+    return resp.items.some((item) => item.name === indexName);
+  });
+  // if index exists, delete all the products matching the shopId
+  if (indexExists) {
+    const query = `shopId:${process.env.SHOP_ID}`;
+    const deleteResp = await index.deleteBy({
+      filters: query,
+    });
+    console.log(deleteResp);
+  }
+
+  const resp = await index.saveObjects(algoliaRecordList, {
+    autoGenerateObjectIDIfNotExist: true
+  });
+  const settings = {
+    searchableAttributes: ["name", "description"],
+    filterableAttributes: ["shopId"],
+  };
+  const configureResp = await configureAlgoliaIndex(index, settings);
+  console.log(configureResp);
+
+  console.log("Post migration completed successfully");
 }
 
 main()
