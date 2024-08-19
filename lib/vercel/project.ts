@@ -1,7 +1,16 @@
+"use server";
 const VERCEL_AUTH_TOKEN = process.env.VERCEL_AUTH_TOKEN;
 const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
 
 // TODO
+type EnvVariable = {
+  gitBranch?: string;
+  key: string;
+  target: string;
+  type: string;
+  value: string;
+};
+
 const ENV_VARIABLES = [
   {
     gitBranch: "main",
@@ -14,11 +23,13 @@ const ENV_VARIABLES = [
 
 const GIT_REPO = "tinyshop-me/storefront";
 
-export const createProject = async (handle: string) => {
+export const createProject = async (handle: string,
+  environment: Array<EnvVariable> = ENV_VARIABLES,
+) => {
   const data = {
     name: handle,
     enableAffectedProjectsDeployments: true,
-    environmentVariables: ENV_VARIABLES,
+    environmentVariables: environment,
     framework: "nextjs",
     gitRepository: {
       repo: GIT_REPO,
@@ -88,26 +99,69 @@ export const redeployProject = async (handle: string) => {
   console.log("RESPONSE redeployProject:", res_json);
 };
 
+export const getEnvVariables = async (handle: string) => {
+  const response = await fetch(
+    `https://api.vercel.com/v9/projects/${handle}/env?teamId=${VERCEL_TEAM_ID}`,
+    {
+      headers: {
+        Authorization: `Bearer ${VERCEL_AUTH_TOKEN}`,
+      },
+    }
+  );
+  console.log("RESPONSE getEnvVariables:", response.headers);
+  const res_json = await response.json();
+  // console.log("RESPONSE getEnvVariables:", res_json);
+  return res_json;
+}
+
 export const editEnvVariable = async (
   handle: string,
   name: string,
   value: string
 ) => {
-  const data = {
-    gitBranch: "main",
-    key: name,
-    target: "[production]",
-    type: "encrypted",
-    value: value,
-  };
-  await fetch(
-    `https://api.vercel.com/v9/projects/${handle}/env/${name}?teamId=${VERCEL_TEAM_ID}`,
-    {
-      body: JSON.stringify(data),
-      headers: {
-        Authorization: `Bearer ${VERCEL_AUTH_TOKEN}`,
-      },
-      method: "patch",
+
+  try {
+    const envVar = await getEnvVariables(handle);
+    // console.log("ENV VARIABLES:", envVar);
+    const env = envVar.envs.find((env: any) => env.key === name);
+    if (!env) {
+      console.error("Env variable not found");
+      return;
     }
-  );
+
+    const envId = env.id;
+    const data = {
+      // gitBranch: "main",
+      key: name,
+      target: ["production"],
+      type: "encrypted",
+      value: value,
+    };
+    console.log("DATA editEnvVariable:", data);
+    console.log("ENV ID:", envId);
+    console.log("handle:", handle);
+    console.log("vercel auth token:", VERCEL_AUTH_TOKEN);
+    console.log("vercel team id:", VERCEL_TEAM_ID);
+    console.log("url:", `https://api.vercel.com/v9/projects/${handle}/env/${envId}?teamId=${VERCEL_TEAM_ID}`);
+    console.log("data:", JSON.stringify(data));
+
+    const response = await fetch(
+      `https://api.vercel.com/v9/projects/${handle}/env/${envId}?teamId=${VERCEL_TEAM_ID}`,
+      {
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${VERCEL_AUTH_TOKEN}`,
+        },
+        method: "patch",
+      }
+    );
+    console.log("data ", response.status)
+    console.log("data ", response.statusText)
+    console.log("response", response)
+    const res_json = await response.json();
+    console.log("RESPONSE editEnvVariable:", res_json);
+  }
+  catch (e) {
+    console.error("ERROR editEnvVariable:", e);
+  }
 };

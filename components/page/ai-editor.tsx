@@ -8,6 +8,7 @@ import { nullProductLayout, ProductLayout } from '../structure/product';
 import AIProduct from '@/components/ai-product';
 import { Themes } from '@/components/themes';
 import { Button } from '@/components/ui/button';
+import { editEnvVariable, redeployProject } from '@/lib/vercel/project';
 
 type UIMessage = {
   input: string;
@@ -49,6 +50,8 @@ const AiEditorPage = ({
     console.log('Publishing to mongo:', mongoLayoutInformation);
     setIsPublishing(true);
     await uploadLayoutInformationToMongo(mongoLayoutInformation);
+
+    const redeployResponse = await redeployProject("ycombinator");
     setIsPublishing(false);
   }
 
@@ -176,6 +179,7 @@ const AiEditorPage = ({
                     <Themes selectedTheme={theme} setSelectedTheme={setTheme} />
                     {/* <!-- Code Button --> */}
                     <button className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-sh-primary text-sh-primary-foreground shadow hover:bg-sh-primary/90 h-8 px-3 py-2 gap-1.5 @[95px]:w-[95px] sm:w-[95px] ml-0"
+                      disabled={isPublishing || isQuerying}
                       onClick={handlePublish}
                     >
                       <span className="hidden @[95px]:inline-block sm:inline-block">Publish</span>
@@ -271,7 +275,7 @@ const AiEditorPage = ({
                       className="min-h-[1.5rem] h-[1rem] flex-[1_0_50%] resize-none border-0 bg-transparent text-sm leading-relaxed shadow-none outline-none ring-0 [scroll-padding-block:0.75rem] selection:bg-teal-300 selection:text-black disabled:bg-transparent disabled:opacity-80 text-white placeholder:text-zinc-400 w-full"
                       name='input'
                       placeholder={selectedHistory.message?.input || "Make the heading larger and darker"}
-                      disabled={isQuerying}
+                      disabled={isQuerying || isPublishing}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
                           e.preventDefault();
