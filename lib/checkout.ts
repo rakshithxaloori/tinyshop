@@ -25,10 +25,9 @@ export const deleteCheckout = async (checkoutId: string) => {
 }
 
 export const updateCheckout = async (checkoutId: string,
-  status: "open" | "abandoned" | "complete" | "expired" | "processing",
   customerAddress: string) => {
   "use server";
-  const checkout = await tinyshop.checkouts.update(checkoutId, { status, customer_address: customerAddress });
+  const checkout = await tinyshop.checkouts.update(checkoutId, { customer_address: customerAddress });
   return checkout;
 }
 

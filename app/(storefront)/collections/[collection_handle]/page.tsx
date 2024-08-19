@@ -67,8 +67,6 @@ const CollectionDisplayPage = async (
     throw new Error('No layout found for the brand');
   }
 
-
-
   return (
     <Suspense fallback={
       <div>Loading...</div>

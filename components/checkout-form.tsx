@@ -213,7 +213,7 @@ const CheckoutForm = ({
 
     const customerAddress = await createCustomerAddress(customerAddressObject);
 
-    const updatedCheckout = await updateCheckout(checkout.id, 'processing', customerAddress.id);
+    const updatedCheckout = await updateCheckout(checkout.id, customerAddress.id);
 
     openRazorpay({
       name: data.fullName,
