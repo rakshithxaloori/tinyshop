@@ -2,8 +2,8 @@ import { ShopCreate } from "./interfaces";
 
 const DASHBOARD_SECRET = process.env.DASHBOARD_SECRET as string;
 
-const baseUrl = "http://127.0.0.1:8001";
-// const baseUrl = "https://api.tinyshop.me";
+// const baseUrl = "http://127.0.0.1:8000";
+const baseUrl = "https://api.tinyshop.me";
 
 const apiFetch = async (
   url: string,

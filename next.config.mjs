@@ -4,12 +4,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cosmix.in",
+        hostname: "ts-storefront-images.s3.ap-south-1.amazonaws.com",
       },
       {
         protocol: "https",
         hostname: "vercel.com",
-      }
+      },
     ],
   },
   transpilePackages: ["@tinyshop/tinyshop-node"],

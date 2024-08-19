@@ -1,4 +1,8 @@
+import { Skeleton } from "@/components/ui/skeleton";
+
 export default function Loading() {
   // You can use any loading indicator here
-  return <>Loading...</>;
+  return (
+    <Skeleton className="min-w-full min-h-screen" />
+  )
 }

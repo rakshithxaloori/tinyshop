@@ -4,19 +4,18 @@ import { redirect } from "next/navigation";
 
 import ProductTable from "./table";
 
-const Products = async () => {
+const Products = async (
+  { params: { shop_id } }: { params: { shop_id: string } }
+) => {
   const user = await stackServerApp.getUser();
-  if (!user?.selectedTeam?.id) {
-    redirect("/");
-  }
-  const dk = user?.serverMetadata.dashboardKeys[user.selectedTeam?.id];
+  const teamId = shop_id;
+  const dk = user?.serverMetadata.dashboardKeys[teamId];
 
-  const tinyshop = new Tinyshop(dk, "http://localhost:8000");
+  const tinyshop = new Tinyshop(dk, process.env.TINYSHOP_API_HOST);
   const products = await tinyshop.products.list();
 
   return (
-    <div>
-      <span>Products</span>
+    <div className="px-8 py-4">
       <ProductTable products={products.data} />
     </div>
   );

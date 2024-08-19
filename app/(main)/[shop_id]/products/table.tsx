@@ -28,7 +28,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
 
   return (
     <Table>
-      <TableCaption>A list of your products.</TableCaption>
+      {/* <TableCaption>A list of your products.</TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead>

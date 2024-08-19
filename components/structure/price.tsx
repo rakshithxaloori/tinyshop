@@ -68,7 +68,7 @@ const PriceStructure = (props: PriceStructureProps) => {
   if (comparePrice) {
     return (
       <div className={cn("flex items-center w-max-content gap-2", className)}>
-        <span className="text-2xl font-bold flex flex-row items-center">
+        <span className="text-2xl font-bold flex flex-row items-center text-base-content">
           <CurrencyIcon currency={currency} />
           {displayPrice}
         </span>
@@ -81,7 +81,7 @@ const PriceStructure = (props: PriceStructureProps) => {
   }
 
   return (
-    <div className={cn("flex items-center", className)}>
+    <div className={cn("flex items-center text-base-content", className)}>
       <CurrencyIcon currency={currency} />
       <span className="text-2xl font-bold">
         {displayPrice}
