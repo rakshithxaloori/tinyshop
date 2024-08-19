@@ -7,7 +7,8 @@ const allowedImageHosts = [
   'cdn.shopify.com',
   'plus.unsplash.com',
   'cosmix.in',
-  'tailwindui.com'
+  'tailwindui.com',
+  "ts-storefront-images.s3.ap-south-1.amazonaws.com",
 ]
 
 const nextConfig = {

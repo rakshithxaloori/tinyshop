@@ -16,13 +16,7 @@ const LandingPage = async () => {
   const all_collection_raw = await getCollectionList();
   const { data: all_collections } = all_collection_raw;
 
-  // show two collections
-  const featuredCollection = [
-    'no-nonsense-plant-protein',
-    'functional-foods'
-  ]
-
-  const featuredCollections = all_collections.filter((collection: any) => featuredCollection.includes(collection.handle));
+  const featuredCollections = all_collections
 
   const heroSectionDetails = await getHeroSectionDetails();
 

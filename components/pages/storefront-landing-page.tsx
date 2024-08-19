@@ -33,10 +33,9 @@ const StorefrontLandingPage = ({
       />
 
       <ThreeStatementBanner
-        firstStatement="OUR MISSION"
-        secondStatement="Prioritizing Holistic Health"
-        thirdStatement="Overwhelmed by quick fixes, diet culture and toxic beauty standards, we set
-        out to revolutionize the health industry."
+        firstStatement="Why YC?"
+        secondStatement="We give startups a disproportionate advantage."
+        thirdStatement="We help foundersmake something people want and the results speak for themselves."
         statementStyles={
           [
             'text-lg',
@@ -51,7 +50,7 @@ const StorefrontLandingPage = ({
         images={carouselImages}
       /> */}
       <ClientProductDisplayList
-        title="COSMIX ESSENTIALS"
+        title="YC ESSENTIALS"
         {...{ products }}
         layout={productCardLayout}
       />

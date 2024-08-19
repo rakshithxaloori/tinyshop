@@ -1,5 +1,8 @@
 import ProductDisplayList from "@/components/product-display-list"
 import { WishlistClearButton } from "@/components/wishlist-client"
+import { getProductLayoutDetails } from "@/lib/storefront";
+
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! as string || "tinyshop";
 
 
 const WishlistPage = async ({
@@ -7,7 +10,11 @@ const WishlistPage = async ({
 }: {
   products: any
 }) => {
-
+  const mongoLayout = await getProductLayoutDetails(shopName);
+  const cardLayout = mongoLayout?.layout || null;
+  if (!cardLayout) {
+    throw new Error('No layout found for the brand');
+  }
 
 
   return (
@@ -22,6 +29,7 @@ const WishlistPage = async ({
       <ProductDisplayList
         name="Wishlist"
         products={products}
+        layout={cardLayout}
       />
     </div>
   )

@@ -1,5 +1,5 @@
 import CollectionDetailsPage from "@/components/pages/collection-details-page";
-import { getAllCollectionHandles, getCollectionByHandle } from "@/lib/storefront";
+import { getAllCollectionHandles, getCollectionByHandle, getProductLayoutDetails } from "@/lib/storefront";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -61,13 +61,20 @@ const CollectionDisplayPage = async (
 
   const collection = collection_list[0];
 
+  const mongoLayout = await getProductLayoutDetails(shopName);
+  const cardLayout = mongoLayout?.layout || null;
+  if (!cardLayout) {
+    throw new Error('No layout found for the brand');
+  }
+
+
 
   return (
     <Suspense fallback={
       <div>Loading...</div>
     }
     >
-      <CollectionDetailsPage {...{ collection }} />
+      <CollectionDetailsPage {...{ collection }} layout={cardLayout} />
     </Suspense>
   );
 }

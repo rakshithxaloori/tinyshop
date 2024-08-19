@@ -1,5 +1,5 @@
 import CollectionDetailsPage from "@/components/pages/collection-details-page";
-import { getRootCollection } from "@/lib/storefront";
+import { getProductLayoutDetails, getRootCollection } from "@/lib/storefront";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -13,12 +13,18 @@ export const metadata: Metadata = {
 const CollectionsPage = async () => {
   const rootCollection = await getRootCollection();
 
+  const mongoLayout = await getProductLayoutDetails(shopName);
+  const cardLayout = mongoLayout?.layout || null;
+  if (!cardLayout) {
+    throw new Error('No layout found for the brand');
+  }
+
   return (
     <Suspense fallback={
       <div>Loading...</div>
     }
     >
-      <CollectionDetailsPage collection={rootCollection} />
+      <CollectionDetailsPage collection={rootCollection} layout={cardLayout} />
     </Suspense>
   );
 }

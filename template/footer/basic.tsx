@@ -9,7 +9,7 @@ const BasicFooter = () => {
         <p>
           {shopName}
           <br />
-          Prioritizing Holistic Health
+          Make something people want
         </p>
       </aside>
       <nav>

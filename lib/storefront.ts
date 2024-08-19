@@ -111,15 +111,15 @@ export const getWishlistProductDetails = async (productIdList: string[]) => {
 
 export const getHeroSectionDetails = async () => {
   const heroSectionDetails = {
-    title: "Gut Loving. Functional. Monsoon favourites.",
+    title: "Make something people want",
     description: "",
     cta: {
       text: "Subscribe & Save 20%",
-      url: "/collections/digestion",
+      url: "/collections/apparel",
     },
     image: {
-      src: "https://cosmix.in/cdn/shop/files/Gut_BFF_de4f04aa-5c0b-4bb6-83f1-ed155b95aefb.jpg",
-      alt: "Gut BFF Product Image"
+      src: "https://ts-storefront-images.s3.ap-south-1.amazonaws.com/landing.jpeg",
+      alt: "YCombinator landing page"
     }
   }
   return heroSectionDetails

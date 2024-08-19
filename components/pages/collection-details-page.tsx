@@ -1,10 +1,13 @@
 import Image from "next/image"
 import ProductDisplayList from "../product-display-list"
+import { ProductLayout } from "../product/card-structure"
 
 const CollectionDetailsPage = ({
-  collection
+  collection,
+  layout
 }: {
-  collection: any
+  collection: any,
+  layout: ProductLayout
 }) => {
 
   const { name, image_web: image } = collection
@@ -33,6 +36,7 @@ const CollectionDetailsPage = ({
       <ProductDisplayList
         name="All Products"
         products={all_products}
+        layout={layout}
       />
     </div >
   )
