@@ -13,6 +13,12 @@ const nextConfig = {
     ],
   },
   transpilePackages: ["@tinyshop/tinyshop-node"],
+  // compiler: {
+  //   emotion: true
+  // }
+  experimental: {
+    serverComponentsExternalPackages: ["@emotion/css"]
+  }
 };
 
 export default nextConfig;
