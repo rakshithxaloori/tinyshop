@@ -11,23 +11,22 @@ export default function Shops({ teams }: { teams: Array<Team> }) {
       className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
     >
       <DialogCreate />
-      {
-        teams.map((team) => (
-          <Link key={team.id} href={`/${team.id}`}>
-            <Card className="bg-background text-foreground p-4 rounded-lg">
-              <div className="space-y-2">
-                <h2 className="text-lg font-bold">{team.displayName}</h2>
-                <p className="text-sm text-muted-foreground">{team.id}</p>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  {/* TODO */}
-                  <span>1 users</span>
-                  <span>today</span>
-                </div>
+      {teams.map((team) => (
+        // TODO remove ai editor
+        <Link key={team.id} href={`/${team.id}/ai-editor`}>
+          <Card className="bg-background text-foreground p-4 rounded-lg">
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold">{team.displayName}</h2>
+              <p className="text-sm text-muted-foreground">{team.id}</p>
+              <div className="flex justify-between text-sm text-muted-foreground">
+                {/* TODO */}
+                <span>1 users</span>
+                <span>today</span>
               </div>
-            </Card>
-          </Link>
-        ))
-      }
-    </ul >
+            </div>
+          </Card>
+        </Link>
+      ))}
+    </ul>
   );
 }

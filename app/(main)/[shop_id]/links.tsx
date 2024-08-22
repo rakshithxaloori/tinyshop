@@ -10,22 +10,22 @@ function classNames(...classes: (string | undefined | null)[]) {
 }
 
 const navLinks = [
-  {
-    name: "Dashboard",
-    href: "",
-  },
-  {
-    name: "Orders",
-    href: "/orders",
-  },
+  // {
+  //   name: "Dashboard",
+  //   href: "",
+  // },
+  // {
+  //   name: "Orders",
+  //   href: "/orders",
+  // },
   {
     name: "Products",
     href: "/products",
   },
-  {
-    name: "Customers",
-    href: "/customers",
-  },
+  // {
+  //   name: "Customers",
+  //   href: "/customers",
+  // },
   {
     name: "AI Editor",
     href: "/ai-editor",
@@ -56,11 +56,7 @@ const DashboardLinks = () => {
           )}
         >
           {navLink.name}
-          {
-            (navLink.name === "AI Editor") &&
-            <Badge className="ml-2">
-              Beta
-            </Badge>}
+          {navLink.name === "AI Editor" && <Badge className="ml-2">Beta</Badge>}
         </Link>
       ))}
     </nav>
