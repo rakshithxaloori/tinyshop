@@ -4,6 +4,7 @@ import { stackServerApp } from "@/stack";
 
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import { cn } from "@/lib/utils";
 
@@ -31,7 +32,13 @@ export default function RootLayout({
         )}
       >
         <StackProvider app={stackServerApp}>
-          <StackTheme>{children}</StackTheme>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+          >
+            <StackTheme>{children}</StackTheme>
+          </ThemeProvider>
         </StackProvider>
       </body>
     </html>
