@@ -1,6 +1,6 @@
 "use server";
-const VERCEL_AUTH_TOKEN = process.env.VERCEL_AUTH_TOKEN;
-const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
+const VERCEL_AUTH_TOKEN = process.env.DASHBOARD_VERCEL_AUTH_TOKEN;
+const VERCEL_TEAM_ID = process.env.DASHBOARD_VERCEL_TEAM_ID;
 
 // TODO
 type EnvVariable = {
