@@ -128,6 +128,30 @@ async function closeMongoDBConnection() {
   }
 }
 
+// delete all existing products, options, variants, prices, collections and reviews
+const cleanseTinyshopData = async () => {
+  const { data: products } = await tinyshop.products.list();
+  for (const product of products) {
+    await tinyshop.products.delete(product.id);
+    const { data: reviews } = await tinyshop.reviews.list(product.id);
+    for (const review of reviews) {
+      await tinyshop.reviews.delete(review.id);
+    }
+  }
+
+  // delete customers
+  const { data: customers } = await tinyshop.customers.list();
+  for (const customer of customers) {
+    await tinyshop.customers.delete(customer.id);
+  }
+
+  // delete collections
+  const { data: collections } = await tinyshop.collections.list();
+  for (const collection of collections) {
+    await tinyshop.collections.delete(collection.id);
+  }
+}
+
 // Function to read JSON data
 const readJSON = (filePath: string) => {
   const data = fs.readFileSync(filePath, "utf-8");
@@ -195,7 +219,7 @@ const convertToPriceCreate = (
   const compareAtPrice = Math.floor(variant.compareAtPrice);
   return {
     active: variant.available,
-    currency: "INR",
+    currency: "USD",
     type: PriceTypeEnum.ONE_TIME,
     unit_amount: price,
     unit_compare_amount: compareAtPrice > price ? compareAtPrice : null,
@@ -216,7 +240,7 @@ const convertToRecurringPriceCreate = (
   const compareAtPrice = Math.floor(variant.compareAtPrice);
   return {
     active: variant.available,
-    currency: "INR",
+    currency: "USD",
     type: PriceTypeEnum.RECURRING,
     unit_amount: price,
     unit_compare_amount: null,
@@ -351,6 +375,7 @@ const processCombinedJSON = async (
 
     // upload to mongoDB
     await uploadProductDetailsToMongoDB(createdProduct, product, brand);
+    console.log(`Uploaded product details for ${createdProduct.name}`);
 
     // maintain a set for unique options
     const optionSet = new Set<string>();
@@ -382,7 +407,14 @@ const processCombinedJSON = async (
       await tinyshop.prices.create(recurringPriceCreate);
     }
 
+    // check if the product has reviews
+    if (!product?.reviews || !product?.reviews?.length) {
+      console.log(`Skipping product with no reviews`);
+      continue;
+    }
+
     // Add reviews. Insert atmost 20 reviews for each product
+
     const reviewsSlice = product.reviews.slice(0, 20);
     for (const review of reviewsSlice) {
       // create a new customer for each review
@@ -466,12 +498,15 @@ const processCombinedJSON = async (
 async function main() {
   const productFilePath = path.join(
     __dirname,
-    "store_data/yc_products.json"
+    "store_data/diode_products.json"
   );
   const collectionFilePath = path.join(
     __dirname,
-    "store_data/yc_collections.json"
+    "store_data/diode_collections.json"
   );
+
+  // Pre migration
+  await cleanseTinyshopData();
 
   await processCombinedJSON(productFilePath, collectionFilePath);
 
