@@ -1,0 +1,25 @@
+import { NextRequest, NextResponse } from "next/server";
+import { stackServerApp } from "./stack";
+
+export async function middleware(request: NextRequest) {
+  const user = await stackServerApp.getUser();
+  if (!user) {
+    return NextResponse.redirect(new URL("/handler/sign-in", request.url));
+  }
+  return NextResponse.next();
+}
+
+export const config = {
+  // You can add your own route protection logic here
+  // Make sure not to protect the root URL, as it would prevent users from accessing static Next.js files or Stack's /handler path
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|handler|_next/static|_next/image|favicon.ico).*)",
+  ],
+};
