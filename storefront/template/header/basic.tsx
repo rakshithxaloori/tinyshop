@@ -1,0 +1,188 @@
+"use client";
+import Cart from "@/components/cart";
+import SearchBar from "@/components/search-bar";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import React, { Suspense } from "react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+import { PizzaIcon, UserIcon } from "lucide-react";
+import Wishlist from "@/components/wishlist";
+import useWindowSize from "@/components/hooks/window-size";
+import CartV2 from "@/components/cart-v2";
+import BetaBanner from "@/components/beta-banner";
+
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME! || "Your Store";
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-base-100/50 hover:text-base-content focus:bg-base-100/50 focus:text-base-content",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"
+
+const NavItems = ({ navItems }: { navItems: any[] }) => {
+  return (
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Shop</NavigationMenuTrigger>
+          <NavigationMenuContent className="bg-base-200">
+            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+              <li className="row-span-3">
+                <NavigationMenuLink asChild>
+                  <a
+                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-base-300 p-6 no-underline outline-none hover:bg-base-100/50 hover:text-base-content"
+                    href="/"
+                  >
+                    <PizzaIcon size={40} />
+                    <div className="mb-2 mt-4 text-lg font-medium">
+                      {shopName}
+                    </div>
+                    <p className="text-sm leading-tight text-primary-content">
+                      cosmix is modern day protein shake for the modern day athlete.
+                    </p>
+                  </a>
+                </NavigationMenuLink>
+              </li>
+              <ListItem href="/collections" title="All products">
+                Explore our collections
+              </ListItem>
+              {
+                navItems.map((item) => (
+                  <ListItem key={item.url} href={item.url} title={item.name}>
+                    {item.description}
+                  </ListItem>
+                ))
+              }
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
+      </NavigationMenuList>
+    </NavigationMenu>
+  )
+}
+
+export const BasicMobileHeader = ({
+  className,
+  navItems,
+}: {
+  navItems: any[],
+  className?: string;
+}) => {
+  return (
+    <header className="border-b  sticky top-0 z-50 bg-base-100 shadow-md">
+      <BetaBanner text="For more information, write to" email="founders@tinyshop.me" />
+      <div className="flex max-w-7xl py-sm flex-col items-start gap-2 px-4">
+        <section className="flex flex-1 w-full items-center gap-2">
+          <Link id="basic-header-name" href="/">
+            <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold">{shopName}</span>
+          </Link>
+          <div className="mr-auto grow" />
+          <section id="basic-header-wishlist" className="flex space-x-4">
+            <Wishlist />
+          </section>
+          <section id="basic-header-cart" className="flex space-x-4">
+            <CartV2 />
+          </section>
+        </section>
+        <section id="basic-header-search" className="flex space-x-4 w-full mt-sm">
+          <Suspense fallback={<div>Loading...</div>}>
+            <SearchBar />
+          </Suspense>
+        </section>
+
+      </div>
+    </header>
+  );
+}
+
+export const BasicDesktopHeader = ({
+  className,
+  navItems,
+}: {
+  navItems: any[],
+  className?: string;
+}) => {
+  const sticky = true;
+  return (
+    <header className={cn("border-b",
+      sticky ? "sticky top-0 z-50 bg-base-100 border-b border-base-content" : "",
+    )}>
+      <BetaBanner text={"Want subscriptions on your store too? Write to us at"} email="founders@tinyshop.me" />
+      <div className={cn("sm:items-centerm py-sm mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 sm:flex-row sm:flex-wrap sm:items-center sm:px-6 md:flex-nowrap lg:px-8",
+        className)}>
+        <Link id="basic-header-name" href="/">
+          <span className="inline-block -mt-0.5 whitespace-nowrap text-2xl font-bold lowercase">{shopName}</span>
+        </Link>
+        <div id="basic-header-nav" className="sm:mr-auto ml-sm">
+          <NavItems navItems={navItems} />
+        </div>
+        <section id="basic-header-right" className="flex space-x-4 min-w-lg ml-auto items-center">
+          <section id="basic-header-search" className="flex space-x-4 ml-auto">
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchBar />
+            </Suspense>
+          </section>
+          <section id="basic-header-wishlist" className="flex space-x-4">
+            <Wishlist />
+          </section>
+          <section id="basic-header-account" className="flex space-x-4">
+            <Link href="/customer">
+              <UserIcon />
+            </Link>
+          </section>
+          <section id="basic-header-cart" className="flex space-x-4">
+            <Cart />
+            {/* <CartV2 /> */}
+          </section>
+        </section>
+
+      </div>
+    </header>
+  );
+}
+
+
+const BasicHeader = ({
+  className,
+  navItems,
+}: {
+  navItems: any[],
+  className?: string;
+}) => {
+  const { isMobile } = useWindowSize();
+  return isMobile ? (
+    <BasicMobileHeader {...{ className, navItems }} />
+  ) : (
+    <BasicDesktopHeader {...{ className, navItems }} />
+  );
+}
+
+export default BasicHeader;
