@@ -2,7 +2,7 @@
 
 ## Overview
 
-This monorepo contains all the necessary components to run a multi-tenant e-commerce platform, including an AI-powered store editor, backend services, cloud infrastructure, and SDKs for developers. Each project is structured to ensure modularity, scalability, and ease of development.
+This monorepo contains most of the necessary components to run a multi-tenant e-commerce platform, including an AI-powered store editor, backend services, cloud infrastructure, and SDKs for developers. Each project is structured to ensure modularity, scalability, and ease of development.
 
 ## Projects
 
