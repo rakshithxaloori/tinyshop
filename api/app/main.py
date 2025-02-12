@@ -1,0 +1,175 @@
+import base64
+from sqlmodel import SQLModel, Session, select
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+
+from app.lib.error import TinyshopException
+from app.database import engine
+
+import app.user.model as user_models
+import app.user_address.model as user_address_models
+import app.shop.model as shop_models
+
+import app.customer.model as customer_models
+
+from app.product import model as product_models
+from app.option import model as option_models
+from app.variant import model as variant_models
+from app.price import model as price_models
+from app.collection import model as collection_models
+
+from app.warehouse import model as warehouse_models
+from app.inventory import model as inventory_models
+
+from app.cart import model as cart_models
+from app.cart_item import model as cart_item_models
+
+from app.review import model as review_models
+
+from app.discount import model as discount_models
+
+from app.checkout import model as checkout_models
+from app.subscription import model as subscription_models
+from app.invoice import model as invoice_models
+from app.order import model as order_models
+
+
+from app.lib import many_to_many_tables as m2m_models
+
+
+from app.database import engine
+
+from app.customer.router import router as customers_router
+from app.customer_address.router import router as customer_addresses_router
+
+from app.product.router import router as products_router
+from app.option.router import router as options_router
+from app.variant.router import router as variants_router
+from app.price.router import router as prices_router
+from app.collection.router import router as collections_router
+
+from app.warehouse.router import router as warehouses_router
+from app.inventory.router import router as inventory_router
+
+from app.cart.router import router as carts_router
+from app.cart_item.router import router as cart_items_router
+
+from app.review.router import router as reviews_router
+
+from app.discount.router import router as discounts_router
+
+from app.checkout.router import router as checkouts_router
+from app.subscription.router import router as subscriptions_router
+from app.invoice.router import router as invoices_router
+from app.order.router import router as orders_router
+
+SQLModel.metadata.create_all(bind=engine)
+
+
+app = FastAPI(
+    title="tinyshop API",
+    version="0.0.1",
+    contact={
+        "name": "tinyshop",
+        "url": "https://support.tinyshop.me/",
+        "email": "hi@tinyshop.me",
+    },
+    root_path="tinyshop",
+)
+
+
+# TODO middleware to log your requests or cache the results
+
+
+@app.exception_handler(TinyshopException)
+async def tinyshop_exception_handler(request: Request, exc: TinyshopException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "type": exc.type,
+            "code": exc.code,
+            "message": exc.message,
+            "param": exc.param,
+        },
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    # TODO handle form incorrect name and type errors
+    print(exc.errors())
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={"detail": "Hmmmmmm", "Error": "Name field is missing"},
+    )
+
+
+@app.middleware("http")
+async def get_credentials(request: Request, call_next):
+    # Skip middleware for routes starting with /v1/webhooks
+    if request.url.path.startswith("/v1/webhooks"):
+        return await call_next(request)
+
+    auth = request.headers.get("Authorization")
+    scheme, data = (auth or " ").split(" ", 1)
+    if scheme != "Basic":
+        return JSONResponse(
+            content={"message": "Only Basic Authentication is allowed"},
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+        )
+
+    secret_key, _ = base64.b64decode(data).decode().split(":", 1)
+    livemode = secret_key.split("_")[1]
+    if livemode not in ["live", "test"]:
+        return JSONResponse(
+            content={"message": "Secret key is invalid"},
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+        )
+    livemode = livemode == "live"
+
+    db = Session(engine)
+    response = None
+    try:
+        request.state.db = db
+        key_res = db.exec(
+            select(shop_models.SecretKey.shop_id)
+            .where(shop_models.SecretKey.livemode == livemode)
+            .where(shop_models.SecretKey.secret_key == secret_key)
+        )
+        shop_id = key_res.one()
+        request.state.shop_id = shop_id
+        request.state.livemode = livemode
+    except Exception as e:
+        print("EXCEPTION get_credentials:", e)
+        response = JSONResponse(
+            content={"message": "Secret key is invalid"},
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+        )
+    response = await call_next(request)
+    db.close()
+    return response
+
+
+app.include_router(customers_router)
+app.include_router(customer_addresses_router)
+
+app.include_router(products_router)
+app.include_router(options_router)
+app.include_router(variants_router)
+app.include_router(prices_router)
+app.include_router(collections_router)
+
+app.include_router(warehouses_router)
+app.include_router(inventory_router)
+
+app.include_router(carts_router)
+app.include_router(cart_items_router)
+
+app.include_router(reviews_router)
+app.include_router(discounts_router)
+
+app.include_router(checkouts_router)
+app.include_router(subscriptions_router)
+app.include_router(invoices_router)
+app.include_router(orders_router)

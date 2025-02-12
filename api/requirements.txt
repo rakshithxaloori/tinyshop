@@ -1,0 +1,11 @@
+fastapi==0.111.0
+alembic==1.13.1
+sqlmodel==0.0.19
+shortuuid==1.0.13
+python-multipart==0.0.9
+psycopg2==2.9.9
+python-dotenv==1.0.1
+python-dateutil==2.9.0.post0
+celery==5.4.0
+redis==5.0.8
+razorpay==1.4.2
