@@ -1,0 +1,4185 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "tinyshop API", "version": "0.0.1" },
+  "paths": {
+    "/v1/customers": {
+      "get": {
+        "summary": "List Customers",
+        "operationId": "list_customers_v1_customers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerList" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Customer",
+        "operationId": "create_customer_v1_customers_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Customer" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers/{customer_id}": {
+      "post": {
+        "summary": "Update Customer",
+        "operationId": "update_customer_v1_customers__customer_id__post",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Customer" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Customer",
+        "operationId": "retrieve_customer_v1_customers__customer_id__get",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    { "$ref": "#/components/schemas/Customer" },
+                    { "type": "null" }
+                  ],
+                  "title": "Response Retrieve Customer V1 Customers  Customer Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Customer",
+        "operationId": "delete_customer_v1_customers__customer_id__delete",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers/{customer_id}/verify": {
+      "post": {
+        "summary": "Verify Customer",
+        "operationId": "verify_customer_v1_customers__customer_id__verify_post",
+        "parameters": [
+          {
+            "name": "customer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Customer" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customers/search": {
+      "get": {
+        "summary": "Search Customers",
+        "operationId": "search_customers_v1_customers_search_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerList" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customer_addresses": {
+      "post": {
+        "summary": "Create Address",
+        "operationId": "create_address_v1_customer_addresses_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerAddress" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Customer Addresses",
+        "operationId": "list_customer_addresses_v1_customer_addresses_get",
+        "parameters": [
+          {
+            "name": "customer",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Customer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerAddressList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/customer_addresses/{address_id}": {
+      "post": {
+        "summary": "Update Address",
+        "operationId": "update_address_v1_customer_addresses__address_id__post",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Address Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerAddress" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Customer Address",
+        "operationId": "retrieve_customer_address_v1_customer_addresses__address_id__get",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Address Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomerAddress" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Customer Address",
+        "operationId": "delete_customer_address_v1_customer_addresses__address_id__delete",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Address Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerAddressDelete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/products": {
+      "post": {
+        "summary": "Create Product",
+        "operationId": "create_product_v1_products_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Products",
+        "operationId": "list_products_v1_products_get",
+        "parameters": [
+          {
+            "name": "collection",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Collection"
+            }
+          },
+          {
+            "name": "expand[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "array", "items": { "type": "string" } },
+                { "type": "null" }
+              ],
+              "title": "Expand[]"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProductList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/products/{product_id}": {
+      "post": {
+        "summary": "Update Product",
+        "operationId": "update_product_v1_products__product_id__post",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Product Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Product",
+        "operationId": "retrieve_product_v1_products__product_id__get",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Product Id" }
+          },
+          {
+            "name": "expand[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "array", "items": { "type": "string" } },
+                { "type": "null" }
+              ],
+              "title": "Expand[]"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Product",
+        "operationId": "delete_product_v1_products__product_id__delete",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Product Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProductDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/products/search": {
+      "get": {
+        "summary": "Search Products",
+        "operationId": "search_products_v1_products_search_get",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Query" }
+          },
+          {
+            "name": "expand[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "array", "items": { "type": "string" } },
+                { "type": "null" }
+              ],
+              "title": "Expand[]"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProductList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/options": {
+      "post": {
+        "summary": "Create Option",
+        "operationId": "create_option_v1_options_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Option" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Options",
+        "operationId": "list_options_v1_options_get",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Product" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OptionList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/options/{option_id}": {
+      "post": {
+        "summary": "Update Option",
+        "operationId": "update_option_v1_options__option_id__post",
+        "parameters": [
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Option Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Option" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Option",
+        "operationId": "retrieve_option_v1_options__option_id__get",
+        "parameters": [
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Option Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Option" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Option",
+        "operationId": "delete_option_v1_options__option_id__delete",
+        "parameters": [
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Option Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OptionDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/variants": {
+      "post": {
+        "summary": "Create Variant",
+        "operationId": "create_variant_v1_variants_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Variant" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Variants",
+        "operationId": "list_variants_v1_variants_get",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Product" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VariantList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/variants/{variant_id}": {
+      "post": {
+        "summary": "Update Variant",
+        "operationId": "update_variant_v1_variants__variant_id__post",
+        "parameters": [
+          {
+            "name": "variant_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Variant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Variant" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Variant",
+        "operationId": "retrieve_variant_v1_variants__variant_id__get",
+        "parameters": [
+          {
+            "name": "variant_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Variant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Variant" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Variant",
+        "operationId": "delete_variant_v1_variants__variant_id__delete",
+        "parameters": [
+          {
+            "name": "variant_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Variant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VariantDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/prices": {
+      "post": {
+        "summary": "Create Price",
+        "operationId": "create_price_v1_prices_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Price" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Prices",
+        "operationId": "list_prices_v1_prices_get",
+        "parameters": [
+          {
+            "name": "variant",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Variant" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PriceList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/prices/{price_id}": {
+      "post": {
+        "summary": "Update Price",
+        "operationId": "update_price_v1_prices__price_id__post",
+        "parameters": [
+          {
+            "name": "price_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Price Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Price" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Price",
+        "operationId": "retrieve_price_v1_prices__price_id__get",
+        "parameters": [
+          {
+            "name": "price_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Price Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Price" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Price",
+        "operationId": "delete_price_v1_prices__price_id__delete",
+        "parameters": [
+          {
+            "name": "price_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Price Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PriceDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/collections": {
+      "post": {
+        "summary": "Create Collection",
+        "operationId": "create_collection_v1_collections_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Collection" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Collections",
+        "operationId": "list_collections_v1_collections_get",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CollectionList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/collections/{collection_id}": {
+      "post": {
+        "summary": "Update Collection",
+        "operationId": "update_collection_v1_collections__collection_id__post",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Collection Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Collection" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Collection",
+        "operationId": "retrieve_collection_v1_collections__collection_id__get",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Collection Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Collection" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Collection",
+        "operationId": "delete_collection_v1_collections__collection_id__delete",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Collection Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CollectionDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/collections/search": {
+      "get": {
+        "summary": "Search Collections",
+        "operationId": "search_collections_v1_collections_search_get",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Query" }
+          },
+          {
+            "name": "expand[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "array", "items": { "type": "string" } },
+                { "type": "null" }
+              ],
+              "title": "Expand[]"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CollectionList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/warehouses": {
+      "get": {
+        "summary": "List Warehouses",
+        "operationId": "list_warehouses_v1_warehouses_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WarehouseList" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Warehouse",
+        "operationId": "create_warehouse_v1_warehouses_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Warehouse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/warehouses/{warehouse_id}": {
+      "post": {
+        "summary": "Update Warehouse",
+        "operationId": "update_warehouse_v1_warehouses__warehouse_id__post",
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Warehouse Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Warehouse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Warehouse",
+        "operationId": "retrieve_warehouse_v1_warehouses__warehouse_id__get",
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Warehouse Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Warehouse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Warehouse",
+        "operationId": "delete_warehouse_v1_warehouses__warehouse_id__delete",
+        "parameters": [
+          {
+            "name": "warehouse_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Warehouse Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WarehouseDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/inventory": {
+      "post": {
+        "summary": "Create Inventory",
+        "operationId": "create_inventory_v1_inventory_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Inventory" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/inventory/{inventory_id}": {
+      "post": {
+        "summary": "Update Inventory",
+        "operationId": "update_inventory_v1_inventory__inventory_id__post",
+        "parameters": [
+          {
+            "name": "inventory_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Inventory Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Inventory" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Inventory",
+        "operationId": "delete_inventory_v1_inventory__inventory_id__delete",
+        "parameters": [
+          {
+            "name": "inventory_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Inventory Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/InventoryDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carts": {
+      "get": {
+        "summary": "List Carts",
+        "operationId": "list_carts_v1_carts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartList" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Cart",
+        "operationId": "create_cart_v1_carts_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Cart" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/carts/{cart_id}": {
+      "post": {
+        "summary": "Update Cart",
+        "operationId": "update_cart_v1_carts__cart_id__post",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Cart" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Cart",
+        "operationId": "retrieve_cart_v1_carts__cart_id__get",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Cart" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Cart",
+        "operationId": "delete_cart_v1_carts__cart_id__delete",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/cart_items": {
+      "post": {
+        "summary": "Create Cart Item",
+        "operationId": "create_cart_item_v1_cart_items_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItem" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Cart Items",
+        "operationId": "list_cart_items_v1_cart_items_get",
+        "parameters": [
+          {
+            "name": "cart",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItemList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/cart_items/{cart_item_id}": {
+      "post": {
+        "summary": "Update Cart Item",
+        "operationId": "update_cart_item_v1_cart_items__cart_item_id__post",
+        "parameters": [
+          {
+            "name": "cart_item_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Item Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItem" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Cart Item",
+        "operationId": "retrieve_cart_item_v1_cart_items__cart_item_id__get",
+        "parameters": [
+          {
+            "name": "cart_item_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Item Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItem" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Cart Item",
+        "operationId": "delete_cart_item_v1_cart_items__cart_item_id__delete",
+        "parameters": [
+          {
+            "name": "cart_item_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Cart Item Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItemDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews": {
+      "post": {
+        "summary": "Create Review",
+        "operationId": "create_review_v1_reviews_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Review" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Reviews",
+        "operationId": "list_reviews_v1_reviews_get",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Product"
+            }
+          },
+          {
+            "name": "customer",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Customer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ReviewList" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews/{review_id}": {
+      "post": {
+        "summary": "Update Review",
+        "operationId": "update_review_v1_reviews__review_id__post",
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Review Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    { "$ref": "#/components/schemas/Review" },
+                    { "type": "null" }
+                  ],
+                  "title": "Response Update Review V1 Reviews  Review Id  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Review",
+        "operationId": "retrieve_review_v1_reviews__review_id__get",
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Review Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Review" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Review",
+        "operationId": "delete_review_v1_reviews__review_id__delete",
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Review Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ReviewDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/discounts": {
+      "get": {
+        "summary": "List Discounts",
+        "operationId": "list_discounts_v1_discounts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DiscountList" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Discount",
+        "operationId": "create_discount_v1_discounts_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Discount" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/discounts/{discount_id}": {
+      "post": {
+        "summary": "Update Discount",
+        "operationId": "update_discount_v1_discounts__discount_id__post",
+        "parameters": [
+          {
+            "name": "discount_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Discount Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Discount" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Discount",
+        "operationId": "retrieve_discount_v1_discounts__discount_id__get",
+        "parameters": [
+          {
+            "name": "discount_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Discount Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Discount" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Discount",
+        "operationId": "delete_discount_v1_discounts__discount_id__delete",
+        "parameters": [
+          {
+            "name": "discount_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Discount Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DiscountDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/checkouts": {
+      "get": {
+        "summary": "List Checkouts",
+        "operationId": "list_checkouts_v1_checkouts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CheckoutList" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Checkout",
+        "operationId": "create_checkout_v1_checkouts_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Checkout" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/checkouts/{checkout_id}": {
+      "post": {
+        "summary": "Update Checkout",
+        "operationId": "update_checkout_v1_checkouts__checkout_id__post",
+        "parameters": [
+          {
+            "name": "checkout_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Checkout Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Checkout" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Checkout",
+        "operationId": "retrieve_checkout_v1_checkouts__checkout_id__get",
+        "parameters": [
+          {
+            "name": "checkout_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Checkout Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Checkout" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Checkout",
+        "operationId": "delete_checkout_v1_checkouts__checkout_id__delete",
+        "parameters": [
+          {
+            "name": "checkout_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Checkout Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CheckoutDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscriptions": {
+      "get": {
+        "summary": "List Subscriptions",
+        "operationId": "list_subscriptions_v1_subscriptions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SubscriptionList" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Subscription",
+        "operationId": "create_subscription_v1_subscriptions_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Subscription" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/subscriptions/{subscription_id}": {
+      "post": {
+        "summary": "Update Subscription",
+        "operationId": "update_subscription_v1_subscriptions__subscription_id__post",
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Subscription Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Subscription" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Subscription",
+        "operationId": "retrieve_subscription_v1_subscriptions__subscription_id__get",
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Subscription Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Subscription" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Subscription",
+        "operationId": "delete_subscription_v1_subscriptions__subscription_id__delete",
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Subscription Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SubscriptionDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/invoices": {
+      "get": {
+        "summary": "List Invoices",
+        "operationId": "list_invoices_v1_invoices_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/InvoiceList" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Invoice",
+        "operationId": "create_invoice_v1_invoices_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Invoice" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/invoices/{invoice_id}": {
+      "post": {
+        "summary": "Update Invoice",
+        "operationId": "update_invoice_v1_invoices__invoice_id__post",
+        "parameters": [
+          {
+            "name": "invoice_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Invoice Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Invoice" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Invoice",
+        "operationId": "retrieve_invoice_v1_invoices__invoice_id__get",
+        "parameters": [
+          {
+            "name": "invoice_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Invoice Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Invoice" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Invoice",
+        "operationId": "delete_invoice_v1_invoices__invoice_id__delete",
+        "parameters": [
+          {
+            "name": "invoice_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Invoice Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/InvoiceDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orders": {
+      "get": {
+        "summary": "List Orders",
+        "operationId": "list_orders_v1_orders_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrderList" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Order",
+        "operationId": "create_order_v1_orders_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrderList" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orders/{order_id}": {
+      "post": {
+        "summary": "Update Order",
+        "operationId": "update_order_v1_orders__order_id__post",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Order Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve Order",
+        "operationId": "retrieve_order_v1_orders__order_id__get",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Order Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Order",
+        "operationId": "delete_order_v1_orders__order_id__delete",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Order Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrderDelete" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BillingCycleAnchorConfig": {
+        "properties": {
+          "day_of_month": { "type": "integer", "title": "Day Of Month" },
+          "hour": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Hour"
+          },
+          "minute": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Minute"
+          },
+          "month": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Month"
+          },
+          "second": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Second"
+          }
+        },
+        "type": "object",
+        "required": ["day_of_month"],
+        "title": "BillingCycleAnchorConfig"
+      },
+      "BuyXGetY": {
+        "properties": {
+          "quantity_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Min"
+          },
+          "amount_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Amount Min"
+          },
+          "quantity_get": { "type": "integer", "title": "Quantity Get" },
+          "products_buy": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/DiscountProductsList" },
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Products Buy"
+          },
+          "variant_get": { "type": "string", "title": "Variant Get" }
+        },
+        "type": "object",
+        "required": ["quantity_get", "variant_get"],
+        "title": "BuyXGetY"
+      },
+      "BuyXGetYUpdate": {
+        "properties": {
+          "quantity_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Min"
+          },
+          "amount_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Amount Min"
+          },
+          "quantity_get": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Get"
+          },
+          "variant_get": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Variant Get"
+          },
+          "products_buy": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/BuyXGetYUpdateProducts" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "BuyXGetYUpdate"
+      },
+      "BuyXGetYUpdateProducts": {
+        "properties": {
+          "add": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Add",
+            "default": []
+          },
+          "remove": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Remove",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "BuyXGetYUpdateProducts"
+      },
+      "CancellationDetails": {
+        "properties": {
+          "review": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Review"
+          },
+          "feedback": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionCancellationDetailsFeedbackEnum"
+              },
+              { "type": "null" }
+            ]
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionCancellationDetailsReasonEnum"
+              },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "CancellationDetails"
+      },
+      "Cart": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "currency": { "type": "string", "title": "Currency" },
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "cart" },
+          "status": { "$ref": "#/components/schemas/CartStatusEnum" },
+          "cart_items": { "$ref": "#/components/schemas/CartItemList" },
+          "discounts": { "$ref": "#/components/schemas/DiscountList" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "currency",
+          "id",
+          "status",
+          "cart_items",
+          "discounts"
+        ],
+        "title": "Cart"
+      },
+      "CartDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "cart" },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CartDelete"
+      },
+      "CartItem": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "quantity": { "type": "integer", "title": "Quantity" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "cart_item"
+          },
+          "price": { "type": "string", "title": "Price" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "quantity",
+          "id",
+          "price"
+        ],
+        "title": "CartItem"
+      },
+      "CartItemDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "cart_item"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CartItemDelete"
+      },
+      "CartItemList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/CartItem" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["url", "has_more"],
+        "title": "CartItemList"
+      },
+      "CartList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url", "default": "/v1/carts" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Cart" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "CartList"
+      },
+      "CartStatusEnum": {
+        "type": "string",
+        "enum": ["requires_payment", "abandoned", "paid"],
+        "title": "CartStatusEnum"
+      },
+      "Checkout": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "return_url": { "type": "string", "title": "Return Url" },
+          "success_url": { "type": "string", "title": "Success Url" },
+          "url": { "type": "string", "title": "Url" },
+          "customer_address": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Address"
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "checkout"
+          },
+          "status": { "$ref": "#/components/schemas/CheckoutStatusEnum" },
+          "currency": { "type": "string", "title": "Currency" },
+          "amount_total": { "type": "integer", "title": "Amount Total" },
+          "amount_subtotal": { "type": "integer", "title": "Amount Subtotal" },
+          "amount_discount": { "type": "integer", "title": "Amount Discount" },
+          "amount_shipping": { "type": "integer", "title": "Amount Shipping" },
+          "amount_tax": { "type": "integer", "title": "Amount Tax" },
+          "expires_at": { "type": "integer", "title": "Expires At" },
+          "customer": { "type": "string", "title": "Customer" },
+          "subscriptions": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/SubscriptionList" },
+              { "type": "null" }
+            ]
+          },
+          "line_items": { "$ref": "#/components/schemas/CheckoutLineItemList" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "return_url",
+          "success_url",
+          "url",
+          "id",
+          "status",
+          "currency",
+          "amount_total",
+          "amount_subtotal",
+          "amount_discount",
+          "amount_shipping",
+          "amount_tax",
+          "expires_at",
+          "customer",
+          "line_items"
+        ],
+        "title": "Checkout"
+      },
+      "CheckoutDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "checkout"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CheckoutDelete"
+      },
+      "CheckoutLineItem": {
+        "properties": {
+          "price": { "type": "string", "title": "Price" },
+          "quantity": { "type": "integer", "title": "Quantity" }
+        },
+        "type": "object",
+        "required": ["price", "quantity"],
+        "title": "CheckoutLineItem"
+      },
+      "CheckoutLineItemList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/CheckoutLineItem" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/checkout_items"
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "CheckoutLineItemList"
+      },
+      "CheckoutList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Checkout" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/checkouts"
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "CheckoutList"
+      },
+      "CheckoutStatusEnum": {
+        "type": "string",
+        "enum": ["open", "abandoned", "complete", "expired"],
+        "title": "CheckoutStatusEnum"
+      },
+      "Collection": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "image_web": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Image Web"
+          },
+          "image_mobile": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Image Mobile"
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "collection"
+          },
+          "handle": { "type": "string", "title": "Handle" },
+          "products": { "$ref": "#/components/schemas/ProductList" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "id",
+          "handle",
+          "products"
+        ],
+        "title": "Collection"
+      },
+      "CollectionDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "collection"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CollectionDelete"
+      },
+      "CollectionList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/collections"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Collection" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "CollectionList"
+      },
+      "CollectionMethodEnum": {
+        "type": "string",
+        "enum": ["collect_automatically", "send_invoice"],
+        "title": "CollectionMethodEnum"
+      },
+      "Customer": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "customer"
+          },
+          "is_verified": { "type": "boolean", "title": "Is Verified" },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          },
+          "phone": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone"
+          }
+        },
+        "type": "object",
+        "required": ["created", "updated", "livemode", "id", "is_verified"],
+        "title": "Customer"
+      },
+      "CustomerAddress": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "line1": { "type": "string", "title": "Line1" },
+          "line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Line2"
+          },
+          "city": { "type": "string", "title": "City" },
+          "state": { "type": "string", "title": "State" },
+          "country": { "type": "string", "title": "Country" },
+          "postal_code": { "type": "string", "title": "Postal Code" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "customer_address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "line1",
+          "city",
+          "state",
+          "country",
+          "postal_code",
+          "id"
+        ],
+        "title": "CustomerAddress"
+      },
+      "CustomerAddressDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "customer_address"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CustomerAddressDelete"
+      },
+      "CustomerAddressList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/CustomerAddress" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["url", "has_more"],
+        "title": "CustomerAddressList"
+      },
+      "CustomerDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "customer"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "CustomerDelete"
+      },
+      "CustomerList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/customers"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Customer" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "CustomerList"
+      },
+      "CustomerUnitAmount": {
+        "properties": {
+          "maximum": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Maximum"
+          },
+          "minimum": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Minimum"
+          },
+          "preset": { "type": "integer", "title": "Preset", "default": 1 }
+        },
+        "type": "object",
+        "title": "CustomerUnitAmount"
+      },
+      "Discount": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "type": { "$ref": "#/components/schemas/DiscountTypeEnum" },
+          "code": { "type": "string", "title": "Code" },
+          "active": { "type": "boolean", "title": "Active" },
+          "expires_at": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Expires At"
+          },
+          "applies_max": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Applies Max"
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "discount"
+          },
+          "config": { "$ref": "#/components/schemas/DiscountConfig" },
+          "customers": { "$ref": "#/components/schemas/DiscountCustomersList" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "type",
+          "code",
+          "active",
+          "id",
+          "config",
+          "customers"
+        ],
+        "title": "Discount"
+      },
+      "DiscountConfig": {
+        "properties": {
+          "off_product": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/OffProduct" },
+              { "$ref": "#/components/schemas/OffProductUpdate" },
+              { "type": "null" }
+            ],
+            "title": "Off Product"
+          },
+          "off_order": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/OffOrder" },
+              { "type": "null" }
+            ]
+          },
+          "shipping": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/Shipping" },
+              { "type": "null" }
+            ]
+          },
+          "buy_x_get_y": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/BuyXGetY" },
+              { "$ref": "#/components/schemas/BuyXGetYUpdate" },
+              { "type": "null" }
+            ],
+            "title": "Buy X Get Y"
+          }
+        },
+        "type": "object",
+        "title": "DiscountConfig"
+      },
+      "DiscountCustomersList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/discounts/{discount_id}/customers"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": ["has_more", "data"],
+        "title": "DiscountCustomersList"
+      },
+      "DiscountDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "discount"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "DiscountDelete"
+      },
+      "DiscountList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/discounts"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/Discount" },
+                "type": "array"
+              },
+              { "items": { "type": "string" }, "type": "array" }
+            ],
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "DiscountList"
+      },
+      "DiscountProductsList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/discounts/{discount_id}/products"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": ["has_more", "data"],
+        "title": "DiscountProductsList"
+      },
+      "DiscountTypeEnum": {
+        "type": "string",
+        "enum": ["off_product", "off_order", "shipping", "buy_x_get_y"],
+        "title": "DiscountTypeEnum"
+      },
+      "FeedbackEnum": {
+        "type": "string",
+        "enum": [
+          "low_quality",
+          "too_expensive",
+          "other",
+          "high_quality",
+          "easy_to_use",
+          "good_value",
+          "satisfactory",
+          "average"
+        ],
+        "title": "FeedbackEnum"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Inventory": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "quantity": { "type": "integer", "title": "Quantity" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "inventory"
+          },
+          "warehouse": { "type": "string", "title": "Warehouse" },
+          "variant": { "type": "string", "title": "Variant" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "quantity",
+          "id",
+          "warehouse",
+          "variant"
+        ],
+        "title": "Inventory"
+      },
+      "InventoryDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "inventory"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "InventoryDelete"
+      },
+      "Invoice": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "amount_paid": { "type": "integer", "title": "Amount Paid" },
+          "due_date": { "type": "integer", "title": "Due Date" },
+          "status": { "$ref": "#/components/schemas/InvoiceStatusEnum" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "invoice"
+          },
+          "amount_remaining": {
+            "type": "integer",
+            "title": "Amount Remaining"
+          },
+          "amount_shipping": { "type": "integer", "title": "Amount Shipping" },
+          "amount_tax": { "type": "integer", "title": "Amount Tax" },
+          "amount_subtotal": { "type": "integer", "title": "Amount Subtotal" },
+          "amount_total": { "type": "integer", "title": "Amount Total" },
+          "amount_discount": { "type": "integer", "title": "Amount Discount" },
+          "currency": { "type": "string", "title": "Currency" },
+          "attempt_count": { "type": "integer", "title": "Attempt Count" },
+          "attempted": { "type": "boolean", "title": "Attempted" },
+          "invoice_pdf": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Invoice Pdf"
+          },
+          "paid": { "type": "boolean", "title": "Paid" },
+          "customer": { "type": "string", "title": "Customer" },
+          "checkout": { "type": "string", "title": "Checkout" },
+          "subscriptions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Subscriptions",
+            "default": []
+          },
+          "customer_address": {
+            "$ref": "#/components/schemas/InvoiceCustomerAddress"
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "amount_paid",
+          "due_date",
+          "status",
+          "id",
+          "amount_remaining",
+          "amount_shipping",
+          "amount_tax",
+          "amount_subtotal",
+          "amount_total",
+          "amount_discount",
+          "currency",
+          "attempt_count",
+          "attempted",
+          "paid",
+          "customer",
+          "checkout",
+          "customer_address"
+        ],
+        "title": "Invoice"
+      },
+      "InvoiceCustomerAddress": {
+        "properties": {
+          "line1": { "type": "string", "title": "Line1" },
+          "line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Line2"
+          },
+          "city": { "type": "string", "title": "City" },
+          "state": { "type": "string", "title": "State" },
+          "country": { "type": "string", "title": "Country" },
+          "postal_code": { "type": "string", "title": "Postal Code" }
+        },
+        "type": "object",
+        "required": ["line1", "city", "state", "country", "postal_code"],
+        "title": "InvoiceCustomerAddress"
+      },
+      "InvoiceDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "invoice"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "InvoiceDelete"
+      },
+      "InvoiceList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Invoice" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "url": { "type": "string", "title": "Url", "default": "/v1/invoices" }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "InvoiceList"
+      },
+      "InvoiceStatusEnum": {
+        "type": "string",
+        "enum": ["draft", "open", "paid", "uncollectible", "void"],
+        "title": "InvoiceStatusEnum"
+      },
+      "OffOrder": {
+        "properties": {
+          "quantity_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Min"
+          },
+          "amount_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Amount Min"
+          },
+          "amount_off": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Amount Off"
+          },
+          "percentage_off": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Percentage Off"
+          }
+        },
+        "type": "object",
+        "title": "OffOrder"
+      },
+      "OffProduct": {
+        "properties": {
+          "quantity_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Min"
+          },
+          "amount_off": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Amount Off"
+          },
+          "percentage_off": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Percentage Off"
+          },
+          "products": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/DiscountProductsList" },
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Products"
+          }
+        },
+        "type": "object",
+        "title": "OffProduct"
+      },
+      "OffProductUpdate": {
+        "properties": {
+          "quantity_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Min"
+          },
+          "amount_off": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Amount Off"
+          },
+          "percentage_off": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Percentage Off"
+          },
+          "products": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/OffProductUpdateProducts" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "OffProductUpdate"
+      },
+      "OffProductUpdateProducts": {
+        "properties": {
+          "add": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Add",
+            "default": []
+          },
+          "remove": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Remove",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "OffProductUpdateProducts"
+      },
+      "Option": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "values": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Values"
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "option" }
+        },
+        "type": "object",
+        "required": ["created", "updated", "livemode", "name", "values", "id"],
+        "title": "Option"
+      },
+      "OptionDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "option"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "OptionDelete"
+      },
+      "OptionList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url", "default": "/v1/options" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Option" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "OptionList"
+      },
+      "Order": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "invoice": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Invoice"
+          },
+          "customer": { "type": "string", "title": "Customer" },
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "order" },
+          "number": { "type": "integer", "title": "Number" },
+          "status": { "$ref": "#/components/schemas/OrderStatusEnum" },
+          "type": { "$ref": "#/components/schemas/OrderTypeEnum" },
+          "line_items": {
+            "items": { "$ref": "#/components/schemas/OrderLineItem" },
+            "type": "array",
+            "title": "Line Items",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "customer",
+          "id",
+          "number",
+          "status",
+          "type"
+        ],
+        "title": "Order"
+      },
+      "OrderDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "order" },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "OrderDelete"
+      },
+      "OrderLineItem": {
+        "properties": {
+          "quantity": { "type": "integer", "title": "Quantity" },
+          "unit_amount": { "type": "integer", "title": "Unit Amount" },
+          "price": { "type": "string", "title": "Price" }
+        },
+        "type": "object",
+        "required": ["quantity", "unit_amount", "price"],
+        "title": "OrderLineItem"
+      },
+      "OrderList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url", "default": "/v1/orders" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Order" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          },
+          "has_more": { "type": "boolean", "title": "Has More" }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "OrderList"
+      },
+      "OrderStatusEnum": {
+        "type": "string",
+        "enum": [
+          "requires_inventory",
+          "requires_shipping",
+          "shipping",
+          "completed",
+          "return_requested"
+        ],
+        "title": "OrderStatusEnum"
+      },
+      "OrderTypeEnum": {
+        "type": "string",
+        "enum": ["preorder", "deferred", "normal"],
+        "title": "OrderTypeEnum"
+      },
+      "PackageDimensions": {
+        "properties": {
+          "height": { "type": "number", "title": "Height" },
+          "width": { "type": "number", "title": "Width" },
+          "length": { "type": "number", "title": "Length" },
+          "weight": { "type": "number", "title": "Weight" }
+        },
+        "type": "object",
+        "required": ["height", "width", "length", "weight"],
+        "title": "PackageDimensions"
+      },
+      "PendingInvoiceInterval": {
+        "properties": {
+          "interval": { "$ref": "#/components/schemas/RecurringTypeEnum" },
+          "interval_count": { "type": "integer", "title": "Interval Count" }
+        },
+        "type": "object",
+        "required": ["interval", "interval_count"],
+        "title": "PendingInvoiceInterval"
+      },
+      "Price": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "active": { "type": "boolean", "title": "Active" },
+          "currency": { "type": "string", "title": "Currency" },
+          "type": { "$ref": "#/components/schemas/PriceTypeEnum" },
+          "unit_amount": { "type": "integer", "title": "Unit Amount" },
+          "unit_compare_amount": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Unit Compare Amount"
+          },
+          "is_default": { "type": "boolean", "title": "Is Default" },
+          "customer_unit_amount": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/CustomerUnitAmount" },
+              { "type": "null" }
+            ]
+          },
+          "recurring": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/Recurring" },
+              { "type": "null" }
+            ]
+          },
+          "variant": { "type": "string", "title": "Variant" },
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "price" },
+          "product": { "type": "string", "title": "Product" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "active",
+          "currency",
+          "type",
+          "unit_amount",
+          "is_default",
+          "variant",
+          "id",
+          "product"
+        ],
+        "title": "Price"
+      },
+      "PriceDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": { "type": "string", "title": "Object", "default": "price" },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "PriceDelete"
+      },
+      "PriceList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url", "default": "/v1/prices" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Price" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "PriceList"
+      },
+      "PriceTypeEnum": {
+        "type": "string",
+        "enum": ["one_time", "recurring"],
+        "title": "PriceTypeEnum"
+      },
+      "Product": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "images": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Images"
+          },
+          "active": { "type": "boolean", "title": "Active" },
+          "shippable": { "type": "boolean", "title": "Shippable" },
+          "preorder": { "type": "boolean", "title": "Preorder" },
+          "id": { "type": "string", "title": "Id" },
+          "handle": { "type": "string", "title": "Handle" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "product"
+          },
+          "default_variant": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/Variant" },
+              { "type": "null" }
+            ]
+          },
+          "rating": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Rating"
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "active",
+          "shippable",
+          "preorder",
+          "id",
+          "handle"
+        ],
+        "title": "Product"
+      },
+      "ProductDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "product"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "ProductDelete"
+      },
+      "ProductList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/products"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/Product" },
+                "type": "array"
+              },
+              { "items": { "type": "string" }, "type": "array" }
+            ],
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "ProductList"
+      },
+      "ProviderDetails": {
+        "properties": {
+          "razorpay": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/RazorpayDetails" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "ProviderDetails"
+      },
+      "RazorpayDetails": {
+        "properties": {
+          "subscription_id": { "type": "string", "title": "Subscription Id" }
+        },
+        "type": "object",
+        "required": ["subscription_id"],
+        "title": "RazorpayDetails"
+      },
+      "Recurring": {
+        "properties": {
+          "interval": { "$ref": "#/components/schemas/RecurringTypeEnum" },
+          "interval_count": { "type": "integer", "title": "Interval Count" }
+        },
+        "type": "object",
+        "required": ["interval", "interval_count"],
+        "title": "Recurring"
+      },
+      "RecurringTypeEnum": {
+        "type": "string",
+        "enum": ["day", "week", "month", "quarter", "year"],
+        "title": "RecurringTypeEnum"
+      },
+      "Review": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "product_rating": { "type": "integer", "title": "Product Rating" },
+          "shipping_rating": { "type": "integer", "title": "Shipping Rating" },
+          "feedback": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/FeedbackEnum" },
+              { "type": "null" }
+            ]
+          },
+          "review": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Review"
+          },
+          "image": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Image"
+          },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "review"
+          },
+          "customer": { "$ref": "#/components/schemas/Customer" }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "product_rating",
+          "shipping_rating",
+          "id",
+          "customer"
+        ],
+        "title": "Review"
+      },
+      "ReviewDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "review"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "ReviewDelete"
+      },
+      "ReviewList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": { "type": "string", "title": "Url", "default": "/v1/reviews" },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Review" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "ReviewList"
+      },
+      "Shipping": {
+        "properties": {
+          "quantity_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Min"
+          },
+          "amount_min": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Amount Min"
+          },
+          "amount_off": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Amount Off"
+          },
+          "percentage_off": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Percentage Off"
+          }
+        },
+        "type": "object",
+        "title": "Shipping"
+      },
+      "Subscription": {
+        "properties": {
+          "cancel_at_period_end": {
+            "type": "boolean",
+            "title": "Cancel At Period End"
+          },
+          "collection_method": {
+            "$ref": "#/components/schemas/CollectionMethodEnum"
+          },
+          "start_date": { "type": "integer", "title": "Start Date" },
+          "billing_cycle_anchor": {
+            "type": "integer",
+            "title": "Billing Cycle Anchor"
+          },
+          "cancel_at": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Cancel At"
+          },
+          "billing_cycle_anchor_config": {
+            "$ref": "#/components/schemas/BillingCycleAnchorConfig"
+          },
+          "pending_invoice_interval": {
+            "$ref": "#/components/schemas/PendingInvoiceInterval"
+          },
+          "customer": { "type": "string", "title": "Customer" },
+          "customer_address": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Address"
+          },
+          "line_items": {
+            "items": { "$ref": "#/components/schemas/SubscriptionLineItem" },
+            "type": "array",
+            "title": "Line Items"
+          },
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "subscription"
+          },
+          "current_period_end": {
+            "type": "integer",
+            "title": "Current Period End"
+          },
+          "current_period_start": {
+            "type": "integer",
+            "title": "Current Period Start"
+          },
+          "status": { "$ref": "#/components/schemas/SubscriptionStatusEnum" },
+          "canceled_at": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Canceled At"
+          },
+          "days_until_due": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Days Until Due"
+          },
+          "ended_at": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Ended At"
+          },
+          "next_pending_invoice": {
+            "type": "integer",
+            "title": "Next Pending Invoice"
+          },
+          "cancellation_details": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/CancellationDetails" },
+              { "type": "null" }
+            ]
+          },
+          "provider_details": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ProviderDetails" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "cancel_at_period_end",
+          "collection_method",
+          "start_date",
+          "billing_cycle_anchor",
+          "billing_cycle_anchor_config",
+          "pending_invoice_interval",
+          "customer",
+          "line_items",
+          "created",
+          "updated",
+          "livemode",
+          "id",
+          "current_period_end",
+          "current_period_start",
+          "status",
+          "next_pending_invoice"
+        ],
+        "title": "Subscription"
+      },
+      "SubscriptionCancellationDetailsFeedbackEnum": {
+        "type": "string",
+        "enum": [
+          "customer_service",
+          "low_quality",
+          "missing_features",
+          "switched_service",
+          "too_complex",
+          "too_expensive",
+          "unused",
+          "other"
+        ],
+        "title": "SubscriptionCancellationDetailsFeedbackEnum"
+      },
+      "SubscriptionCancellationDetailsReasonEnum": {
+        "type": "string",
+        "enum": [
+          "cancellation_requested",
+          "payment_disputed",
+          "payment_failed"
+        ],
+        "title": "SubscriptionCancellationDetailsReasonEnum"
+      },
+      "SubscriptionDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "subscription"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "SubscriptionDelete"
+      },
+      "SubscriptionLineItem": {
+        "properties": {
+          "price": { "type": "string", "title": "Price" },
+          "quantity": { "type": "integer", "title": "Quantity" }
+        },
+        "type": "object",
+        "required": ["price", "quantity"],
+        "title": "SubscriptionLineItem"
+      },
+      "SubscriptionList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/subscriptions"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Subscription" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "SubscriptionList"
+      },
+      "SubscriptionStatusEnum": {
+        "type": "string",
+        "enum": [
+          "incomplete",
+          "incomplete_expired",
+          "active",
+          "past_due",
+          "canceled",
+          "unpaid",
+          "paused",
+          "completed"
+        ],
+        "title": "SubscriptionStatusEnum"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      },
+      "Variant": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "active": { "type": "boolean", "title": "Active" },
+          "options": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Options"
+          },
+          "accept_zero_inventory_orders": {
+            "type": "boolean",
+            "title": "Accept Zero Inventory Orders"
+          },
+          "next_refill": { "type": "integer", "title": "Next Refill" },
+          "image": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Image"
+          },
+          "package_dimensions": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/PackageDimensions" },
+              { "type": "null" }
+            ]
+          },
+          "is_default": { "type": "boolean", "title": "Is Default" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "variant"
+          },
+          "prices": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/PriceList" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "active",
+          "options",
+          "accept_zero_inventory_orders",
+          "next_refill",
+          "is_default",
+          "id"
+        ],
+        "title": "Variant"
+      },
+      "VariantDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "variant"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "VariantDelete"
+      },
+      "VariantList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/variants"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Variant" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "VariantList"
+      },
+      "Warehouse": {
+        "properties": {
+          "created": { "type": "integer", "title": "Created" },
+          "updated": { "type": "integer", "title": "Updated" },
+          "livemode": { "type": "boolean", "title": "Livemode" },
+          "name": { "type": "string", "title": "Name" },
+          "active": { "type": "boolean", "title": "Active" },
+          "phone": { "type": "string", "title": "Phone" },
+          "address": { "$ref": "#/components/schemas/WarehouseAddress" },
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "warehouse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "livemode",
+          "name",
+          "active",
+          "phone",
+          "address",
+          "id"
+        ],
+        "title": "Warehouse"
+      },
+      "WarehouseAddress": {
+        "properties": {
+          "line1": { "type": "string", "title": "Line1" },
+          "line2": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Line2"
+          },
+          "city": { "type": "string", "title": "City" },
+          "state": { "type": "string", "title": "State" },
+          "country": { "type": "string", "title": "Country" },
+          "postal_code": { "type": "string", "title": "Postal Code" }
+        },
+        "type": "object",
+        "required": ["line1", "city", "state", "country", "postal_code"],
+        "title": "WarehouseAddress"
+      },
+      "WarehouseDelete": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "object": {
+            "type": "string",
+            "title": "Object",
+            "default": "warehouse"
+          },
+          "deleted": { "type": "boolean", "title": "Deleted" }
+        },
+        "type": "object",
+        "required": ["id", "deleted"],
+        "title": "WarehouseDelete"
+      },
+      "WarehouseList": {
+        "properties": {
+          "object": { "type": "string", "title": "Object", "default": "list" },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "default": "/v1/warehouses"
+          },
+          "has_more": { "type": "boolean", "title": "Has More" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/Warehouse" },
+            "type": "array",
+            "title": "Data",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["has_more"],
+        "title": "WarehouseList"
+      }
+    }
+  }
+}

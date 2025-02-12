@@ -1,0 +1,35 @@
+---
+title: Introduction
+description: "Welcome to the API for your e-commerce store"
+---
+
+## Setting up
+
+Sign up at our [dashboard](https://dashboard.tinyshop.me) to get your test secret key.
+
+<Note>
+  Treat your secret key like a password. Never expose it to the public internet.
+  Only use it server-side.
+</Note>
+
+Install our NodeJS SDK and initialize:
+
+```bash bash
+yarn add @tinyshop/tinyshop-node
+```
+
+```javascript javascript
+import Tinyshop from "@tinyshop/tinyshop-node";
+
+const secretKey = process.env.TINYSHOP_SECRET_KEY;
+
+const tinyshop = new Tinyshop(secretKey);
+```
+
+## Getting hands dirty
+
+Create your first product
+
+```javascript javascript
+const newProduct = await tinyshop.products.create({ name="Model S" });
+```

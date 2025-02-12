@@ -1,0 +1,34 @@
+---
+title: "Create a Cart"
+---
+
+[Carts](/api-reference/billing/carts) contain items that a customer intends to buy. Carts are useful in understanding customer buying behavior.
+
+## Create a Cart and add an item
+
+```javascript javascript
+const cart = await tinyshop.carts.create({
+  currency: "INR",
+});
+
+// Add an item to the cart
+const cartItem = await tinyshop.cartItems.create({
+  cart: cart.id,
+  price: "price_xxxaaa", // A variant's price
+  quantity: 1,
+});
+```
+
+## Change the item's quantity
+
+```javascript javascript
+const cartItem = await tinyshop.cartItems.update(cartItem.id, {
+  quantity: 2,
+});
+```
+
+## Remove an item from cart
+
+```javascript javascript
+await tinyshop.cartItems.delete(cartItem.id);
+```

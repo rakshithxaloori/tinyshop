@@ -1,0 +1,88 @@
+---
+title: "Create Discounts"
+---
+
+Offer lower prices or free items on the cart for your customers.
+
+[Discounts](/api-reference/storefront/discounts) are of four types:
+
+- [Off Product](/guide/discounts#off-product)
+- [Off Order](/guide/discounts#off-order)
+- [Shipping](/guide/discounts#shipping)
+- [Buy X Get Y](/guide/discounts#buy-x-get-y)
+
+## Off Product
+
+A lower price on specific products added to the cart.
+
+```javascript javascript
+const offProductDiscount = await tinyshop.discounts.create({
+  type: "off_product",
+  code: "PROTEINSALE",
+  active: true,
+  config: {
+    off_product: {
+      quantity_min: 2,
+      amount_off: 15000,
+      products: ["prod_xxxaaa", "prod_xxxbbb"],
+    },
+  },
+});
+```
+
+## Off Order
+
+A lower amount on the subtotal of the whole cart.
+
+```javascript javascript
+const offOrderDiscount = await tinyshop.discounts.create({
+  type: "off_order",
+  code: "NEWYEARSALE",
+  active: true,
+  config: {
+    off_order: {
+      amount_min: 80000,
+      amount_off: 30000,
+    },
+  },
+});
+```
+
+## Shipping
+
+Free or a lower shipping amount.
+
+```javascript javascript
+const shippingDiscount = await tinyshop.discounts.create({
+  type: "shipping",
+  code: "SHIPPING",
+  active: true,
+  config: {
+    shipping: {
+      amount_min: 50000,
+      percentage_off: 10000,
+    },
+  },
+});
+```
+
+<Note>Percentages are represented as integers. 21.5% is 2150. </Note>
+
+# Buy X Get Y
+
+A variant, added to the order for free, when a customer hits a minimum amount or a minimum quantiy of a specific product or the whole cart.
+
+```javascript javascript
+const buyXGetYDiscount = await tinyshop.discounts.create({
+  type: "buy_x_get_y",
+  code: "WINTERSALE",
+  active: true,
+  config: {
+    buy_x_get_y: {
+      amount_min: 150000,
+      variant_get: "var_xxxfff",
+      quantity_get: 1,
+    },
+  },
+});
+```

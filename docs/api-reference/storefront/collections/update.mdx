@@ -1,0 +1,17 @@
+---
+title: "Update a Collection"
+openapi: "POST /v1/collections/{collection_id}"
+---
+
+<RequestExample>
+
+```javascript javascript
+const collection = await tinyshop.collections.update("col_xxxaaa", {
+  products: {
+    add: ["prod_xxxaaa"],
+    remove: ["prod_xxxbb"],
+  },
+});
+```
+
+</RequestExample>

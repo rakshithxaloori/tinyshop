@@ -1,0 +1,14 @@
+---
+title: "Verify a Customer"
+openapi: "POST /v1/customers/{customer_id}/verify"
+---
+
+<RequestExample>
+
+```javascript javascript
+const customer = await tinyshop.customers.verify({
+  otp: "503001",
+});
+```
+
+</RequestExample>

@@ -1,0 +1,20 @@
+---
+title: "Create a Checkout"
+---
+
+[Checkouts](/api-reference/billing/checkouts) collect customer's address and payment details.
+
+## Create a Checkout
+
+```javascript javascript
+const cart = await tinyshop.checkouts.create({
+  customer: "cus_xxxaaa",
+  cart: "cart_xxxbbb",
+  // The API will fill the CHECKOUT_ID in all of the URLs
+  url: "https://nike.com/checkout/{CHECKOUT_ID}", // URL of the checkout page - collect customer's address and payment details here.
+  return_url: "https://nike.com/checkout/return/{CHECKOUT_ID}", // Payment Retry or Failed URL
+  success_url: "https://nike.com/checkout/success/{CHECKOUT_ID}", // The payment is successful
+});
+```
+
+The checkout will create the payment gateway details and return them in `payment_providers` for `checkout.subscriptions` and `checkout.invoices`.

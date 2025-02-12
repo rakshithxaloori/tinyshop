@@ -1,0 +1,17 @@
+---
+title: "Create a Customer"
+openapi: "POST /v1/customers"
+---
+
+<RequestExample>
+
+```javascript javascript
+const checkout = await tinyshop.customers.create({
+  name: "Rakshith Aloori",
+  email: "rakshith@tinyshop.me",
+  phone: "+919876543210",
+  send_otp: true,
+});
+```
+
+</RequestExample>

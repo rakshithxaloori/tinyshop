@@ -1,0 +1,18 @@
+---
+title: "Create a Collection"
+---
+
+A [Collection](/api-reference/storefront/collections) is a group of products of a particular kind.
+
+## Create a Collection
+
+```javascript javascript
+const collection = await tinyshop.collections.create({
+  name: "Protein Powders",
+  products: ["prod_xxxaaa", "prod_xxxbbb"],
+});
+```
+
+<Note>A Product may belong to multiple Collections.</Note>
+
+Upon creation, every collection has a collection `handle` you can use for the collection's storefront page, at _/collections/:handle_, for example.

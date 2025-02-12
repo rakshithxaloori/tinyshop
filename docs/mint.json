@@ -1,0 +1,246 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Tinyshop",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.png"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "modeToggle": {
+    "default": "light",
+    "isHidden": true
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:founders@tinyshop.me"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://dashboard.tinyshop.me"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Documentation",
+      "icon": "book-open-cover",
+      "url": "/docs"
+    },
+    {
+      "name": "Community",
+      "icon": "slack",
+      "url": "https://community.tinyshop.me"
+    },
+    {
+      "name": "Blog",
+      "icon": "newspaper",
+      "url": "https://blog.tinyshop.me"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": ["introduction"]
+    },
+    {
+      "group": "Storefront",
+      "pages": [
+        "storefront/products",
+        "storefront/discounts",
+        "storefront/collections"
+      ]
+    },
+    {
+      "group": "Billing",
+      "pages": ["billing/carts", "billing/checkouts"]
+    },
+    {
+      "group": "Orders",
+      "pages": ["orders/reviews"]
+    },
+    {
+      "group": "API Documentation",
+      "pages": ["api-reference/introduction"]
+    },
+    {
+      "group": "Storefront",
+      "pages": [
+        {
+          "group": "Products",
+          "pages": [
+            "api-reference/storefront/products/create",
+            "api-reference/storefront/products/update",
+            "api-reference/storefront/products/retrieve",
+            "api-reference/storefront/products/list",
+            "api-reference/storefront/products/delete"
+          ]
+        },
+        {
+          "group": "Options",
+          "pages": [
+            "api-reference/storefront/options/create",
+            "api-reference/storefront/options/update",
+            "api-reference/storefront/options/retrieve",
+            "api-reference/storefront/options/list",
+            "api-reference/storefront/options/delete"
+          ]
+        },
+        {
+          "group": "Variants",
+          "pages": [
+            "api-reference/storefront/variants/create",
+            "api-reference/storefront/variants/update",
+            "api-reference/storefront/variants/retrieve",
+            "api-reference/storefront/variants/list",
+            "api-reference/storefront/variants/delete"
+          ]
+        },
+        {
+          "group": "Prices",
+          "pages": [
+            "api-reference/storefront/prices/create",
+            "api-reference/storefront/prices/update",
+            "api-reference/storefront/prices/retrieve",
+            "api-reference/storefront/prices/list",
+            "api-reference/storefront/prices/delete"
+          ]
+        },
+        {
+          "group": "Collections",
+          "pages": [
+            "api-reference/storefront/collections/create",
+            "api-reference/storefront/collections/update",
+            "api-reference/storefront/collections/retrieve",
+            "api-reference/storefront/collections/list",
+            "api-reference/storefront/collections/delete"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Customers",
+      "pages": [
+        {
+          "group": "Customers",
+          "pages": [
+            "api-reference/customers/customers/create",
+            "api-reference/customers/customers/update",
+            "api-reference/customers/customers/retrieve",
+            "api-reference/customers/customers/list",
+            "api-reference/customers/customers/delete",
+            "api-reference/customers/customers/verify"
+          ]
+        },
+        {
+          "group": "Customer Addresses",
+          "pages": [
+            "api-reference/customers/customer_addresses/create",
+            "api-reference/customers/customer_addresses/update",
+            "api-reference/customers/customer_addresses/retrieve",
+            "api-reference/customers/customer_addresses/list",
+            "api-reference/customers/customer_addresses/delete"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Billing",
+      "pages": [
+        {
+          "group": "Carts",
+          "pages": [
+            "api-reference/billing/carts/create",
+            "api-reference/billing/carts/update",
+            "api-reference/billing/carts/retrieve",
+            "api-reference/billing/carts/list",
+            "api-reference/billing/carts/delete"
+          ]
+        },
+        {
+          "group": "Cart Items",
+          "pages": [
+            "api-reference/billing/cart_items/create",
+            "api-reference/billing/cart_items/update",
+            "api-reference/billing/cart_items/retrieve",
+            "api-reference/billing/cart_items/list",
+            "api-reference/billing/cart_items/delete"
+          ]
+        },
+        {
+          "group": "Checkouts",
+          "pages": [
+            "api-reference/billing/checkouts/create",
+            "api-reference/billing/checkouts/update",
+            "api-reference/billing/checkouts/retrieve",
+            "api-reference/billing/checkouts/list",
+            "api-reference/billing/checkouts/delete"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Orders",
+      "pages": [
+        {
+          "group": "Reviews",
+          "pages": [
+            "api-reference/orders/reviews/create",
+            "api-reference/orders/reviews/update",
+            "api-reference/orders/reviews/retrieve",
+            "api-reference/orders/reviews/list",
+            "api-reference/orders/reviews/delete"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Fulfillment",
+      "pages": [
+        {
+          "group": "Warehouses",
+          "pages": [
+            "api-reference/fulfillments/warehouses/create",
+            "api-reference/fulfillments/warehouses/update",
+            "api-reference/fulfillments/warehouses/retrieve",
+            "api-reference/fulfillments/warehouses/list",
+            "api-reference/fulfillments/warehouses/delete"
+          ]
+        },
+        {
+          "group": "Inventory",
+          "pages": [
+            "api-reference/fulfillments/inventory/create",
+            "api-reference/fulfillments/inventory/update",
+            "api-reference/fulfillments/inventory/delete"
+          ]
+        }
+      ]
+    }
+  ],
+  "api": {
+    "auth": {
+      "method": "basic",
+      "name": "sk_test_xxxx:"
+    }
+  },
+  "footerSocials": {
+    "x": "https://x.com/mintlify",
+    "github": "https://github.com/mintlify",
+    "linkedin": "https://www.linkedin.com/company/mintsearch"
+  }
+}

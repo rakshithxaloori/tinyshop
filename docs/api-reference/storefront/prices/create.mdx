@@ -1,0 +1,19 @@
+---
+title: "Create a Price"
+openapi: "POST /v1/prices"
+---
+
+<RequestExample>
+
+```javascript javascript
+const price = await tinyshop.prices.create({
+  variant: "var_xxxaaa",
+  active: true,
+  currency: "INR",
+  type: "one_time",
+  unit_amount: 50000, // Amount in paise
+  is_default: true,
+});
+```
+
+</RequestExample>
