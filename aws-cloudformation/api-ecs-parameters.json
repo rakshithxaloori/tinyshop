@@ -1,0 +1,30 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "ts-dev-api"
+  },
+  {
+    "ParameterKey": "VPCId",
+    "ParameterValue": "vpc-080c8a48ad69c32fb"
+  },
+  {
+    "ParameterKey": "PrivateSubnet1",
+    "ParameterValue": "subnet-05e2468782def1849"
+  },
+  {
+    "ParameterKey": "PrivateSubnet2",
+    "ParameterValue": "subnet-05fd8d149fc6cb0e2"
+  },
+  {
+    "ParameterKey": "ProxyECSSecurityGroupId",
+    "ParameterValue": "sg-053f9efd067cea0b5"
+  },
+  {
+    "ParameterKey": "ApiImage",
+    "ParameterValue": "662294483096.dkr.ecr.us-east-1.amazonaws.com/ts-api-test:latest"
+  },
+  {
+    "ParameterKey": "MyIp",
+    "ParameterValue": "192.168.0.105/32"
+  }
+]

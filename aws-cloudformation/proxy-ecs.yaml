@@ -1,0 +1,248 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "CloudFormation template for an Application Load Balancer, ECS roles, task definition, ECS service, and CloudWatch Logs group."
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Description: "The name of the environment"
+  VPCId:
+    Type: AWS::EC2::VPC::Id
+    Description: "VPC ID"
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet::Id
+    Description: "Public Subnet 1 ID"
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet::Id
+    Description: "Public Subnet 2 ID"
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet::Id
+    Description: "Private Subnet ID"
+  CertificateArn:
+    Type: String
+    Description: "ARN of the SSL certificate"
+  ApiImage:
+    Type: String
+    Description: "Docker image for the API container"
+  MyIp:
+    Type: String
+    Description: "Your IP address with CIDR notation, e.g., 1.2.3.4/32"
+
+Resources:
+  # Security Group for Load Balancer
+  LBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow HTTPS traffic from IPv4 and IPv6"
+      VpcId: !Ref VPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-lb"
+
+  # Application Load Balancer
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub "${EnvironmentName}-lb"
+      Subnets:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+      SecurityGroups:
+        - !Ref LBSecurityGroup
+      Scheme: internet-facing
+      IpAddressType: ipv4
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-lb"
+
+  # Target Group for Load Balancer
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${EnvironmentName}-http-target-group"
+      Protocol: HTTP
+      Port: 80
+      VpcId: !Ref VPCId
+      TargetType: ip
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: 80
+      HealthCheckPath: /
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Matcher:
+        HttpCode: 406
+
+  # Listener for Load Balancer
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Protocol: HTTPS
+      Port: 443
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      Certificates:
+        - CertificateArn: !Ref CertificateArn
+
+  # Security Group for ECS
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub "Security Group for ${EnvironmentName}-ecs - Allow HTTP and HTTPS from ${EnvironmentName}-lb, all traffic from My IP"
+      VpcId: !Ref VPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref LBSecurityGroup
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          SourceSecurityGroupId: !Ref LBSecurityGroup
+        - IpProtocol: -1
+          CidrIp: !Ref MyIp
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ecs"
+
+  # ECS Cluster
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub "${EnvironmentName}-cluster"
+
+  # ECS Task Execution Role
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub "${EnvironmentName}-task-execution-policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                  - ecr:GetAuthorizationToken
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - ecs:CreateService
+                  - ecs:UpdateService
+                  - ecs:DeleteService
+                  - ecs:DescribeServices
+                Resource: "*"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-TaskExecutionRole"
+
+  # ECS Task Role
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub "${EnvironmentName}-task-policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssmmessages:CreateControlChannel
+                  - ssmmessages:CreateDataChannel
+                  - ssmmessages:OpenControlChannel
+                  - ssmmessages:OpenDataChannel
+                Resource: "*"
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-TaskRole"
+
+  # CloudWatch Logs Group
+  CloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/${EnvironmentName}"
+      RetentionInDays: 30
+
+  # ECS Task Definition
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Ref EnvironmentName
+      Cpu: "256"
+      Memory: "1024"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      RuntimePlatform:
+        CpuArchitecture: ARM64
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+      TaskRoleArn: !GetAtt TaskRole.Arn
+      ContainerDefinitions:
+        - Name: api
+          Image: !Ref ApiImage
+          Essential: true
+          PortMappings:
+            - ContainerPort: 80
+              HostPort: 80
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref CloudWatchLogsGroup
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: "ecs"
+
+  # ECS Service
+  ECSService:
+    Type: AWS::ECS::Service
+    DependsOn: Listener
+    Properties:
+      Cluster: !Ref ECSCluster
+      ServiceName: !Sub "${EnvironmentName}-service"
+      TaskDefinition: !Ref TaskDefinition
+      DesiredCount: 1
+      LaunchType: FARGATE
+      LoadBalancers:
+        - TargetGroupArn: !Ref TargetGroup
+          ContainerName: api
+          ContainerPort: 80
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets:
+            - !Ref PrivateSubnet1
+          SecurityGroups:
+            - !Ref ECSSecurityGroup
+          AssignPublicIp: ENABLED
+      EnableExecuteCommand: true
+
+Outputs:
+  LoadBalancerDNSName:
+    Description: "The DNS name of the load balancer"
+    Value: !GetAtt LoadBalancer.DNSName
+  TaskDefinitionArn:
+    Description: "The ARN of the task definition"
+    Value: !Ref TaskDefinition
+  ECSServiceName:
+    Description: "The name of the ECS service"
+    Value: !Ref ECSService
